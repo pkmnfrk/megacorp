@@ -1,6 +1,6 @@
-package com.mike_caron.mod_template.item;
+package com.mike_caron.megacorp.item;
 
-import com.mike_caron.mod_template.ModTemplateMod;
+import com.mike_caron.megacorp.MegaCorpMod;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
@@ -11,7 +11,7 @@ public abstract class ItemBase extends Item
 {
     public ItemBase()
     {
-        setCreativeTab(ModTemplateMod.creativeTab);
+        setCreativeTab(MegaCorpMod.creativeTab);
     }
     @SuppressWarnings("ConstantConditions")
     @SideOnly(Side.CLIENT)

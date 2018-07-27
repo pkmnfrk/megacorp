@@ -1,10 +1,9 @@
-package com.mike_caron.mod_template.block;
+package com.mike_caron.megacorp.block;
 
-import com.mike_caron.mod_template.ModTemplateMod;
+import com.mike_caron.megacorp.MegaCorpMod;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -17,7 +16,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 @Mod.EventBusSubscriber
-@GameRegistry.ObjectHolder (ModTemplateMod.modId)
+@GameRegistry.ObjectHolder (MegaCorpMod.modId)
 public class ModBlocks
 {
     //@GameRegistry.ObjectHolder(TransmutationChamber.id)
@@ -30,7 +29,7 @@ public class ModBlocks
 
         //registry.register(new TransmutationChamber());
 
-        //GameRegistry.registerTileEntity(TransmutationChamberTileEntity.class, new ResourceLocation(ModTemplateMod.modId, TransmutationChamber.id));
+        //GameRegistry.registerTileEntity(TransmutationChamberTileEntity.class, new ResourceLocation(MegaCorpMod.modId, TransmutationChamber.id));
     }
 
     @SuppressWarnings("ConstantConditions")

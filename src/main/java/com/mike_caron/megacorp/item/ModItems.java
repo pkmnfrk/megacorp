@@ -1,6 +1,6 @@
-package com.mike_caron.mod_template.item;
+package com.mike_caron.megacorp.item;
 
-import com.mike_caron.mod_template.ModTemplateMod;
+import com.mike_caron.megacorp.MegaCorpMod;
 import net.minecraft.item.Item;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -14,7 +14,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 @Mod.EventBusSubscriber
-@GameRegistry.ObjectHolder(ModTemplateMod.modId)
+@GameRegistry.ObjectHolder(MegaCorpMod.modId)
 public class ModItems
 {
     //@GameRegistry.ObjectHolder(SoulboundTalisman.id)

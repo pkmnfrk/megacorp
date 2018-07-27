@@ -1,6 +1,8 @@
-# Mod Template
+# Mega Corp
 
-This mod is a template meant to be copied to start creating new mods
+Ever wanted to run your own small business, and grow it into a massive corporation?
+
+Too bad, someone already beat you to it, and now you owe them all your resources!
 
 ## Issues
 

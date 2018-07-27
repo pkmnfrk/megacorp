@@ -1,10 +1,9 @@
-package com.mike_caron.mod_template;
+package com.mike_caron.megacorp;
 
-import com.mike_caron.mod_template.integrations.MainCompatHandler;
-import com.mike_caron.mod_template.network.CtoSMessage;
-import com.mike_caron.mod_template.network.PacketHandlerServer;
-import com.mike_caron.mod_template.proxy.IModProxy;
-import net.minecraftforge.common.MinecraftForge;
+import com.mike_caron.megacorp.integrations.MainCompatHandler;
+import com.mike_caron.megacorp.network.CtoSMessage;
+import com.mike_caron.megacorp.network.PacketHandlerServer;
+import com.mike_caron.megacorp.proxy.IModProxy;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
@@ -16,18 +15,18 @@ import org.apache.logging.log4j.Logger;
 
 @SuppressWarnings("unused")
 @Mod(
-        modid = ModTemplateMod.modId,
-        name = ModTemplateMod.name,
-        version = ModTemplateMod.version,
+        modid = MegaCorpMod.modId,
+        name = MegaCorpMod.name,
+        version = MegaCorpMod.version,
         acceptedMinecraftVersions = "[1.12.2]"
         //,dependencies = "required-after:projecte@[1.12-PE1.3.1,)"
 )
 @Mod.EventBusSubscriber
-public class ModTemplateMod
+public class MegaCorpMod
 {
-    public static final String modId = "mod_template";
-    public static final String name = "Equivalent Integrations";
-    public static final String version = "0.1.4";
+    public static final String modId = "megacorp";
+    public static final String name = "Mega Corp";
+    public static final String version = "0.1.0";
 
     public static final Logger logger = LogManager.getLogger(modId);
 
@@ -35,11 +34,11 @@ public class ModTemplateMod
 
     @SuppressWarnings("unused")
     @Mod.Instance(modId)
-    public static ModTemplateMod instance;
+    public static MegaCorpMod instance;
 
     @SidedProxy(
-            serverSide = "com.mike_caron.mod_template.proxy.CommonProxy",
-            clientSide = "com.mike_caron.mod_template.proxy.ClientProxy"
+            serverSide = "com.mike_caron.megacorp.proxy.CommonProxy",
+            clientSide = "com.mike_caron.megacorp.proxy.ClientProxy"
     )
     public static IModProxy proxy;
 

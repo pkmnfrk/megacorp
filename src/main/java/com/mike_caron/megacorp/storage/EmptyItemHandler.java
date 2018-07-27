@@ -1,4 +1,4 @@
-package com.mike_caron.mod_template.storage;
+package com.mike_caron.megacorp.storage;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;

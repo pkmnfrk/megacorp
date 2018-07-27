@@ -1,4 +1,4 @@
-package com.mike_caron.mod_template.integrations;
+package com.mike_caron.megacorp.integrations;
 
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;

@@ -1,6 +1,6 @@
-package com.mike_caron.mod_template.proxy;
+package com.mike_caron.megacorp.proxy;
 
-import com.mike_caron.mod_template.ModTemplateMod;
+import com.mike_caron.megacorp.MegaCorpMod;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -21,7 +21,7 @@ public class CommonProxy
 
     public void init(FMLInitializationEvent e)
     {
-        NetworkRegistry.INSTANCE.registerGuiHandler(ModTemplateMod.instance, new GuiProxy());
+        NetworkRegistry.INSTANCE.registerGuiHandler(MegaCorpMod.instance, new GuiProxy());
         //CapabilityManager.INSTANCE.register(IEMCManager.class, new DummyIStorage<>(), new ManagedEMCManager.Factory());
     }
 

@@ -1,4 +1,4 @@
-package com.mike_caron.mod_template.inventory;
+package com.mike_caron.megacorp.inventory;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

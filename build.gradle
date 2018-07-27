@@ -12,8 +12,8 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 
 
 //version = "0.1"
-group = "com.mike-caron.template" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "Template"
+group = "com.mike-caron.megacorp" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "MegaCorp"
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 compileJava {

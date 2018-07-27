@@ -1,4 +1,4 @@
-package com.mike_caron.mod_template.proxy;
+package com.mike_caron.megacorp.proxy;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;

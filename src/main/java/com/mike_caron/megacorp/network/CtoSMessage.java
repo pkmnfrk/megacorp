@@ -1,4 +1,4 @@
-package com.mike_caron.mod_template.network;
+package com.mike_caron.megacorp.network;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.util.math.BlockPos;

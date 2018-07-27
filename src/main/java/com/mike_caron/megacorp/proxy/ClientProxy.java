@@ -1,7 +1,7 @@
-package com.mike_caron.mod_template.proxy;
+package com.mike_caron.megacorp.proxy;
 
-import com.mike_caron.mod_template.block.ModBlocks;
-import com.mike_caron.mod_template.item.ModItems;
+import com.mike_caron.megacorp.block.ModBlocks;
+import com.mike_caron.megacorp.item.ModItems;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;

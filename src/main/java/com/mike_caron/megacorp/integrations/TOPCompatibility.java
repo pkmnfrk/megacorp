@@ -1,6 +1,6 @@
-package com.mike_caron.mod_template.integrations;
+package com.mike_caron.megacorp.integrations;
 
-import com.mike_caron.mod_template.ModTemplateMod;
+import com.mike_caron.megacorp.MegaCorpMod;
 import mcjty.theoneprobe.api.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,7 +19,7 @@ public class TOPCompatibility
         if(registered) return;
 
         registered = true;
-        FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", "com.mike_caron.mod_template.integrations.TOPCompatibility$GetTheOneProbe");
+        FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", "com.mike_caron.megacorp.integrations.TOPCompatibility$GetTheOneProbe");
     }
 
     public static class GetTheOneProbe
@@ -32,13 +32,13 @@ public class TOPCompatibility
         public Void apply(ITheOneProbe iTheOneProbe)
         {
             probe = iTheOneProbe;
-            ModTemplateMod.logger.info("Enabled support for The One Probe. Most excellent.");
+            MegaCorpMod.logger.info("Enabled support for The One Probe. Most excellent.");
             probe.registerProvider(new IProbeInfoProvider()
             {
                 @Override
                 public String getID()
                 {
-                    return ModTemplateMod.modId + ":default";
+                    return MegaCorpMod.modId + ":default";
                 }
 
                 @Override

@@ -1,6 +1,6 @@
-package com.mike_caron.mod_template.network;
+package com.mike_caron.megacorp.network;
 
-import com.mike_caron.mod_template.ModTemplateMod;
+import com.mike_caron.megacorp.MegaCorpMod;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IThreadListener;
@@ -51,7 +51,7 @@ public class PacketHandlerServer implements IMessageHandler<CtoSMessage, IMessag
                 }
                 catch (Exception e)
                 {
-                    ModTemplateMod.logger.error("Error while handling message", e);
+                    MegaCorpMod.logger.error("Error while handling message", e);
                 }
             }
         });

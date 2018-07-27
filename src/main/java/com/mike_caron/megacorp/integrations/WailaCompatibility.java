@@ -1,7 +1,7 @@
-package com.mike_caron.mod_template.integrations;
+package com.mike_caron.megacorp.integrations;
 
-import com.mike_caron.mod_template.ModTemplateMod;
-import com.mike_caron.mod_template.block.BlockBase;
+import com.mike_caron.megacorp.MegaCorpMod;
+import com.mike_caron.megacorp.block.BlockBase;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
@@ -28,7 +28,7 @@ public class WailaCompatibility
     private static boolean loaded;
 
     public static void load(IWailaRegistrar registrar) {
-        ModTemplateMod.logger.info("Loading Waila integration");
+        MegaCorpMod.logger.info("Loading Waila integration");
         if (!registered){
             throw new RuntimeException("Please register this handler using the provided method.");
         }
@@ -44,7 +44,7 @@ public class WailaCompatibility
         if (registered)
             return;
         registered = true;
-        boolean ret = FMLInterModComms.sendMessage("waila", "register", "com.mike_caron.mod_template.integrations.WailaCompatibility.load");
+        boolean ret = FMLInterModComms.sendMessage("waila", "register", "com.mike_caron.megacorp.integrations.WailaCompatibility.load");
     }
 
     @Override

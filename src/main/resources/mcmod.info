@@ -1,0 +1,15 @@
+[
+{
+  "modid": "mod_template",
+  "name": "Mod Template",
+  "description": "A template for a minecraft mod",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "logoFile": "assets/mod_template/logo.png",
+  "url": "",
+  "updateUrl": "",
+  "authorList": [ "pkmnfrk" ],
+  "parent": "",
+  "screenshots": []
+}
+]

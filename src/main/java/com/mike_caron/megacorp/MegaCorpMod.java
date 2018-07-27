@@ -4,6 +4,7 @@ import com.mike_caron.megacorp.integrations.MainCompatHandler;
 import com.mike_caron.megacorp.network.CtoSMessage;
 import com.mike_caron.megacorp.network.PacketHandlerServer;
 import com.mike_caron.megacorp.proxy.IModProxy;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
@@ -43,6 +44,10 @@ public class MegaCorpMod
     public static IModProxy proxy;
 
     public static SimpleNetworkWrapper networkWrapper;
+
+    static {
+        FluidRegistry.enableUniversalBucket();
+    }
 
     @Mod.EventHandler
     public  void preInit(FMLPreInitializationEvent event)

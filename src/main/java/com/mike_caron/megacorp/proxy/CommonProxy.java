@@ -1,6 +1,7 @@
 package com.mike_caron.megacorp.proxy;
 
 import com.mike_caron.megacorp.MegaCorpMod;
+import com.mike_caron.megacorp.fluid.ModFluids;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -13,10 +14,10 @@ public class CommonProxy
     implements IModProxy
 {
 
-    @SuppressWarnings("EmptyMethod")
+
     public void preInit(FMLPreInitializationEvent e)
     {
-
+        ModFluids.register();
     }
 
     public void init(FMLInitializationEvent e)

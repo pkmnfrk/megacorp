@@ -11,3 +11,5 @@ item.megacorp:ingot_dense_money.name=Fat Stack of Cash
 
 tile.megacorp:money_block.name=Block of Money
 tile.megacorp:dense_money_block.name=Block of Dense Money
+
+tile.megacorp:small_business_simulator.name=Small Business Simulator

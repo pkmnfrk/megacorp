@@ -35,11 +35,11 @@ public class ModBlocks
     @GameRegistry.ObjectHolder("dense_money")
     public static BlockFluidBase dense_money;
 
-    @GameRegistry.ObjectHolder("money_block")
-    public static BlockBase money_block;
+    //@GameRegistry.ObjectHolder("money_block")
+    //public static BlockBase money_block;
 
-    @GameRegistry.ObjectHolder("dense_money_block")
-    public static BlockBase dense_money_block;
+    //@GameRegistry.ObjectHolder("dense_money_block")
+    //public static BlockBase dense_money_block;
 
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event)
@@ -49,11 +49,11 @@ public class ModBlocks
         registry.register(new BlockFluidBase(ModFluids.MONEY, "money", MapColor.GREEN));
         registry.register(new BlockFluidBase(ModFluids.DENSE_MONEY, "dense_money", MapColor.GREEN_STAINED_HARDENED_CLAY));
 
-        registry.register(money_block = (BlockBase)new BlockBase(Material.IRON, "money_block").setHardness(10));
-        registry.register(dense_money_block = (BlockBase)new BlockBase(Material.IRON, "dense_money_block").setHardness(20));
+        //registry.register(money_block = (BlockBase)new BlockBase(Material.IRON, "money_block").setHardness(10));
+        //registry.register(dense_money_block = (BlockBase)new BlockBase(Material.IRON, "dense_money_block").setHardness(20));
 
-        money_block.setHarvestLevel("pickaxe", 2);
-        dense_money_block.setHarvestLevel("pickaxe", 3);
+        //money_block.setHarvestLevel("pickaxe", 2);
+        //dense_money_block.setHarvestLevel("pickaxe", 3);
         //GameRegistry.registerTileEntity(TransmutationChamberTileEntity.class, new ResourceLocation(MegaCorpMod.modId, TransmutationChamber.id));
     }
 
@@ -83,8 +83,8 @@ public class ModBlocks
             throw new RuntimeException("Unable to reflect upon myself??");
         }
 
-        OreDictionary.registerOre("blockMoney", money_block);
-        OreDictionary.registerOre("blockDenseMoney", dense_money_block);
+        //OreDictionary.registerOre("blockMoney", money_block);
+        //OreDictionary.registerOre("blockDenseMoney", dense_money_block);
     }
 
     @SideOnly(Side.CLIENT)

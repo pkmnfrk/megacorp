@@ -24,6 +24,7 @@ public class EnderioCompatability
 
     private static void registerRecipes()
     {
+        /*
         registerXml("<enderio:recipes xmlns:enderio=\"http://enderio.com/recipes\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://enderio.com/recipes recipes.xsd \">\n" +
                 "    <recipe name=\"Money\">\n" +
                 "        <alloying energy=\"20000\" exp=\"1\">\n" +
@@ -33,6 +34,7 @@ public class EnderioCompatability
                 "        </alloying>\n" +
                 "    </recipe>\n" +
                 "</enderio:recipes>");
+                */
         /*registerFluid(ModFluids.MONEY, "Money");
         registerFluid(ModFluids.DENSE_MONEY, "DenseMoney");
 

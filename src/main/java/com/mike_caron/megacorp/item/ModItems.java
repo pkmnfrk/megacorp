@@ -23,18 +23,18 @@ public class ModItems
     //@GameRegistry.ObjectHolder(SoulboundTalisman.id)
     //public static SoulboundTalisman soulboundTalisman;
 
-    @GameRegistry.ObjectHolder("ingot_money")
-    public static Item ingotMoney;
+    //@GameRegistry.ObjectHolder("ingot_money")
+    //public static Item ingotMoney;
 
-    @GameRegistry.ObjectHolder("ingot_dense_money")
-    public static Item ingotDenseMoney;
+    //@GameRegistry.ObjectHolder("ingot_dense_money")
+    //public static Item ingotDenseMoney;
 
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event)
     {
         IForgeRegistry<Item> registry = event.getRegistry();
 
-        //registry.register(new SoulboundTalisman());
+        /*
         registry.register(ingotMoney = new Item()
                 .setRegistryName("ingot_money")
                 .setUnlocalizedName("megacorp:ingot_money")
@@ -48,16 +48,19 @@ public class ModItems
                 .setCreativeTab(MegaCorpMod.creativeTab)
 
         );
+        */
 
+        /*
         OreDictionary.registerOre("ingotMoney", ingotMoney);
         OreDictionary.registerOre("ingotDenseMoney", ingotDenseMoney);
+        */
     }
 
     @SideOnly(Side.CLIENT)
     public static void initModels()
     {
-        initModel(ingotMoney);
-        initModel(ingotDenseMoney);
+        //initModel(ingotMoney);
+        //initModel(ingotDenseMoney);
 
         try
         {

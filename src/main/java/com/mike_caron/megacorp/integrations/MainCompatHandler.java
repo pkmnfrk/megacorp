@@ -10,7 +10,7 @@ public class MainCompatHandler
         registerTOP();
         registerWaila();
         registerTConstruct();
-        registerEnderio();
+        //registerEnderio();
     }
 
     public static void registerAllInit()

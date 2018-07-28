@@ -29,6 +29,7 @@ public class ThermalExpansionCompatability
 
     private static void registerRecipes()
     {
+        /*
         ThermalExpansionHelper.addSmelterRecipe(
                 20000,
                 new ItemStack(Item.getByNameOrId("emerald"), 12),
@@ -50,6 +51,7 @@ public class ThermalExpansionCompatability
         ThermalExpansionHelper.addCrucibleRecipe(800000,
                 new ItemStack(ModBlocks.dense_money_block),
                 new FluidStack(ModFluids.DENSE_MONEY, 144 * 9));
+        */
 
         ThermalExpansionHelper.addRefineryRecipe(100000,
                 new FluidStack(ModFluids.MONEY, 1000),

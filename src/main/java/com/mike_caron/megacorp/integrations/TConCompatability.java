@@ -30,8 +30,8 @@ public class TConCompatability
 
     private static void registerRecipes()
     {
-        registerFluid(ModFluids.MONEY, "Money");
-        registerFluid(ModFluids.DENSE_MONEY, "DenseMoney");
+        //registerFluid(ModFluids.MONEY, "Money");
+        //registerFluid(ModFluids.DENSE_MONEY, "DenseMoney");
 
         NBTTagList tagList = new NBTTagList();
 

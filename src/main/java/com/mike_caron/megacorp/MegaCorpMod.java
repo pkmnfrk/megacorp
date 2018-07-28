@@ -21,6 +21,7 @@ import org.apache.logging.log4j.Logger;
         version = MegaCorpMod.version,
         acceptedMinecraftVersions = "[1.12.2]"
         //,dependencies = "required-after:projecte@[1.12-PE1.3.1,)"
+        ,dependencies = "after:tconstruct;after:thermalexpansion;after:theoneprobe;after:waila;after:enderio"
 )
 @Mod.EventBusSubscriber
 public class MegaCorpMod
@@ -54,13 +55,15 @@ public class MegaCorpMod
     {
         proxy.preInit(event);
 
-        MainCompatHandler.registerAll();
+        MainCompatHandler.registerAllPreInit();
     }
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event)
     {
         proxy.init(event);
+
+        MainCompatHandler.registerAllInit();
     }
 
     @Mod.EventHandler

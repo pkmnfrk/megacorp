@@ -2,18 +2,12 @@ package com.mike_caron.megacorp.integrations;
 
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.fluid.ModFluids;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class TConCompatability
+public class EnderioCompatability
 {
     private static boolean registered = false;
 
@@ -25,12 +19,21 @@ public class TConCompatability
 
         registerRecipes();
 
-        MegaCorpMod.logger.info("Tinker's Construct compatibility is online");
+        MegaCorpMod.logger.info("EnderIO compatibility creeping up behind you!");
     }
 
     private static void registerRecipes()
     {
-        registerFluid(ModFluids.MONEY, "Money");
+        registerXml("<enderio:recipes xmlns:enderio=\"http://enderio.com/recipes\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://enderio.com/recipes recipes.xsd \">\n" +
+                "    <recipe name=\"Money\">\n" +
+                "        <alloying energy=\"20000\" exp=\"1\">\n" +
+                "            <input name=\"minecraft:emerald\" amount=\"12\"/>\n" +
+                "            <input name=\"minecraft:gold_block\" amount=\"12\"/>\n" +
+                "            <output name=\"megacorp:ingot_money\" amount=\"1\"/>\n" +
+                "        </alloying>\n" +
+                "    </recipe>\n" +
+                "</enderio:recipes>");
+        /*registerFluid(ModFluids.MONEY, "Money");
         registerFluid(ModFluids.DENSE_MONEY, "DenseMoney");
 
         NBTTagList tagList = new NBTTagList();
@@ -53,15 +56,11 @@ public class TConCompatability
         NBTTagCompound message = new NBTTagCompound();
         message.setTag("alloy", tagList);
         FMLInterModComms.sendMessage("tconstruct", "alloy", message);
+        */
     }
 
-    private static void registerFluid(Fluid fluid, String oreSuffix)
+    private static void registerXml(String xml)
     {
-        NBTTagCompound tag = new NBTTagCompound();
-        tag.setString("fluid", fluid.getName());
-        tag.setString("ore", oreSuffix);
-        tag.setBoolean("toolforge", true);
-
-        FMLInterModComms.sendMessage("tconstruct", "integrateSmeltery", tag);
+        FMLInterModComms.sendMessage("enderio", "recipe:xml", xml);
     }
 }

@@ -7,9 +7,6 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class BlockSBS extends MachineBlockBase
 {
-    private ItemStackHandler inventory;
-
-
     public BlockSBS()
     {
         super(Material.IRON, "small_business_simulator");

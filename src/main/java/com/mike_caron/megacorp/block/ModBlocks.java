@@ -3,6 +3,7 @@ package com.mike_caron.megacorp.block;
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.ModMaterials;
 import com.mike_caron.megacorp.block.sbs.BlockSBS;
+import com.mike_caron.megacorp.block.uplink.BlockUplink;
 import com.mike_caron.megacorp.fluid.ModFluids;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
@@ -39,6 +40,9 @@ public class ModBlocks
     @GameRegistry.ObjectHolder("small_business_simulator")
     public static BlockSBS small_business_simulator;
 
+    @GameRegistry.ObjectHolder("uplink")
+    public static BlockUplink uplink;
+
     //@GameRegistry.ObjectHolder("money_block")
     //public static BlockBase money_block;
 
@@ -53,6 +57,7 @@ public class ModBlocks
         registry.register(new BlockFluidBase(ModFluids.MONEY, "money", MapColor.GREEN));
         registry.register(new BlockFluidBase(ModFluids.DENSE_MONEY, "dense_money", MapColor.GREEN_STAINED_HARDENED_CLAY));
         registry.register(new BlockSBS());
+        registry.register(new BlockUplink());
 
         //registry.register(money_block = (BlockBase)new BlockBase(Material.IRON, "money_block").setHardness(10));
         //registry.register(dense_money_block = (BlockBase)new BlockBase(Material.IRON, "dense_money_block").setHardness(20));

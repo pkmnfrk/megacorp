@@ -14,8 +14,6 @@ public class CreativeTab extends CreativeTabs
     @Override
     public ItemStack getTabIconItem()
     {
-        //return new ItemStack(ModItems.efficiencyCatalyst, 1);
-        return new ItemStack(ModBlocks.money, 1);
-        //throw new RuntimeException("Not implemented: an icon for the creative tab");
+        return new ItemStack(ModBlocks.uplink, 1);
     }
 }

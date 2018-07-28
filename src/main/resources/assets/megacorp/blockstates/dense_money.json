@@ -1,0 +1,16 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "forge:fluid"
+  },
+  "variants": {
+    "normal": [
+      {
+        "transform": "forge:default-item",
+        "custom": {
+          "fluid": "dense_money"
+        }
+      }
+    ]
+  }
+}

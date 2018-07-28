@@ -9,11 +9,13 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class BlockBase extends Block
+public class BlockBase extends Block
 {
-    public BlockBase(Material material)
+    public BlockBase(Material material, String name)
     {
         super(material);
+        setRegistryName(name);
+        setUnlocalizedName(getRegistryName().toString());
         setCreativeTab(MegaCorpMod.creativeTab);
     }
 

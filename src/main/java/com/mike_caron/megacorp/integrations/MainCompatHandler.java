@@ -8,6 +8,7 @@ public class MainCompatHandler
     {
         registerTOP();
         registerWaila();
+        registerTConstruct();
     }
 
     public static void registerTOP()
@@ -23,6 +24,14 @@ public class MainCompatHandler
         if(Loader.isModLoaded("waila"))
         {
             WailaCompatibility.register();
+        }
+    }
+
+    public static void registerTConstruct()
+    {
+        if(Loader.isModLoaded("tconstruct"))
+        {
+            TConCompatability.register();
         }
     }
 }

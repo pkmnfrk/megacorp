@@ -1,3 +1,13 @@
 itemGroup.megacorp=Mega Corp
 
 fluid.money=Money
+fluid.dense_money=Dense Money
+
+tile.megacorp:money.name=Money
+tile.megacorp:dense_money.name=Dense Money
+
+item.megacorp:ingot_money.name=Cash
+item.megacorp:ingot_dense_money.name=Fat Stack of Cash
+
+tile.megacorp:money_block.name=Block of Money
+tile.megacorp:dense_money_block.name=Block of Dense Money

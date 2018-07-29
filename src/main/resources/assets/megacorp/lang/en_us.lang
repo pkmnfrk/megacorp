@@ -14,3 +14,6 @@ tile.megacorp:dense_money_block.name=Block of Dense Money
 
 tile.megacorp:small_business_simulator.name=Small Business Simulator
 tile.megacorp:uplink.name=Mega Corp Uplink
+tile.megacorp:capital_investor.name=Capital Investor
+tile.megacorp:profit_materializer.name=Profit Materializer
+tile.megacorp:profit_condenser.name=Profit Condenser

@@ -2,6 +2,10 @@ package com.mike_caron.megacorp.block;
 
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.ModMaterials;
+import com.mike_caron.megacorp.block.capital_investor.BlockCapitalInvestor;
+import com.mike_caron.megacorp.block.profit_condenser.BlockProfitCondenser;
+import com.mike_caron.megacorp.block.profit_materializer.BlockProfitMaterializer;
+import com.mike_caron.megacorp.block.profit_materializer.TileEntityProfitMaterializer;
 import com.mike_caron.megacorp.block.sbs.BlockSBS;
 import com.mike_caron.megacorp.block.uplink.BlockUplink;
 import com.mike_caron.megacorp.fluid.ModFluids;
@@ -11,6 +15,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -43,6 +48,15 @@ public class ModBlocks
     @GameRegistry.ObjectHolder("uplink")
     public static BlockUplink uplink;
 
+    @GameRegistry.ObjectHolder("profit_materializer")
+    public static BlockProfitMaterializer profit_materializer;
+
+    @GameRegistry.ObjectHolder("profit_condenser")
+    public static BlockProfitCondenser profit_condenser;
+
+    @GameRegistry.ObjectHolder("capital_investor")
+    public static BlockCapitalInvestor capital_investor;
+
     //@GameRegistry.ObjectHolder("money_block")
     //public static BlockBase money_block;
 
@@ -58,6 +72,9 @@ public class ModBlocks
         registry.register(new BlockFluidBase(ModFluids.DENSE_MONEY, "dense_money", MapColor.GREEN_STAINED_HARDENED_CLAY));
         registry.register(new BlockSBS());
         registry.register(new BlockUplink());
+        registry.register(new BlockProfitMaterializer());
+        registry.register(new BlockProfitCondenser());
+        registry.register(new BlockCapitalInvestor());
 
         //registry.register(money_block = (BlockBase)new BlockBase(Material.IRON, "money_block").setHardness(10));
         //registry.register(dense_money_block = (BlockBase)new BlockBase(Material.IRON, "dense_money_block").setHardness(20));

@@ -1,17 +1,16 @@
 package com.mike_caron.megacorp.block;
 
 import com.mike_caron.megacorp.MegaCorpMod;
-import com.mike_caron.megacorp.ModMaterials;
 import com.mike_caron.megacorp.block.capital_investor.BlockCapitalInvestor;
 import com.mike_caron.megacorp.block.profit_condenser.BlockProfitCondenser;
 import com.mike_caron.megacorp.block.profit_materializer.BlockProfitMaterializer;
 import com.mike_caron.megacorp.block.profit_materializer.TileEntityProfitMaterializer;
 import com.mike_caron.megacorp.block.sbs.BlockSBS;
 import com.mike_caron.megacorp.block.uplink.BlockUplink;
+import com.mike_caron.megacorp.block.uplink.TileEntityUplink;
 import com.mike_caron.megacorp.fluid.ModFluids;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -23,7 +22,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import java.lang.reflect.Field;
@@ -83,6 +81,7 @@ public class ModBlocks
         //dense_money_block.setHarvestLevel("pickaxe", 3);
 
         GameRegistry.registerTileEntity(TileEntityProfitMaterializer.class, new ResourceLocation(MegaCorpMod.modId, "profit_materializer"));
+        GameRegistry.registerTileEntity(TileEntityUplink.class, new ResourceLocation(MegaCorpMod.modId, "uplink"));
     }
 
     @SuppressWarnings("ConstantConditions")

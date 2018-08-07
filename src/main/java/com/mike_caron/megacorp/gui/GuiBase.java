@@ -1,6 +1,10 @@
 package com.mike_caron.megacorp.gui;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiButtonImage;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -8,15 +12,133 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class GuiBase
         extends GuiContainer
 {
-
     public static final ResourceLocation MC_BLOCK_SHEET = new ResourceLocation("textures/atlas/blocks.png");
+
+    @Override
+    public void updateScreen()
+    {
+        super.updateScreen();
+
+        for(Gui control : this.controls)
+        {
+            if(control instanceof GuiTextField)
+            {
+                ((GuiTextField)control).updateCursorCounter();
+            }
+        }
+    }
+
+    @Override
+    protected void mouseReleased(int mouseX, int mouseY, int state)
+    {
+        for (Gui control : this.controls) {
+            if(control instanceof GuiButton)
+            {
+                if(state == 0)
+                {
+                    ((GuiButton) control).mouseReleased(mouseX, mouseY);
+                }
+            }
+
+        }
+
+        super.mouseReleased(mouseX, mouseY, state);
+    }
+
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
+    {
+        for (Gui control : this.controls) {
+            if (control instanceof GuiTextField) {
+                GuiTextField textField = (GuiTextField)control;
+                textField.mouseClicked(mouseX, mouseY, mouseButton);
+            }
+            else if(control instanceof GuiButton)
+            {
+                if(mouseButton == 0)
+                {
+                    if(((GuiButton) control).mousePressed(this.mc, mouseX, mouseY))
+                    {
+                        ((GuiButton)control).playPressSound(this.mc.getSoundHandler());
+                        this.actionPerformed((GuiButton)control);
+
+                    }
+                }
+            }
+
+        }
+
+        Slot slot = this.getSlotUnderMouse();
+
+        if(slot != null)
+        {
+
+        }
+
+        super.mouseClicked(mouseX, mouseY, mouseButton);
+    }
+
+    @Override
+    protected void keyTyped(char typedChar, int keyCode) throws IOException
+    {
+        boolean textFocused = false;
+
+        for (Gui control : this.controls) {
+            if (control instanceof GuiTextField) {
+                GuiTextField textField = (GuiTextField) control;
+                if (textField.isFocused()) {
+                    textFocused = true;
+                    textField.textboxKeyTyped(typedChar, keyCode);
+
+                    if(keyCode == Keyboard.KEY_ESCAPE)
+                    {
+                        textField.setFocused(false);
+                    }
+
+                    break;
+                }
+            }
+        }
+
+
+
+        if (!textFocused)
+            super.keyTyped(typedChar, keyCode);
+    }
+
+    @Override
+    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
+    {
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(-guiLeft, -guiTop, 0);
+
+        for (Gui control : this.controls) {
+            if (control instanceof GuiTextField) {
+                ((GuiTextField)control).drawTextBox();
+            } else if (control instanceof GuiButton) {
+                ((GuiButton)control).drawButton(this.mc, mouseX, mouseY, 0f);
+            }
+        }
+
+        GlStateManager.popMatrix();
+
+        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
+    }
+
+    protected final List<Gui> controls = new ArrayList<>();
 
     public GuiBase(Container inventorySlotsIn)
     {
@@ -29,6 +151,11 @@ public abstract class GuiBase
         this.drawDefaultBackground();
         super.drawScreen(mouseX, mouseY, partialTicks);
         this.renderHoveredToolTip(mouseX, mouseY);
+    }
+
+    protected void addControl(Gui control)
+    {
+        this.controls.add(control);
     }
 
     public void drawFluid(int x, int y, FluidStack fluid, int width, int height) {
@@ -103,5 +230,13 @@ public abstract class GuiBase
         return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
     }
 
+    protected GuiButtonImage makeGuiButtonImage(int buttonId, int x, int y, int width, int height, int xTex, int yTex, int yDiff, ResourceLocation resourceLocation)
+    {
+        return new GuiButtonImage(buttonId, x, y, width, height, xTex, yTex, yDiff, resourceLocation);
+    }
 
+    protected GuiButtonImage makeGuiButtonImage(int buttonId, int x, int y, int width, int height, int xTex, int yTex, ResourceLocation resourceLocation)
+    {
+        return new GuiButtonImage(buttonId, x, y, width, height, xTex, yTex, 0, resourceLocation);
+    }
 }

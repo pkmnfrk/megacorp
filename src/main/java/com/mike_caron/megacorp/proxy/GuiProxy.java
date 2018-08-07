@@ -2,7 +2,10 @@ package com.mike_caron.megacorp.proxy;
 
 import com.mike_caron.megacorp.block.profit_materializer.ContainerProfitMaterializer;
 import com.mike_caron.megacorp.block.profit_materializer.TileEntityProfitMaterializer;
+import com.mike_caron.megacorp.block.uplink.ContainerUplink;
+import com.mike_caron.megacorp.block.uplink.TileEntityUplink;
 import com.mike_caron.megacorp.gui.GuiProfitMaterializer;
+import com.mike_caron.megacorp.gui.GuiUplink;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -21,15 +24,15 @@ public class GuiProxy implements IGuiHandler
         TileEntity te = world.getTileEntity(pos);
 
 
-        if(te instanceof TileEntityProfitMaterializer) {
+        if(te instanceof TileEntityProfitMaterializer)
+        {
             return new ContainerProfitMaterializer(player.inventory, (TileEntityProfitMaterializer)te);
         }
-        /*
-        else if(te instanceof TransmutationGeneratorTileEntity)
+        else if(te instanceof TileEntityUplink)
         {
-            return new TransmutationGeneratorContainer(player.inventory, (TransmutationGeneratorTileEntity)te);
+            return new ContainerUplink(player.inventory, (TileEntityUplink)te);
         }
-        */
+
         return null;
     }
 
@@ -45,13 +48,11 @@ public class GuiProxy implements IGuiHandler
             TileEntityProfitMaterializer TCte = (TileEntityProfitMaterializer) te;
             return new GuiProfitMaterializer(TCte, new ContainerProfitMaterializer(player.inventory, TCte));
         }
-        /*
-        else if(te instanceof TransmutationGeneratorTileEntity)
+        else if(te instanceof TileEntityUplink)
         {
-            TransmutationGeneratorTileEntity TGte = (TransmutationGeneratorTileEntity)te;
-            return new TransmutationGeneratorContainerGui(TGte, new TransmutationGeneratorContainer(player.inventory, TGte));
+            TileEntityUplink TCte = (TileEntityUplink)te;
+            return new GuiUplink(TCte, new ContainerUplink(player.inventory, TCte));
         }
-        */
 
         return null;
     }

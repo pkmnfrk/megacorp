@@ -10,7 +10,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import java.lang.reflect.Field;
@@ -20,19 +19,21 @@ import java.lang.reflect.Modifier;
 @GameRegistry.ObjectHolder(MegaCorpMod.modId)
 public class ModItems
 {
-    //@GameRegistry.ObjectHolder(SoulboundTalisman.id)
-    //public static SoulboundTalisman soulboundTalisman;
-
     //@GameRegistry.ObjectHolder("ingot_money")
     //public static Item ingotMoney;
 
     //@GameRegistry.ObjectHolder("ingot_dense_money")
     //public static Item ingotDenseMoney;
 
+    @GameRegistry.ObjectHolder("corporate_card")
+    public static CorporateCard corporateCard;
+
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event)
     {
         IForgeRegistry<Item> registry = event.getRegistry();
+
+        registry.register(new CorporateCard());
 
         /*
         registry.register(ingotMoney = new Item()

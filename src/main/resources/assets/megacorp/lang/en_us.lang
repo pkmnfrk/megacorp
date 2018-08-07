@@ -17,3 +17,6 @@ tile.megacorp:uplink.name=Mega Corp Uplink
 tile.megacorp:capital_investor.name=Capital Investor
 tile.megacorp:profit_materializer.name=Profit Materializer
 tile.megacorp:profit_condenser.name=Profit Condenser
+
+item.megacorp:corporate_card.name=Corporate Card
+item.megacorp:corporate_card.description=Registered to %s

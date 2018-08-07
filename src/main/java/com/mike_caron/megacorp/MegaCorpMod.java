@@ -2,6 +2,7 @@ package com.mike_caron.megacorp;
 
 import com.mike_caron.megacorp.integrations.MainCompatHandler;
 import com.mike_caron.megacorp.network.CtoSMessage;
+import com.mike_caron.megacorp.network.MessageUpdateGui;
 import com.mike_caron.megacorp.network.PacketHandlerServer;
 import com.mike_caron.megacorp.proxy.IModProxy;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -71,6 +72,7 @@ public class MegaCorpMod
         proxy.postInit(event);
         networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(modId);
         networkWrapper.registerMessage(PacketHandlerServer.class, CtoSMessage.class, 2, Side.SERVER);
+        networkWrapper.registerMessage(MessageUpdateGui.Handler.class, MessageUpdateGui.class, 3, Side.CLIENT);
     }
 
     @Mod.EventHandler

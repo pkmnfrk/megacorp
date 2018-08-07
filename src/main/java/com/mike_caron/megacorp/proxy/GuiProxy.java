@@ -1,5 +1,8 @@
 package com.mike_caron.megacorp.proxy;
 
+import com.mike_caron.megacorp.block.profit_materializer.ContainerProfitMaterializer;
+import com.mike_caron.megacorp.block.profit_materializer.TileEntityProfitMaterializer;
+import com.mike_caron.megacorp.gui.GuiProfitMaterializer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -17,10 +20,11 @@ public class GuiProxy implements IGuiHandler
         BlockPos pos = new BlockPos(x,y,z);
         TileEntity te = world.getTileEntity(pos);
 
-        /*
-        if(te instanceof TransmutationChamberTileEntity) {
-            return new TransmutationChamberContainer(player.inventory, (TransmutationChamberTileEntity)te);
+
+        if(te instanceof TileEntityProfitMaterializer) {
+            return new ContainerProfitMaterializer(player.inventory, (TileEntityProfitMaterializer)te);
         }
+        /*
         else if(te instanceof TransmutationGeneratorTileEntity)
         {
             return new TransmutationGeneratorContainer(player.inventory, (TransmutationGeneratorTileEntity)te);
@@ -36,11 +40,12 @@ public class GuiProxy implements IGuiHandler
         BlockPos pos = new BlockPos(x,y,z);
         TileEntity te = world.getTileEntity(pos);
 
-        /*
-        if(te instanceof TransmutationChamberTileEntity) {
-            TransmutationChamberTileEntity TCte = (TransmutationChamberTileEntity)te;
-            return new TransmutationChamberContainerGui(TCte, new TransmutationChamberContainer(player.inventory, TCte));
+
+        if(te instanceof TileEntityProfitMaterializer) {
+            TileEntityProfitMaterializer TCte = (TileEntityProfitMaterializer) te;
+            return new GuiProfitMaterializer(TCte, new ContainerProfitMaterializer(player.inventory, TCte));
         }
+        /*
         else if(te instanceof TransmutationGeneratorTileEntity)
         {
             TransmutationGeneratorTileEntity TGte = (TransmutationGeneratorTileEntity)te;

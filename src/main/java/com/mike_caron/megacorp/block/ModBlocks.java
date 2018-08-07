@@ -81,7 +81,8 @@ public class ModBlocks
 
         //money_block.setHarvestLevel("pickaxe", 2);
         //dense_money_block.setHarvestLevel("pickaxe", 3);
-        //GameRegistry.registerTileEntity(TransmutationChamberTileEntity.class, new ResourceLocation(MegaCorpMod.modId, TransmutationChamber.id));
+
+        GameRegistry.registerTileEntity(TileEntityProfitMaterializer.class, new ResourceLocation(MegaCorpMod.modId, "profit_materializer"));
     }
 
     @SuppressWarnings("ConstantConditions")

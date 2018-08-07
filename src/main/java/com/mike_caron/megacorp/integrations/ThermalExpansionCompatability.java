@@ -53,11 +53,28 @@ public class ThermalExpansionCompatability
                 new FluidStack(ModFluids.DENSE_MONEY, 144 * 9));
         */
 
-        ThermalExpansionHelper.addRefineryRecipe(100000,
+        addRefineryRecipe(100000,
                 new FluidStack(ModFluids.MONEY, 1000),
                 new FluidStack(ModFluids.DENSE_MONEY, 1),
                 ItemStack.EMPTY);
 
+    }
+
+    private static void addRefineryRecipe(int energy, FluidStack input, FluidStack output, ItemStack outputItem) {
+        if (input != null && output != null) {
+            NBTTagCompound toSend = new NBTTagCompound();
+            toSend.setInteger("energy", energy);
+            toSend.setTag("input", new NBTTagCompound());
+            toSend.setTag("output", new NBTTagCompound());
+            if (!outputItem.isEmpty()) {
+                toSend.setTag("output2", new NBTTagCompound());
+                outputItem.writeToNBT(toSend.getCompoundTag("output2"));
+            }
+
+            input.writeToNBT(toSend.getCompoundTag("input"));
+            output.writeToNBT(toSend.getCompoundTag("output"));
+            FMLInterModComms.sendMessage("thermalexpansion", "addrefineryrecipe", toSend);
+        }
     }
 
 

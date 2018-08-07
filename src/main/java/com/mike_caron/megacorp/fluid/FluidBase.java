@@ -11,7 +11,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class FluidBase extends Fluid
 {
-    protected int mapColor = 0xFFFFFFFF;
+    //protected int mapColor = 0xFFFFFFFF;
     protected float overlayAlpha = 0.2F;
     protected SoundEvent emptySound = SoundEvents.ITEM_BUCKET_EMPTY;
     protected SoundEvent fillSound = SoundEvents.ITEM_BUCKET_FILL;
@@ -54,12 +54,12 @@ public class FluidBase extends Fluid
     @Override
     public int getColor()
     {
-        return mapColor;
+        return color;
     }
 
     public FluidBase setColor(int parColor)
     {
-        mapColor = parColor;
+        color = parColor;
         return this;
     }
 

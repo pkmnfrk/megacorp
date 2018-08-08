@@ -8,6 +8,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.UUID;
 
 public class CorporateCard extends ItemBase
 {
@@ -27,5 +28,13 @@ public class CorporateCard extends ItemBase
     {
         String temp = TextFormatting.OBFUSCATED + "unknown" + TextFormatting.RESET;
         tooltip.add(I18n.format("item.megacorp:corporate_card.description", temp));
+    }
+
+    public static UUID getOwner(ItemStack stack)
+    {
+        if(stack.getItem() != ModItems.corporateCard || !stack.hasTagCompound() || !stack.getTagCompound().hasKey("Owner"))
+            return null;
+
+        return UUID.fromString(stack.getTagCompound().getString("Owner"));
     }
 }

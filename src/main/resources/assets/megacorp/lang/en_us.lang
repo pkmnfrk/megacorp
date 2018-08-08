@@ -23,3 +23,5 @@ tile.megacorp:profit_condenser.name=Profit Condenser
 
 item.megacorp:corporate_card.name=Corporate Card
 item.megacorp:corporate_card.description=Registered to %s
+
+tile.megacorp:misc.insertcard=Please activate this machine with a Corporate Card.

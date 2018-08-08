@@ -23,8 +23,23 @@ public class GuiProfitMaterializer
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
-        this.fontRenderer.drawString(new TextComponentTranslation("tile.megacorp:profit_materializer.name", new Object[0]).getUnformattedText(), 6, 4, FONT_COLOUR);
+        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 
+        if(te.getOwner() == null)
+        {
+            this.drawInsertCardForeground();
+        }
+        else
+        {
+
+        }
+
+    }
+
+    @Override
+    protected String getTitle()
+    {
+        return new TextComponentTranslation("tile.megacorp:profit_materializer.name", new Object[0]).getUnformattedText();
     }
 
     public GuiProfitMaterializer(TileEntityProfitMaterializer te, ContainerProfitMaterializer container)
@@ -41,13 +56,20 @@ public class GuiProfitMaterializer
     @Override
     protected void drawGuiContainerBackgroundLayer(float v, int i, int i1)
     {
-        GlStateManager.color(1, 1, 1, 1);
-        mc.getTextureManager().bindTexture(background);
-        drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+        if(te.getOwner() == null)
+        {
+            drawInsertCardBackground();
+        }
+        else
+        {
+            GlStateManager.color(1, 1, 1, 1);
+            mc.getTextureManager().bindTexture(background);
+            drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
-        int scaledHeight = getScaled(52);
+            int scaledHeight = getScaled(52);
 
-        this.drawFluid(guiLeft + 66, guiTop + 21 + (52-scaledHeight), te.fluidTank.getFluid(), 43, scaledHeight);
+            this.drawFluid(guiLeft + 66, guiTop + 21 + (52 - scaledHeight), te.fluidTank.getFluid(), 43, scaledHeight);
+        }
     }
 
     private int getScaled(int height)

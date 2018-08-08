@@ -19,8 +19,6 @@ public class GuiUplink
     public static final int WIDTH = 176;
     public static final int HEIGHT = 166;
 
-    public static final int FONT_COLOUR = 0x404040;
-
     private static final ResourceLocation background = new ResourceLocation(MegaCorpMod.modId, "textures/gui/uplink.png");
 
     private final TileEntityUplink te;
@@ -73,11 +71,16 @@ public class GuiUplink
     }
 
     @Override
+    protected String getTitle()
+    {
+        return new TextComponentTranslation("tile.megacorp:uplink.name").getUnformattedText();
+    }
+
+    @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 
-        this.fontRenderer.drawString(new TextComponentTranslation("tile.megacorp:uplink.name").getUnformattedText(), 6, 4, FONT_COLOUR);
         this.fontRenderer.drawString(new TextComponentTranslation("tile.megacorp:uplink.corpname").getUnformattedText(), 6, 19, FONT_COLOUR);
 
         String prefix = new TextComponentTranslation("tile.megacorp:uplink.profit").getUnformattedText();

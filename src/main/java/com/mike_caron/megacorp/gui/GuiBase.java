@@ -1,5 +1,6 @@
 package com.mike_caron.megacorp.gui;
 
+import com.mike_caron.megacorp.MegaCorpMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
@@ -14,6 +15,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
@@ -26,6 +28,8 @@ public abstract class GuiBase
         extends GuiContainer
 {
     public static final ResourceLocation MC_BLOCK_SHEET = new ResourceLocation("textures/atlas/blocks.png");
+    public static final ResourceLocation EMPTY_GUI = new ResourceLocation(MegaCorpMod.modId, "textures/gui/empty.png");
+    public static final int FONT_COLOUR = 0x404040;
 
     @Override
     public void updateScreen()
@@ -122,6 +126,12 @@ public abstract class GuiBase
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
+        String title = getTitle();
+        if(title != null)
+        {
+            this.fontRenderer.drawString(title, 6, 6, FONT_COLOUR);
+        }
+
         GlStateManager.pushMatrix();
         GlStateManager.translate(-guiLeft, -guiTop, 0);
 
@@ -238,5 +248,38 @@ public abstract class GuiBase
     protected GuiButtonImage makeGuiButtonImage(int buttonId, int x, int y, int width, int height, int xTex, int yTex, ResourceLocation resourceLocation)
     {
         return new GuiButtonImage(buttonId, x, y, width, height, xTex, yTex, 0, resourceLocation);
+    }
+
+    protected void drawInsertCardBackground()
+    {
+        GlStateManager.color(1, 1, 1, 1);
+        mc.getTextureManager().bindTexture(EMPTY_GUI);
+        drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+    }
+
+    protected void drawInsertCardForeground()
+    {
+        String message = new TextComponentTranslation("tile.megacorp:misc.insertcard").getUnformattedText();
+
+        drawCenteredWrappedString(message, 88, 45, 154);
+    }
+
+    protected String getTitle()
+    {
+        return null;
+    }
+
+    protected void drawCenteredWrappedString(String message, int x, int y, int wrapWidth)
+    {
+        List<String> lines = this.fontRenderer.listFormattedStringToWidth(message, wrapWidth);
+        int height = 10 * lines.size();
+        int ty = y - height / 2;
+
+        for(int i = 0; i < lines.size(); i++)
+        {
+            int w = this.fontRenderer.getStringWidth(lines.get(i));
+            this.fontRenderer.drawString(lines.get(i), x - w / 2, ty, FONT_COLOUR);
+            ty += 10;
+        }
     }
 }

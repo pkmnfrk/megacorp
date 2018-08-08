@@ -88,6 +88,8 @@ public class TileEntityProfitMaterializer
     {
         if(world == null || world.isRemote) return;
 
+        if(owner == null) return;
+
         timer += 1;
 
         if(timer > 8)

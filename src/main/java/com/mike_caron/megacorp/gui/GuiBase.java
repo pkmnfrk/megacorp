@@ -1,6 +1,7 @@
 package com.mike_caron.megacorp.gui;
 
 import com.mike_caron.megacorp.MegaCorpMod;
+import com.mike_caron.megacorp.block.ContainerBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
@@ -12,7 +13,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -30,6 +30,26 @@ public abstract class GuiBase
     public static final ResourceLocation MC_BLOCK_SHEET = new ResourceLocation("textures/atlas/blocks.png");
     public static final ResourceLocation EMPTY_GUI = new ResourceLocation(MegaCorpMod.modId, "textures/gui/empty.png");
     public static final int FONT_COLOUR = 0x404040;
+
+
+    public GuiBase(ContainerBase inventorySlotsIn)
+    {
+        super(inventorySlotsIn);
+
+        inventorySlotsIn.setGuiListener(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                onContainerRefresh();
+            }
+        });
+    }
+
+    protected void onContainerRefresh()
+    {
+
+    }
 
     @Override
     public void updateScreen()
@@ -68,7 +88,12 @@ public abstract class GuiBase
         for (Gui control : this.controls) {
             if (control instanceof GuiTextField) {
                 GuiTextField textField = (GuiTextField)control;
+                boolean wasFocused = textField.isFocused();
                 textField.mouseClicked(mouseX, mouseY, mouseButton);
+                if(wasFocused && !textField.isFocused())
+                {
+                    this.textFieldLostFocus(textField);
+                }
             }
             else if(control instanceof GuiButton)
             {
@@ -110,14 +135,13 @@ public abstract class GuiBase
                     if(keyCode == Keyboard.KEY_ESCAPE)
                     {
                         textField.setFocused(false);
+                        this.textFieldLostFocus(textField);
                     }
 
                     break;
                 }
             }
         }
-
-
 
         if (!textFocused)
             super.keyTyped(typedChar, keyCode);
@@ -139,6 +163,7 @@ public abstract class GuiBase
             if (control instanceof GuiTextField) {
                 ((GuiTextField)control).drawTextBox();
             } else if (control instanceof GuiButton) {
+                GlStateManager.color(1, 1, 1, 1);
                 ((GuiButton)control).drawButton(this.mc, mouseX, mouseY, 0f);
             }
         }
@@ -149,11 +174,6 @@ public abstract class GuiBase
     }
 
     protected final List<Gui> controls = new ArrayList<>();
-
-    public GuiBase(Container inventorySlotsIn)
-    {
-        super(inventorySlotsIn);
-    }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
@@ -282,4 +302,10 @@ public abstract class GuiBase
             ty += 10;
         }
     }
+
+    protected void textFieldLostFocus(GuiTextField textField)
+    {
+
+    }
+
 }

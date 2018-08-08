@@ -1,6 +1,7 @@
 package com.mike_caron.megacorp.block;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -79,4 +80,7 @@ public class TileEntityBase
         this.owner = owner;
         this.markDirty();
     }
+
+    public void handleGuiButton(EntityPlayerMP player, int button) {}
+    public void handleGuiString(EntityPlayerMP player, int element, String string) {}
 }

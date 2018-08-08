@@ -2,10 +2,11 @@ package com.mike_caron.megacorp.gui;
 
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.block.profit_materializer.ContainerProfitMaterializer;
-import com.mike_caron.megacorp.block.profit_materializer.TileEntityProfitMaterializer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 public class GuiProfitMaterializer
     extends GuiBase
@@ -17,7 +18,6 @@ public class GuiProfitMaterializer
 
     private static final ResourceLocation background = new ResourceLocation(MegaCorpMod.modId, "textures/gui/profit_materializer.png");
 
-    private final TileEntityProfitMaterializer te;
     private final ContainerProfitMaterializer container;
 
     @Override
@@ -25,7 +25,7 @@ public class GuiProfitMaterializer
     {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 
-        if(te.getOwner() == null)
+        if(container.owner == null)
         {
             this.drawInsertCardForeground();
         }
@@ -42,21 +42,20 @@ public class GuiProfitMaterializer
         return new TextComponentTranslation("tile.megacorp:profit_materializer.name", new Object[0]).getUnformattedText();
     }
 
-    public GuiProfitMaterializer(TileEntityProfitMaterializer te, ContainerProfitMaterializer container)
+    public GuiProfitMaterializer(ContainerProfitMaterializer container)
     {
         super(container);
 
         xSize = WIDTH;
         ySize = HEIGHT;
 
-        this.te = te;
         this.container = container;
     }
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float v, int i, int i1)
     {
-        if(te.getOwner() == null)
+        if(container.owner == null)
         {
             drawInsertCardBackground();
         }
@@ -68,14 +67,16 @@ public class GuiProfitMaterializer
 
             int scaledHeight = getScaled(52);
 
-            this.drawFluid(guiLeft + 66, guiTop + 21 + (52 - scaledHeight), te.fluidTank.getFluid(), 43, scaledHeight);
+            FluidStack fluid = FluidRegistry.getFluidStack( container.fluid, 1);
+
+            this.drawFluid(guiLeft + 66, guiTop + 21 + (52 - scaledHeight), fluid, 43, scaledHeight);
         }
     }
 
     private int getScaled(int height)
     {
-        int ret = (int)Math.floor(((double)te.fluidTank.getFluidAmount()) / te.fluidTank.getCapacity() * height);
-        if(ret == 0 && te.fluidTank.getFluidAmount() > 0)
+        int ret = (int)Math.floor(((double)container.fluidAmount) / container.fluidCapacity * height);
+        if(ret == 0 && container.fluidAmount > 0)
             return 1;
         return ret;
     }

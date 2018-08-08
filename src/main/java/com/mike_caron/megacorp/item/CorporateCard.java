@@ -3,7 +3,7 @@ package com.mike_caron.megacorp.item;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -18,6 +18,8 @@ public class CorporateCard extends ItemBase
 
         setRegistryName("corporate_card");
         setUnlocalizedName("megacorp:corporate_card");
+        setMaxStackSize(1);
+
         //intentionally not set:
         //setCreativeTab(MegaCorpMod.creativeTab);
 
@@ -26,8 +28,33 @@ public class CorporateCard extends ItemBase
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
     {
-        String temp = TextFormatting.OBFUSCATED + "unknown" + TextFormatting.RESET;
-        tooltip.add(I18n.format("item.megacorp:corporate_card.description", temp));
+        UUID owner = getOwner(stack);
+        String message;
+
+        if(owner == null)
+        {
+            message = "item.megacorp:corporate_card.notlinked";
+        }
+        else
+        {
+            message = "item.megacorp:corporate_card.linked";
+        }
+
+        tooltip.add(I18n.format(message));
+    }
+
+    public static ItemStack stackForCorp(UUID owner)
+    {
+        if(owner == null)
+        {
+            return ItemStack.EMPTY;
+        }
+        ItemStack stack = new ItemStack(ModItems.corporateCard, 1);
+        NBTTagCompound tag = new NBTTagCompound();
+        tag.setString("Owner", owner.toString());
+        stack.setTagCompound(tag);
+
+        return stack;
     }
 
     public static UUID getOwner(ItemStack stack)

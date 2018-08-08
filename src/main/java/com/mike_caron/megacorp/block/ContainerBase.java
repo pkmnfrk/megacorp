@@ -18,12 +18,36 @@ public abstract class ContainerBase
         extends Container
         implements IGuiUpdater
 {
+    private Runnable onGuiUpdate;
+    private IInventory playerInventory;
+
+    protected boolean changed = false;
+
+    @Override
+    public void detectAndSendChanges()
+    {
+        super.detectAndSendChanges();
+
+        changed = false;
+    }
 
     public ContainerBase(IInventory player)
     {
         super();
 
-        addPlayerSlots(player);
+        this.playerInventory = player;
+    }
+
+    protected void init()
+    {
+        addPlayerSlots(playerInventory);
+        addOwnSlots();
+    }
+
+    @Override
+    public void setGuiListener(Runnable onUpdate)
+    {
+        this.onGuiUpdate = onUpdate;
     }
 
     protected int playerInventoryX()
@@ -125,7 +149,20 @@ public abstract class ContainerBase
         if(nbtTagCompound != null)
         {
             onReadNBT(nbtTagCompound);
+
+            if(onGuiUpdate != null)
+            {
+                onGuiUpdate.run();
+            }
         }
+    }
+
+    @Override
+    public void addListener(IContainerListener listener)
+    {
+        super.addListener(listener);
+
+        triggerUpdate(listener);
     }
 
     protected void onReadNBT(NBTTagCompound tag)
@@ -141,5 +178,12 @@ public abstract class ContainerBase
         {
             MegaCorpMod.networkWrapper.sendTo(message, (EntityPlayerMP)listener);
         }
+    }
+
+    protected void triggerUpdate(IContainerListener listener)
+    {
+        MessageUpdateGui message = new MessageUpdateGui(this);
+        MegaCorpMod.networkWrapper.sendTo(message, (EntityPlayerMP)listener);
+
     }
 }

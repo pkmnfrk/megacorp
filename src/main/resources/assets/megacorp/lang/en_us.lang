@@ -15,6 +15,10 @@ tile.megacorp:dense_money_block.name=Block of Dense Money
 tile.megacorp:uplink.name=Mega Corp Uplink
 tile.megacorp:uplink.corpname=Corporation Name:
 tile.megacorp:uplink.profit=Profit Generated:
+tile.megacorp:uplink.newcorp=No Mega Corp registered to this owner. Insert a Corporate Card, or:
+tile.megacorp:uplink.existcorp=Mega Corp registered to this owner exists. Insert a Corporate Card, or:
+tile.megacorp.uplink.createcorp=Create Mega Corp
+tile.megacorp.uplink.establish=Establish Uplink
 
 tile.megacorp:small_business_simulator.name=Small Business Simulator
 tile.megacorp:capital_investor.name=Capital Investor
@@ -22,6 +26,9 @@ tile.megacorp:profit_materializer.name=Profit Materializer
 tile.megacorp:profit_condenser.name=Profit Condenser
 
 item.megacorp:corporate_card.name=Corporate Card
-item.megacorp:corporate_card.description=Registered to %s
+item.megacorp:corporate_card.linked=Registered
+item.megacorp:corporate_card.notlinked=Unregistered
+
 
 tile.megacorp:misc.insertcard=Please activate this machine with a Corporate Card.
+

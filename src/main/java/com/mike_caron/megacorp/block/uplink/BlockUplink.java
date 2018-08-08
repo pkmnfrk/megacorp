@@ -2,7 +2,6 @@ package com.mike_caron.megacorp.block.uplink;
 
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.block.MachineBlockBase;
-import com.mike_caron.megacorp.integrations.ITOPInfoProvider;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.ProbeMode;
@@ -20,7 +19,6 @@ import javax.annotation.Nullable;
 
 public class BlockUplink
         extends MachineBlockBase
-        implements ITOPInfoProvider
 {
     public BlockUplink()
     {
@@ -72,6 +70,8 @@ public class BlockUplink
     @Override
     public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data)
     {
+        super.addProbeInfo(mode, probeInfo, player, world, blockState, data);
+
         TileEntityUplink te = getTE(world, data.getPos());
 
         if(te == null) return;

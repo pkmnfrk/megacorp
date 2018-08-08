@@ -75,8 +75,10 @@ public class BlockProfitMaterializer
     }
 
     @Override
-    public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data)
+    public void addMegaCorpProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data)
     {
+        super.addMegaCorpProbeInfo(mode, probeInfo, player, world, blockState, data);
+
         TileEntityProfitMaterializer te = getTE(world, data.getPos());
 
         if(te == null) return;

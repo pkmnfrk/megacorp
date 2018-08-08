@@ -1,14 +1,17 @@
 package com.mike_caron.megacorp.block.profit_materializer;
 
 import com.mike_caron.megacorp.block.TEContainerBase;
+import com.mike_caron.megacorp.util.StringUtil;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidRegistry;
 
 public class ContainerProfitMaterializer
         extends TEContainerBase
 {
     public int fluidAmount = 0;
+    public int fluidCapacity = 1;
+    public String fluid = null;
 
     public ContainerProfitMaterializer(IInventory playerInventory, TileEntityProfitMaterializer te)
     {
@@ -39,32 +42,71 @@ public class ContainerProfitMaterializer
 
         TileEntityProfitMaterializer te = getTE();
 
-        //for(IContainerListener crafter : this.listeners)
-        //{
-            if(te.fluidTank.getFluidAmount() != this.fluidAmount)
-            {
-                this.fluidAmount = te.fluidTank.getFluidAmount();
+        if(te.fluidTank.getFluidAmount() != this.fluidAmount)
+        {
+            this.fluidAmount = te.fluidTank.getFluidAmount();
+            changed = true;
+        }
 
-                this.triggerUpdate();
-            }
-        //}
+        if(te.fluidTank.getCapacity() != this.fluidCapacity)
+        {
+            this.fluidCapacity = te.fluidTank.getCapacity();
+            changed = true;
+        }
+
+
+        String fluidName = null;
+        if(te.fluidTank.getFluid() != null && te.fluidTank.getFluid().getFluid() != null)
+        {
+            fluidName = FluidRegistry.getFluidName(te.fluidTank.getFluid().getFluid());
+        }
+
+        if(!StringUtil.areEqual(fluidName, this.fluid))
+        {
+            this.fluid = fluidName;
+            changed = true;
+        }
+
+        if(changed)
+        {
+            this.triggerUpdate();
+        }
     }
 
     @Override
     protected void onReadNBT(NBTTagCompound tag)
     {
-        if(tag.hasKey("tank"))
+        super.onReadNBT(tag);
+
+        if(tag.hasKey("FluidAmount"))
         {
-            getTE().fluidTank.setFluid(FluidStack.loadFluidStackFromNBT(tag.getCompoundTag("tank")));
+            this.fluidAmount = tag.getInteger("FluidAmount");
+        }
+        if(tag.hasKey("FluidCapacity"))
+        {
+            this.fluidCapacity = tag.getInteger("FluidCapacity");
+        }
+        if(tag.hasKey("Fluid"))
+        {
+            this.fluid = tag.getString("Fluid");
+        }
+        else
+        {
+            this.fluid = null;
         }
     }
 
     @Override
     protected void onWriteNBT(NBTTagCompound tag)
     {
-        NBTTagCompound tank = new NBTTagCompound();
-        getTE().fluidTank.getFluid().writeToNBT(tank);
-        tag.setTag("tank", tank);
+        super.onWriteNBT(tag);
+
+        tag.setInteger("FluidAmount", this.fluidAmount);
+        tag.setInteger("FluidCapacity", this.fluidCapacity);
+        if(this.fluid != null)
+        {
+            tag.setString("Fluid", this.fluid);
+        }
 
     }
 
@@ -73,4 +115,6 @@ public class ContainerProfitMaterializer
     {
         return 1;
     }
+
+
 }

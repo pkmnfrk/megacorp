@@ -1,7 +1,14 @@
 package com.mike_caron.megacorp.block;
 
+import com.mike_caron.megacorp.api.CorporationManager;
+import com.mike_caron.megacorp.api.ICorporation;
+import com.mike_caron.megacorp.integrations.ITOPInfoProvider;
 import com.mike_caron.megacorp.item.CorporateCard;
 import com.mike_caron.megacorp.item.ModItems;
+import mcjty.theoneprobe.api.ElementAlignment;
+import mcjty.theoneprobe.api.IProbeHitData;
+import mcjty.theoneprobe.api.IProbeInfo;
+import mcjty.theoneprobe.api.ProbeMode;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,7 +22,7 @@ import net.minecraft.world.World;
 
 import java.util.UUID;
 
-public class MachineBlockBase extends FacingBlockBase
+public class MachineBlockBase extends FacingBlockBase implements ITOPInfoProvider
 {
 
     public MachineBlockBase(Material material, String name)
@@ -35,6 +42,36 @@ public class MachineBlockBase extends FacingBlockBase
             return (TileEntityBase)te;
 
         return null;
+    }
+
+    @Override
+    public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data)
+    {
+        TileEntityBase teb = getTE(world, data.getPos());
+
+        if(teb == null) return;
+
+        if(teb.getOwner() != null)
+        {
+            ICorporation corp = CorporationManager.getInstance(world).getCorporationForOwner(teb.getOwner());
+
+            IProbeInfo box = probeInfo
+                .vertical(probeInfo.defaultLayoutStyle().borderColor(0xff008000));
+
+            box.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER))
+                .item(new ItemStack(ModItems.corporateCard))
+                .vertical()
+                    //.text("Corporation")
+                    .text(corp.getName());
+
+            addMegaCorpProbeInfo(mode, box, player, world, blockState, data);
+        }
+
+    }
+
+    protected void addMegaCorpProbeInfo(ProbeMode mode, IProbeInfo info, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data)
+    {
+
     }
 
     @Override

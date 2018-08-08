@@ -6,14 +6,11 @@ import com.mike_caron.megacorp.api.ICorporationManager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.WorldSavedData;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@Mod.EventBusSubscriber
 public class CorporationManager extends WorldSavedData implements ICorporationManager
 {
     private final Map<UUID, Corporation> corporations = new HashMap<>();
@@ -22,6 +19,11 @@ public class CorporationManager extends WorldSavedData implements ICorporationMa
     {
         super(MegaCorpMod.modId);
 
+    }
+
+    public CorporationManager(String id)
+    {
+        super(id);
     }
 
     public boolean ownerHasCorporation(UUID owner)
@@ -34,14 +36,26 @@ public class CorporationManager extends WorldSavedData implements ICorporationMa
         if(corporations.containsKey(owner))
             throw new IllegalArgumentException("owner");
 
-        Corporation corp = new Corporation();
+        Corporation corp = new Corporation(this, owner);
+
+        corp.setName(CorporationNameGenerator.generateName());
 
         corporations.put(owner, corp);
+
+        markDirty();
 
         return corp;
     }
 
     public ICorporation getCorporationForOwner(UUID owner)
+    {
+        if(!corporations.containsKey(owner))
+            throw new IllegalArgumentException("owner");
+
+        return corporations.get(owner);
+    }
+
+    public Corporation getCorporationForOwnerInternal(UUID owner)
     {
         if(!corporations.containsKey(owner))
             throw new IllegalArgumentException("owner");
@@ -57,7 +71,7 @@ public class CorporationManager extends WorldSavedData implements ICorporationMa
         for(String key : tag.getKeySet())
         {
             UUID owner = UUID.fromString(key);
-            Corporation corp = new Corporation();
+            Corporation corp = new Corporation(this);
             corp.deserializeNBT(tag.getCompoundTag(key));
 
             corporations.put(owner, corp);
@@ -76,12 +90,6 @@ public class CorporationManager extends WorldSavedData implements ICorporationMa
         }
 
         return ret;
-    }
-
-    @Mod.EventHandler
-    public static void OnStartup(FMLServerStartingEvent event)
-    {
-
     }
 
     public static CorporationManager get(World world)

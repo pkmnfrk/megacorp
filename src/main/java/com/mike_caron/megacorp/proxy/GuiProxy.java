@@ -30,7 +30,7 @@ public class GuiProxy implements IGuiHandler
         }
         else if(te instanceof TileEntityUplink)
         {
-            return new ContainerUplink(player.inventory, (TileEntityUplink)te);
+            return new ContainerUplink(player.inventory, (TileEntityUplink)te, player);
         }
 
         return null;
@@ -46,12 +46,12 @@ public class GuiProxy implements IGuiHandler
 
         if(te instanceof TileEntityProfitMaterializer) {
             TileEntityProfitMaterializer TCte = (TileEntityProfitMaterializer) te;
-            return new GuiProfitMaterializer(TCte, new ContainerProfitMaterializer(player.inventory, TCte));
+            return new GuiProfitMaterializer(new ContainerProfitMaterializer(player.inventory, TCte));
         }
         else if(te instanceof TileEntityUplink)
         {
             TileEntityUplink TCte = (TileEntityUplink)te;
-            return new GuiUplink(TCte, new ContainerUplink(player.inventory, TCte));
+            return new GuiUplink(new ContainerUplink(player.inventory, TCte, player));
         }
 
         return null;

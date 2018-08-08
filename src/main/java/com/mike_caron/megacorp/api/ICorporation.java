@@ -7,7 +7,6 @@ public interface ICorporation
     UUID getOwner();
     String getName();
     long getAvailableProfit();
-
-
+    long getTotalProfit();
 
 }

@@ -4,12 +4,12 @@ import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.block.profit_materializer.ContainerProfitMaterializer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
+
+import java.text.NumberFormat;
 
 public class GuiProfitMaterializer
-    extends GuiBase
+    extends GuiContainerBase
 {
     public static final int WIDTH = 176;
     public static final int HEIGHT = 166;
@@ -19,6 +19,41 @@ public class GuiProfitMaterializer
     private static final ResourceLocation background = new ResourceLocation(MegaCorpMod.modId, "textures/gui/profit_materializer.png");
 
     private final ContainerProfitMaterializer container;
+
+    private GuiFluid fluid;
+    private GuiTranslatedLabel profitRemainingTitleLabel;
+    private GuiTranslatedLabel profitRemainingLabel;
+
+    @Override
+    public void updateScreen()
+    {
+        super.updateScreen();
+
+        if(container.owner == null && fluid.isVisible())
+        {
+            fluid.setVisible(false);
+            profitRemainingLabel.setVisible(false);
+            profitRemainingTitleLabel.setVisible(false);
+        }
+        else if(container.owner != null && !fluid.isVisible())
+        {
+            fluid.setVisible(true);
+            profitRemainingLabel.setVisible(true);
+            profitRemainingTitleLabel.setVisible(true);
+        }
+
+        if(fluid.isVisible())
+        {
+            fluid.setAmount(container.fluidAmount);
+            fluid.setCapacity(container.fluidCapacity);
+            fluid.setFluid(FluidRegistry.getFluid(container.fluid));
+        }
+
+        if(profitRemainingLabel.isVisible())
+        {
+            profitRemainingLabel.setPlaceholder(0, NumberFormat.getIntegerInstance().format(container.profitRemaining));
+        }
+    }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
@@ -37,9 +72,9 @@ public class GuiProfitMaterializer
     }
 
     @Override
-    protected String getTitle()
+    protected String getTitleKey()
     {
-        return new TextComponentTranslation("tile.megacorp:profit_materializer.name", new Object[0]).getUnformattedText();
+        return "tile.megacorp:profit_materializer.name";
     }
 
     public GuiProfitMaterializer(ContainerProfitMaterializer container)
@@ -50,6 +85,26 @@ public class GuiProfitMaterializer
         ySize = HEIGHT;
 
         this.container = container;
+
+        initControls();
+    }
+
+    @Override
+    protected void addControls()
+    {
+        super.addControls();
+
+        fluid = new GuiFluid(26, 21, 43, 52);
+        fluid.setGradEnabled(true);
+
+        this.addControl(fluid);
+
+        profitRemainingTitleLabel = new GuiTranslatedLabel(74, 22, "tile.megacorp:profit_materializer.remaining");
+        profitRemainingLabel = new GuiTranslatedLabel(74, 31 , "tile.megacorp:profit_materializer.remainingval", "");
+
+        this.addControl(profitRemainingLabel);
+        this.addControl(profitRemainingTitleLabel);
+
     }
 
     @Override
@@ -64,20 +119,32 @@ public class GuiProfitMaterializer
             GlStateManager.color(1, 1, 1, 1);
             mc.getTextureManager().bindTexture(background);
             drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
-
-            int scaledHeight = getScaled(52);
-
-            FluidStack fluid = FluidRegistry.getFluidStack( container.fluid, 1);
-
-            this.drawFluid(guiLeft + 66, guiTop + 21 + (52 - scaledHeight), fluid, 43, scaledHeight);
         }
     }
 
-    private int getScaled(int height)
+
+    @Override
+    protected void renderHoveredToolTip(int mouseX, int mouseY)
     {
-        int ret = (int)Math.floor(((double)container.fluidAmount) / container.fluidCapacity * height);
-        if(ret == 0 && container.fluidAmount > 0)
-            return 1;
-        return ret;
+        /*if(GuiUtil.inBounds(mouseX, mouseY, guiLeft + 66, guiTop + 21, 43, 52))
+        {
+            List<String> items = new ArrayList<>();
+
+            items.add(FluidRegistry.getFluid(container.fluid).getLocalizedName(null));
+
+            StringBuilder sb = new StringBuilder();
+            sb.append(NumberFormat.getIntegerInstance().format(container.fluidAmount));
+            sb.append("/");
+            sb.append(NumberFormat.getIntegerInstance().format(container.fluidCapacity));
+            sb.append("mb");
+            items.add(sb.toString());
+
+            this.drawHoveringText(items, mouseX, mouseY);
+        }
+        else*/
+        {
+            super.renderHoveredToolTip(mouseX, mouseY);
+        }
     }
+
 }

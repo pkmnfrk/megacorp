@@ -22,13 +22,16 @@ tile.megacorp.uplink.establish=Establish Uplink
 
 tile.megacorp:small_business_simulator.name=Small Business Simulator
 tile.megacorp:capital_investor.name=Capital Investor
-tile.megacorp:profit_materializer.name=Profit Materializer
 tile.megacorp:profit_condenser.name=Profit Condenser
 
 item.megacorp:corporate_card.name=Corporate Card
 item.megacorp:corporate_card.linked=Registered
 item.megacorp:corporate_card.notlinked=Unregistered
 
+tile.megacorp:profit_materializer.name=Profit Materializer
+tile.megacorp:profit_materializer.remaining=Profit Remaining:
+tile.megacorp:profit_materializer.remainingval=$%s
 
 tile.megacorp:misc.insertcard=Please activate this machine with a Corporate Card.
+
 

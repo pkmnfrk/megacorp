@@ -1,5 +1,6 @@
 package com.mike_caron.megacorp.block.profit_materializer;
 
+import com.mike_caron.megacorp.api.CorporationManager;
 import com.mike_caron.megacorp.block.TEContainerBase;
 import com.mike_caron.megacorp.util.StringUtil;
 import net.minecraft.inventory.IInventory;
@@ -12,6 +13,7 @@ public class ContainerProfitMaterializer
     public int fluidAmount = 0;
     public int fluidCapacity = 1;
     public String fluid = null;
+    public long profitRemaining;
 
     public ContainerProfitMaterializer(IInventory playerInventory, TileEntityProfitMaterializer te)
     {
@@ -67,6 +69,19 @@ public class ContainerProfitMaterializer
             changed = true;
         }
 
+        long pr = 0;
+
+        if(owner != null)
+        {
+            pr = CorporationManager.getInstance(te.getWorld()).getCorporationForOwner(owner).getAvailableProfit();
+        }
+
+        if(profitRemaining != pr)
+        {
+            profitRemaining = pr;
+            changed = true;
+        }
+
         if(changed)
         {
             this.triggerUpdate();
@@ -94,6 +109,10 @@ public class ContainerProfitMaterializer
         {
             this.fluid = null;
         }
+        if(tag.hasKey("ProfitRemaining"))
+        {
+            this.profitRemaining = tag.getLong("ProfitRemaining");
+        }
     }
 
     @Override
@@ -107,6 +126,7 @@ public class ContainerProfitMaterializer
         {
             tag.setString("Fluid", this.fluid);
         }
+        tag.setLong("ProfitRemaining", this.profitRemaining);
 
     }
 

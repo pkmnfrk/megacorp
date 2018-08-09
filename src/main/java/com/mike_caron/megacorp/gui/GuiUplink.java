@@ -4,7 +4,6 @@ import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.block.uplink.ContainerUplink;
 import com.mike_caron.megacorp.network.CtoSMessage;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiButtonImage;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
@@ -14,7 +13,7 @@ import java.io.IOException;
 import java.text.NumberFormat;
 
 public class GuiUplink
-    extends GuiBase
+    extends GuiContainerBase
 {
     public static final int WIDTH = 176;
     public static final int HEIGHT = 166;
@@ -25,7 +24,7 @@ public class GuiUplink
     private final ContainerUplink container;
 
     private static ResourceLocation cardImage = new ResourceLocation(MegaCorpMod.modId, "textures/gui/test.png");
-    private GuiButtonImage cardButton;
+    //private GuiButtonImage cardButton;
     private GuiTextField corpNameField;
     private GuiButton establishCorporation;
 
@@ -40,6 +39,7 @@ public class GuiUplink
 
         this.container = container;
 
+        initControls();
     }
 
     @Override
@@ -53,11 +53,7 @@ public class GuiUplink
     {
         if(!button.enabled) return;
 
-        if(button == cardButton)
-        {
-
-        }
-        else if(button == establishCorporation)
+        if(button == establishCorporation)
         {
             CtoSMessage packet = CtoSMessage.forGuiButton(container.getPos(), 1);
             MegaCorpMod.networkWrapper.sendToServer(packet);
@@ -78,9 +74,9 @@ public class GuiUplink
     }
 
     @Override
-    public void initGui()
+    public void addControls()
     {
-        super.initGui();
+        super.addControls();
 
         String name = container.corpName;
         int cursor = 0;
@@ -95,17 +91,12 @@ public class GuiUplink
             cursor = corpNameField.getCursorPosition();
         }
 
-        this.controls.clear();
-
         if(container.owner != null)
         {
             addControl(corpNameField = new GuiTextField(2, this.fontRenderer, guiLeft + 7, guiTop + 29, 156, 10));
             corpNameField.setText(name);
             corpNameField.setCursorPosition(cursor);
             corpNameField.setCanLoseFocus(true);
-
-
-            addControl(cardButton = makeGuiButtonImage(1, guiLeft + 7, guiTop + 58, 18, 18, 176, 0, 18, background));
         }
         else
         {
@@ -120,9 +111,9 @@ public class GuiUplink
     }
 
     @Override
-    protected String getTitle()
+    protected String getTitleKey()
     {
-        return new TextComponentTranslation("tile.megacorp:uplink.name").getUnformattedText();
+        return "tile.megacorp:uplink.name";
     }
 
     @Override
@@ -142,13 +133,13 @@ public class GuiUplink
         else
         {
 
-            this.fontRenderer.drawString(new TextComponentTranslation("tile.megacorp:uplink.corpname").getUnformattedText(), 6, 19, FONT_COLOUR);
+            this.fontRenderer.drawString(new TextComponentTranslation("tile.megacorp:uplink.corpname").getUnformattedText(), 6, 19, GuiUtil.FONT_COLOUR);
 
             String prefix = new TextComponentTranslation("tile.megacorp:uplink.profit").getUnformattedText();
 
             prefix += " $" + NumberFormat.getIntegerInstance().format(container.profit);
 
-            this.fontRenderer.drawString(prefix, 6, 43, FONT_COLOUR);
+            this.fontRenderer.drawString(prefix, 6, 43, GuiUtil.FONT_COLOUR);
         }
 
 

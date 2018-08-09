@@ -1,6 +1,10 @@
 package com.mike_caron.megacorp.gui;
 
 import com.mike_caron.megacorp.block.ContainerBase;
+import com.mike_caron.megacorp.gui.control.GuiControl;
+import com.mike_caron.megacorp.gui.control.GuiMultilineLabel;
+import com.mike_caron.megacorp.gui.control.GuiTranslatedLabel;
+import com.mike_caron.megacorp.gui.control.IGuiGroup;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -9,7 +13,6 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.inventory.Slot;
-import net.minecraft.util.text.TextComponentTranslation;
 import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
@@ -18,9 +21,11 @@ import java.util.List;
 
 public abstract class GuiContainerBase
         extends GuiContainer
+    implements IGuiGroup
 {
     protected final List<Gui> controls = new ArrayList<>();
     private GuiTranslatedLabel titleLabel;
+    protected GuiMultilineLabel insertCardLabel;
 
     public GuiContainerBase(ContainerBase inventorySlotsIn)
     {
@@ -227,12 +232,14 @@ public abstract class GuiContainerBase
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
     }
 
+    /*
     protected void drawInsertCardForeground()
     {
         String message = new TextComponentTranslation("tile.megacorp:misc.insertcard").getUnformattedText();
 
         drawCenteredWrappedString(message, 88, 45, 154);
     }
+    */
 
     protected String getTitleKey()
     {
@@ -267,10 +274,27 @@ public abstract class GuiContainerBase
     {
         titleLabel = new GuiTranslatedLabel(6, 6, GuiUtil.FONT_COLOUR, getTitleKey());
         this.addControl(titleLabel);
+
+        insertCardLabel = GuiUtil.staticMultilineLabelFromTranslationKey(8, 16, 160, 53,"tile.megacorp:misc.insertcard");
+        insertCardLabel.setAlignment(GuiMultilineLabel.Alignment.CENTER);
+        insertCardLabel.setVisible(false);
+        this.addControl(insertCardLabel);
     }
 
-    protected FontRenderer getFontRenderer()
+    public FontRenderer getFontRenderer()
     {
         return this.fontRenderer;
+    }
+
+    @Override
+    public void addControl(GuiControl control)
+    {
+        this.addControl((Gui)control);
+    }
+
+    @Override
+    public void removeControl(GuiControl control)
+    {
+        this.removeControl((Gui)control);
     }
 }

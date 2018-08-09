@@ -1,4 +1,4 @@
-package com.mike_caron.megacorp.gui;
+package com.mike_caron.megacorp.gui.control;
 
 public abstract class GuiSized extends GuiControl
 {

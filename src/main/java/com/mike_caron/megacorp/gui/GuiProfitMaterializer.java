@@ -2,6 +2,7 @@ package com.mike_caron.megacorp.gui;
 
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.block.profit_materializer.ContainerProfitMaterializer;
+import com.mike_caron.megacorp.gui.control.*;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -20,8 +21,9 @@ public class GuiProfitMaterializer
 
     private final ContainerProfitMaterializer container;
 
+    private GuiGroup activeGroup;
     private GuiFluid fluid;
-    private GuiTranslatedLabel profitRemainingTitleLabel;
+    private GuiLabel profitRemainingTitleLabel;
     private GuiTranslatedLabel profitRemainingLabel;
 
     @Override
@@ -31,44 +33,24 @@ public class GuiProfitMaterializer
 
         if(container.owner == null && fluid.isVisible())
         {
-            fluid.setVisible(false);
-            profitRemainingLabel.setVisible(false);
-            profitRemainingTitleLabel.setVisible(false);
+            activeGroup.setVisible(false);
+            insertCardLabel.setVisible(true);
         }
         else if(container.owner != null && !fluid.isVisible())
         {
-            fluid.setVisible(true);
-            profitRemainingLabel.setVisible(true);
-            profitRemainingTitleLabel.setVisible(true);
+            activeGroup.setVisible(true);
+            insertCardLabel.setVisible(false);
+
         }
 
-        if(fluid.isVisible())
+        if(activeGroup.isVisible())
         {
             fluid.setAmount(container.fluidAmount);
             fluid.setCapacity(container.fluidCapacity);
             fluid.setFluid(FluidRegistry.getFluid(container.fluid));
-        }
 
-        if(profitRemainingLabel.isVisible())
-        {
             profitRemainingLabel.setPlaceholder(0, NumberFormat.getIntegerInstance().format(container.profitRemaining));
         }
-    }
-
-    @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
-    {
-        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-
-        if(container.owner == null)
-        {
-            this.drawInsertCardForeground();
-        }
-        else
-        {
-
-        }
-
     }
 
     @Override
@@ -94,16 +76,19 @@ public class GuiProfitMaterializer
     {
         super.addControls();
 
+        activeGroup = new GuiGroup();
+
         fluid = new GuiFluid(26, 21, 43, 52);
         fluid.setGradEnabled(true);
 
-        this.addControl(fluid);
-
-        profitRemainingTitleLabel = new GuiTranslatedLabel(74, 22, "tile.megacorp:profit_materializer.remaining");
+        profitRemainingTitleLabel = GuiUtil.staticLabelFromTranslationKey(74, 22, "tile.megacorp:profit_materializer.remaining");
         profitRemainingLabel = new GuiTranslatedLabel(74, 31 , "tile.megacorp:profit_materializer.remainingval", "");
 
-        this.addControl(profitRemainingLabel);
-        this.addControl(profitRemainingTitleLabel);
+        activeGroup.addControl(fluid);
+        activeGroup.addControl(profitRemainingLabel);
+        activeGroup.addControl(profitRemainingTitleLabel);
+
+        this.addControl(activeGroup);
 
     }
 

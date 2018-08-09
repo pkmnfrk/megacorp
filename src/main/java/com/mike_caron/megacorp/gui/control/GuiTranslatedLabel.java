@@ -1,5 +1,6 @@
-package com.mike_caron.megacorp.gui;
+package com.mike_caron.megacorp.gui.control;
 
+import com.mike_caron.megacorp.gui.GuiUtil;
 import net.minecraft.util.text.TextComponentTranslation;
 
 public class GuiTranslatedLabel

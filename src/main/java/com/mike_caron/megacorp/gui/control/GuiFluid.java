@@ -1,5 +1,6 @@
-package com.mike_caron.megacorp.gui;
+package com.mike_caron.megacorp.gui.control;
 
+import com.mike_caron.megacorp.gui.GuiUtil;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -58,7 +59,7 @@ public class GuiFluid
 
         int scaledHeight = getScaled(this.height);
 
-        GuiUtil.drawFluid(this.parent, this.x, this.y + this.height - scaledHeight, fluidStack, this.width, scaledHeight);
+        GuiUtil.drawFluid(this.x, this.y + this.height - scaledHeight, fluidStack, this.width, scaledHeight);
 
         if(gradEnabled)
         {

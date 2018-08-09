@@ -1,4 +1,6 @@
-package com.mike_caron.megacorp.gui;
+package com.mike_caron.megacorp.gui.control;
+
+import com.mike_caron.megacorp.gui.GuiUtil;
 
 public class GuiLabel
     extends GuiControl

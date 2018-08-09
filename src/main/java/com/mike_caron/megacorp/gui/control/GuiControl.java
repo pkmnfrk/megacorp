@@ -1,11 +1,11 @@
-package com.mike_caron.megacorp.gui;
+package com.mike_caron.megacorp.gui.control;
 
 import net.minecraft.client.gui.Gui;
 
 public abstract class GuiControl
     extends Gui
 {
-    protected GuiContainerBase parent;
+    protected IGuiGroup parent;
     protected int x;
     protected int y;
     protected boolean enabled = true, visible = true;
@@ -56,12 +56,12 @@ public abstract class GuiControl
         this.visible = visible;
     }
 
-    public GuiContainerBase getParent()
+    public IGuiGroup getParent()
     {
         return this.parent;
     }
 
-    public void setParent(GuiContainerBase parent)
+    public void setParent(IGuiGroup parent)
     {
         this.parent = parent;
     }

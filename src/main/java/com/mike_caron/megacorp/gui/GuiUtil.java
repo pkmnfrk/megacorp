@@ -1,16 +1,18 @@
 package com.mike_caron.megacorp.gui;
 
 import com.mike_caron.megacorp.MegaCorpMod;
+import com.mike_caron.megacorp.gui.control.GuiLabel;
+import com.mike_caron.megacorp.gui.control.GuiMultilineLabel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiButtonImage;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
@@ -57,7 +59,7 @@ public class GuiUtil
         return false;
     }
 
-    public static void drawFluid(GuiContainer gui, int x, int y, FluidStack fluid, int width, int height) {
+    public static void drawFluid(int x, int y, FluidStack fluid, int width, int height) {
 
         if (fluid == null) {
             return;
@@ -70,11 +72,11 @@ public class GuiUtil
         int color = fluid.getFluid().getColor(fluid);
         setGLColorFromInt(color);
 
-        drawTiledTexture(gui, x, y, getTexture(fluid.getFluid().getStill(fluid)), width, height);
+        drawTiledTexture(x, y, getTexture(fluid.getFluid().getStill(fluid)), width, height);
         GL11.glPopMatrix();
     }
 
-    protected static void drawTiledTexture(GuiContainer gui, int x, int y, TextureAtlasSprite icon, int width, int height) {
+    protected static void drawTiledTexture(int x, int y, TextureAtlasSprite icon, int width, int height) {
 
         int i;
         int j;
@@ -86,13 +88,13 @@ public class GuiUtil
             for (j = 0; j < height; j += 16) {
                 drawWidth = Math.min(width - i, 16);
                 drawHeight = Math.min(height - j, 16);
-                drawScaledTexturedModelRectFromIcon(gui, x + i, y + j, icon, drawWidth, drawHeight);
+                drawScaledTexturedModelRectFromIcon(x + i, y + j, icon, drawWidth, drawHeight);
             }
         }
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
-    protected static void drawScaledTexturedModelRectFromIcon(GuiContainer gui, int x, int y, TextureAtlasSprite icon, int width, int height) {
+    protected static void drawScaledTexturedModelRectFromIcon(int x, int y, TextureAtlasSprite icon, int width, int height) {
 
         if (icon == null) {
             return;
@@ -146,5 +148,34 @@ public class GuiUtil
     public static GuiButtonImage makeGuiButtonImage(int buttonId, int x, int y, int width, int height, int xTex, int yTex, ResourceLocation resourceLocation)
     {
         return new GuiButtonImage(buttonId, x, y, width, height, xTex, yTex, 0, resourceLocation);
+    }
+
+    public static GuiLabel staticLabelFromTranslationKey(int x, int y, String key, Object ... placeholders)
+    {
+        String message = new TextComponentTranslation(key, placeholders).getFormattedText();
+        return new GuiLabel(x, y, message);
+    }
+
+    public static GuiMultilineLabel staticMultilineLabelFromTranslationKey(int x, int y, int width, int height, String key, Object ... placeholders)
+    {
+        String message = new TextComponentTranslation(key, placeholders).getFormattedText();
+        return new GuiMultilineLabel(x, y, width, height, message);
+    }
+
+    public static void drawDebugFlatRectangle(int x, int y, int width, int height)
+    {
+        bindTexture(MISC_RESOURCES);
+        float minU = 14f / 256f;
+        float maxU = 15f / 256f;
+        float minV = 3 / 256f;
+        float maxV = 4 / 256f;
+
+        BufferBuilder buffer = Tessellator.getInstance().getBuffer();
+        buffer.begin(GL11.GL_TRIANGLE_STRIP, DefaultVertexFormats.POSITION_TEX);
+        buffer.pos(x, y, 0).tex(minU, minV).endVertex();
+        buffer.pos(x, y + height, 0).tex(minU, maxV).endVertex();
+        buffer.pos(x + width, y, 0).tex(maxU, minV).endVertex();
+        buffer.pos(x + width, y + height, 0).tex(maxU, maxV).endVertex();
+        Tessellator.getInstance().draw();
     }
 }

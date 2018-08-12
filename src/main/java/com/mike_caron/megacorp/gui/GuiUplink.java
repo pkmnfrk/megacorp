@@ -2,14 +2,14 @@ package com.mike_caron.megacorp.gui;
 
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.block.uplink.ContainerUplink;
+import com.mike_caron.megacorp.gui.control.GuiButton;
+import com.mike_caron.megacorp.gui.control.GuiControl;
 import com.mike_caron.megacorp.network.CtoSMessage;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 
-import java.io.IOException;
 import java.text.NumberFormat;
 
 public class GuiUplink
@@ -49,15 +49,15 @@ public class GuiUplink
     }
 
     @Override
-    protected void actionPerformed(GuiButton button) throws IOException
+    protected void onActionPerformed(GuiControl button)
     {
-        if(!button.enabled) return;
+        if(!button.getEnabled()) return;
 
         if(button == establishCorporation)
         {
             CtoSMessage packet = CtoSMessage.forGuiButton(container.getPos(), 1);
             MegaCorpMod.networkWrapper.sendToServer(packet);
-            button.enabled = false;
+            button.setEnabled(false);
         }
     }
 

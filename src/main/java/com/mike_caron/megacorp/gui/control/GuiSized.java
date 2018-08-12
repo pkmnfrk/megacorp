@@ -5,7 +5,7 @@ public abstract class GuiSized extends GuiControl
     protected int width;
     protected int height;
 
-    public GuiSized(int x, int y, int height, int width)
+    public GuiSized(int x, int y, int width, int height)
     {
         super(x, y);
         this.height = height;
@@ -25,4 +25,8 @@ public abstract class GuiSized extends GuiControl
     }
 
     public void setHeight(int height) { this.height = height; }
+
+    public void onMouseEnter() {}
+    public void onMouseExit() {}
+    public void onMouseOver() {}
 }

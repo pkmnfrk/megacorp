@@ -32,7 +32,7 @@ public class GuiMultilineLabel
 
     public GuiMultilineLabel(int x, int y, int width, int height, int color, Alignment alignment, VerticalAlignment valignment, String string)
     {
-        super(x, y, height, width);
+        super(x, y, width, height);
 
         this.color = color;
         this.string = string;

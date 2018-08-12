@@ -3,6 +3,7 @@ package com.mike_caron.megacorp.gui;
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.gui.control.GuiLabel;
 import com.mike_caron.megacorp.gui.control.GuiMultilineLabel;
+import com.mike_caron.megacorp.gui.control.GuiSized;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiButtonImage;
@@ -44,9 +45,14 @@ public class GuiUtil
         return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
     }
 
-    protected static boolean inBounds(int mouseX, int mouseY, GuiButton button)
+    public static boolean inBounds(int mouseX, int mouseY, GuiButton button)
     {
         return inBounds(mouseX, mouseY, button.x, button.y, button.width, button.height);
+    }
+
+    public static boolean inBounds(int mouseX, int mouseY, GuiSized button)
+    {
+        return inBounds(mouseX, mouseY, button.getX(), button.getY(), button.getWidth(), button.getHeight());
     }
 
     public static boolean inBounds(int mouseX, int mouseY, int bx, int by, int bw, int bh)
@@ -177,5 +183,27 @@ public class GuiUtil
         buffer.pos(x + width, y, 0).tex(maxU, minV).endVertex();
         buffer.pos(x + width, y + height, 0).tex(maxU, maxV).endVertex();
         Tessellator.getInstance().draw();
+    }
+
+    public static void draw3x3(int x, int y, int width, int height, int sx, int sy)
+    {
+        //top-left
+        drawTiledTexturePart(x, y, 4, 4, sx, sy, 4, 4, 256, 256);
+        //top-right
+        drawTiledTexturePart(x + width - 4, y, 4, 4, sx + 20, sy, 4, 4, 256, 256);
+        //bottom-left
+        drawTiledTexturePart(x, y + height - 4, 4, 4, sx, sy + 20, 4, 4, 256, 256);
+        //bottom-right
+        drawTiledTexturePart(x + width - 4, y + height - 4, 4, 4, sx + 20, sy + 20, 4, 4, 256, 256);
+        //top
+        drawTiledTexturePart(x + 4, y, width - 8, 4, sx + 4, sy, 16, 4, 256, 256);
+        //bottom
+        drawTiledTexturePart(x + 4, y + height - 4, width - 8, 4, sx + 4, sy + 20, 16, 4, 256, 256);
+        //left
+        drawTiledTexturePart(x, y + 4, 4, height - 8, sx, sy + 4, 4, 16, 256, 256);
+        //right
+        drawTiledTexturePart(x + width - 4, y + 4, 4, height - 8, sx + 20, sy + 4, 4, 16, 256, 256);
+        //center
+        drawTiledTexturePart(x + 4, y + 4, width - 8, height - 8, sx + 4, sy + 4, 16, 16, 256, 256);
     }
 }

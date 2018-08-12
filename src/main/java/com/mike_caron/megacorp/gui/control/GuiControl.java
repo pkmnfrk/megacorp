@@ -66,5 +66,13 @@ public abstract class GuiControl
         this.parent = parent;
     }
 
+    public boolean canHaveFocus() { return false; }
+
+    public boolean hasFocus() { return false; }
+
+    public void setFocus(boolean focussed) { }
+
+    public void onKeyTyped(char typedChar, int keyCode) {}
+
     public abstract void draw();
 }

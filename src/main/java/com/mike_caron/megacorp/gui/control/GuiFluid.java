@@ -16,7 +16,7 @@ public class GuiFluid
 
     public GuiFluid(int x, int y, int width, int height)
     {
-        super(x,y, height, width);
+        super(x,y, width, height);
     }
 
     public void setCapacity(int capacity)

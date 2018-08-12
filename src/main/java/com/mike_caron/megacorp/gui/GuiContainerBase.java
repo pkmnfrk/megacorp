@@ -1,19 +1,15 @@
 package com.mike_caron.megacorp.gui;
 
 import com.mike_caron.megacorp.block.ContainerBase;
-import com.mike_caron.megacorp.gui.control.GuiControl;
-import com.mike_caron.megacorp.gui.control.GuiMultilineLabel;
-import com.mike_caron.megacorp.gui.control.GuiTranslatedLabel;
-import com.mike_caron.megacorp.gui.control.IGuiGroup;
-import net.minecraft.client.Minecraft;
+import com.mike_caron.megacorp.gui.control.*;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.inventory.Slot;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,6 +22,8 @@ public abstract class GuiContainerBase
     protected final List<Gui> controls = new ArrayList<>();
     private GuiTranslatedLabel titleLabel;
     protected GuiMultilineLabel insertCardLabel;
+
+    private GuiSized mouseOverControl = null;
 
     public GuiContainerBase(ContainerBase inventorySlotsIn)
     {
@@ -44,6 +42,41 @@ public abstract class GuiContainerBase
     protected void onContainerRefresh()
     {
 
+    }
+
+    @Override
+    public void handleMouseInput() throws IOException
+    {
+        super.handleMouseInput();
+
+        int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth - guiLeft;
+        int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1 - guiTop;
+
+        GuiSized newMouseControl = null;
+
+        for(Gui control : this.controls)
+        {
+            if(control instanceof GuiSized)
+            {
+                if(GuiUtil.inBounds(mouseX, mouseY, (GuiSized)control))
+                {
+                    newMouseControl = (GuiSized)control;
+                }
+            }
+        }
+
+        if(mouseOverControl != newMouseControl)
+        {
+            if(mouseOverControl != null)
+            {
+                mouseOverControl.onMouseExit();
+            }
+            mouseOverControl = newMouseControl;
+            if(mouseOverControl != null)
+            {
+                mouseOverControl.onMouseEnter();
+            }
+        }
     }
 
     @Override
@@ -68,7 +101,7 @@ public abstract class GuiContainerBase
             {
                 if(state == 0)
                 {
-                    ((GuiButton) control).mouseReleased(mouseX, mouseY);
+                    //((GuiButton) control).mouseReleased(mouseX, mouseY);
                 }
             }
 
@@ -90,15 +123,23 @@ public abstract class GuiContainerBase
                     this.textFieldLostFocus(textField);
                 }
             }
-            else if(control instanceof GuiButton)
+            else if(control instanceof GuiControl)
             {
-                if(mouseButton == 0)
-                {
-                    if(((GuiButton) control).mousePressed(this.mc, mouseX, mouseY))
-                    {
-                        ((GuiButton)control).playPressSound(this.mc.getSoundHandler());
-                        this.actionPerformed((GuiButton)control);
+                if(!((GuiControl) control).getEnabled())
+                    continue;
 
+                if (control instanceof GuiButton)
+                {
+                    if (mouseButton == 0)
+                    {
+                        /*
+                        if (((GuiButton) control).mousePressed(this.mc, mouseX, mouseY))
+                        {
+                            ((GuiButton) control).playPressSound(this.mc.getSoundHandler());
+                            this.actionPerformed((GuiButton) control);
+
+                        }
+                        */
                     }
                 }
             }
@@ -143,54 +184,25 @@ public abstract class GuiContainerBase
     }
 
     @Override
-    public void setWorldAndResolution(Minecraft mc, int width, int height)
-    {
-        super.setWorldAndResolution(mc, width, height);
-        /*this.mc = mc;
-        this.itemRender = mc.getRenderItem();
-        this.fontRenderer = mc.fontRenderer;
-        this.width = width;
-        this.height = height;
-
-        if (!MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.InitGuiEvent.Pre(this, this.buttonList))) {
-            this.buttonList.clear();
-            //this.initGui();
-        }
-
-        MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.InitGuiEvent.Post(this, this.buttonList));
-        */
-    }
-
-    @Override
     public final void initGui()
     {
         super.initGui();
-
-        //this.controls.clear();
-
-        //addControls();
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
-        /*String title = getTitleKey();
-        if(title != null)
-        {
-            this.fontRenderer.drawString(title, 6, 6, GuiUtil.FONT_COLOUR);
-        }*/
 
         GlStateManager.pushMatrix();
-        //GlStateManager.translate(-guiLeft, -guiTop, 0);
 
         for (Gui control : this.controls) {
             if (control instanceof GuiTextField) {
                 ((GuiTextField)control).drawTextBox();
             }
-            else if (control instanceof GuiButton)
+            else if (control instanceof net.minecraft.client.gui.GuiButton)
             {
                 GlStateManager.color(1, 1, 1, 1);
-                ((GuiButton)control).drawButton(this.mc, mouseX, mouseY, 0f);
+                ((net.minecraft.client.gui.GuiButton)control).drawButton(this.mc, mouseX, mouseY, 0f);
             }
             else if(control instanceof GuiControl)
             {
@@ -296,5 +308,10 @@ public abstract class GuiContainerBase
     public void removeControl(GuiControl control)
     {
         this.removeControl((Gui)control);
+    }
+
+    protected void onActionPerformed(GuiControl control)
+    {
+
     }
 }

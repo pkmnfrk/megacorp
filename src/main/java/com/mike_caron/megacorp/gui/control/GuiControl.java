@@ -3,6 +3,8 @@ package com.mike_caron.megacorp.gui.control;
 import net.minecraft.client.gui.Gui;
 
 import javax.annotation.Nullable;
+import java.util.EventListener;
+import java.util.Vector;
 
 public abstract class GuiControl
     extends Gui
@@ -11,6 +13,8 @@ public abstract class GuiControl
     protected int x;
     protected int y;
     protected boolean enabled = true, visible = true;
+
+    protected final Vector<EventListener> listeners = new Vector<>();
 
     public GuiControl(int x, int y)
     {

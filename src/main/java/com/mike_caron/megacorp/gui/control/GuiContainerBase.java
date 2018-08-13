@@ -4,7 +4,6 @@ import com.mike_caron.megacorp.block.ContainerBase;
 import com.mike_caron.megacorp.gui.GuiUtil;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Keyboard;
@@ -18,7 +17,7 @@ public abstract class GuiContainerBase
         extends GuiContainer
     implements IGuiGroup
 {
-    protected final List<Gui> controls = new ArrayList<>();
+    protected final List<GuiControl> controls = new ArrayList<>();
     private GuiTranslatedLabel titleLabel;
     protected GuiMultilineLabel insertCardLabel;
 
@@ -119,6 +118,18 @@ public abstract class GuiContainerBase
                     mouseOverControl.onMouseDown(mouseX, mouseY, button);
                     waitingForButton.get(button).add(mouseOverControl);
                 }
+
+                if(mouseOverControl == null || !mouseOverControl.canHaveFocus())
+                {
+                    for(GuiControl control : controls)
+                    {
+                        if (control.hasFocus())
+                        {
+                            control.setFocused(false);
+                            break;
+                        }
+                    }
+                }
             }
         }
     }
@@ -141,35 +152,10 @@ public abstract class GuiContainerBase
     {
         super.updateScreen();
 
-        for(Gui control : this.controls)
+        for(GuiControl control : this.controls)
         {
-            if(control instanceof GuiTextField)
-            {
-                ((GuiTextField)control).updateCursorCounter();
-            }
-            else if(control instanceof GuiControl)
-            {
-                ((GuiControl)control).update();
-            }
+            control.update();
         }
-    }
-
-    @Override
-    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
-    {
-        for (Gui control : this.controls) {
-            if (control instanceof GuiTextField) {
-                GuiTextField textField = (GuiTextField)control;
-                boolean wasFocused = textField.isFocused();
-                textField.mouseClicked(mouseX, mouseY, mouseButton);
-                if(wasFocused && !textField.isFocused())
-                {
-                    this.controlLostFocus(textField);
-                }
-            }
-        }
-
-        super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     @Override
@@ -177,38 +163,19 @@ public abstract class GuiContainerBase
     {
         boolean textFocused = false;
 
-        for (Gui control : this.controls) {
-            if (control instanceof GuiTextField) {
-                GuiTextField textField = (GuiTextField) control;
-                if (textField.isFocused()) {
-                    textFocused = true;
-                    textField.textboxKeyTyped(typedChar, keyCode);
-
-                    if(keyCode == Keyboard.KEY_ESCAPE)
-                    {
-                        textField.setFocused(false);
-                        this.controlLostFocus(textField);
-                    }
-
-                    break;
-                }
-            }
-            else if(control instanceof GuiControl)
+        for (GuiControl control : this.controls) {
+            if(control.hasFocus())
             {
-                if(((GuiControl) control).hasFocus())
+                textFocused = true;
+                control.onKeyTyped(typedChar, keyCode);
+
+                if(keyCode == Keyboard.KEY_ESCAPE)
                 {
-                    textFocused = true;
-                    ((GuiControl) control).onKeyTyped(typedChar, keyCode);
-
-                    if(keyCode == Keyboard.KEY_ESCAPE)
-                    {
-                        ((GuiControl)control).setFocused(false);
-                        this.controlLostFocus(control);
-                    }
-
-                    break;
+                    control.setFocused(false);
+                    this.controlLostFocus(control);
                 }
 
+                break;
             }
         }
 
@@ -228,19 +195,8 @@ public abstract class GuiContainerBase
 
         GlStateManager.pushMatrix();
 
-        for (Gui control : this.controls) {
-            if (control instanceof GuiTextField) {
-                ((GuiTextField)control).drawTextBox();
-            }
-            else if (control instanceof net.minecraft.client.gui.GuiButton)
-            {
-                GlStateManager.color(1, 1, 1, 1);
-                ((net.minecraft.client.gui.GuiButton)control).drawButton(this.mc, mouseX, mouseY, 0f);
-            }
-            else if(control instanceof GuiControl)
-            {
-                ((GuiControl)control).draw();
-            }
+        for (GuiControl control : this.controls) {
+            control.draw();
         }
 
         GlStateManager.popMatrix();
@@ -256,16 +212,16 @@ public abstract class GuiContainerBase
         this.renderHoveredToolTip(mouseX, mouseY);
     }
 
-    public void addControl(Gui control)
+    @Override
+    public void addControl(GuiControl control)
     {
         this.controls.add(control);
-        if(control instanceof GuiControl)
-        {
-            ((GuiControl)control).setParent(this);
-        }
+        control.setParent(this);
+
     }
 
-    public void removeControl(Gui control)
+    @Override
+    public void removeControl(GuiControl control)
     {
         this.controls.remove(control);
     }
@@ -276,15 +232,6 @@ public abstract class GuiContainerBase
         mc.getTextureManager().bindTexture(GuiUtil.EMPTY_GUI);
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
     }
-
-    /*
-    protected void drawInsertCardForeground()
-    {
-        String message = new TextComponentTranslation("tile.megacorp:misc.insertcard").getUnformattedText();
-
-        drawCenteredWrappedString(message, 88, 45, 154);
-    }
-    */
 
     protected String getTitleKey()
     {
@@ -331,18 +278,6 @@ public abstract class GuiContainerBase
         return this.fontRenderer;
     }
 
-    @Override
-    public void addControl(GuiControl control)
-    {
-        this.addControl((Gui)control);
-    }
-
-    @Override
-    public void removeControl(GuiControl control)
-    {
-        this.removeControl((Gui)control);
-    }
-
     protected void onActionPerformed(GuiControl control)
     {
 
@@ -366,18 +301,11 @@ public abstract class GuiContainerBase
         }*/
 
         //no objections, lady
-        for(Gui control : controls)
+        for(GuiControl control : controls)
         {
-            if(control instanceof GuiControl)
+            if (control != taker && ((GuiControl)control).hasFocus())
             {
-                if (control != taker && ((GuiControl)control).hasFocus())
-                {
-                    ((GuiControl)control).setFocused(false);
-                }
-            }
-            else if(control instanceof GuiTextField)
-            {
-                ((GuiTextField) control).setFocused(false);
+                ((GuiControl)control).setFocused(false);
             }
         }
 

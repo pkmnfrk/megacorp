@@ -9,6 +9,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class GuiUplink
     extends GuiContainerBase
+    implements GuiButton.ClickedListener, GuiTextBox.TextboxListener
 {
     public static final int WIDTH = 176;
     public static final int HEIGHT = 166;
@@ -25,7 +26,7 @@ public class GuiUplink
     private GuiGroup unownedGroup = new GuiGroup();
 
     private GuiWrappedTextBox corpNameField = new GuiWrappedTextBox(7, 29, 156, 10);
-    private GuiButton establishCorporation = new GuiButton(2, guiLeft + 28, guiTop + 55, 120, 20, "");
+    private GuiButton establishCorporation = new GuiButton(1, guiLeft + 28, guiTop + 55, 120, 20, "");
 
     private GuiMultilineLabel unownedText = GuiUtil.staticMultilineLabelFromTranslationKey(11, 16, 154, 40, "");
 
@@ -95,11 +96,12 @@ public class GuiUplink
 
         ownedGroup.addControl(corpNameField);
 
-        unownedText.setAlignment(GuiMultilineLabel.Alignment.CENTER);
-
         unownedGroup.addControl(establishCorporation);
         unownedGroup.addControl(unownedText);
 
+        unownedText.setAlignment(GuiMultilineLabel.Alignment.CENTER);
+        establishCorporation.addClickedListener(this);
+        corpNameField.addTextboxListener(this);
     }
 
     @Override
@@ -148,4 +150,26 @@ public class GuiUplink
         }
     }
 
+    @Override
+    public void clicked(GuiButton.ClickedEvent event)
+    {
+        switch (event.id)
+        {
+            case 1:
+                CtoSMessage packet = CtoSMessage.forGuiButton(container.getPos(), 1);
+                MegaCorpMod.networkWrapper.sendToServer(packet);
+                event.control.setEnabled(false);
+                break;
+        }
+    }
+
+    @Override
+    public void changed(GuiTextBox.ChangedEvent event)
+    {
+        if(event.control == corpNameField)
+        {
+            CtoSMessage packet = CtoSMessage.forGuiString(container.getPos(), 2, corpNameField.getText());
+            MegaCorpMod.networkWrapper.sendToServer(packet);
+        }
+    }
 }

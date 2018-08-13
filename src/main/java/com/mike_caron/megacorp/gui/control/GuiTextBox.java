@@ -4,6 +4,7 @@ import com.mike_caron.megacorp.gui.GuiUtil;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
+import java.util.EventListener;
 
 public class GuiTextBox
     extends GuiSized
@@ -72,5 +73,43 @@ public class GuiTextBox
 
         this.parent.getFontRenderer().drawString(currentString, this.x + 1, this.y + 1, foreColor);
 
+    }
+
+    private void triggerChangedEvent()
+    {
+        ChangedEvent evt = new ChangedEvent(this);
+
+        for(EventListener listener : listeners)
+        {
+            if(listener instanceof TextboxListener)
+            {
+                ((TextboxListener) listener).changed(evt);
+            }
+        }
+    }
+
+    public void addTextboxListener(TextboxListener listener)
+    {
+        this.listeners.add(listener);
+    }
+
+    public void removeTextboxListener(TextboxListener listener)
+    {
+        this.listeners.remove(listener);
+    }
+
+    public interface TextboxListener
+        extends EventListener
+    {
+        void changed(ChangedEvent event);
+    }
+
+    public static class ChangedEvent
+        extends ControlEvent
+    {
+        public ChangedEvent(GuiControl control)
+        {
+            super(control);
+        }
     }
 }

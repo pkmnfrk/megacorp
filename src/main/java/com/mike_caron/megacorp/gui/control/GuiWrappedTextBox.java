@@ -3,10 +3,13 @@ package com.mike_caron.megacorp.gui.control;
 import net.minecraft.client.gui.GuiTextField;
 
 import javax.annotation.Nonnull;
+import java.util.EventListener;
 
 public class GuiWrappedTextBox
     extends GuiSized
 {
+    String currentText = "";
+
     @Override
     public void update()
     {
@@ -30,6 +33,15 @@ public class GuiWrappedTextBox
             if(!this.parent.notifyTakeFocus(this))
             {
                 textField.setFocused(false);
+            }
+        }
+        else if(focused && !textField.isFocused())
+        {
+            String newText = textField.getText();
+            if(!newText.equals(currentText))
+            {
+                currentText = newText;
+                this.triggerChangedEvent();
             }
         }
     }
@@ -131,7 +143,19 @@ public class GuiWrappedTextBox
     {
         if(textField != null)
         {
+            boolean isFocused = textField.isFocused();
+
             textField.setFocused(focused);
+
+            if(isFocused && !focused)
+            {
+                String newText = textField.getText();
+                if(!newText.equals(currentText))
+                {
+                    currentText = newText;
+                    this.triggerChangedEvent();
+                }
+            }
         }
     }
 
@@ -168,5 +192,28 @@ public class GuiWrappedTextBox
             textField.setCursorPosition(tempCursorPosition);
             tempCursorPosition = -1;
         }
+    }
+
+    private void triggerChangedEvent()
+    {
+        GuiTextBox.ChangedEvent evt = new GuiTextBox.ChangedEvent(this);
+
+        for(EventListener listener : listeners)
+        {
+            if(listener instanceof GuiTextBox.TextboxListener)
+            {
+                ((GuiTextBox.TextboxListener) listener).changed(evt);
+            }
+        }
+    }
+
+    public void addTextboxListener(GuiTextBox.TextboxListener listener)
+    {
+        this.listeners.add(listener);
+    }
+
+    public void removeTextboxListener(GuiTextBox.TextboxListener listener)
+    {
+        this.listeners.remove(listener);
     }
 }

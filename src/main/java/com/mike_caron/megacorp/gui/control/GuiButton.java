@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.GlStateManager;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
+import java.util.EventListener;
 
 public class GuiButton
     extends GuiSized
@@ -33,6 +34,7 @@ public class GuiButton
             this.state = State.HOVERED;
 
             // do action
+            this.triggerClicked();
         }
         else
         {
@@ -109,10 +111,51 @@ public class GuiButton
         return this.label;
     }
 
+    public void addClickedListener(ClickedListener listener)
+    {
+        this.listeners.add(listener);
+    }
+
+    public void removeClickedListener(ClickedListener listener)
+    {
+        this.listeners.remove(listener);
+    }
+
+    private void triggerClicked()
+    {
+        ClickedEvent evt = new ClickedEvent(this,id);
+
+        for(EventListener listener : listeners)
+        {
+            if(listener instanceof ClickedListener)
+            {
+                ((ClickedListener) listener).clicked(evt);
+            }
+        }
+    }
+
     enum State
     {
         NORMAL,
         HOVERED,
         PRESSED
+    }
+
+    public interface ClickedListener
+        extends EventListener
+    {
+        void clicked(ClickedEvent event);
+    }
+
+    public static class ClickedEvent
+        extends ControlEvent
+    {
+        public final int id;
+
+        public ClickedEvent(GuiControl control, int id)
+        {
+            super(control);
+            this.id = id;
+        }
     }
 }

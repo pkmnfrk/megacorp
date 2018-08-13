@@ -1,9 +1,22 @@
 package com.mike_caron.megacorp.gui.control;
 
+import com.mike_caron.megacorp.gui.GuiUtil;
+
 public abstract class GuiSized extends GuiControl
 {
     protected int width;
     protected int height;
+
+    @Override
+    public GuiControl hitTest(int x, int y)
+    {
+        if(GuiUtil.inBounds(x,y, this.x, this.y, this.width, this.height))
+        {
+            return this;
+        }
+
+        return null;
+    }
 
     public GuiSized(int x, int y, int width, int height)
     {
@@ -26,7 +39,4 @@ public abstract class GuiSized extends GuiControl
 
     public void setHeight(int height) { this.height = height; }
 
-    public void onMouseEnter() {}
-    public void onMouseExit() {}
-    public void onMouseOver() {}
 }

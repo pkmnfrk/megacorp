@@ -7,6 +7,39 @@ import javax.annotation.Nonnull;
 public class GuiWrappedTextBox
     extends GuiSized
 {
+    @Override
+    public void update()
+    {
+        if(textField != null)
+        {
+            textField.updateCursorCounter();
+        }
+    }
+
+    @Override
+    public void onMouseDown(int mouseX, int mouseY, int button)
+    {
+        if(!enabled || !visible) return;
+
+        boolean focused = textField.isFocused();
+
+        textField.mouseClicked(mouseX, mouseY, button);
+
+        if(!focused && textField.isFocused())
+        {
+            if(!this.parent.notifyTakeFocus(this))
+            {
+                textField.setFocused(false);
+            }
+        }
+    }
+
+    @Override
+    public void onMouseUp(int mouseX, int mouseY, int button)
+    {
+
+    }
+
     private GuiTextField textField;
     private String tempText = null;
     private int tempCursorPosition = -1;
@@ -80,7 +113,7 @@ public class GuiWrappedTextBox
     @Override
     public boolean canHaveFocus()
     {
-        return getEnabled();
+        return isEnabled();
     }
 
     @Override

@@ -2,6 +2,8 @@ package com.mike_caron.megacorp.gui.control;
 
 import net.minecraft.client.gui.Gui;
 
+import javax.annotation.Nullable;
+
 public abstract class GuiControl
     extends Gui
 {
@@ -36,7 +38,7 @@ public abstract class GuiControl
         this.x = x;
     }
 
-    public boolean getEnabled()
+    public boolean isEnabled()
     {
         return enabled;
     }
@@ -72,7 +74,17 @@ public abstract class GuiControl
 
     public void setFocused(boolean focused) { }
 
+    @Nullable
+    public GuiControl hitTest(int x, int y) { return null; }
+
     public void onKeyTyped(char typedChar, int keyCode) { }
 
+    public void onMouseEnter() {}
+    public void onMouseExit() {}
+    public void onMouseOver(int mouseX, int mouseY) {}
+    public void onMouseDown(int mouseX, int mouseY, int button) {}
+    public void onMouseUp(int mouseX, int mouseY, int button) {}
+
+    public void update() { }
     public abstract void draw();
 }

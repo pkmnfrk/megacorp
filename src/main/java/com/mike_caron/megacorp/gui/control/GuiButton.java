@@ -24,6 +24,31 @@ public class GuiButton
     }
 
     @Override
+    public void onMouseUp(int mouseX, int mouseY, int button)
+    {
+        if(button != 0) return;
+
+        if(GuiUtil.inBounds(mouseX, mouseY, this))
+        {
+            this.state = State.HOVERED;
+
+            // do action
+        }
+        else
+        {
+            this.state = State.NORMAL;
+        }
+    }
+
+    @Override
+    public void onMouseDown(int mouseX, int mouseY, int button)
+    {
+        if(button != 0) return;
+
+        this.state = State.PRESSED;
+    }
+
+    @Override
     public void draw()
     {
         if(!visible)
@@ -59,13 +84,19 @@ public class GuiButton
     @Override
     public void onMouseEnter()
     {
-        this.state = State.HOVERED;
+        if(this.state == State.NORMAL)
+        {
+            this.state = State.HOVERED;
+        }
     }
 
     @Override
     public void onMouseExit()
     {
-        this.state = State.NORMAL;
+        if(this.state == State.HOVERED)
+        {
+            this.state = State.NORMAL;
+        }
     }
 
     enum State

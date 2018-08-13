@@ -7,4 +7,5 @@ public interface IGuiGroup
     void addControl(GuiControl control);
     void removeControl(GuiControl control);
     FontRenderer getFontRenderer();
+    boolean notifyTakeFocus(GuiControl taker);
 }

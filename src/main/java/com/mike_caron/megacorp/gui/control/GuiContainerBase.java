@@ -7,7 +7,6 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.inventory.Slot;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
@@ -23,7 +22,9 @@ public abstract class GuiContainerBase
     private GuiTranslatedLabel titleLabel;
     protected GuiMultilineLabel insertCardLabel;
 
-    private GuiSized mouseOverControl = null;
+    private GuiControl mouseOverControl = null;
+    private boolean leftDown = false, rightDown = false;
+    private List<List<GuiControl>> waitingForButton = new ArrayList<List<GuiControl>>();
 
     public GuiContainerBase(ContainerBase inventorySlotsIn)
     {
@@ -37,6 +38,9 @@ public abstract class GuiContainerBase
                 onContainerRefresh();
             }
         });
+
+        waitingForButton.add(new ArrayList<>());
+        waitingForButton.add(new ArrayList<>());
     }
 
     protected void onContainerRefresh()
@@ -52,15 +56,22 @@ public abstract class GuiContainerBase
         int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth - guiLeft;
         int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1 - guiTop;
 
-        GuiSized newMouseControl = null;
+        GuiControl newMouseControl = null;
 
         for(Gui control : this.controls)
         {
-            if(control instanceof GuiSized)
+            if(control instanceof GuiControl)
             {
-                if(GuiUtil.inBounds(mouseX, mouseY, (GuiSized)control))
+                GuiControl ctrl = (GuiControl)control;
+
+                if(!ctrl.isVisible() || !ctrl.isEnabled())
+                    continue;
+
+                GuiControl result = ctrl.hitTest(mouseX, mouseY);
+
+                if(result != null)
                 {
-                    newMouseControl = (GuiSized)control;
+                    newMouseControl = result;
                 }
             }
         }
@@ -77,6 +88,52 @@ public abstract class GuiContainerBase
                 mouseOverControl.onMouseEnter();
             }
         }
+
+        if(mouseOverControl != null)
+        {
+            mouseOverControl.onMouseOver(mouseX, mouseY);
+        }
+
+
+        int button = Mouse.getEventButton();
+        if(button >= 0 && button <= 1)
+        {
+            boolean newState = Mouse.getEventButtonState();
+
+            if(getStateForButton(button) && !newState)
+            {
+                setStateForButton(button, false);
+
+                //mouseOverControl.onMouseUp(mouseX, mouseY, button);
+                for(GuiControl waiting : waitingForButton.get(button))
+                {
+                    waiting.onMouseUp(mouseX, mouseY, button);
+                }
+                waitingForButton.get(button).clear();
+            }
+            else if(!getStateForButton(button) && newState)
+            {
+                setStateForButton(button, true);
+                if(mouseOverControl != null)
+                {
+                    mouseOverControl.onMouseDown(mouseX, mouseY, button);
+                    waitingForButton.get(button).add(mouseOverControl);
+                }
+            }
+        }
+    }
+
+    private boolean getStateForButton(int button)
+    {
+        if(button == 0) return leftDown;
+        if(button == 1) return rightDown;
+        return false;
+    }
+
+    private void setStateForButton(int button, boolean state)
+    {
+        if(button == 0) leftDown = state;
+        if(button == 1) rightDown = state;
     }
 
     @Override
@@ -90,24 +147,11 @@ public abstract class GuiContainerBase
             {
                 ((GuiTextField)control).updateCursorCounter();
             }
-        }
-    }
-
-    @Override
-    protected void mouseReleased(int mouseX, int mouseY, int state)
-    {
-        for (Gui control : this.controls) {
-            if(control instanceof GuiButton)
+            else if(control instanceof GuiControl)
             {
-                if(state == 0)
-                {
-                    //((GuiButton) control).mouseReleased(mouseX, mouseY);
-                }
+                ((GuiControl)control).update();
             }
-
         }
-
-        super.mouseReleased(mouseX, mouseY, state);
     }
 
     @Override
@@ -123,34 +167,6 @@ public abstract class GuiContainerBase
                     this.controlLostFocus(textField);
                 }
             }
-            else if(control instanceof GuiControl)
-            {
-                if(!((GuiControl) control).getEnabled())
-                    continue;
-
-                if (control instanceof GuiButton)
-                {
-                    if (mouseButton == 0)
-                    {
-                        /*
-                        if (((GuiButton) control).mousePressed(this.mc, mouseX, mouseY))
-                        {
-                            ((GuiButton) control).playPressSound(this.mc.getSoundHandler());
-                            this.actionPerformed((GuiButton) control);
-
-                        }
-                        */
-                    }
-                }
-            }
-
-        }
-
-        Slot slot = this.getSlotUnderMouse();
-
-        if(slot != null)
-        {
-
         }
 
         super.mouseClicked(mouseX, mouseY, mouseButton);
@@ -330,5 +346,41 @@ public abstract class GuiContainerBase
     protected void onActionPerformed(GuiControl control)
     {
 
+    }
+
+    @Override
+    public boolean notifyTakeFocus(GuiControl taker)
+    {
+        //first, look for objections
+        /*
+        for(Gui control : controls)
+        {
+            if(control instanceof GuiTextField)
+            {
+                //hum, how to determine if a text field can lose focus?
+
+                //if(((GuiTextField)control).get) {
+                //    return false;
+                //}
+            }
+        }*/
+
+        //no objections, lady
+        for(Gui control : controls)
+        {
+            if(control instanceof GuiControl)
+            {
+                if (control != taker && ((GuiControl)control).hasFocus())
+                {
+                    ((GuiControl)control).setFocused(false);
+                }
+            }
+            else if(control instanceof GuiTextField)
+            {
+                ((GuiTextField) control).setFocused(false);
+            }
+        }
+
+        return true;
     }
 }

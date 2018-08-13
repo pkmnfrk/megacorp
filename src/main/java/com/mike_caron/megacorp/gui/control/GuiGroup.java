@@ -29,6 +29,50 @@ public class GuiGroup
     }
 
     @Override
+    public void update()
+    {
+        for(GuiControl control : controls)
+        {
+            control.update();
+        }
+    }
+
+    @Override
+    public boolean notifyTakeFocus(GuiControl taker)
+    {
+        if(this.parent != null)
+        {
+            if (!this.parent.notifyTakeFocus(this))
+            {
+                return false;
+            }
+        }
+
+        for(GuiControl control : controls)
+        {
+            if(control != taker && control.hasFocus())
+            {
+                control.setFocused(false);
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public GuiControl hitTest(int x, int y)
+    {
+        for(GuiControl control : controls)
+        {
+            GuiControl res = control.hitTest(x, y);
+            if(res != null)
+                return res;
+        }
+
+        return null;
+    }
+
+    @Override
     public void addControl(GuiControl control)
     {
         this.controls.add(control);

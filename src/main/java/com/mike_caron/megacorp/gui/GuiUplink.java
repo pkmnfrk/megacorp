@@ -62,7 +62,7 @@ public class GuiUplink
     @Override
     protected void onActionPerformed(GuiControl button)
     {
-        if(!button.getEnabled()) return;
+        if(!button.isEnabled()) return;
 
         if(button == establishCorporation)
         {

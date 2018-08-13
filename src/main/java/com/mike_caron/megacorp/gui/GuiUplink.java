@@ -7,6 +7,8 @@ import com.mike_caron.megacorp.network.CtoSMessage;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 
+import java.text.NumberFormat;
+
 public class GuiUplink
     extends GuiContainerBase
     implements GuiButton.ClickedListener, GuiTextBox.TextboxListener
@@ -29,6 +31,9 @@ public class GuiUplink
     private GuiButton establishCorporation = new GuiButton(1, guiLeft + 28, guiTop + 55, 120, 20, "");
 
     private GuiMultilineLabel unownedText = GuiUtil.staticMultilineLabelFromTranslationKey(11, 16, 154, 40, "");
+
+    private GuiLabel corpNameHeader = GuiUtil.staticLabelFromTranslationKey(6, 19, "tile.megacorp:uplink.corpname");
+    private GuiTranslatedLabel profitLabel = new GuiTranslatedLabel(6, 43, "tile.megacorp:uplink.profit", "");
 
     private int corpNameCounter = -1;
 
@@ -72,20 +77,6 @@ public class GuiUplink
         }
     }
 
-    /*
-    @Override
-    protected void controlLostFocus(GuiTextBox textField)
-    {
-        if(textField == corpNameField)
-        {
-            //container.corpName = corpNameField.getText();
-            //send update
-            CtoSMessage packet = CtoSMessage.forGuiString(container.getPos(), 2, corpNameField.getText());
-            MegaCorpMod.networkWrapper.sendToServer(packet);
-        }
-    }
-    */
-
     @Override
     public void addControls()
     {
@@ -95,6 +86,8 @@ public class GuiUplink
         this.addControl(unownedGroup);
 
         ownedGroup.addControl(corpNameField);
+        ownedGroup.addControl(corpNameHeader);
+        ownedGroup.addControl(profitLabel);
 
         unownedGroup.addControl(establishCorporation);
         unownedGroup.addControl(unownedText);
@@ -130,6 +123,8 @@ public class GuiUplink
                 this.corpNameCounter = container.corpNameCounter;
             }
         }
+
+        profitLabel.setPlaceholder(0, NumberFormat.getIntegerInstance().format(container.profit));
 
         establishCorporation.setLabel(GuiUtil.translateConditional(container.hasCorp, "tile.megacorp.uplink.establish", "tile.megacorp.uplink.createcorp"));
         unownedText.setString(GuiUtil.translateConditional(container.hasCorp, "tile.megacorp:uplink.existcorp", "tile.megacorp:uplink.newcorp"));

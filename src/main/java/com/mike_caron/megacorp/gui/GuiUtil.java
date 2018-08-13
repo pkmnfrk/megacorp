@@ -187,23 +187,28 @@ public class GuiUtil
 
     public static void draw3x3(int x, int y, int width, int height, int sx, int sy)
     {
+        final int SHEET_SIZE = 256;
+        final int CORNER_SIZE = 4;
+        final int CENTER_SIZE = 8;
+        final int TILE_SIZE = CORNER_SIZE * 2 + CENTER_SIZE;
+
         //top-left
-        drawTiledTexturePart(x, y, 4, 4, sx, sy, 4, 4, 256, 256);
+        drawTiledTexturePart(x, y, CORNER_SIZE, CORNER_SIZE, sx, sy, CORNER_SIZE, CORNER_SIZE, SHEET_SIZE, SHEET_SIZE);
         //top-right
-        drawTiledTexturePart(x + width - 4, y, 4, 4, sx + 20, sy, 4, 4, 256, 256);
+        drawTiledTexturePart(x + width - CORNER_SIZE, y, CORNER_SIZE, CORNER_SIZE, sx + TILE_SIZE - CORNER_SIZE, sy, CORNER_SIZE, CORNER_SIZE, SHEET_SIZE, SHEET_SIZE);
         //bottom-left
-        drawTiledTexturePart(x, y + height - 4, 4, 4, sx, sy + 20, 4, 4, 256, 256);
+        drawTiledTexturePart(x, y + height - CORNER_SIZE, CORNER_SIZE, CORNER_SIZE, sx, sy + TILE_SIZE - CORNER_SIZE, CORNER_SIZE, CORNER_SIZE, SHEET_SIZE, SHEET_SIZE);
         //bottom-right
-        drawTiledTexturePart(x + width - 4, y + height - 4, 4, 4, sx + 20, sy + 20, 4, 4, 256, 256);
+        drawTiledTexturePart(x + width - CORNER_SIZE, y + height - CORNER_SIZE, CORNER_SIZE, CORNER_SIZE, sx + TILE_SIZE - CORNER_SIZE, sy + TILE_SIZE - CORNER_SIZE, CORNER_SIZE, CORNER_SIZE, SHEET_SIZE, SHEET_SIZE);
         //top
-        drawTiledTexturePart(x + 4, y, width - 8, 4, sx + 4, sy, 16, 4, 256, 256);
+        drawTiledTexturePart(x + CORNER_SIZE, y, width - CORNER_SIZE * 2, CORNER_SIZE, sx + CORNER_SIZE, sy, CENTER_SIZE, CORNER_SIZE, SHEET_SIZE, SHEET_SIZE);
         //bottom
-        drawTiledTexturePart(x + 4, y + height - 4, width - 8, 4, sx + 4, sy + 20, 16, 4, 256, 256);
+        drawTiledTexturePart(x + CORNER_SIZE, y + height - CORNER_SIZE, width - CORNER_SIZE * 2, CORNER_SIZE, sx + CORNER_SIZE, sy + TILE_SIZE - CORNER_SIZE, CENTER_SIZE, CORNER_SIZE, SHEET_SIZE, SHEET_SIZE);
         //left
-        drawTiledTexturePart(x, y + 4, 4, height - 8, sx, sy + 4, 4, 16, 256, 256);
+        drawTiledTexturePart(x, y + CORNER_SIZE, CORNER_SIZE, height - CORNER_SIZE * 2, sx, sy + CORNER_SIZE, CORNER_SIZE, CENTER_SIZE, SHEET_SIZE, SHEET_SIZE);
         //right
-        drawTiledTexturePart(x + width - 4, y + 4, 4, height - 8, sx + 20, sy + 4, 4, 16, 256, 256);
+        drawTiledTexturePart(x + width - CORNER_SIZE, y + CORNER_SIZE, CORNER_SIZE, height - CORNER_SIZE * 2, sx + TILE_SIZE - CORNER_SIZE, sy + CORNER_SIZE, CORNER_SIZE, CENTER_SIZE, SHEET_SIZE, SHEET_SIZE);
         //center
-        drawTiledTexturePart(x + 4, y + 4, width - 8, height - 8, sx + 4, sy + 4, 16, 16, 256, 256);
+        drawTiledTexturePart(x + CORNER_SIZE, y + CORNER_SIZE, width - CORNER_SIZE * 2, height - CORNER_SIZE * 2, sx + CORNER_SIZE, sy + CORNER_SIZE, CENTER_SIZE, CENTER_SIZE, SHEET_SIZE, SHEET_SIZE);
     }
 }

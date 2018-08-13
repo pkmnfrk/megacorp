@@ -3,7 +3,9 @@ package com.mike_caron.megacorp.gui;
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.block.uplink.ContainerUplink;
 import com.mike_caron.megacorp.gui.control.GuiButton;
+import com.mike_caron.megacorp.gui.control.GuiContainerBase;
 import com.mike_caron.megacorp.gui.control.GuiControl;
+import com.mike_caron.megacorp.gui.control.GuiGroup;
 import com.mike_caron.megacorp.network.CtoSMessage;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
@@ -25,6 +27,9 @@ public class GuiUplink
 
     private static ResourceLocation cardImage = new ResourceLocation(MegaCorpMod.modId, "textures/gui/test.png");
     //private GuiButtonImage cardButton;
+
+    private GuiGroup mainGroup;
+
     private GuiTextField corpNameField;
     private GuiButton establishCorporation;
 
@@ -78,6 +83,10 @@ public class GuiUplink
     {
         super.addControls();
 
+        mainGroup = new GuiGroup();
+
+        this.addControl(mainGroup);
+
         String name = container.corpName;
         int cursor = 0;
         if(name != null)
@@ -106,7 +115,7 @@ public class GuiUplink
                 message = "tile.megacorp.uplink.establish";
             }
             message = new TextComponentTranslation(message).getUnformattedText();
-            addControl(establishCorporation = new GuiButton(2, guiLeft + 28, guiTop + 55, 120, 20, message));
+            mainGroup.addControl(establishCorporation = new GuiButton(2, guiLeft + 28, guiTop + 55, 120, 20, message));
         }
     }
 

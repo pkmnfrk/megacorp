@@ -1,7 +1,7 @@
-package com.mike_caron.megacorp.gui;
+package com.mike_caron.megacorp.gui.control;
 
 import com.mike_caron.megacorp.block.ContainerBase;
-import com.mike_caron.megacorp.gui.control.*;
+import com.mike_caron.megacorp.gui.GuiUtil;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiTextField;

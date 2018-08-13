@@ -34,10 +34,10 @@ public class GuiButton
                 sx = 16;
                 break;
             case HOVERED:
-                sx = 40;
+                sx = 32;
                 break;
             case PRESSED:
-                sx = 64;
+                sx = 48;
                 break;
         }
 

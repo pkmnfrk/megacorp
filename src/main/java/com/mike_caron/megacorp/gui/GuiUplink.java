@@ -6,7 +6,6 @@ import com.mike_caron.megacorp.gui.control.*;
 import com.mike_caron.megacorp.network.CtoSMessage;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextComponentTranslation;
 
 public class GuiUplink
     extends GuiContainerBase
@@ -22,13 +21,13 @@ public class GuiUplink
     private static ResourceLocation cardImage = new ResourceLocation(MegaCorpMod.modId, "textures/gui/test.png");
     //private GuiButtonImage cardButton;
 
-    private GuiGroup ownedGroup;
-    private GuiGroup unownedGroup;
+    private GuiGroup ownedGroup = new GuiGroup();
+    private GuiGroup unownedGroup = new GuiGroup();
 
-    private GuiWrappedTextBox corpNameField;
-    private GuiButton establishCorporation;
+    private GuiWrappedTextBox corpNameField = new GuiWrappedTextBox(7, 29, 156, 10);
+    private GuiButton establishCorporation = new GuiButton(2, guiLeft + 28, guiTop + 55, 120, 20, "");
 
-    private GuiMultilineLabel unownedText;
+    private GuiMultilineLabel unownedText = GuiUtil.staticMultilineLabelFromTranslationKey(11, 16, 154, 40, "");
 
     private int corpNameCounter = -1;
 
@@ -91,51 +90,14 @@ public class GuiUplink
     {
         super.addControls();
 
-        ownedGroup = new GuiGroup();
-        unownedGroup = new GuiGroup();
-
         this.addControl(ownedGroup);
         this.addControl(unownedGroup);
 
-        String name = container.corpName;
-        int cursor = 0;
-        if(name != null)
-        {
-            cursor = name.length();
-        }
+        ownedGroup.addControl(corpNameField);
 
-        if(corpNameField != null)
-        {
-            name = corpNameField.getText();
-            cursor = corpNameField.getCursorPosition();
-        }
-
-        if(name == null)
-        {
-            name = "";
-        }
-
-
-        ownedGroup.addControl(corpNameField = new GuiWrappedTextBox(7, 29, 156, 10));
-        corpNameField.setText(name);
-        corpNameField.setCursorPosition(cursor);
-        //corpNameField.setCanLoseFocus(true);
-
-        String message = "tile.megacorp.uplink.createcorp";
-        if(container.hasCorp)
-        {
-            message = "tile.megacorp.uplink.establish";
-        }
-        message = new TextComponentTranslation(message).getUnformattedText();
-        unownedGroup.addControl(establishCorporation = new GuiButton(2, guiLeft + 28, guiTop + 55, 120, 20, message));
-
-        message = "tile.megacorp:uplink.newcorp";
-        if(container.hasCorp)
-        {
-            message = "tile.megacorp:uplink.existcorp";
-        }
-        unownedText = GuiUtil.staticMultilineLabelFromTranslationKey(11, 16, 154, 40, message);
         unownedText.setAlignment(GuiMultilineLabel.Alignment.CENTER);
+
+        unownedGroup.addControl(establishCorporation);
         unownedGroup.addControl(unownedText);
 
     }
@@ -144,38 +106,6 @@ public class GuiUplink
     protected String getTitleKey()
     {
         return "tile.megacorp:uplink.name";
-    }
-
-    @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
-    {
-        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-
-        if(container.owner == null)
-        {
-            /*String message = "tile.megacorp:uplink.newcorp";
-            if(container.hasCorp)
-            {
-                message = "tile.megacorp:uplink.existcorp";
-            }
-            drawCenteredWrappedString(new TextComponentTranslation(message).getUnformattedText(), 88, 35, 154);
-            */
-        }
-        else
-        {
-
-            /*
-            this.fontRenderer.drawString(new TextComponentTranslation("tile.megacorp:uplink.corpname").getUnformattedText(), 6, 19, GuiUtil.FONT_COLOUR);
-
-            String prefix = new TextComponentTranslation("tile.megacorp:uplink.profit").getUnformattedText();
-
-            prefix += " $" + NumberFormat.getIntegerInstance().format(container.profit);
-
-            this.fontRenderer.drawString(prefix, 6, 43, GuiUtil.FONT_COLOUR);
-            */
-        }
-
-
     }
 
     @Override
@@ -198,6 +128,9 @@ public class GuiUplink
                 this.corpNameCounter = container.corpNameCounter;
             }
         }
+
+        establishCorporation.setLabel(GuiUtil.translateConditional(container.hasCorp, "tile.megacorp.uplink.establish", "tile.megacorp.uplink.createcorp"));
+        unownedText.setString(GuiUtil.translateConditional(container.hasCorp, "tile.megacorp:uplink.existcorp", "tile.megacorp:uplink.newcorp"));
     }
 
     @Override

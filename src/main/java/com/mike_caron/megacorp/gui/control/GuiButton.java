@@ -3,6 +3,7 @@ package com.mike_caron.megacorp.gui.control;
 import com.mike_caron.megacorp.gui.GuiUtil;
 import net.minecraft.client.renderer.GlStateManager;
 
+import javax.annotation.Nonnull;
 import java.awt.*;
 
 public class GuiButton
@@ -12,7 +13,6 @@ public class GuiButton
 
     private String label;
     private State state;
-
 
     public GuiButton(int id, int x, int y, int width, int height, String label)
     {
@@ -97,6 +97,16 @@ public class GuiButton
         {
             this.state = State.NORMAL;
         }
+    }
+
+    public void setLabel(@Nonnull String string)
+    {
+        this.label = string;
+    }
+
+    public String getLabel()
+    {
+        return this.label;
     }
 
     enum State

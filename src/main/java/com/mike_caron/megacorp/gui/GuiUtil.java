@@ -268,4 +268,14 @@ public class GuiUtil
         //center
         drawStretchedTexturePart(x + cornerSize, y + cornerSize, width - cornerSize * 2, height - cornerSize * 2, sx + cornerSize, sy + cornerSize, centerSize, centerSize, SHEET_SIZE, SHEET_SIZE);
     }
+
+    public static String translate(String key, Object... args)
+    {
+        return new TextComponentTranslation(key, args).getFormattedText();
+    }
+
+    public static String translateConditional(boolean condition, String trueKey, String falseKey, Object... args)
+    {
+        return new TextComponentTranslation(condition ? trueKey : falseKey, args).getFormattedText();
+    }
 }

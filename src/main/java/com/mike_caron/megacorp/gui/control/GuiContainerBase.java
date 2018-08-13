@@ -120,7 +120,7 @@ public abstract class GuiContainerBase
                 textField.mouseClicked(mouseX, mouseY, mouseButton);
                 if(wasFocused && !textField.isFocused())
                 {
-                    this.textFieldLostFocus(textField);
+                    this.controlLostFocus(textField);
                 }
             }
             else if(control instanceof GuiControl)
@@ -171,11 +171,28 @@ public abstract class GuiContainerBase
                     if(keyCode == Keyboard.KEY_ESCAPE)
                     {
                         textField.setFocused(false);
-                        this.textFieldLostFocus(textField);
+                        this.controlLostFocus(textField);
                     }
 
                     break;
                 }
+            }
+            else if(control instanceof GuiControl)
+            {
+                if(((GuiControl) control).hasFocus())
+                {
+                    textFocused = true;
+                    ((GuiControl) control).onKeyTyped(typedChar, keyCode);
+
+                    if(keyCode == Keyboard.KEY_ESCAPE)
+                    {
+                        ((GuiControl)control).setFocused(false);
+                        this.controlLostFocus(control);
+                    }
+
+                    break;
+                }
+
             }
         }
 
@@ -272,7 +289,7 @@ public abstract class GuiContainerBase
         }
     }
 
-    protected void textFieldLostFocus(GuiTextField textField)
+    protected void controlLostFocus(Gui textField)
     {
 
     }

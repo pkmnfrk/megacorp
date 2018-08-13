@@ -70,9 +70,9 @@ public abstract class GuiControl
 
     public boolean hasFocus() { return false; }
 
-    public void setFocus(boolean focussed) { }
+    public void setFocused(boolean focused) { }
 
-    public void onKeyTyped(char typedChar, int keyCode) {}
+    public void onKeyTyped(char typedChar, int keyCode) { }
 
     public abstract void draw();
 }

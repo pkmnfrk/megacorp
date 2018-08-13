@@ -142,8 +142,26 @@ public class GuiUtil
                 Tessellator.getInstance().draw();
             }
         }
+    }
 
+    public static void drawStretchedTexturePart(int x, int y, int width, int height, int tileX, int tileY, int tileWidth, int tileHeight, int sheetWidth, int sheetHeight)
+    {
+        float minU = tileX * 1f / sheetWidth;
+        float minV = tileY * 1f / sheetHeight;
+        float maxU = (tileX + tileWidth) * 1f / sheetWidth;
+        float maxV = (tileY + tileHeight) * 1f / sheetHeight;
 
+        //  0    2
+        //  v  / v
+        //  1    3
+
+        BufferBuilder buffer = Tessellator.getInstance().getBuffer();
+        buffer.begin(GL11.GL_TRIANGLE_STRIP, DefaultVertexFormats.POSITION_TEX);
+        buffer.pos(x, y, 0).tex(minU, minV).endVertex();
+        buffer.pos(x, y + height, 0).tex(minU, maxV).endVertex();
+        buffer.pos(x + width, y, 0).tex(maxU, minV).endVertex();
+        buffer.pos(x + width, y + height, 0).tex(maxU, maxV).endVertex();
+        Tessellator.getInstance().draw();
     }
 
     public static GuiButtonImage makeGuiButtonImage(int buttonId, int x, int y, int width, int height, int xTex, int yTex, int yDiff, ResourceLocation resourceLocation)
@@ -187,28 +205,67 @@ public class GuiUtil
 
     public static void draw3x3(int x, int y, int width, int height, int sx, int sy)
     {
-        final int SHEET_SIZE = 256;
         final int CORNER_SIZE = 4;
         final int CENTER_SIZE = 8;
-        final int TILE_SIZE = CORNER_SIZE * 2 + CENTER_SIZE;
+
+        draw3x3(x, y, width, height, sx, sy, CORNER_SIZE, CENTER_SIZE);
+    }
+
+    public static void draw3x3(int x, int y, int width, int height, int sx, int sy, int cornerSize, int centerSize)
+    {
+        final int SHEET_SIZE = 256;
+        final int TILE_SIZE = cornerSize * 2 + centerSize;
 
         //top-left
-        drawTiledTexturePart(x, y, CORNER_SIZE, CORNER_SIZE, sx, sy, CORNER_SIZE, CORNER_SIZE, SHEET_SIZE, SHEET_SIZE);
+        drawTiledTexturePart(x, y, cornerSize, cornerSize, sx, sy, cornerSize, cornerSize, SHEET_SIZE, SHEET_SIZE);
         //top-right
-        drawTiledTexturePart(x + width - CORNER_SIZE, y, CORNER_SIZE, CORNER_SIZE, sx + TILE_SIZE - CORNER_SIZE, sy, CORNER_SIZE, CORNER_SIZE, SHEET_SIZE, SHEET_SIZE);
+        drawTiledTexturePart(x + width - cornerSize, y, cornerSize, cornerSize, sx + TILE_SIZE - cornerSize, sy, cornerSize, cornerSize, SHEET_SIZE, SHEET_SIZE);
         //bottom-left
-        drawTiledTexturePart(x, y + height - CORNER_SIZE, CORNER_SIZE, CORNER_SIZE, sx, sy + TILE_SIZE - CORNER_SIZE, CORNER_SIZE, CORNER_SIZE, SHEET_SIZE, SHEET_SIZE);
+        drawTiledTexturePart(x, y + height - cornerSize, cornerSize, cornerSize, sx, sy + TILE_SIZE - cornerSize, cornerSize, cornerSize, SHEET_SIZE, SHEET_SIZE);
         //bottom-right
-        drawTiledTexturePart(x + width - CORNER_SIZE, y + height - CORNER_SIZE, CORNER_SIZE, CORNER_SIZE, sx + TILE_SIZE - CORNER_SIZE, sy + TILE_SIZE - CORNER_SIZE, CORNER_SIZE, CORNER_SIZE, SHEET_SIZE, SHEET_SIZE);
+        drawTiledTexturePart(x + width - cornerSize, y + height - cornerSize, cornerSize, cornerSize, sx + TILE_SIZE - cornerSize, sy + TILE_SIZE - cornerSize, cornerSize, cornerSize, SHEET_SIZE, SHEET_SIZE);
         //top
-        drawTiledTexturePart(x + CORNER_SIZE, y, width - CORNER_SIZE * 2, CORNER_SIZE, sx + CORNER_SIZE, sy, CENTER_SIZE, CORNER_SIZE, SHEET_SIZE, SHEET_SIZE);
+        drawTiledTexturePart(x + cornerSize, y, width - cornerSize * 2, cornerSize, sx + cornerSize, sy, centerSize, cornerSize, SHEET_SIZE, SHEET_SIZE);
         //bottom
-        drawTiledTexturePart(x + CORNER_SIZE, y + height - CORNER_SIZE, width - CORNER_SIZE * 2, CORNER_SIZE, sx + CORNER_SIZE, sy + TILE_SIZE - CORNER_SIZE, CENTER_SIZE, CORNER_SIZE, SHEET_SIZE, SHEET_SIZE);
+        drawTiledTexturePart(x + cornerSize, y + height - cornerSize, width - cornerSize * 2, cornerSize, sx + cornerSize, sy + TILE_SIZE - cornerSize, centerSize, cornerSize, SHEET_SIZE, SHEET_SIZE);
         //left
-        drawTiledTexturePart(x, y + CORNER_SIZE, CORNER_SIZE, height - CORNER_SIZE * 2, sx, sy + CORNER_SIZE, CORNER_SIZE, CENTER_SIZE, SHEET_SIZE, SHEET_SIZE);
+        drawTiledTexturePart(x, y + cornerSize, cornerSize, height - cornerSize * 2, sx, sy + cornerSize, cornerSize, centerSize, SHEET_SIZE, SHEET_SIZE);
         //right
-        drawTiledTexturePart(x + width - CORNER_SIZE, y + CORNER_SIZE, CORNER_SIZE, height - CORNER_SIZE * 2, sx + TILE_SIZE - CORNER_SIZE, sy + CORNER_SIZE, CORNER_SIZE, CENTER_SIZE, SHEET_SIZE, SHEET_SIZE);
+        drawTiledTexturePart(x + width - cornerSize, y + cornerSize, cornerSize, height - cornerSize * 2, sx + TILE_SIZE - cornerSize, sy + cornerSize, cornerSize, centerSize, SHEET_SIZE, SHEET_SIZE);
         //center
-        drawTiledTexturePart(x + CORNER_SIZE, y + CORNER_SIZE, width - CORNER_SIZE * 2, height - CORNER_SIZE * 2, sx + CORNER_SIZE, sy + CORNER_SIZE, CENTER_SIZE, CENTER_SIZE, SHEET_SIZE, SHEET_SIZE);
+        drawTiledTexturePart(x + cornerSize, y + cornerSize, width - cornerSize * 2, height - cornerSize * 2, sx + cornerSize, sy + cornerSize, centerSize, centerSize, SHEET_SIZE, SHEET_SIZE);
+    }
+
+    public static void draw3x3Stretched(int x, int y, int width, int height, int sx, int sy)
+    {
+        final int CORNER_SIZE = 4;
+        final int CENTER_SIZE = 8;
+
+        draw3x3(x, y, width, height, sx, sy, CORNER_SIZE, CENTER_SIZE);
+    }
+
+    public static void draw3x3Stretched(int x, int y, int width, int height, int sx, int sy, int cornerSize, int centerSize)
+    {
+        final int SHEET_SIZE = 256;
+        final int TILE_SIZE = cornerSize * 2 + centerSize;
+
+        //top-left
+        drawStretchedTexturePart(x, y, cornerSize, cornerSize, sx, sy, cornerSize, cornerSize, SHEET_SIZE, SHEET_SIZE);
+        //top-right
+        drawStretchedTexturePart(x + width - cornerSize, y, cornerSize, cornerSize, sx + TILE_SIZE - cornerSize, sy, cornerSize, cornerSize, SHEET_SIZE, SHEET_SIZE);
+        //bottom-left
+        drawStretchedTexturePart(x, y + height - cornerSize, cornerSize, cornerSize, sx, sy + TILE_SIZE - cornerSize, cornerSize, cornerSize, SHEET_SIZE, SHEET_SIZE);
+        //bottom-right
+        drawStretchedTexturePart(x + width - cornerSize, y + height - cornerSize, cornerSize, cornerSize, sx + TILE_SIZE - cornerSize, sy + TILE_SIZE - cornerSize, cornerSize, cornerSize, SHEET_SIZE, SHEET_SIZE);
+        //top
+        drawStretchedTexturePart(x + cornerSize, y, width - cornerSize * 2, cornerSize, sx + cornerSize, sy, centerSize, cornerSize, SHEET_SIZE, SHEET_SIZE);
+        //bottom
+        drawStretchedTexturePart(x + cornerSize, y + height - cornerSize, width - cornerSize * 2, cornerSize, sx + cornerSize, sy + TILE_SIZE - cornerSize, centerSize, cornerSize, SHEET_SIZE, SHEET_SIZE);
+        //left
+        drawStretchedTexturePart(x, y + cornerSize, cornerSize, height - cornerSize * 2, sx, sy + cornerSize, cornerSize, centerSize, SHEET_SIZE, SHEET_SIZE);
+        //right
+        drawStretchedTexturePart(x + width - cornerSize, y + cornerSize, cornerSize, height - cornerSize * 2, sx + TILE_SIZE - cornerSize, sy + cornerSize, cornerSize, centerSize, SHEET_SIZE, SHEET_SIZE);
+        //center
+        drawStretchedTexturePart(x + cornerSize, y + cornerSize, width - cornerSize * 2, height - cornerSize * 2, sx + cornerSize, sy + cornerSize, centerSize, centerSize, SHEET_SIZE, SHEET_SIZE);
     }
 }

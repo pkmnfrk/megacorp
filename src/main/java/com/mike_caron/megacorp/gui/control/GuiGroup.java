@@ -32,10 +32,7 @@ public class GuiGroup
     public void addControl(GuiControl control)
     {
         this.controls.add(control);
-        if(control instanceof GuiControl)
-        {
-            ((GuiControl)control).setParent(this);
-        }
+        control.setParent(this);
     }
 
     @Override
@@ -48,5 +45,62 @@ public class GuiGroup
     public FontRenderer getFontRenderer()
     {
         return parent.getFontRenderer();
+    }
+
+    @Override
+    public boolean hasFocus()
+    {
+        for(GuiControl control : controls)
+        {
+            if(control.hasFocus()) return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean canHaveFocus()
+    {
+        return controls.stream().anyMatch(GuiControl::canHaveFocus);
+    }
+
+    @Override
+    public void setFocused(boolean focused)
+    {
+        if(!focused)
+        {
+            for(GuiControl control : controls)
+            {
+                if(control.hasFocus())
+                {
+                    control.setFocused(false);
+                    break;
+                }
+            }
+        }
+        else
+        {
+            for(GuiControl control : controls)
+            {
+                if(control.canHaveFocus())
+                {
+                    control.setFocused(true);
+                    break;
+                }
+            }
+        }
+
+    }
+
+    @Override
+    public void onKeyTyped(char typedChar, int keyCode)
+    {
+        for(GuiControl control : controls)
+        {
+            if(control.hasFocus())
+            {
+                control.onKeyTyped(typedChar, keyCode);
+                break;
+            }
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.mike_caron.megacorp.gui.control;
 
 import com.mike_caron.megacorp.gui.GuiUtil;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -30,15 +31,22 @@ public class GuiFluid
     {
         List<String> items = new ArrayList<>();
 
-        items.add(this.fluid.getLocalizedName(null));
+        if(this.fluid != null)
+        {
+            items.add(this.fluid.getLocalizedName(null));
 
-        StringBuilder sb = new StringBuilder();
-        sb.append(NumberFormat.getIntegerInstance().format(this.amount));
-        sb.append("/");
-        sb.append(NumberFormat.getIntegerInstance().format(this.capacity));
-        sb.append("mb");
-        items.add(sb.toString());
-
+            StringBuilder sb = new StringBuilder();
+            sb.append(NumberFormat.getIntegerInstance().format(this.amount));
+            sb.append("/");
+            sb.append(NumberFormat.getIntegerInstance().format(this.capacity));
+            sb.append("mb");
+            items.add(sb.toString());
+        }
+        else
+        {
+            items.add(new TextComponentTranslation("tile.megacorp:misc.empty").getFormattedText());
+        }
+        
         return items;
     }
 

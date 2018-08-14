@@ -301,9 +301,12 @@ public abstract class GuiContainerBase
             }
         }*/
 
+        int goodX = mouseX - guiLeft;
+        int goodY = mouseY - guiTop;
+
         if(mouseOverControl != null)
         {
-            List<String> toolTip = mouseOverControl.getTooltip(mouseX, mouseY);
+            List<String> toolTip = mouseOverControl.getTooltip(goodX, goodY);
             if(toolTip != null)
             {
                 this.drawHoveringText(toolTip, mouseX, mouseY);

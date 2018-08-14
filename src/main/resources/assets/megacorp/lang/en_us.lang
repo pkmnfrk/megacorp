@@ -32,6 +32,7 @@ tile.megacorp:profit_materializer.name=Profit Materializer
 tile.megacorp:profit_materializer.remaining=Profit Remaining:
 tile.megacorp:profit_materializer.remainingval=$%s
 
+tile.megacorp:misc.empty=Empty
 tile.megacorp:misc.insertcard=Please activate this machine with a Corporate Card.
 
 

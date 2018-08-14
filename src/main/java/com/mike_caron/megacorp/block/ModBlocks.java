@@ -6,6 +6,7 @@ import com.mike_caron.megacorp.block.profit_condenser.BlockProfitCondenser;
 import com.mike_caron.megacorp.block.profit_materializer.BlockProfitMaterializer;
 import com.mike_caron.megacorp.block.profit_materializer.TileEntityProfitMaterializer;
 import com.mike_caron.megacorp.block.sbs.BlockSBS;
+import com.mike_caron.megacorp.block.sbs.TileEntitySBS;
 import com.mike_caron.megacorp.block.uplink.BlockUplink;
 import com.mike_caron.megacorp.block.uplink.TileEntityUplink;
 import com.mike_caron.megacorp.fluid.ModFluids;
@@ -82,6 +83,7 @@ public class ModBlocks
 
         GameRegistry.registerTileEntity(TileEntityProfitMaterializer.class, new ResourceLocation(MegaCorpMod.modId, "profit_materializer"));
         GameRegistry.registerTileEntity(TileEntityUplink.class, new ResourceLocation(MegaCorpMod.modId, "uplink"));
+        GameRegistry.registerTileEntity(TileEntitySBS.class, new ResourceLocation(MegaCorpMod.modId, "small_business_simulator"));
     }
 
     @SuppressWarnings("ConstantConditions")

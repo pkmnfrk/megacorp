@@ -18,8 +18,7 @@ public abstract class GuiContainerBase
     implements IGuiGroup
 {
     protected final List<GuiControl> controls = new ArrayList<>();
-    private GuiTranslatedLabel titleLabel;
-    protected GuiMultilineLabel insertCardLabel;
+    private GuiLabel titleLabel;
 
     private GuiControl mouseOverControl = null;
     private boolean leftDown = false, rightDown = false;
@@ -264,13 +263,8 @@ public abstract class GuiContainerBase
 
     protected void addControls()
     {
-        titleLabel = new GuiTranslatedLabel(6, 6, GuiUtil.FONT_COLOUR, getTitleKey());
+        titleLabel = GuiUtil.staticLabelFromTranslationKey(6, 6, getTitleKey());
         this.addControl(titleLabel);
-
-        insertCardLabel = GuiUtil.staticMultilineLabelFromTranslationKey(8, 16, 160, 53,"tile.megacorp:misc.insertcard");
-        insertCardLabel.setAlignment(GuiMultilineLabel.Alignment.CENTER);
-        insertCardLabel.setVisible(false);
-        this.addControl(insertCardLabel);
     }
 
     public FontRenderer getFontRenderer()
@@ -286,21 +280,6 @@ public abstract class GuiContainerBase
     @Override
     protected void renderHoveredToolTip(int mouseX, int mouseY)
     {
-        /*
-        for(GuiControl control : controls)
-        {
-            GuiControl hit = control.hitTest(mouseX, mouseY);
-            if(hit != null)
-            {
-                List<String> toolTip = hit.getTooltip(mouseX, mouseY);
-                if(toolTip != null)
-                {
-                    this.drawHoveringText(toolTip, mouseX, mouseY);
-                }
-                return;
-            }
-        }*/
-
         int goodX = mouseX - guiLeft;
         int goodY = mouseY - guiTop;
 

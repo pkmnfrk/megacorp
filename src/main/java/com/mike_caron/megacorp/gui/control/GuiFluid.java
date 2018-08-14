@@ -46,7 +46,7 @@ public class GuiFluid
         {
             items.add(new TextComponentTranslation("tile.megacorp:misc.empty").getFormattedText());
         }
-        
+
         return items;
     }
 

@@ -1,7 +1,7 @@
 package com.mike_caron.megacorp.block.uplink;
 
 import com.mike_caron.megacorp.api.ICorporationManager;
-import com.mike_caron.megacorp.block.TileEntityBase;
+import com.mike_caron.megacorp.block.TileEntityOwnedBase;
 import com.mike_caron.megacorp.impl.Corporation;
 import com.mike_caron.megacorp.impl.CorporationManager;
 import com.mike_caron.megacorp.item.CorporateCard;
@@ -12,7 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class TileEntityUplink
-        extends TileEntityBase
+    extends TileEntityOwnedBase
 {
     public final ItemStackHandler cardInventory = new ItemStackHandler(2)
     {

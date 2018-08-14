@@ -1,7 +1,7 @@
 package com.mike_caron.megacorp.block.uplink;
 
 import com.mike_caron.megacorp.MegaCorpMod;
-import com.mike_caron.megacorp.block.MachineBlockBase;
+import com.mike_caron.megacorp.block.OwnedMachineBlockBase;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.ProbeMode;
@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 
 public class BlockUplink
-        extends MachineBlockBase
+    extends OwnedMachineBlockBase
 {
     public BlockUplink()
     {

@@ -1,30 +1,31 @@
-package com.mike_caron.megacorp.block.profit_materializer;
+package com.mike_caron.megacorp.block.sbs;
 
-import com.mike_caron.megacorp.api.CorporationManager;
-import com.mike_caron.megacorp.block.TEOwnedContainerBase;
+import com.mike_caron.megacorp.block.TEContainerBase;
 import com.mike_caron.megacorp.util.StringUtil;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.items.SlotItemHandler;
 
-public class ContainerProfitMaterializer
-    extends TEOwnedContainerBase
+public class ContainerSBS
+    extends TEContainerBase
 {
     public int fluidAmount = 0;
     public int fluidCapacity = 1;
     public String fluid = null;
-    public long profitRemaining;
 
-    public ContainerProfitMaterializer(IInventory playerInventory, TileEntityProfitMaterializer te)
+    Slot emeraldSlot, goldSlot;
+
+    public ContainerSBS(IInventory playerInventory, TileEntitySBS te)
     {
         super(playerInventory, te);
-
         init();
     }
 
-    private TileEntityProfitMaterializer getTE()
+    private TileEntitySBS getTE()
     {
-        return (TileEntityProfitMaterializer)this.te;
+        return (TileEntitySBS)this.te;
     }
 
     @Override
@@ -40,11 +41,28 @@ public class ContainerProfitMaterializer
     }
 
     @Override
+    protected int numOwnSlots()
+    {
+        return 2;
+    }
+
+    @Override
+    protected void addOwnSlots()
+    {
+        goldSlot = new SlotItemHandler(getTE().reagents, 0, 34, 29);
+        emeraldSlot = new SlotItemHandler(getTE().reagents, 1, 34, 52);
+
+        this.addSlotToContainer(goldSlot);
+        this.addSlotToContainer(emeraldSlot);
+    }
+
+    @Override
     public void detectAndSendChanges()
     {
         super.detectAndSendChanges();
 
-        TileEntityProfitMaterializer te = getTE();
+
+        TileEntitySBS te = getTE();
 
         if(te.fluidTank.getFluidAmount() != this.fluidAmount)
         {
@@ -68,19 +86,6 @@ public class ContainerProfitMaterializer
         if(!StringUtil.areEqual(fluidName, this.fluid))
         {
             this.fluid = fluidName;
-            changed = true;
-        }
-
-        long pr = 0;
-
-        if(owner != null)
-        {
-            pr = CorporationManager.getInstance(te.getWorld()).getCorporationForOwner(owner).getAvailableProfit();
-        }
-
-        if(profitRemaining != pr)
-        {
-            profitRemaining = pr;
             changed = true;
         }
 
@@ -111,10 +116,6 @@ public class ContainerProfitMaterializer
         {
             this.fluid = null;
         }
-        if(tag.hasKey("ProfitRemaining"))
-        {
-            this.profitRemaining = tag.getLong("ProfitRemaining");
-        }
     }
 
     @Override
@@ -128,14 +129,13 @@ public class ContainerProfitMaterializer
         {
             tag.setString("Fluid", this.fluid);
         }
-        tag.setLong("ProfitRemaining", this.profitRemaining);
 
     }
 
     @Override
     public int getId()
     {
-        return 1;
+        return 3;
     }
 
 

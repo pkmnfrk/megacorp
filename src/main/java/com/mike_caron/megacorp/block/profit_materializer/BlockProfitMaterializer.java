@@ -1,7 +1,7 @@
 package com.mike_caron.megacorp.block.profit_materializer;
 
 import com.mike_caron.megacorp.MegaCorpMod;
-import com.mike_caron.megacorp.block.MachineBlockBase;
+import com.mike_caron.megacorp.block.OwnedMachineBlockBase;
 import com.mike_caron.megacorp.fluid.ModFluids;
 import com.mike_caron.megacorp.integrations.ITOPInfoProvider;
 import mcjty.theoneprobe.api.IProbeHitData;
@@ -24,8 +24,8 @@ import javax.annotation.Nullable;
 import java.awt.*;
 
 public class BlockProfitMaterializer
-        extends MachineBlockBase
-        implements ITOPInfoProvider
+    extends OwnedMachineBlockBase
+    implements ITOPInfoProvider
 {
     public BlockProfitMaterializer()
     {

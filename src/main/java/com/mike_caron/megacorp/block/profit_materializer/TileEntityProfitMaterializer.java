@@ -1,6 +1,6 @@
 package com.mike_caron.megacorp.block.profit_materializer;
 
-import com.mike_caron.megacorp.block.TileEntityBase;
+import com.mike_caron.megacorp.block.TileEntityOwnedBase;
 import com.mike_caron.megacorp.fluid.ModFluids;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -13,7 +13,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import javax.annotation.Nullable;
 
 public class TileEntityProfitMaterializer
-        extends TileEntityBase
+    extends TileEntityOwnedBase
         implements ITickable
 {
     public final FluidTank fluidTank = new FluidTank(10000)

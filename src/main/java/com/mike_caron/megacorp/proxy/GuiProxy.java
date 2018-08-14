@@ -2,9 +2,12 @@ package com.mike_caron.megacorp.proxy;
 
 import com.mike_caron.megacorp.block.profit_materializer.ContainerProfitMaterializer;
 import com.mike_caron.megacorp.block.profit_materializer.TileEntityProfitMaterializer;
+import com.mike_caron.megacorp.block.sbs.ContainerSBS;
+import com.mike_caron.megacorp.block.sbs.TileEntitySBS;
 import com.mike_caron.megacorp.block.uplink.ContainerUplink;
 import com.mike_caron.megacorp.block.uplink.TileEntityUplink;
 import com.mike_caron.megacorp.gui.GuiProfitMaterializer;
+import com.mike_caron.megacorp.gui.GuiSBS;
 import com.mike_caron.megacorp.gui.GuiUplink;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -32,6 +35,10 @@ public class GuiProxy implements IGuiHandler
         {
             return new ContainerUplink(player.inventory, (TileEntityUplink)te, player);
         }
+        else if(te instanceof TileEntitySBS)
+        {
+            return new ContainerSBS(player.inventory, (TileEntitySBS)te);
+        }
 
         return null;
     }
@@ -52,6 +59,11 @@ public class GuiProxy implements IGuiHandler
         {
             TileEntityUplink TCte = (TileEntityUplink)te;
             return new GuiUplink(new ContainerUplink(player.inventory, TCte, player));
+        }
+        else if(te instanceof TileEntitySBS)
+        {
+            TileEntitySBS teSBS = (TileEntitySBS)te;
+            return new GuiSBS(new ContainerSBS(player.inventory, teSBS));
         }
 
         return null;

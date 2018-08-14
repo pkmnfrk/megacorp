@@ -10,7 +10,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import java.text.NumberFormat;
 
 public class GuiProfitMaterializer
-    extends GuiContainerBase
+    extends GuiContainerOwnedBase
 {
     public static final int WIDTH = 176;
     public static final int HEIGHT = 166;

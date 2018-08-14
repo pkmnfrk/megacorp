@@ -2,7 +2,7 @@ package com.mike_caron.megacorp.block.uplink;
 
 import com.mike_caron.megacorp.api.ICorporation;
 import com.mike_caron.megacorp.api.ICorporationManager;
-import com.mike_caron.megacorp.block.TEContainerBase;
+import com.mike_caron.megacorp.block.TEOwnedContainerBase;
 import com.mike_caron.megacorp.impl.CorporationManager;
 import com.mike_caron.megacorp.storage.SlotOutputOnly;
 import com.mike_caron.megacorp.util.StringUtil;
@@ -15,7 +15,7 @@ import net.minecraftforge.items.SlotItemHandler;
 import java.util.UUID;
 
 public class ContainerUplink
-        extends TEContainerBase
+    extends TEOwnedContainerBase
 {
 
     public UUID opener;
@@ -31,6 +31,8 @@ public class ContainerUplink
         super(playerInventory, te);
 
         opener = player.getPersistentID();
+
+        init();
     }
 
     private TileEntityUplink getTE()

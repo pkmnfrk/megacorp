@@ -65,19 +65,6 @@ public class GuiUplink
     }
 
     @Override
-    protected void onActionPerformed(GuiControl button)
-    {
-        if(!button.isEnabled()) return;
-
-        if(button == establishCorporation)
-        {
-            CtoSMessage packet = CtoSMessage.forGuiButton(container.getPos(), 1);
-            MegaCorpMod.networkWrapper.sendToServer(packet);
-            button.setEnabled(false);
-        }
-    }
-
-    @Override
     public void addControls()
     {
         super.addControls();

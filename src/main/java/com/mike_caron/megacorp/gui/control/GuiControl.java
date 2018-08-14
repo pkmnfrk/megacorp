@@ -4,6 +4,7 @@ import net.minecraft.client.gui.Gui;
 
 import javax.annotation.Nullable;
 import java.util.EventListener;
+import java.util.List;
 import java.util.Vector;
 
 public abstract class GuiControl
@@ -91,4 +92,7 @@ public abstract class GuiControl
 
     public void update() { }
     public abstract void draw();
+
+    @Nullable
+    public List<String> getTooltip(int mouseX, int mouseY) { return null; }
 }

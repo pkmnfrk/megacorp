@@ -284,6 +284,37 @@ public abstract class GuiContainerBase
     }
 
     @Override
+    protected void renderHoveredToolTip(int mouseX, int mouseY)
+    {
+        /*
+        for(GuiControl control : controls)
+        {
+            GuiControl hit = control.hitTest(mouseX, mouseY);
+            if(hit != null)
+            {
+                List<String> toolTip = hit.getTooltip(mouseX, mouseY);
+                if(toolTip != null)
+                {
+                    this.drawHoveringText(toolTip, mouseX, mouseY);
+                }
+                return;
+            }
+        }*/
+
+        if(mouseOverControl != null)
+        {
+            List<String> toolTip = mouseOverControl.getTooltip(mouseX, mouseY);
+            if(toolTip != null)
+            {
+                this.drawHoveringText(toolTip, mouseX, mouseY);
+            }
+            return;
+        }
+
+        super.renderHoveredToolTip(mouseX, mouseY);
+    }
+
+    @Override
     public boolean notifyTakeFocus(GuiControl taker)
     {
         //first, look for objections

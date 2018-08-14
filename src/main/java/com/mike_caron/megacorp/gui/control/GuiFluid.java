@@ -5,6 +5,11 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
+import javax.annotation.Nullable;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
+
 public class GuiFluid
     extends GuiSized
 {
@@ -17,6 +22,24 @@ public class GuiFluid
     public GuiFluid(int x, int y, int width, int height)
     {
         super(x,y, width, height);
+    }
+
+    @Nullable
+    @Override
+    public List<String> getTooltip(int mouseX, int mouseY)
+    {
+        List<String> items = new ArrayList<>();
+
+        items.add(this.fluid.getLocalizedName(null));
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(NumberFormat.getIntegerInstance().format(this.amount));
+        sb.append("/");
+        sb.append(NumberFormat.getIntegerInstance().format(this.capacity));
+        sb.append("mb");
+        items.add(sb.toString());
+
+        return items;
     }
 
     public void setCapacity(int capacity)

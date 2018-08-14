@@ -107,29 +107,4 @@ public class GuiProfitMaterializer
         }
     }
 
-
-    @Override
-    protected void renderHoveredToolTip(int mouseX, int mouseY)
-    {
-        /*if(GuiUtil.inBounds(mouseX, mouseY, guiLeft + 66, guiTop + 21, 43, 52))
-        {
-            List<String> items = new ArrayList<>();
-
-            items.add(FluidRegistry.getFluid(container.fluid).getLocalizedName(null));
-
-            StringBuilder sb = new StringBuilder();
-            sb.append(NumberFormat.getIntegerInstance().format(container.fluidAmount));
-            sb.append("/");
-            sb.append(NumberFormat.getIntegerInstance().format(container.fluidCapacity));
-            sb.append("mb");
-            items.add(sb.toString());
-
-            this.drawHoveringText(items, mouseX, mouseY);
-        }
-        else*/
-        {
-            super.renderHoveredToolTip(mouseX, mouseY);
-        }
-    }
-
 }

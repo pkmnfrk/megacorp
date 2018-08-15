@@ -25,8 +25,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 @Mod.EventBusSubscriber
 @GameRegistry.ObjectHolder (MegaCorpMod.modId)
@@ -92,25 +93,10 @@ public class ModBlocks
     {
         IForgeRegistry<Item> registry = event.getRegistry();
 
-        try
-        {
-            for (Field field : ModBlocks.class.getDeclaredFields())
-            {
-                if (Modifier.isStatic(field.getModifiers()) && Block.class.isAssignableFrom(field.getType()))
-                {
-                    Block block = (Block) field.get(null);
-
-                    registry.register(
-                            new ItemBlock(block)
-                            .setRegistryName(block.getRegistryName())
-                    );
-                }
-            }
-        }
-        catch(IllegalAccessException ex)
-        {
-            throw new RuntimeException("Unable to reflect upon myself??");
-        }
+        getAllBlocks().forEach(block -> registry.register(
+            new ItemBlock(block)
+                .setRegistryName(block.getRegistryName())
+        ));
 
         //OreDictionary.registerOre("blockMoney", money_block);
         //OreDictionary.registerOre("blockDenseMoney", dense_money_block);
@@ -122,22 +108,21 @@ public class ModBlocks
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(money), 0, new ModelResourceLocation(money.getRegistryName(), "normal"));
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(dense_money), 0, new ModelResourceLocation(dense_money.getRegistryName(), "normal"));
 
-        try
-        {
-            for (Field field : ModBlocks.class.getDeclaredFields())
-            {
-                if (Modifier.isStatic(field.getModifiers()) && BlockBase.class.isAssignableFrom(field.getType()))
-                {
-                    BlockBase block = (BlockBase) field.get(null);
+        getAllBlocks().filter(b -> b instanceof BlockBase).map(b -> (BlockBase)b).forEach(BlockBase::initModel);
+    }
 
-                    block.initModel();
-                }
+    public static Stream<Block> getAllBlocks()
+    {
+        return Arrays.stream(ModBlocks.class.getDeclaredFields()).filter(f -> Modifier.isStatic(f.getModifiers()) && Block.class.isAssignableFrom(f.getType())).map(f -> {
+            try
+            {
+                return (Block) f.get(null);
             }
-        }
-        catch(IllegalAccessException ex)
-        {
-            throw new RuntimeException("Unable to reflect upon myself??");
-        }
+            catch (IllegalAccessException e)
+            {
+                throw new RuntimeException("Unable to reflect upon myself??");
+            }
+        });
     }
 
     public static void renderFluids() {

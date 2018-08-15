@@ -1,17 +1,13 @@
 package com.mike_caron.megacorp.fluid;
 
-import com.mike_caron.megacorp.MegaCorpMod;
-import com.mike_caron.megacorp.ModMaterials;
-import net.minecraft.block.material.Material;
 import net.minecraft.item.EnumRarity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 
 import java.awt.*;
-import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 @Mod.EventBusSubscriber
 public class ModFluids
@@ -35,5 +31,19 @@ public class ModFluids
                 .setLuminosity(15)
                 .setRarity(EnumRarity.EPIC)
                 .setColor(new Color(0, 64, 0));
+    }
+
+    public static Stream<Fluid> getAllFluids()
+    {
+        return Arrays.stream(ModFluids.class.getDeclaredFields()).filter(f -> Modifier.isStatic(f.getModifiers()) && Fluid.class.isAssignableFrom(f.getType())).map(f -> {
+            try
+            {
+                return (Fluid) f.get(null);
+            }
+            catch (IllegalAccessException e)
+            {
+                throw new RuntimeException("Unable to reflect upon myself??");
+            }
+        });
     }
 }

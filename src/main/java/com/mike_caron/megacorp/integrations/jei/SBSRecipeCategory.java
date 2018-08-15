@@ -49,7 +49,7 @@ public class SBSRecipeCategory
     @Nonnull
     public String getUid()
     {
-        return com.mike_caron.megacorp.integrations.JEIPlugin.SBS_CATEGORY;
+        return JEIPlugin.SBS_CATEGORY;
     }
 
     @Override
@@ -116,7 +116,7 @@ public class SBSRecipeCategory
         @Override
         public void getIngredients(@Nonnull IIngredients iIngredients)
         {
-            iIngredients.setInputLists(VanillaTypes.ITEM, Arrays.asList(Arrays.asList(recipe.input1, recipe.input2), Arrays.asList(recipe.input2, recipe.input1)));
+            iIngredients.setInputs(VanillaTypes.ITEM, Arrays.asList(recipe.input1, recipe.input2));
             iIngredients.setOutput(VanillaTypes.FLUID, recipe.output);
         }
     }

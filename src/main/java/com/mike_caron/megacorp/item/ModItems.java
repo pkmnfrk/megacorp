@@ -12,8 +12,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 @Mod.EventBusSubscriber
 @GameRegistry.ObjectHolder(MegaCorpMod.modId)
@@ -63,23 +64,21 @@ public class ModItems
         //initModel(ingotMoney);
         //initModel(ingotDenseMoney);
 
-        try
-        {
-            for (Field field : ModItems.class.getDeclaredFields())
-            {
-                if (Modifier.isStatic(field.getModifiers()) && ItemBase.class.isAssignableFrom(field.getType()))
-                {
-                    ItemBase item = (ItemBase) field.get(null);
+        getAllItems().forEach(ItemBase::initModel);
+    }
 
-                    item.initModel();
-                }
+    public static Stream<ItemBase> getAllItems()
+    {
+        return Arrays.stream(ModItems.class.getDeclaredFields()).filter(f -> Modifier.isStatic(f.getModifiers()) && ItemBase.class.isAssignableFrom(f.getType())).map(f -> {
+            try
+            {
+                return (ItemBase) f.get(null);
             }
-        }
-        catch(IllegalAccessException ex)
-        {
-            throw new RuntimeException("Unable to reflect upon myself??");
-        }
-        //soulboundTalisman.initModel();
+            catch (IllegalAccessException e)
+            {
+                throw new RuntimeException("Unable to reflect upon myself??");
+            }
+        });
     }
 
     private static void initModel(Item item)

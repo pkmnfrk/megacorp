@@ -72,6 +72,9 @@ public class SBSRecipeManager
     @GameRegistry.ObjectHolder("minecraft:gold_block")
     public static Item gold_block;
 
+    @GameRegistry.ObjectHolder("minecraft:gold_ingot")
+    public static Item gold_ingot;
+
     @GameRegistry.ObjectHolder("minecraft:emerald")
     public static Item emerald;
 
@@ -86,6 +89,14 @@ public class SBSRecipeManager
             new ItemStack(gold_block, 1),
             new ItemStack(emerald, 1),
             30
+        );
+
+        addRecipe(
+            "money",
+            new FluidStack(ModFluids.MONEY, 20),
+            new ItemStack(gold_ingot, 9),
+            new ItemStack(emerald, 1),
+            25
         );
 
         addRecipe(

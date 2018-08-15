@@ -1,17 +1,10 @@
 package com.mike_caron.megacorp.integrations;
 
 import com.mike_caron.megacorp.MegaCorpMod;
-import com.mike_caron.megacorp.fluid.ModFluids;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class TConCompatability
 {
@@ -37,7 +30,7 @@ public class TConCompatability
 
         NBTTagCompound fluid = new NBTTagCompound();
         fluid.setString("FluidName", "money");
-        fluid.setInteger("Amount", 12);
+        fluid.setInteger("Amount", 20);
         tagList.appendTag(fluid);
 
         fluid = new NBTTagCompound();

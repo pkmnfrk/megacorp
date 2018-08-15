@@ -82,7 +82,7 @@ public class SBSRecipeManager
     {
         addRecipe(
             "money",
-            new FluidStack(ModFluids.MONEY, 12),
+            new FluidStack(ModFluids.MONEY, 20),
             new ItemStack(gold_block, 1),
             new ItemStack(emerald, 1),
             30
@@ -90,7 +90,7 @@ public class SBSRecipeManager
 
         addRecipe(
             "money2",
-            new FluidStack(ModFluids.MONEY, 108),
+            new FluidStack(ModFluids.MONEY, 20 * 9),
             new ItemStack(gold_block, 9),
             new ItemStack(emerald_block, 1),
             150

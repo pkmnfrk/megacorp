@@ -2,12 +2,12 @@ package com.mike_caron.megacorp.block.profit_materializer;
 
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.block.OwnedMachineBlockBase;
-import com.mike_caron.megacorp.fluid.ModFluids;
 import com.mike_caron.megacorp.integrations.ITOPInfoProvider;
+import com.mike_caron.megacorp.util.FluidUtils;
+import com.mike_caron.megacorp.util.TOPUtils;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.ProbeMode;
-import mcjty.theoneprobe.apiimpl.styles.ProgressStyle;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,11 +17,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
 
 import javax.annotation.Nullable;
-import java.awt.*;
 
 public class BlockProfitMaterializer
     extends OwnedMachineBlockBase
@@ -69,6 +66,11 @@ public class BlockProfitMaterializer
         if(te == null)
             return false;
 
+        if(FluidUtils.fillPlayerHandWithFluid(worldIn, pos, playerIn, te.fluidTank))
+        {
+            return true;
+        }
+
         playerIn.openGui(MegaCorpMod.instance, 1, worldIn, pos.getX(), pos.getY(), pos.getZ());
 
         return true;
@@ -83,27 +85,6 @@ public class BlockProfitMaterializer
 
         if(te == null) return;
 
-        FluidStack fluid = te.fluidTank.getFluid();
-        int fluidColor = Color.BLUE.getRGB();
-
-        if(fluid != null)
-        {
-            if(fluid.getFluid() != null)
-            {
-                fluidColor = fluid.getFluid().getColor();
-            }
-
-            probeInfo
-                .horizontal()
-                .item(FluidUtil.getFilledBucket(new FluidStack(ModFluids.MONEY, 1000)))
-                .vertical()
-                .text(fluid.getLocalizedName())
-                .progress(fluid.amount, te.fluidTank.getCapacity(), new ProgressStyle()
-                    .filledColor(fluidColor)
-                    .suffix("mB")
-                )
-            ;
-        }
-
+        TOPUtils.addFluidTank(probeInfo, te.fluidTank);
     }
 }

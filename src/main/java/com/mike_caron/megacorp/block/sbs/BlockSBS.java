@@ -3,6 +3,10 @@ package com.mike_caron.megacorp.block.sbs;
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.block.MachineBlockBase;
 import com.mike_caron.megacorp.util.FluidUtils;
+import com.mike_caron.megacorp.util.TOPUtils;
+import mcjty.theoneprobe.api.IProbeHitData;
+import mcjty.theoneprobe.api.IProbeInfo;
+import mcjty.theoneprobe.api.ProbeMode;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -58,6 +62,23 @@ public class BlockSBS
                 drops.add(stack);
             }
         }
+    }
+
+    @Override
+    protected void addMegaCorpProbeInfo(ProbeMode mode, IProbeInfo info, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data)
+    {
+        super.addMegaCorpProbeInfo(mode, info, player, world, blockState, data);
+
+        TileEntitySBS te = getTE(world, data.getPos());
+
+        if(te == null) return;
+
+        TOPUtils.addFluidTank(info, te.fluidTank);
+
+        //if(te.getCurrentRecipe() != null)
+        //{
+            TOPUtils.addProgress(info, te.getProgress());
+        //}
     }
 
     @Override

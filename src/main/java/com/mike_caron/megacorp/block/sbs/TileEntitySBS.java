@@ -53,9 +53,9 @@ public class TileEntitySBS
         @Override
         protected void onContentsChanged(int slot)
         {
-            super.onContentsChanged(slot);
+            //checkForRecipe();
 
-            checkForRecipe();
+            super.onContentsChanged(slot);
 
             TileEntitySBS.this.markDirty();
         }
@@ -190,6 +190,11 @@ public class TileEntitySBS
             }
             this.markDirty();
         }
+
+        if(currentRecipe == null)
+        {
+            checkForRecipe();
+        }
     }
 
     private boolean recursion = false;
@@ -241,5 +246,10 @@ public class TileEntitySBS
         if(stalled) return 1f;
 
         return 1f - (((float)ticksLeft) / currentRecipe.ticks);
+    }
+
+    public SBSRecipe getCurrentRecipe()
+    {
+        return currentRecipe;
     }
 }

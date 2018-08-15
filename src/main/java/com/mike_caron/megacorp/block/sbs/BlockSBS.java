@@ -2,6 +2,7 @@ package com.mike_caron.megacorp.block.sbs;
 
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.block.MachineBlockBase;
+import com.mike_caron.megacorp.util.FluidUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -69,6 +70,11 @@ public class BlockSBS
             return true;
 
         TileEntitySBS te = getTE(worldIn, pos);
+
+        if(FluidUtils.fillPlayerHandWithFluid(worldIn, pos, playerIn, te.fluidTank))
+        {
+            return true;
+        }
 
         if(te == null)
             return false;

@@ -8,9 +8,11 @@ import mcjty.theoneprobe.api.ProbeMode;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -77,5 +79,22 @@ public class BlockUplink
         if(te == null) return;
 
 
+    }
+
+    @Override
+    public void getExtraDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state)
+    {
+        super.getExtraDrops(drops, world, pos, state);
+
+        TileEntityUplink te = getTE(world, pos);
+
+        if(te == null) return;
+
+        for(int i = 0; i < te.cardInventory.getSlots(); i++)
+        {
+            ItemStack stack = te.cardInventory.getStackInSlot(i);
+            if(stack.isEmpty()) continue;
+            drops.add(stack);
+        }
     }
 }

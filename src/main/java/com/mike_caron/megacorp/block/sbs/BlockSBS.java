@@ -5,9 +5,11 @@ import com.mike_caron.megacorp.block.MachineBlockBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -36,6 +38,25 @@ public class BlockSBS
     public TileEntity createTileEntity(World world, IBlockState state)
     {
         return new TileEntitySBS();
+    }
+
+    @Override
+    public void getExtraDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state)
+    {
+        super.getExtraDrops(drops, world, pos, state);
+
+        TileEntitySBS te = getTE(world, pos);
+
+        if(te != null)
+        {
+            for (int i = 0; i < te.reagents.getSlots(); i++)
+            {
+                ItemStack stack = te.reagents.getStackInSlot(i);
+                if (stack.isEmpty())
+                    continue;
+                drops.add(stack);
+            }
+        }
     }
 
     @Override

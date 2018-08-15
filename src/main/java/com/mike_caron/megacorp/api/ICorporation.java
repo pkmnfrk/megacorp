@@ -8,5 +8,6 @@ public interface ICorporation
     String getName();
     long getAvailableProfit();
     long getTotalProfit();
+    int consumeProfit(int amount);
 
 }

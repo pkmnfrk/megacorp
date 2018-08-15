@@ -1,7 +1,9 @@
 package com.mike_caron.megacorp.block.profit_materializer;
 
+import com.mike_caron.megacorp.api.ICorporation;
 import com.mike_caron.megacorp.block.TileEntityOwnedBase;
 import com.mike_caron.megacorp.fluid.ModFluids;
+import com.mike_caron.megacorp.impl.CorporationManager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -92,11 +94,24 @@ public class TileEntityProfitMaterializer
 
         timer += 1;
 
-        if(timer > 8)
+        int amount = Math.min(fluidTank.getCapacity() - fluidTank.getFluidAmount(), 2);
+        if(amount > 0)
         {
-            this.fluidTank.fillInternal(new FluidStack(ModFluids.MONEY, 2), true);
-            timer = 0;
+            if(timer > 8)
+            {
+                ICorporation corp = CorporationManager.get(world).getCorporationForOwner(owner);
+
+                amount = corp.consumeProfit(amount);
+
+                if(amount > 0)
+                {
+                    this.fluidTank.fillInternal(new FluidStack(ModFluids.MONEY, amount), true);
+                }
+                timer = 0;
+            }
         }
+
+
 
     }
 }

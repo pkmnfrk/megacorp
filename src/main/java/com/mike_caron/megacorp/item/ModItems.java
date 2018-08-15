@@ -29,12 +29,22 @@ public class ModItems
     @GameRegistry.ObjectHolder("corporate_card")
     public static CorporateCard corporateCard;
 
+    @GameRegistry.ObjectHolder("black_card")
+    public static ItemBase blackCard;
+
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event)
     {
         IForgeRegistry<Item> registry = event.getRegistry();
 
         registry.register(new CorporateCard());
+        registry.register(new DebugItemBase()
+                            .setRegistryName("black_card")
+                            .setUnlocalizedName("megacorp:black_card")
+                            .setCreativeTab(MegaCorpMod.creativeTab)
+                            .setMaxStackSize(1)
+        );
+
 
         /*
         registry.register(ingotMoney = new Item()

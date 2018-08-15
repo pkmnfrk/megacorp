@@ -2,6 +2,9 @@ package com.mike_caron.megacorp.block.uplink;
 
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.block.OwnedMachineBlockBase;
+import com.mike_caron.megacorp.impl.Corporation;
+import com.mike_caron.megacorp.impl.CorporationManager;
+import com.mike_caron.megacorp.item.ModItems;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.ProbeMode;
@@ -63,6 +66,14 @@ public class BlockUplink
 
         if(te == null)
             return false;
+
+        ItemStack inHand = playerIn.inventory.getCurrentItem();
+        if(inHand.getItem() == ModItems.blackCard)
+        {
+            Corporation corp = (Corporation)CorporationManager.get(worldIn).getCorporationForOwner(te.getOwner());
+            corp.addProfit(1000);
+            return true;
+        }
 
         playerIn.openGui(MegaCorpMod.instance, 2, worldIn, pos.getX(), pos.getY(), pos.getZ());
 

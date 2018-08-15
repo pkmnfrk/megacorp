@@ -1,14 +1,18 @@
 package com.mike_caron.megacorp.impl;
 
+import com.google.common.base.Preconditions;
 import com.mike_caron.megacorp.api.ICorporation;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
 
 import java.util.UUID;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Corporation
         implements ICorporation, INBTSerializable<NBTTagCompound>
 {
+    private final Lock lock = new ReentrantLock();
     private UUID owner;
     private String name;
     private long availableProfit;
@@ -57,6 +61,45 @@ public class Corporation
         return availableProfit;
     }
 
+    public int consumeProfit(int amount)
+    {
+        Preconditions.checkArgument(amount > 0);
+        lock.lock();
+
+        try
+        {
+            if (amount > availableProfit)
+            {
+                amount = (int) availableProfit;
+            }
+
+            availableProfit -= amount;
+
+            return amount;
+        }
+        finally
+        {
+            lock.unlock();
+        }
+
+    }
+
+    public void addProfit(int amount)
+    {
+        Preconditions.checkArgument(amount > 0);
+
+        lock.lock();
+
+        try
+        {
+            availableProfit = Math.addExact(availableProfit, amount);
+            totalProfit = Math.addExact(totalProfit, amount);
+        }
+        finally
+        {
+            lock.unlock();
+        }
+    }
 
     @Override
     public NBTTagCompound serializeNBT()

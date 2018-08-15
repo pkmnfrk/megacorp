@@ -6,7 +6,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class ItemBase extends Item
+public class ItemBase extends Item
 {
     @SuppressWarnings("ConstantConditions")
     @SideOnly(Side.CLIENT)

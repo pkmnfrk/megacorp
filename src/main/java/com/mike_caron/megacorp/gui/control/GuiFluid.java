@@ -73,6 +73,16 @@ public class GuiFluid
         }
     }
 
+    public Fluid getFluid()
+    {
+        return this.fluid;
+    }
+
+    public FluidStack getFluidStack()
+    {
+        return this.fluidStack;
+    }
+
     public boolean isGradEnabled()
     {
         return gradEnabled;

@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -294,6 +295,22 @@ public abstract class GuiContainerBase
         }
 
         super.renderHoveredToolTip(mouseX, mouseY);
+    }
+
+    @Nullable
+    @Override
+    public GuiControl hitTest(int x, int y)
+    {
+        for(GuiControl control : controls)
+        {
+            if(!control.isVisible() || !control.isEnabled())
+                continue;
+
+            GuiControl ret = control.hitTest(x, y);
+            if(ret != null)
+                return ret;
+        }
+        return null;
     }
 
     @Override

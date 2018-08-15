@@ -48,6 +48,7 @@ public class GuiMultilineLabel
     public void setString(String string)
     {
         this.string = string;
+        lines = null;
     }
 
     public int getColor()

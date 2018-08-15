@@ -49,7 +49,7 @@ public class SBSRecipeCategory
     @Nonnull
     public String getUid()
     {
-        return "megacorp:sbs";
+        return com.mike_caron.megacorp.integrations.JEIPlugin.SBS_CATEGORY;
     }
 
     @Override

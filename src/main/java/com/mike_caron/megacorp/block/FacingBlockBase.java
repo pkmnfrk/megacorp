@@ -1,6 +1,5 @@
 package com.mike_caron.megacorp.block;
 
-import mcjty.theoneprobe.api.IProbeHitData;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
@@ -64,6 +63,22 @@ public class FacingBlockBase extends BlockBase
                 (float) entity.posY - clickedBlock.getY(),
                 (float) entity.posZ - clickedBlock.getZ()
         );
+    }
+
+    @Override
+    public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis)
+    {
+        //return super.rotateBlock(world, pos, axis);
+
+        IBlockState state = world.getBlockState(pos);
+        IProperty<EnumFacing> prop = FACING;
+
+        EnumFacing facing = state.getValue(prop);
+
+        IBlockState newState = state.withProperty(prop, facing.rotateY());
+
+        world.setBlockState(pos, newState);
+        return true;
     }
 
     @Override

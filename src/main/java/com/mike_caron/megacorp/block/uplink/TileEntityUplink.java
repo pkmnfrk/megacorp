@@ -6,15 +6,15 @@ import com.mike_caron.megacorp.impl.Corporation;
 import com.mike_caron.megacorp.impl.CorporationManager;
 import com.mike_caron.megacorp.item.CorporateCard;
 import com.mike_caron.megacorp.item.ModItems;
+import com.mike_caron.megacorp.storage.TweakedItemStackHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.items.ItemStackHandler;
 
 public class TileEntityUplink
     extends TileEntityOwnedBase
 {
-    public final ItemStackHandler cardInventory = new ItemStackHandler(2)
+    public final TweakedItemStackHandler cardInventory = new TweakedItemStackHandler(2)
     {
         @Override
         protected void onContentsChanged(int slot)

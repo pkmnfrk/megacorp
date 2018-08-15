@@ -5,6 +5,7 @@ import com.mike_caron.megacorp.block.sbs.ContainerSBS;
 import com.mike_caron.megacorp.gui.control.*;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.FluidRegistry;
 
 public class GuiSBS
     extends GuiContainerBase
@@ -19,7 +20,9 @@ public class GuiSBS
 
     private GuiGroup ownedGroup = new GuiGroup();
 
-    private GuiFluid money = new GuiFluid(97, 22, 44, 53);
+    private GuiFluid money = new GuiFluid(97, 22, 43, 52);
+
+    private GuiProgressGlyph progress = new GuiProgressGlyph(53, 35, 38, 26, 177, 1, background);
 
 
     public GuiSBS(ContainerSBS container)
@@ -38,6 +41,10 @@ public class GuiSBS
     protected void onContainerRefresh()
     {
         //update fluid
+        money.setAmount(container.fluidAmount);
+        money.setCapacity(container.fluidCapacity);
+        money.setFluid(FluidRegistry.getFluid(container.fluid));
+        progress.setProgress(container.progress);
     }
 
     @Override
@@ -47,7 +54,10 @@ public class GuiSBS
 
         this.addControl(ownedGroup);
 
+        money.setGradEnabled(true);
+
         ownedGroup.addControl(money);
+        ownedGroup.addControl(progress);
     }
 
     @Override

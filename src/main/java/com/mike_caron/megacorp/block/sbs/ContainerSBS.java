@@ -1,12 +1,12 @@
 package com.mike_caron.megacorp.block.sbs;
 
 import com.mike_caron.megacorp.block.TEContainerBase;
+import com.mike_caron.megacorp.storage.SlotItemHandlerFixed;
 import com.mike_caron.megacorp.util.StringUtil;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerSBS
     extends TEContainerBase
@@ -14,6 +14,7 @@ public class ContainerSBS
     public int fluidAmount = 0;
     public int fluidCapacity = 1;
     public String fluid = null;
+    public float progress = 0f;
 
     Slot emeraldSlot, goldSlot;
 
@@ -49,8 +50,8 @@ public class ContainerSBS
     @Override
     protected void addOwnSlots()
     {
-        goldSlot = new SlotItemHandler(getTE().reagents, 0, 34, 29);
-        emeraldSlot = new SlotItemHandler(getTE().reagents, 1, 34, 52);
+        goldSlot = new SlotItemHandlerFixed(getTE().reagents, 0, 34, 29);
+        emeraldSlot = new SlotItemHandlerFixed(getTE().reagents, 1, 34, 52);
 
         this.addSlotToContainer(goldSlot);
         this.addSlotToContainer(emeraldSlot);
@@ -89,6 +90,12 @@ public class ContainerSBS
             changed = true;
         }
 
+        if(progress != te.getProgress())
+        {
+            progress = te.getProgress();
+            changed = true;
+        }
+
         if(changed)
         {
             this.triggerUpdate();
@@ -116,6 +123,10 @@ public class ContainerSBS
         {
             this.fluid = null;
         }
+        if(tag.hasKey("Progress"))
+        {
+            this.progress = tag.getFloat("Progress");
+        }
     }
 
     @Override
@@ -129,6 +140,7 @@ public class ContainerSBS
         {
             tag.setString("Fluid", this.fluid);
         }
+        tag.setFloat("Progress", progress);
 
     }
 

@@ -40,8 +40,8 @@ public abstract class ContainerBase
 
     protected void init()
     {
-        addPlayerSlots(playerInventory);
         addOwnSlots();
+        addPlayerSlots(playerInventory);
     }
 
     @Override

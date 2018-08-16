@@ -4,6 +4,7 @@ import com.mike_caron.megacorp.integrations.MainCompatHandler;
 import com.mike_caron.megacorp.network.CtoSMessage;
 import com.mike_caron.megacorp.network.MessageUpdateGui;
 import com.mike_caron.megacorp.proxy.IModProxy;
+import com.mike_caron.megacorp.recipes.PCRecipeManager;
 import com.mike_caron.megacorp.recipes.SBSRecipeManager;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -75,6 +76,7 @@ public class MegaCorpMod
         networkWrapper.registerMessage(MessageUpdateGui.Handler.class, MessageUpdateGui.class, 3, Side.CLIENT);
 
         SBSRecipeManager.addDefaultRecipes();
+        PCRecipeManager.addDefaultRecipes();
     }
 
     @Mod.EventHandler

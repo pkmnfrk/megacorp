@@ -18,6 +18,12 @@
       "east": {
         "y": 90
       }
+    },
+    "swapped":{
+      "true": {
+        "east": "megacorp:blocks/machine_output",
+        "west": "megacorp:blocks/machine_input"
+      }
     }
   }
 }

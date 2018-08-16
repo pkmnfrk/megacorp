@@ -1,8 +1,19 @@
 {
-  "parent": "minecraft:block/orientable",
+  "parent": "block/cube",
+  "display": {
+    "firstperson_righthand": {
+      "rotation": [ 0, 135, 0 ],
+      "translation": [ 0, 0, 0 ],
+      "scale": [ 0.40, 0.40, 0.40 ]
+    }
+  },
   "textures": {
-    "top": "megacorp:blocks/machine_top",
-    "front": "megacorp:blocks/profit_condenser_front",
-    "side": "megacorp:blocks/machine_side"
+    "particle": "megacorp:blocks/profit_condenser_front",
+    "down": "megacorp:blocks/machine_top",
+    "up": "megacorp:blocks/machine_top",
+    "north": "megacorp:blocks/profit_condenser_front",
+    "east": "megacorp:blocks/machine_input",
+    "south": "megacorp:blocks/machine_side",
+    "west": "megacorp:blocks/machine_output"
   }
 }

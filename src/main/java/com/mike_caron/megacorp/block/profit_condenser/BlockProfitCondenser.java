@@ -3,6 +3,10 @@ package com.mike_caron.megacorp.block.profit_condenser;
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.block.MachineBlockBase;
 import com.mike_caron.megacorp.util.FluidUtils;
+import com.mike_caron.megacorp.util.TOPUtils;
+import mcjty.theoneprobe.api.IProbeHitData;
+import mcjty.theoneprobe.api.IProbeInfo;
+import mcjty.theoneprobe.api.ProbeMode;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
@@ -63,6 +67,19 @@ public class BlockProfitCondenser extends MachineBlockBase
         return null;
     }
 
+    @Nullable
+    @Override
+    public TileEntity createTileEntity(World world, IBlockState state)
+    {
+        return new TileEntityProfitCondenser();
+    }
+
+    @Override
+    public boolean hasTileEntity(IBlockState state)
+    {
+        return true;
+    }
+
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
@@ -92,5 +109,25 @@ public class BlockProfitCondenser extends MachineBlockBase
         return true;
     }
 
+    @Override
+    protected void addMegaCorpProbeInfo(ProbeMode mode, IProbeInfo info, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data)
+    {
+        super.addMegaCorpProbeInfo(mode, info, player, world, blockState, data);
+
+        TileEntityProfitCondenser te = getTE(world, data.getPos());
+
+        if(te == null) return;
+
+        if(player.isSneaking())
+        {
+            TOPUtils.addFluidTank(info, te.inputFluidTank);
+            TOPUtils.addFluidTank(info, te.outputFluidTank);
+        }
+
+        //if(te.getCurrentRecipe() != null)
+        //{
+        TOPUtils.addProgress(info, te.getProgress());
+        //}
+    }
 
 }

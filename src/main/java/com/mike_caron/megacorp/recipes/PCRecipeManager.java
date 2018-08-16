@@ -33,6 +33,8 @@ public class PCRecipeManager
 
     public static PCRecipe getRecipeForIngredients(FluidStack ingredient)
     {
+        if(ingredient == null) return null;
+
         for(PCRecipe recipe : recipes)
         {
             if(recipe.isMatch(ingredient))
@@ -57,8 +59,8 @@ public class PCRecipeManager
     {
         addRecipe(
             "dense_money",
-            new FluidStack(ModFluids.MONEY, 1000),
             new FluidStack(ModFluids.DENSE_MONEY, 1),
+            new FluidStack(ModFluids.MONEY, 1000),
             20 * 6
         );
     }

@@ -20,9 +20,12 @@
       }
     },
     "swapped":{
+      "false": {},
       "true": {
-        "east": "megacorp:blocks/machine_output",
-        "west": "megacorp:blocks/machine_input"
+        "textures": {
+          "east": "megacorp:blocks/machine_output",
+          "west": "megacorp:blocks/machine_input"
+        }
       }
     }
   }

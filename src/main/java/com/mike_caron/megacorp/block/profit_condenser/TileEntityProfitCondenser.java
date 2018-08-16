@@ -78,7 +78,7 @@ public class TileEntityProfitCondenser
 
         if(compound.hasKey("OutputTank"))
         {
-            inputFluidTank.readFromNBT(compound.getCompoundTag("OutputTank"));
+            outputFluidTank.readFromNBT(compound.getCompoundTag("OutputTank"));
         }
 
 
@@ -186,6 +186,11 @@ public class TileEntityProfitCondenser
             }
             this.markDirty();
         }
+
+        if(currentRecipe == null)
+        {
+            checkForRecipe();
+        }
     }
 
     public float getProgress()
@@ -204,34 +209,42 @@ public class TileEntityProfitCondenser
     private boolean recursion = false;
     private void checkForRecipe()
     {
-        if(recursion) return;
+        if (recursion)
+            return;
 
         recursion = true;
-        //if we're in the middle of a recipe, don't do anything
-        if(currentRecipe == null)
+        try
         {
+            //if we're in the middle of a recipe, don't do anything
+            if (currentRecipe != null) return;
 
             FluidStack stack1 = inputFluidTank.getFluid();
+            if (stack1 == null)
+                return;
 
             //look for a recipe with these ingredients
             PCRecipe recipe = PCRecipeManager.getRecipeForIngredients(stack1);
-            if(recipe != null)
-            {
-                //try removing the correct number of ingredients.
-                FluidStack drained = inputFluidTank.drainInternal(recipe.input, false);
-                if(drained != null && drained.amount == recipe.input.amount)
-                {
-                    //simulation succeeded, do for real
-                    inputFluidTank.drainInternal(recipe.input, true);
+            if (recipe == null) return;
 
-                    //start working on this recipe
-                    currentRecipe = recipe;
-                    ticksLeft = recipe.ticks;
+            //try removing the correct number of ingredients.
+            FluidStack drained = inputFluidTank.drainInternal(recipe.input, false);
+            if (drained == null || drained.amount != recipe.input.amount) return;
 
-                    this.markDirty();
-                }
-            }
+            //simulation succeeded, do for real
+            inputFluidTank.drainInternal(recipe.input, true);
+
+            //start working on this recipe
+            currentRecipe = recipe;
+            ticksLeft = recipe.ticks;
+
+            this.markDirty();
+
+
+
         }
-        recursion = false;
+        finally
+        {
+            recursion = false;
+        }
     }
 }

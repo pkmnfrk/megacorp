@@ -29,6 +29,7 @@ public class PCRecipe
 
     public boolean isMatch(FluidStack input)
     {
+        if(input == null) return false;
         return input.isFluidEqual(this.input);
     }
 }

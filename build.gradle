@@ -52,10 +52,11 @@ repositories {
         name = "ModMaven"
         url = "modmaven.k-4u.nl"
     }
-    maven {
-        name = "CoFH Maven"
-        url = "http://maven.covers1624.net"
-    }
+    //maven {
+    //    name = "CoFH Maven"
+    //    url = "http://maven.covers1624.net"
+    //}
+
     // ivy {
     //     name 'ProjectE'
     //     ivyPattern "https://maven.tterrag.com/[module]-[revision].[ext]"
@@ -66,7 +67,7 @@ repositories {
 dependencies {
     // deobfCompile name: 'ProjectE', version: "${pe_version}", ext: 'jar'
     deobfProvided "mcp.mobius.waila:Hwyla:${hwyla_version}"
-    deobfProvided ("mcjty.theoneprobe:TheOneProbe-1.12:${top_version}"){
+    deobfCompile ("mcjty.theoneprobe:TheOneProbe-1.12:${top_version}"){
         transitive = false
     }
     // compile against the JEI API but do not include it at runtime

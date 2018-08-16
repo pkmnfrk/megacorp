@@ -70,28 +70,25 @@ public class FluidUtils
                 boolean good = false;
                 for(IFluidTankProperties cprop : container.getTankProperties())
                 {
-                    if(cprop.canDrainFluidType(prop.getContents()))
+                    //if(cprop.canDrainFluidType(prop.getContents()))
+                    if(prop.canFillFluidType(cprop.getContents()))
                     {
-                        good = true;
-                        break;
+                        int filled = fluidHandler.fill(cprop.getContents(), false);
+                        if(filled == 0) continue;
+
+                        FluidStack drained = container.drain(filled, false);
+
+                        if(drained == null || drained.amount == 0) continue;
+
+
+                        drained = container.drain(drained.amount, true);
+                        filled = fluidHandler.fill(drained, true);
+
+                        player.inventory.setInventorySlotContents(player.inventory.currentItem, container.getContainer());
+                        return true;
                     }
 
                 }
-                if(!good) continue;
-
-                int filled = fluidHandler.fill(prop.getContents(), false);
-                if(filled == 0) continue;
-
-                FluidStack drained = container.drain(filled, false);
-
-                if(drained == null || drained.amount == 0) continue;
-
-
-                drained = container.drain(drained.amount, true);
-                filled = fluidHandler.fill(drained, true);
-
-                player.inventory.setInventorySlotContents(player.inventory.currentItem, container.getContainer());
-                return true;
             }
         }
 

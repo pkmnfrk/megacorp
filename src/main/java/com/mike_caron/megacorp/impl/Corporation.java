@@ -63,7 +63,7 @@ public class Corporation
 
     public int consumeProfit(int amount)
     {
-        Preconditions.checkArgument(amount > 0);
+        Preconditions.checkArgument(amount >= 0);
         lock.lock();
 
         try
@@ -74,6 +74,8 @@ public class Corporation
             }
 
             availableProfit -= amount;
+
+            this.manager.markDirty();
 
             return amount;
         }
@@ -86,7 +88,7 @@ public class Corporation
 
     public void addProfit(int amount)
     {
-        Preconditions.checkArgument(amount > 0);
+        Preconditions.checkArgument(amount >= 0);
 
         lock.lock();
 
@@ -94,6 +96,8 @@ public class Corporation
         {
             availableProfit = Math.addExact(availableProfit, amount);
             totalProfit = Math.addExact(totalProfit, amount);
+
+            this.manager.markDirty();
         }
         finally
         {

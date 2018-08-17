@@ -1,0 +1,19 @@
+{
+  "type": "megacorp:fluid",
+  "pattern": [
+    "ggg",
+    "gmg",
+    "ggg"
+  ],
+  "key": {
+    "g": {
+      "item": "minecraft:gold_ingot"
+    },
+    "m": {
+      "item": "#FLUID_MONEY"
+    }
+  },
+  "result": {
+    "item": "megacorp:uplink"
+  }
+}

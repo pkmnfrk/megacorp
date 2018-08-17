@@ -1,0 +1,9 @@
+[
+  {
+    "name": "FLUID_MONEY",
+    "ingredient": {
+      "type": "fluid",
+      "fluid": "money"
+    }
+  }
+]

@@ -2,14 +2,16 @@ package com.mike_caron.megacorp.proxy;
 
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.fluid.ModFluids;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.relauncher.Side;
 
-@Mod.EventBusSubscriber(Side.SERVER)
+@Mod.EventBusSubscriber
 public class CommonProxy
     implements IModProxy
 {
@@ -32,4 +34,9 @@ public class CommonProxy
 
     }
 
+    @SubscribeEvent
+    public static void registerRecipes(RegistryEvent.Register<IRecipe> registry)
+    {
+        //registry.getRegistry().register(new RecipeFluid().setRegistryName(MegaCorpMod.modId, "uplink"));
+    }
 }

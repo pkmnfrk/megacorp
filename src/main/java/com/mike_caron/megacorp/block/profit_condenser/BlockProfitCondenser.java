@@ -2,6 +2,7 @@ package com.mike_caron.megacorp.block.profit_condenser;
 
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.block.MachineBlockBase;
+import com.mike_caron.megacorp.item.Bottle;
 import com.mike_caron.megacorp.util.FluidUtils;
 import com.mike_caron.megacorp.util.TOPUtils;
 import mcjty.theoneprobe.api.IProbeHitData;
@@ -12,9 +13,11 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -128,6 +131,33 @@ public class BlockProfitCondenser extends MachineBlockBase
         //{
         TOPUtils.addProgress(info, te.getProgress());
         //}
+    }
+
+    @Override
+    protected void getExtraDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state)
+    {
+        super.getExtraDrops(drops, world, pos, state);
+
+        TileEntityProfitCondenser te = getTE(world, pos);
+
+        if(te != null)
+        {
+            if (te.inputFluidTank.getFluidAmount() > 0)
+            {
+                drops.add(Bottle.with(te.inputFluidTank.getFluid()));
+            }
+
+            if (te.outputFluidTank.getFluidAmount() > 0)
+            {
+                drops.add(Bottle.with(te.outputFluidTank.getFluid()));
+            }
+
+            if(te.getCurrentRecipe() != null)
+            {
+                //need to refund the ingredients
+                drops.add(Bottle.with(te.getCurrentRecipe().input));
+            }
+        }
     }
 
 }

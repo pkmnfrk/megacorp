@@ -3,6 +3,7 @@ package com.mike_caron.megacorp.block.profit_materializer;
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.block.OwnedMachineBlockBase;
 import com.mike_caron.megacorp.integrations.ITOPInfoProvider;
+import com.mike_caron.megacorp.item.Bottle;
 import com.mike_caron.megacorp.util.FluidUtils;
 import com.mike_caron.megacorp.util.TOPUtils;
 import mcjty.theoneprobe.api.IProbeHitData;
@@ -11,9 +12,11 @@ import mcjty.theoneprobe.api.ProbeMode;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -74,6 +77,22 @@ public class BlockProfitMaterializer
         playerIn.openGui(MegaCorpMod.instance, 1, worldIn, pos.getX(), pos.getY(), pos.getZ());
 
         return true;
+    }
+
+    @Override
+    protected void getExtraDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state)
+    {
+        super.getExtraDrops(drops, world, pos, state);
+
+        TileEntityProfitMaterializer te = getTE(world, pos);
+
+        if(te != null)
+        {
+            if (te.fluidTank.getFluidAmount() > 0)
+            {
+                drops.add(Bottle.with(te.fluidTank.getFluid()));
+            }
+        }
     }
 
     @Override

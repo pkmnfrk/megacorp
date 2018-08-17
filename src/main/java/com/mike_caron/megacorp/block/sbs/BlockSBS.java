@@ -2,6 +2,7 @@ package com.mike_caron.megacorp.block.sbs;
 
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.block.MachineBlockBase;
+import com.mike_caron.megacorp.item.Bottle;
 import com.mike_caron.megacorp.util.FluidUtils;
 import com.mike_caron.megacorp.util.TOPUtils;
 import mcjty.theoneprobe.api.IProbeHitData;
@@ -60,6 +61,18 @@ public class BlockSBS
                 if (stack.isEmpty())
                     continue;
                 drops.add(stack);
+            }
+
+            if(te.fluidTank.getFluidAmount() > 0)
+            {
+                drops.add(Bottle.with(te.fluidTank.getFluid()));
+            }
+
+            if(te.getCurrentRecipe() != null)
+            {
+                //refund the ingredients
+                drops.add(te.getCurrentRecipe().input1);
+                drops.add(te.getCurrentRecipe().input2);
             }
         }
     }

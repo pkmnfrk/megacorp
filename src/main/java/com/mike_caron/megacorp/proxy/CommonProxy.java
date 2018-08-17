@@ -37,6 +37,6 @@ public class CommonProxy
     @SubscribeEvent
     public static void registerRecipes(RegistryEvent.Register<IRecipe> registry)
     {
-        //registry.getRegistry().register(new RecipeFluid().setRegistryName(MegaCorpMod.modId, "uplink"));
+        //registry.getRegistry().register(new FluidRecipe().setRegistryName(MegaCorpMod.modId, "uplink"));
     }
 }

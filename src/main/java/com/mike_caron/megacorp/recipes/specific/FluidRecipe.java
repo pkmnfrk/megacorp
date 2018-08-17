@@ -1,7 +1,6 @@
 package com.mike_caron.megacorp.recipes.specific;
 
 import com.google.gson.JsonObject;
-import com.mike_caron.megacorp.recipes.ingredient.FluidIngredient;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -23,13 +22,10 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class RecipeFluid
+public class FluidRecipe
     extends ShapedOreRecipe
 {
-    //@GameRegistry.ItemStackHolder("minecraft:gold_ingot")
-    //public static ItemStack gold_ingot;
-
-    public RecipeFluid(ResourceLocation group, @Nonnull ItemStack result, CraftingHelper.ShapedPrimer primer)
+    public FluidRecipe(ResourceLocation group, @Nonnull ItemStack result, CraftingHelper.ShapedPrimer primer)
     {
         super(group, result, primer);
 
@@ -84,10 +80,11 @@ public class RecipeFluid
         for(int i = 0; i < ingredients.size(); i++)
         {
             Ingredient ing = ingredients.get(i);
-            if(ing instanceof FluidIngredient)
-            {
-                FluidStack desiredFluid = getFluidFromItem(ing.getMatchingStacks()[0]);
+            ItemStack ingredientStack = ing.getMatchingStacks()[0];
+            FluidStack desiredFluid = getFluidFromItem(ingredientStack);
 
+            if(desiredFluid != null)
+            {
                 if(!fluidMatches(desiredFluid, inventoryCrafting.getStackInSlot(i)))
                     return false;
             }
@@ -111,10 +108,11 @@ public class RecipeFluid
         {
             ItemStack stack = inv.getStackInSlot(i);
             Ingredient ing = ingredients.get(i);
-            if(ing instanceof FluidIngredient)
-            {
-                FluidStack desiredFluid = getFluidFromItem(ing.getMatchingStacks()[0]);
+            ItemStack ingredientStack = ing.getMatchingStacks()[0];
+            FluidStack desiredFluid = getFluidFromItem(ingredientStack);
 
+            if(desiredFluid != null)
+            {
                 if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null))
                 {
                     IFluidHandlerItem fluidHandler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
@@ -143,7 +141,7 @@ public class RecipeFluid
             final CraftingHelper.ShapedPrimer primer = RecipeUtil.parseShaped(jsonContext, json);
             final ItemStack result = CraftingHelper.getItemStack(JsonUtils.getJsonObject(json, "result"), jsonContext);
 
-            return new RecipeFluid(group.isEmpty() ? null : new ResourceLocation(group), result, primer);
+            return new FluidRecipe(group.isEmpty() ? null : new ResourceLocation(group), result, primer);
         }
     }
 

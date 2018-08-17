@@ -52,3 +52,5 @@ tile.megacorp:misc.idle=Idle
 tile.megacorp:misc.insertcard=Please activate this machine with a Corporate Card.
 
 
+item.megacorp:bottle.empty=Empty Bottle
+item.megacorp:bottle.filled=Bottle of %s (%smb)

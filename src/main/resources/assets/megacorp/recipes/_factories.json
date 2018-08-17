@@ -3,6 +3,6 @@
     "fluid": "com.mike_caron.megacorp.recipes.ingredient.FluidIngredientFactory"
   },
   "recipes": {
-    "fluid": "com.mike_caron.megacorp.recipes.specific.RecipeFluid$Factory"
+    "fluid": "com.mike_caron.megacorp.recipes.specific.FluidRecipe$Factory"
   }
 }

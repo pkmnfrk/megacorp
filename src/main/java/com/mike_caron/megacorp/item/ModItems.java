@@ -32,6 +32,9 @@ public class ModItems
     @GameRegistry.ObjectHolder("black_card")
     public static ItemBase blackCard;
 
+    @GameRegistry.ObjectHolder("bottle")
+    public static ItemBase bottle;
+
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event)
     {
@@ -44,6 +47,7 @@ public class ModItems
                             .setCreativeTab(MegaCorpMod.creativeTab)
                             .setMaxStackSize(1)
         );
+        registry.register(new Bottle());
 
 
         /*

@@ -54,3 +54,4 @@ tile.megacorp:misc.insertcard=Please activate this machine with a Corporate Card
 
 item.megacorp:bottle.empty=Empty Bottle
 item.megacorp:bottle.filled=Bottle of %s (%smb)
+item.megacorp:bottle.description=A small, highly-disposable plastic bottle used to hold liquid. Vanishes when emptied. Primarily used by machines to salvage liquid that might be destroyed when they are picked up.

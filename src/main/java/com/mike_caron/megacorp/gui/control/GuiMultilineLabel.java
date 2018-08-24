@@ -3,13 +3,14 @@ package com.mike_caron.megacorp.gui.control;
 import com.mike_caron.megacorp.gui.GuiUtil;
 import net.minecraft.client.gui.FontRenderer;
 
+import java.awt.*;
 import java.util.List;
 
 public class GuiMultilineLabel
     extends GuiSized
 {
     private String string;
-    private int color;
+    private Color color;
     private Alignment alignment;
     private VerticalAlignment valignment;
 
@@ -20,7 +21,7 @@ public class GuiMultilineLabel
         this(x, y, width, height, GuiUtil.FONT_COLOUR, Alignment.LEFT, VerticalAlignment.CENTER, string);
     }
 
-    public GuiMultilineLabel(int x, int y, int width, int height, int color, String string)
+    public GuiMultilineLabel(int x, int y, int width, int height, Color color, String string)
     {
         this(x, y, width, height, color, Alignment.LEFT, VerticalAlignment.CENTER, string);
     }
@@ -30,7 +31,7 @@ public class GuiMultilineLabel
         this(x, y, width, height, GuiUtil.FONT_COLOUR, alignment, valignment, string);
     }
 
-    public GuiMultilineLabel(int x, int y, int width, int height, int color, Alignment alignment, VerticalAlignment valignment, String string)
+    public GuiMultilineLabel(int x, int y, int width, int height, Color color, Alignment alignment, VerticalAlignment valignment, String string)
     {
         super(x, y, width, height);
 
@@ -51,12 +52,12 @@ public class GuiMultilineLabel
         lines = null;
     }
 
-    public int getColor()
+    public Color getColor()
     {
         return color;
     }
 
-    public void setColor(int color)
+    public void setColor(Color color)
     {
         this.color = color;
     }
@@ -130,7 +131,7 @@ public class GuiMultilineLabel
                     break;
             }
 
-            renderer.drawString(lines.get(i), dx, dy + i * renderer.FONT_HEIGHT, color);
+            renderer.drawString(lines.get(i), dx, dy + i * renderer.FONT_HEIGHT, color.getRGB());
         }
     }
 

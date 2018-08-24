@@ -35,6 +35,9 @@ public class ModItems
     @GameRegistry.ObjectHolder("bottle")
     public static ItemBase bottle;
 
+    @GameRegistry.ObjectHolder("work_voucher")
+    public static ItemBase work_voucher;
+
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event)
     {
@@ -48,6 +51,7 @@ public class ModItems
                             .setMaxStackSize(1)
         );
         registry.register(new Bottle());
+        registry.register(new WorkVoucher());
 
 
         /*

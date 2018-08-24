@@ -12,6 +12,7 @@ import org.lwjgl.input.Mouse;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public abstract class GuiContainerBase
@@ -217,7 +218,19 @@ public abstract class GuiContainerBase
     {
         this.controls.add(control);
         control.setParent(this);
+        this.sort();
+    }
 
+    @Override
+    public int translateX(int x)
+    {
+        return guiLeft + x;
+    }
+
+    @Override
+    public int translateY(int y)
+    {
+        return guiTop + y;
     }
 
     @Override
@@ -247,7 +260,7 @@ public abstract class GuiContainerBase
         for(int i = 0; i < lines.size(); i++)
         {
             int w = this.fontRenderer.getStringWidth(lines.get(i));
-            this.fontRenderer.drawString(lines.get(i), x - w / 2, ty, GuiUtil.FONT_COLOUR);
+            this.fontRenderer.drawString(lines.get(i), x - w / 2, ty, GuiUtil.FONT_COLOUR.getRGB());
             ty += 10;
         }
     }
@@ -311,6 +324,12 @@ public abstract class GuiContainerBase
                 return ret;
         }
         return null;
+    }
+
+    @Override
+    public void sort()
+    {
+        this.controls.sort(Comparator.comparingInt(a -> a.zIndex));
     }
 
     @Override

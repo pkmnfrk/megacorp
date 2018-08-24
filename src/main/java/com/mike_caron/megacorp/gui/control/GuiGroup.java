@@ -3,6 +3,7 @@ package com.mike_caron.megacorp.gui.control;
 import net.minecraft.client.gui.FontRenderer;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class GuiGroup
@@ -17,6 +18,24 @@ public class GuiGroup
     }
 
     @Override
+    public int translateX(int x)
+    {
+        return parent.translateX(x);
+    }
+
+    @Override
+    public int translateY(int y)
+    {
+        return parent.translateY(y);
+    }
+
+    @Override
+    public void sort()
+    {
+        this.controls.sort(Comparator.comparingInt(a -> a.zIndex));
+    }
+
+    @Override
     public void draw()
     {
         if(!this.visible)
@@ -24,7 +43,10 @@ public class GuiGroup
 
         for(GuiControl control : controls)
         {
-            control.draw();
+            if(control.isVisible())
+            {
+                control.draw();
+            }
         }
     }
 
@@ -64,9 +86,12 @@ public class GuiGroup
     {
         for(GuiControl control : controls)
         {
-            GuiControl res = control.hitTest(x, y);
-            if(res != null)
-                return res;
+            if(control.isVisible())
+            {
+                GuiControl res = control.hitTest(x, y);
+                if (res != null)
+                    return res;
+            }
         }
 
         return null;
@@ -77,6 +102,7 @@ public class GuiGroup
     {
         this.controls.add(control);
         control.setParent(this);
+        this.sort();
     }
 
     @Override
@@ -125,6 +151,8 @@ public class GuiGroup
         {
             for(GuiControl control : controls)
             {
+                if(!control.isEnabled()) continue;
+
                 if(control.canHaveFocus())
                 {
                     control.setFocused(true);

@@ -2,12 +2,16 @@ package com.mike_caron.megacorp.block;
 
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.block.capital_investor.BlockCapitalInvestor;
+import com.mike_caron.megacorp.block.liquid_shipping_depot.BlockLiquidShippingDepot;
+import com.mike_caron.megacorp.block.liquid_shipping_depot.TileEntityLiquidShippingDepot;
 import com.mike_caron.megacorp.block.profit_condenser.BlockProfitCondenser;
 import com.mike_caron.megacorp.block.profit_condenser.TileEntityProfitCondenser;
 import com.mike_caron.megacorp.block.profit_materializer.BlockProfitMaterializer;
 import com.mike_caron.megacorp.block.profit_materializer.TileEntityProfitMaterializer;
 import com.mike_caron.megacorp.block.sbs.BlockSBS;
 import com.mike_caron.megacorp.block.sbs.TileEntitySBS;
+import com.mike_caron.megacorp.block.shipping_depot.BlockShippingDepot;
+import com.mike_caron.megacorp.block.shipping_depot.TileEntityShippingDepot;
 import com.mike_caron.megacorp.block.uplink.BlockUplink;
 import com.mike_caron.megacorp.block.uplink.TileEntityUplink;
 import com.mike_caron.megacorp.fluid.ModFluids;
@@ -58,6 +62,12 @@ public class ModBlocks
     @GameRegistry.ObjectHolder("capital_investor")
     public static BlockCapitalInvestor capital_investor;
 
+    @GameRegistry.ObjectHolder("shipping_depot")
+    public static BlockShippingDepot shipping_depot;
+
+    @GameRegistry.ObjectHolder("liquid_shipping_depot")
+    public static BlockLiquidShippingDepot liquid_shipping_depot;
+
     //@GameRegistry.ObjectHolder("money_block")
     //public static BlockBase money_block;
 
@@ -76,6 +86,8 @@ public class ModBlocks
         registry.register(new BlockProfitMaterializer());
         registry.register(new BlockProfitCondenser());
         registry.register(new BlockCapitalInvestor());
+        registry.register(new BlockShippingDepot());
+        registry.register(new BlockLiquidShippingDepot());
 
         //registry.register(money_block = (BlockBase)new BlockBase(Material.IRON, "money_block").setHardness(10));
         //registry.register(dense_money_block = (BlockBase)new BlockBase(Material.IRON, "dense_money_block").setHardness(20));
@@ -87,6 +99,8 @@ public class ModBlocks
         GameRegistry.registerTileEntity(TileEntityUplink.class, new ResourceLocation(MegaCorpMod.modId, "uplink"));
         GameRegistry.registerTileEntity(TileEntitySBS.class, new ResourceLocation(MegaCorpMod.modId, "small_business_simulator"));
         GameRegistry.registerTileEntity(TileEntityProfitCondenser.class, new ResourceLocation(MegaCorpMod.modId, "profit_condenser"));
+        GameRegistry.registerTileEntity(TileEntityShippingDepot.class, new ResourceLocation(MegaCorpMod.modId, "shipping_depot"));
+        GameRegistry.registerTileEntity(TileEntityLiquidShippingDepot.class, new ResourceLocation(MegaCorpMod.modId, "liquid_shipping_depot"));
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -118,7 +132,13 @@ public class ModBlocks
         return Arrays.stream(ModBlocks.class.getDeclaredFields()).filter(f -> Modifier.isStatic(f.getModifiers()) && Block.class.isAssignableFrom(f.getType())).map(f -> {
             try
             {
-                return (Block) f.get(null);
+                Block ret = (Block)f.get(null);
+
+                if(ret == null)
+                {
+                    MegaCorpMod.logger.error("Block " + f.getName() + " is null");
+                }
+                return ret;
             }
             catch (IllegalAccessException e)
             {

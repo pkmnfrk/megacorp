@@ -12,4 +12,7 @@ public interface IGuiGroup
     boolean notifyTakeFocus(GuiControl taker);
     @Nullable
     GuiControl hitTest(int x, int y);
+    void sort();
+    int translateX(int x);
+    int translateY(int y);
 }

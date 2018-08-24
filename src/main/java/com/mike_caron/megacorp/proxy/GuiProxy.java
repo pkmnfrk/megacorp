@@ -6,12 +6,11 @@ import com.mike_caron.megacorp.block.profit_materializer.ContainerProfitMaterial
 import com.mike_caron.megacorp.block.profit_materializer.TileEntityProfitMaterializer;
 import com.mike_caron.megacorp.block.sbs.ContainerSBS;
 import com.mike_caron.megacorp.block.sbs.TileEntitySBS;
+import com.mike_caron.megacorp.block.shipping_depot.ContainerShippingDepot;
+import com.mike_caron.megacorp.block.shipping_depot.TileEntityShippingDepot;
 import com.mike_caron.megacorp.block.uplink.ContainerUplink;
 import com.mike_caron.megacorp.block.uplink.TileEntityUplink;
-import com.mike_caron.megacorp.gui.GuiProfitCondenser;
-import com.mike_caron.megacorp.gui.GuiProfitMaterializer;
-import com.mike_caron.megacorp.gui.GuiSBS;
-import com.mike_caron.megacorp.gui.GuiUplink;
+import com.mike_caron.megacorp.gui.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -46,6 +45,16 @@ public class GuiProxy implements IGuiHandler
         {
             return new ContainerProfitCondenser(player.inventory, (TileEntityProfitCondenser)te);
         }
+        else if(te instanceof TileEntityShippingDepot)
+        {
+            return new ContainerShippingDepot(player.inventory, (TileEntityShippingDepot)te);
+        }
+        /*
+        else if(te instanceof TileEntityLiquidShippingDepot)
+        {
+            return new ContainerLiquidShippingDepot(player.inventory, (TileEntityLiquidShippingDepot)te);
+        }
+        */
 
         return null;
     }
@@ -77,6 +86,18 @@ public class GuiProxy implements IGuiHandler
             TileEntityProfitCondenser tePC = (TileEntityProfitCondenser)te;
             return new GuiProfitCondenser(new ContainerProfitCondenser(player.inventory, tePC));
         }
+        else if(te instanceof TileEntityShippingDepot)
+        {
+            TileEntityShippingDepot tePC = (TileEntityShippingDepot)te;
+            return new GuiShippingDepot(new ContainerShippingDepot(player.inventory, tePC));
+        }
+        /*
+        else if(te instanceof TileEntityLiquidShippingDepot)
+        {
+            TileEntityLiquidShippingDepot tePC = (TileEntityLiquidShippingDepot)te;
+            return new GuiLiquidShippingDepot(new ContainerLiquidShippingDepot(player.inventory, tePC));
+        }
+        */
 
         return null;
     }

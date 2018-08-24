@@ -55,3 +55,19 @@ tile.megacorp:misc.insertcard=Please activate this machine with a Corporate Card
 item.megacorp:bottle.empty=Empty Bottle
 item.megacorp:bottle.filled=Bottle of %s (%smb)
 item.megacorp:bottle.description=A small, highly-disposable plastic bottle used to hold liquid. Vanishes when emptied. Primarily used by machines to salvage liquid that might be destroyed when they are picked up.
+
+tile.megacorp:shipping_depot.name=Shipping Depot
+tile.megacorp:shipping_depot.description=The Shipping Depot is the place where work orders for items or liquids is fulfilled. Simply deposit the desired items or liquids, and watch the progress bar fill up. Profit is generated upon completion of a work order.
+tile.megacorp:shipping_depot.item=Item: %s
+tile.megacorp:shipping_depot.quantity=Quantity: %s
+tile.megacorp:shipping_depot.progress=%d / %d
+tile.megacorp:shipping_depot.new_quest=New Work Order
+
+tile.megacorp:liquid_shipping_depot.name=Liquid Shipping Depot
+tile.megacorp:liquid_shipping_depot.description=The Liquid Shipping Depot is the place where work orders for liquids are fulfilled. Simply deposit the desired liquids, and watch the progress bar fill up. Profit is generated upon completion of a work order.
+tile.megacorp:liquid_shipping_depot.liquid=Liquid: %s
+tile.megacorp:liquid_shipping_depot.quantity=Quantity: %smb
+
+item.megacorp:work_voucher.name=Work Voucher
+item.megacorp:work_voucher.tooltip_blank=Blank?
+item.megacorp:work_voucher.tooltip=%s (%2s/%1s)

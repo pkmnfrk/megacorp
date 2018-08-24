@@ -1,12 +1,9 @@
 package com.mike_caron.megacorp.item;
 
-import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.client.models.ModelBottle;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.capabilities.Capability;
@@ -95,6 +92,7 @@ public class Bottle
         return stack.getTagCompound();
     }
 
+    /*
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
     {
@@ -106,6 +104,7 @@ public class Bottle
         }
 
     }
+    */
 
     public static ItemStack with(FluidStack stack)
     {

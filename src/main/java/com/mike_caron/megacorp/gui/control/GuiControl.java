@@ -13,6 +13,7 @@ public abstract class GuiControl
     protected IGuiGroup parent;
     protected int x;
     protected int y;
+    protected int zIndex;
     protected boolean enabled = true, visible = true;
 
     protected final Vector<EventListener> listeners = new Vector<>();
@@ -41,6 +42,14 @@ public abstract class GuiControl
     public void setX(int x)
     {
         this.x = x;
+    }
+
+    public int getzIndex() { return this.zIndex; }
+
+    public void setzIndex(int zIndex) {
+        this.zIndex = zIndex;
+        if(this.parent != null)
+            this.parent.sort();
     }
 
     public boolean isEnabled()

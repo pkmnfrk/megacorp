@@ -17,6 +17,8 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
+
 public class GuiUtil
 {
     private GuiUtil() {}
@@ -25,7 +27,7 @@ public class GuiUtil
     public static final ResourceLocation EMPTY_GUI = new ResourceLocation(MegaCorpMod.modId, "textures/gui/empty.png");
     public static final ResourceLocation MISC_RESOURCES = new ResourceLocation(MegaCorpMod.modId, "textures/gui/misc.png");
 
-    public static final int FONT_COLOUR = 0x404040;
+    public static final Color FONT_COLOUR = new Color(0x404040);
 
     public static void bindTexture(ResourceLocation resource)
     {
@@ -38,6 +40,11 @@ public class GuiUtil
         float green = (float) (color >> 8 & 255) / 255.0F;
         float blue = (float) (color & 255) / 255.0F;
         GlStateManager.color(red, green, blue, 1.0F);
+    }
+
+    public static void setGLColor(Color color)
+    {
+        GlStateManager.color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f);
     }
 
     public static TextureAtlasSprite getTexture(ResourceLocation location) {

@@ -86,6 +86,17 @@ public class Corporation
 
     }
 
+    @Override
+    public boolean completeWorkOrder(WorkOrder workOrder)
+    {
+        if(workOrder.isComplete())
+        {
+            this.addProfit(workOrder.getProfit());
+            return true;
+        }
+        return false;
+    }
+
     public void addProfit(int amount)
     {
         Preconditions.checkArgument(amount >= 0);

@@ -1,5 +1,7 @@
 package com.mike_caron.megacorp.api;
 
+import com.mike_caron.megacorp.impl.WorkOrder;
+
 import java.util.UUID;
 
 public interface ICorporation
@@ -10,4 +12,5 @@ public interface ICorporation
     long getTotalProfit();
     int consumeProfit(int amount);
 
+    boolean completeWorkOrder(WorkOrder workOrder);
 }

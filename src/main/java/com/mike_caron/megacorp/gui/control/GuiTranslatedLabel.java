@@ -3,6 +3,8 @@ package com.mike_caron.megacorp.gui.control;
 import com.mike_caron.megacorp.gui.GuiUtil;
 import net.minecraft.util.text.TextComponentTranslation;
 
+import java.awt.*;
+
 public class GuiTranslatedLabel
     extends GuiLabel
 {
@@ -13,7 +15,7 @@ public class GuiTranslatedLabel
     {
         this(x, y, GuiUtil.FONT_COLOUR, stringKey, placeholders);
     }
-    public GuiTranslatedLabel(int x, int y, int color, String stringKey, Object... placeholders)
+    public GuiTranslatedLabel(int x, int y, Color color, String stringKey, Object... placeholders)
     {
         super(x, y, color, "");
 

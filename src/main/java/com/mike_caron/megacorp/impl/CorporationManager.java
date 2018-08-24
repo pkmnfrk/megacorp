@@ -94,6 +94,9 @@ public class CorporationManager extends WorldSavedData implements ICorporationMa
 
     public static CorporationManager get(World world)
     {
+        if(world.isRemote)
+            throw new IllegalStateException("Cannot access this data on the client side");
+
         CorporationManager ret = (CorporationManager)world.getMapStorage().getOrLoadData(CorporationManager.class, MegaCorpMod.modId);
         if(ret == null)
         {

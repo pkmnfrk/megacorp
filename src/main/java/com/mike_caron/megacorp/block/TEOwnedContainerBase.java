@@ -21,6 +21,8 @@ public abstract class TEOwnedContainerBase
     {
         super.detectAndSendChanges();
 
+
+
         TileEntityOwnedBase te = getTE();
 
         if(te != null)

@@ -9,9 +9,11 @@ import com.mike_caron.megacorp.storage.TweakedItemStackHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ITickable;
 
 public class TileEntityShippingDepot
     extends TileEntityOwnedBase
+    implements ITickable
 {
     public WorkOrder workOrder;
 
@@ -21,8 +23,6 @@ public class TileEntityShippingDepot
         protected void onContentsChanged(int slot)
         {
             super.onContentsChanged(slot);
-
-            tryConsumeItem();
 
             markDirty();
         }
@@ -103,5 +103,13 @@ public class TileEntityShippingDepot
                 }
             }
         }
+    }
+
+    @Override
+    public void update()
+    {
+        if(world.isRemote) return;
+
+        tryConsumeItem();
     }
 }

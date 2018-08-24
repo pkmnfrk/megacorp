@@ -5,12 +5,10 @@ import com.mike_caron.megacorp.network.IGuiUpdater;
 import com.mike_caron.megacorp.network.MessageUpdateGui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 
 import javax.annotation.Nonnull;
 
@@ -22,13 +20,37 @@ public abstract class ContainerBase
     private IInventory playerInventory;
 
     protected boolean changed = false;
+    private NonNullList<ItemStack> knownSlots;
+
+    protected boolean useDefaultDetectBehaviour()
+    {
+        return true;
+    }
 
     @Override
     public void detectAndSendChanges()
     {
-        super.detectAndSendChanges();
+        if(useDefaultDetectBehaviour())
+        {
+            super.detectAndSendChanges();
+        }
 
         changed = false;
+
+        if(!useDefaultDetectBehaviour())
+        {
+            for (int i = 0; i < inventorySlots.size(); i++)
+            {
+                ItemStack invStack = inventorySlots.get(i).getStack();
+                ItemStack knownStack = knownSlots.get(i);
+
+                if(!ItemStack.areItemStacksEqual(invStack, knownStack))
+                {
+                    this.knownSlots.set(i, invStack);
+                    changed = true;
+                }
+            }
+        }
     }
 
     public ContainerBase(IInventory player)
@@ -42,6 +64,8 @@ public abstract class ContainerBase
     {
         addOwnSlots();
         addPlayerSlots(playerInventory);
+
+        knownSlots = NonNullList.withSize(inventorySlots.size(), ItemStack.EMPTY);
     }
 
     @Override
@@ -139,7 +163,10 @@ public abstract class ContainerBase
 
     protected void onWriteNBT(NBTTagCompound tag)
     {
-
+        if(!useDefaultDetectBehaviour())
+        {
+            tag.setTag("Slots", ItemStackHelper.saveAllItems(new NBTTagCompound(), knownSlots, true));
+        }
     }
 
 
@@ -167,7 +194,17 @@ public abstract class ContainerBase
 
     protected void onReadNBT(NBTTagCompound tag)
     {
+        if(!useDefaultDetectBehaviour())
+        {
+            ItemStackHelper.loadAllItems(tag.getCompoundTag("Slots"), knownSlots);
 
+            for(int i = 0; i < knownSlots.size(); i++)
+            {
+                ItemStack stack = knownSlots.get(i);
+
+                inventorySlots.get(i).putStack(stack);
+            }
+        }
     }
 
     protected void triggerUpdate()

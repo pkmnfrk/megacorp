@@ -25,5 +25,6 @@ public class TweakedItemStackHandler
     public void notifySlotChanged(int slot)
     {
         this.onContentsChanged(slot);
+
     }
 }

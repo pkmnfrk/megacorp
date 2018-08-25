@@ -111,7 +111,7 @@ public final class ModelBottle implements IModel
                             Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter)
     {
         // DEBUG
-        System.out.println("Baking custom model");
+        //System.out.println("Baking custom model");
 
         ImmutableMap<ItemCameraTransforms.TransformType, TRSRTransformation> transformMap = PerspectiveMapWrapper.getTransforms(state);
 
@@ -122,7 +122,7 @@ public final class ModelBottle implements IModel
         if (fluid != null)
         {
             // DEBUG
-            System.out.println("Getting fluid sprite");
+            //System.out.println("Getting fluid sprite");
 
             fluidSprite = bakedTextureGetter.apply(fluid.getStill());
         }
@@ -138,7 +138,7 @@ public final class ModelBottle implements IModel
         if (filledLocation != null && fluidSprite != null)
         {
             // DEBUG
-            System.out.println("Building filled model");
+            //System.out.println("Building filled model");
 
             TextureAtlasSprite filledTexture = bakedTextureGetter.apply(filledLocation);
             // build liquid layer (inside)
@@ -173,7 +173,7 @@ public final class ModelBottle implements IModel
     public ModelBottle process(ImmutableMap<String, String> customData)
     {
         // DEBUG
-        System.out.println("process method with custom data = ");
+        //System.out.println("process method with custom data = ");
 
         String fluidName = customData.get("fluid");
         Fluid fluid = FluidRegistry.getFluid(fluidName);
@@ -197,7 +197,7 @@ public final class ModelBottle implements IModel
     {
         // don't allow retexturing
         // DEBUG
-        System.out.println("Retexturing");
+        //System.out.println("Retexturing");
 
         return new ModelBottle(fluid);
     }
@@ -280,7 +280,7 @@ public final class ModelBottle implements IModel
             if (!model.cache.containsKey(name))
             {
                 // DEBUG
-                System.out.println("The model cache does not have key for fluid name");
+                //System.out.println("The model cache does not have key for fluid name");
                 IModel parent = model.parent.process(ImmutableMap.of("fluid", name));
                 Function<ResourceLocation, TextureAtlasSprite> textureGetter;
                 textureGetter = new Function<ResourceLocation, TextureAtlasSprite>() {

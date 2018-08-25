@@ -116,7 +116,10 @@ public class Quest
             float high = 1 + randomFactor;
             float fin = (high - low) * rng.nextFloat() + low;
 
-            MegaCorpMod.logger.warn("RNG: " + low + " .. " + fin + " .. " + high);
+            if(fin < low || fin > high)
+            {
+                MegaCorpMod.logger.warn("RNG out of range: " + low + " .. " + fin + " .. " + high);
+            }
 
             qty *= fin;
         }

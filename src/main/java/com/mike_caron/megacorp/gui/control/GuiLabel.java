@@ -5,7 +5,7 @@ import com.mike_caron.megacorp.gui.GuiUtil;
 import java.awt.*;
 
 public class GuiLabel
-    extends GuiControl
+    extends GuiSized
 {
     protected String stringLabel;
 
@@ -15,9 +15,23 @@ public class GuiLabel
     {
         this(x,y, GuiUtil.FONT_COLOUR, key);
     }
+
+    @Override
+    public int getWidth()
+    {
+        if(width == 0)
+        {
+            if (this.parent != null)
+            {
+                width = this.parent.getFontRenderer().getStringWidth(stringLabel);
+            }
+        }
+        return super.getWidth();
+    }
+
     public GuiLabel(int x, int y, Color color, String key)
     {
-        super(x, y);
+        super(x, y, 0, 10);
 
         this.color = color;
         this.stringLabel = key;

@@ -28,9 +28,10 @@ public class GuiShippingDepot
     private GuiGroup ownedGroup = new GuiGroup();
     private GuiGroup workorderGroup = new GuiGroup();
 
-    private GuiTranslatedLabel itemLabel = new GuiTranslatedLabel(6, 20, "tile.megacorp:shipping_depot.item", "");
-    private GuiTranslatedLabel quantityLabel = new GuiTranslatedLabel(6, 31, "tile.megacorp:shipping_depot.quantity", "");
-    private GuiTranslatedLabel questLabel = new GuiTranslatedLabel(6, 42, "tile.megacorp:shipping_depot.quest", "");
+    private GuiTranslatedLabel questLabel = new GuiTranslatedLabel(6, 20, "tile.megacorp:shipping_depot.quest", "");
+    private GuiTranslatedLabel itemLabel = new GuiTranslatedLabel(6, 31, "tile.megacorp:shipping_depot.item", "");
+    private GuiTranslatedLabel quantityLabel = new GuiTranslatedLabel(6, 42, "tile.megacorp:shipping_depot.quantity", "");
+
     private GuiProgressBar progressBar = new GuiProgressBar(8, 67, 159, 12);
     private GuiTranslatedLabel progressLabel = new GuiTranslatedLabel(80, 69, "tile.megacorp:shipping_depot.progress", 0, 0);
     private GuiButton newQuestButton = new GuiButton(1, 7, 66, 161, 14, GuiUtil.translate("tile.megacorp:shipping_depot.new_quest"));
@@ -66,6 +67,7 @@ public class GuiShippingDepot
 
                 QuestLocalization questLocalization = QuestManager.INSTANCE.getLocalizationForCurrent(container.workOrder.getQuestId());
                 questLabel.setPlaceholder(0, questLocalization.title);
+                questLabel.setTooltip(questLocalization.description);
 
             }
             else
@@ -114,9 +116,16 @@ public class GuiShippingDepot
     @Override
     protected void drawGuiContainerBackgroundLayer(float v, int i, int i1)
     {
-        GlStateManager.color(1, 1, 1, 1);
-        mc.getTextureManager().bindTexture(background);
-        drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+        if(this.container.owner == null)
+        {
+            drawInsertCardBackground();
+        }
+        else
+        {
+            GlStateManager.color(1, 1, 1, 1);
+            mc.getTextureManager().bindTexture(background);
+            drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+        }
     }
 
     @Override

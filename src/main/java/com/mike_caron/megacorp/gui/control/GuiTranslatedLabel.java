@@ -26,6 +26,7 @@ public class GuiTranslatedLabel
     public void setPlaceholder(int i, Object value)
     {
         this.placeholders[i] = value;
+        this.width = 0;
     }
 
     @Override

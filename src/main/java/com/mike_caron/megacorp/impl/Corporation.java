@@ -5,6 +5,8 @@ import com.mike_caron.megacorp.api.ICorporation;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -17,6 +19,7 @@ public class Corporation
     private String name;
     private long availableProfit;
     private long totalProfit;
+    private Map<String, Integer> questLog;
 
     private final CorporationManager manager;
 
@@ -29,6 +32,7 @@ public class Corporation
     {
         this.manager = manager;
         this.owner = owner;
+        this.questLog = new HashMap<>();
     }
 
     @Override
@@ -89,12 +93,25 @@ public class Corporation
     @Override
     public boolean completeWorkOrder(WorkOrder workOrder)
     {
-        if(workOrder.isComplete())
+        lock.lock();
+        try
         {
-            this.addProfit(workOrder.getProfit());
-            return true;
+            if (workOrder.isComplete())
+            {
+                this.addProfit(workOrder.getProfit());
+
+                int completed = questLog.getOrDefault(workOrder.getQuestId(), 0);
+                completed = Math.incrementExact(completed);
+                questLog.put(workOrder.getQuestId(), completed);
+
+                return true;
+            }
+            return false;
         }
-        return false;
+        finally
+        {
+            lock.unlock();
+        }
     }
 
     public void addProfit(int amount)
@@ -125,6 +142,10 @@ public class Corporation
         tag.setString("Name", name);
         tag.setLong("AvailableProfit", availableProfit);
         tag.setLong("TotalProfit", totalProfit);
+        if(!questLog.isEmpty())
+        {
+            tag.setTag("Quests", serializeLog());
+        }
 
         return tag;
     }
@@ -136,5 +157,38 @@ public class Corporation
         name = tag.getString("Name");
         availableProfit = tag.getLong("AvailableProfit");
         totalProfit = tag.getLong("TotalProfit");
+        if(tag.hasKey("Quests"))
+        {
+            deserializeLog(tag.getCompoundTag("Quests"));
+        }
+        else
+        {
+            deserializeLog(null);
+        }
+    }
+
+    private NBTTagCompound serializeLog()
+    {
+        NBTTagCompound ret = new NBTTagCompound();
+
+        for(String quest : questLog.keySet())
+        {
+            ret.setInteger(quest, questLog.get(quest));
+        }
+
+        return ret;
+    }
+
+    private void deserializeLog(NBTTagCompound tag)
+    {
+        questLog = new HashMap<>();
+
+        if(tag != null)
+        {
+            for(String quest : tag.getKeySet())
+            {
+                questLog.put(quest, tag.getInteger(quest));
+            }
+        }
     }
 }

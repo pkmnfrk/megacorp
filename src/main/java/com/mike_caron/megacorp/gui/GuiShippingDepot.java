@@ -6,6 +6,8 @@ import com.mike_caron.megacorp.gui.control.GuiButton;
 import com.mike_caron.megacorp.gui.control.GuiGroup;
 import com.mike_caron.megacorp.gui.control.GuiProgressBar;
 import com.mike_caron.megacorp.gui.control.GuiTranslatedLabel;
+import com.mike_caron.megacorp.impl.QuestLocalization;
+import com.mike_caron.megacorp.impl.QuestManager;
 import com.mike_caron.megacorp.network.CtoSMessage;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
@@ -28,6 +30,7 @@ public class GuiShippingDepot
 
     private GuiTranslatedLabel itemLabel = new GuiTranslatedLabel(6, 20, "tile.megacorp:shipping_depot.item", "");
     private GuiTranslatedLabel quantityLabel = new GuiTranslatedLabel(6, 31, "tile.megacorp:shipping_depot.quantity", "");
+    private GuiTranslatedLabel questLabel = new GuiTranslatedLabel(6, 42, "tile.megacorp:shipping_depot.quest", "");
     private GuiProgressBar progressBar = new GuiProgressBar(8, 67, 159, 12);
     private GuiTranslatedLabel progressLabel = new GuiTranslatedLabel(80, 69, "tile.megacorp:shipping_depot.progress", 0, 0);
     private GuiButton newQuestButton = new GuiButton(1, 7, 66, 161, 14, GuiUtil.translate("tile.megacorp:shipping_depot.new_quest"));
@@ -60,6 +63,10 @@ public class GuiShippingDepot
                 progressLabel.setPlaceholder(0, container.workOrder.getProgress());
                 progressLabel.setPlaceholder(1, container.workOrder.getDesiredItem().getCount());
                 progressBar.setProgress(((float)container.workOrder.getProgress()) / container.workOrder.getDesiredItem().getCount());
+
+                QuestLocalization questLocalization = QuestManager.INSTANCE.getLocalizationForCurrent(container.workOrder.getQuestId());
+                questLabel.setPlaceholder(0, questLocalization.title);
+
             }
             else
             {
@@ -93,6 +100,7 @@ public class GuiShippingDepot
         workorderGroup.addControl(quantityLabel);
         workorderGroup.addControl(progressBar);
         workorderGroup.addControl(progressLabel);
+        workorderGroup.addControl(questLabel);
 
         newQuestButton.addClickedListener(this);
     }

@@ -1,0 +1,42 @@
+//        n = completed orders * levelscale
+// qty 0 = baseqty
+// qty n = qty(n-1) * multqty
+// aka:
+// qty n = baseqty * multqty ^ n
+// (there are other factors applied afterwards, eg randomness and such)
+{
+  "mod": "minecraft",
+  "quests": [
+    {
+      "id": "letthemeatcake",
+      "item": "minecraft:cake",
+      "baseqty": 5,
+      "multqty": 2,
+      "rand": 0.25,
+      "levelscale": 0.5
+    },
+    {
+      "id": "egginc",
+      "item": "minecraft:egg",
+      "baseqty": 16,
+      "multqty": 1.5,
+      "rand": 0.25
+    },
+    {
+      "id": "cowtippers",
+      "item": "minecraft:leather",
+      "baseqty": 8,
+      "multqty": 1.5,
+      "rand": 0.25,
+      "levelscale": 1.1
+    },
+    {
+      "id": "bonepicking",
+      "item": "minecraft:bone",
+      "baseqty": 12,
+      "multqty": 1.5,
+      "rand": 0.25,
+      "levelscale": 1.25
+    }
+  ]
+}

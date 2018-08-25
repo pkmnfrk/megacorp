@@ -2,14 +2,20 @@ package com.mike_caron.megacorp.block.shipping_depot;
 
 import com.mike_caron.megacorp.api.ICorporation;
 import com.mike_caron.megacorp.block.TileEntityOwnedBase;
+import com.mike_caron.megacorp.impl.Corporation;
 import com.mike_caron.megacorp.impl.CorporationManager;
 import com.mike_caron.megacorp.impl.WorkOrder;
-import com.mike_caron.megacorp.item.ModItems;
 import com.mike_caron.megacorp.storage.TweakedItemStackHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.items.CapabilityItemHandler;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class TileEntityShippingDepot
     extends TileEntityOwnedBase
@@ -26,11 +32,54 @@ public class TileEntityShippingDepot
 
             markDirty();
         }
+
+        @Nonnull
+        @Override
+        public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate)
+        {
+            if(workOrder == null || !ItemStack.areItemsEqual(stack, workOrder.getDesiredItem()))
+            {
+                return stack;
+            }
+
+            return super.insertItem(slot, stack, simulate);
+        }
+
+        @Override
+        public int getSlotLimit(int slot)
+        {
+            if(workOrder == null) return 0;
+
+
+            int remaining = workOrder.getDesiredItem().getCount() - workOrder.getProgress();
+            return Math.min(remaining, 64);
+        }
     };
 
     public TileEntityShippingDepot()
     {
 
+    }
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing)
+    {
+        if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && facing != null)
+        {
+            return true;
+        }
+        return super.hasCapability(capability, facing);
+    }
+
+    @Nullable
+    @Override
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing)
+    {
+        if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && facing != null)
+        {
+            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
+        }
+        return super.getCapability(capability, facing);
     }
 
     @Override
@@ -73,7 +122,9 @@ public class TileEntityShippingDepot
 
             if(owner != null)
             {
-                workOrder = new WorkOrder(this.owner, "test", new ItemStack(ModItems.corporateCard, 3), 1000);
+                Corporation corp = (Corporation)CorporationManager.get(world).getCorporationForOwner(owner);
+                //workOrder = new WorkOrder(this.owner, "test", new ItemStack(ModItems.corporateCard, 3), 1000);
+                workOrder = corp.createNewWorkorder();
             }
         }
     }

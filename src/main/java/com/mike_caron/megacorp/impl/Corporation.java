@@ -1,7 +1,9 @@
 package com.mike_caron.megacorp.impl;
 
 import com.google.common.base.Preconditions;
+import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.api.ICorporation;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
 
@@ -131,6 +133,33 @@ public class Corporation
         {
             lock.unlock();
         }
+    }
+
+    public int getCompletedCountFor(String questId)
+    {
+        if(!questLog.containsKey(questId))
+        {
+            return 0;
+        }
+
+        return questLog.get(questId);
+    }
+
+    public WorkOrder createNewWorkorder()
+    {
+        //first, select a quest
+        Quest quest = QuestManager.INSTANCE.getRandomQuest();
+        ItemStack qty = quest.getItemForLevel(getCompletedCountFor(quest.id));
+
+        if(qty.isEmpty())
+        {
+            MegaCorpMod.logger.warn("Not returning quest, because it is bogus");
+            return null;
+        }
+
+        WorkOrder ret = new WorkOrder(this.owner, quest.id, qty, 1000);
+
+        return ret;
     }
 
     @Override

@@ -2,8 +2,11 @@ package com.mike_caron.megacorp.impl;
 
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonObject;
+import com.mike_caron.megacorp.MegaCorpMod;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import java.util.Random;
 
 public class Quest
 {
@@ -98,5 +101,28 @@ public class Quest
         }
 
         throw new RuntimeException("I don't understand the item " + tag);
+    }
+
+    public ItemStack getItemForLevel(int level)
+    {
+        ItemStack ret = item.copy();
+
+        double qty = baseQty * Math.pow(multQty, level * levelScale);
+
+        if(randomFactor > 0)
+        {
+            Random rng = new Random();
+            float low = 1 - randomFactor;
+            float high = 1 + randomFactor;
+            float fin = (high - low) * rng.nextFloat() + low;
+
+            MegaCorpMod.logger.warn("RNG: " + low + " .. " + fin + " .. " + high);
+
+            qty *= fin;
+        }
+
+        ret.setCount((int)qty);
+
+        return ret;
     }
 }

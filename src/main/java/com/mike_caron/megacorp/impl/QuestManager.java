@@ -15,10 +15,7 @@ import org.apache.commons.io.FilenameUtils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class QuestManager
 {
@@ -162,5 +159,12 @@ public class QuestManager
     public QuestLocalization getLocalizationForCurrent(String questId)
     {
         return getLocalizationFor(Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage().getLanguageCode(), questId);
+    }
+
+    public Quest getRandomQuest()
+    {
+        Random rng = new Random();
+        int q = rng.nextInt(quests.size());
+        return quests.get(q);
     }
 }

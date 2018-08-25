@@ -4,19 +4,15 @@ import mcjty.theoneprobe.api.ElementAlignment;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.NumberFormat;
 import mcjty.theoneprobe.apiimpl.styles.ProgressStyle;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.IFluidTank;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.awt.*;
 
 public class TOPUtils
 {
-    @GameRegistry.ItemStackHolder("minecraft:clock")
-    public static ItemStack CLOCK;
 
     private TOPUtils() {}
 
@@ -55,7 +51,7 @@ public class TOPUtils
         {
             probeInfo
                 .horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER))
-                .item(CLOCK)
+                .item(ItemUtils.CLOCK)
                 .text(new TextComponentTranslation("tile.megacorp:misc.idle").getFormattedText());
             ;
         }
@@ -63,7 +59,7 @@ public class TOPUtils
         {
             probeInfo
                 .horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER))
-                .item(CLOCK)
+                .item(ItemUtils.CLOCK)
                 .progress((int) (progress * 100), 100, new ProgressStyle().suffix("%"))
             ;
         }

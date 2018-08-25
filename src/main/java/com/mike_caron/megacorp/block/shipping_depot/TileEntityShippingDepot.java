@@ -127,6 +127,26 @@ public class TileEntityShippingDepot
                 workOrder = corp.createNewWorkorder();
             }
         }
+        else if(button == 2)
+        {
+            if(owner != null && workOrder != null)
+            {
+                Corporation corp = (Corporation)CorporationManager.get(world).getCorporationForOwner(owner);
+
+                workOrder = corp.createNewWorkorder();
+            }
+        }
+    }
+
+    @Override
+    public void handleGuiToggle(EntityPlayerMP player, int element, boolean newState)
+    {
+        if(!canInteractWith(player)) return;
+
+        if(element == 3)
+        {
+
+        }
     }
 
     private void tryConsumeItem()

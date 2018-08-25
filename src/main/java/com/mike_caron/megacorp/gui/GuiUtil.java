@@ -151,12 +151,32 @@ public class GuiUtil
         }
     }
 
-    public static void drawStretchedTexturePart(int x, int y, int width, int height, int tileX, int tileY, int tileWidth, int tileHeight, int sheetWidth, int sheetHeight)
+    public static void drawStretchedTexturePart(float x, float y, int width, int height, int tileX, int tileY, int tileWidth, int tileHeight, int sheetWidth, int sheetHeight)
     {
         float minU = tileX * 1f / sheetWidth;
         float minV = tileY * 1f / sheetHeight;
         float maxU = (tileX + tileWidth) * 1f / sheetWidth;
         float maxV = (tileY + tileHeight) * 1f / sheetHeight;
+
+        //  0    2
+        //  v  / v
+        //  1    3
+
+        BufferBuilder buffer = Tessellator.getInstance().getBuffer();
+        buffer.begin(GL11.GL_TRIANGLE_STRIP, DefaultVertexFormats.POSITION_TEX);
+        buffer.pos(x, y, 0).tex(minU, minV).endVertex();
+        buffer.pos(x, y + height, 0).tex(minU, maxV).endVertex();
+        buffer.pos(x + width, y, 0).tex(maxU, minV).endVertex();
+        buffer.pos(x + width, y + height, 0).tex(maxU, maxV).endVertex();
+        Tessellator.getInstance().draw();
+    }
+
+    public static void drawTexturePart(float x, float y, int width, int height, int tileX, int tileY, int sheetWidth, int sheetHeight)
+    {
+        float minU = tileX * 1f / sheetWidth;
+        float minV = tileY * 1f / sheetHeight;
+        float maxU = (tileX + width) * 1f / sheetWidth;
+        float maxV = (tileY + height) * 1f / sheetHeight;
 
         //  0    2
         //  v  / v

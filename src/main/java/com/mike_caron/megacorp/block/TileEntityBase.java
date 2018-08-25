@@ -23,6 +23,8 @@ public class TileEntityBase extends TileEntity
 
     public void handleGuiString(EntityPlayerMP player, int element, String string) {}
 
+    public void handleGuiToggle(EntityPlayerMP player, int element, boolean bool) {}
+
     @Nonnull
     @Override
     public SPacketUpdateTileEntity getUpdatePacket()

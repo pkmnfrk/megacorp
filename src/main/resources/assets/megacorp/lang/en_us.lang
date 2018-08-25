@@ -63,6 +63,8 @@ tile.megacorp:shipping_depot.quantity=Quantity: %s
 tile.megacorp:shipping_depot.progress=%d / %d
 tile.megacorp:shipping_depot.new_quest=New Work Order
 tile.megacorp:shipping_depot.quest=Job: %s
+tile.megacorp:shipping_depot.automate=Automatically generate new work order
+tile.megacorp:shipping_depot.reroll=Discard work order and get new one
 
 tile.megacorp:liquid_shipping_depot.name=Liquid Shipping Depot
 tile.megacorp:liquid_shipping_depot.description=The Liquid Shipping Depot is the place where work orders for liquids are fulfilled. Simply deposit the desired liquids, and watch the progress bar fill up. Profit is generated upon completion of a work order.

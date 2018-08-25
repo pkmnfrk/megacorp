@@ -21,6 +21,7 @@ public class CtoSMessage implements IMessage
     private KindEnum kind;
     private int guiElement;
     private String theString;
+    private boolean theBoolean;
 
     // add message-specific fields here
 
@@ -47,6 +48,17 @@ public class CtoSMessage implements IMessage
         return ret;
     }
 
+    public static CtoSMessage forGuiToggle(BlockPos pos, int guiElement, boolean bool)
+    {
+        CtoSMessage ret = new CtoSMessage();
+        ret.kind = KindEnum.GuiToggle;
+        //ret.dim = dim;
+        ret.pos = pos;
+        ret.guiElement = guiElement;
+        ret.theBoolean = bool;
+        return ret;
+    }
+
     @Override
     public void fromBytes(ByteBuf buf)
     {
@@ -62,6 +74,10 @@ public class CtoSMessage implements IMessage
             case GuiString:
                 guiElement = buf.readInt();
                 theString = readString(buf);
+                break;
+            case GuiToggle:
+                guiElement = buf.readInt();
+                theBoolean = buf.readBoolean();
                 break;
             default:
                 throw new RuntimeException("What the? What kind of kind is " + kind);
@@ -85,6 +101,10 @@ public class CtoSMessage implements IMessage
                 buf.writeInt(guiElement);
                 writeString(buf, theString);
                 break;
+            case GuiToggle:
+                buf.writeInt(guiElement);
+                buf.writeBoolean(theBoolean);
+                break;
             default:
                 throw new RuntimeException("What the? What kind of kind is " + kind);
         }
@@ -98,10 +118,13 @@ public class CtoSMessage implements IMessage
 
     public KindEnum getKind() { return kind; }
 
+    public boolean getBoolean() { return theBoolean; }
+
     public enum KindEnum {
         Unknown,
         GuiButton,
-        GuiString
+        GuiString,
+        GuiToggle
     }
 
     private static String readString(ByteBuf byteBuf)
@@ -147,6 +170,12 @@ public class CtoSMessage implements IMessage
                                     TileEntityOwnedBase teb = (TileEntityOwnedBase) te;
                                     teb.handleGuiString(player, message.getGuiElement(), message.getString());
                                 }
+                                case GuiToggle:
+                                {
+                                    TileEntityOwnedBase teb = (TileEntityOwnedBase) te;
+                                    teb.handleGuiToggle(player, message.getGuiElement(), message.getBoolean());
+                                }
+
                                 break;
                             }
                         }

@@ -103,10 +103,8 @@ public class Quest
         throw new RuntimeException("I don't understand the item " + tag);
     }
 
-    public ItemStack getItemForLevel(int level)
+    public int getCountForLevel(int level)
     {
-        ItemStack ret = item.copy();
-
         double qty = baseQty * Math.pow(multQty, level * levelScale);
 
         if(randomFactor > 0)
@@ -124,8 +122,6 @@ public class Quest
             qty *= fin;
         }
 
-        ret.setCount((int)qty);
-
-        return ret;
+        return (int)qty;
     }
 }

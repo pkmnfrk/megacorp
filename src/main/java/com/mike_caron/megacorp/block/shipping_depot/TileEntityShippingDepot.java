@@ -1,5 +1,6 @@
 package com.mike_caron.megacorp.block.shipping_depot;
 
+import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.api.ICorporation;
 import com.mike_caron.megacorp.block.TileEntityOwnedBase;
 import com.mike_caron.megacorp.impl.Corporation;
@@ -51,7 +52,7 @@ public class TileEntityShippingDepot
             if(workOrder == null) return 0;
 
 
-            int remaining = workOrder.getDesiredItem().getCount() - workOrder.getProgress();
+            int remaining = workOrder.getDesiredCount() - workOrder.getProgress();
             return Math.min(remaining, 64);
         }
     };
@@ -134,6 +135,8 @@ public class TileEntityShippingDepot
                 Corporation corp = (Corporation)CorporationManager.get(world).getCorporationForOwner(owner);
 
                 workOrder = corp.createNewWorkorder();
+
+                MegaCorpMod.logger.warn("Generated quest: " + workOrder.getDesiredItem());
             }
         }
     }

@@ -63,10 +63,10 @@ public class GuiShippingDepot
                 newQuestButton.setVisible(false);
                 workorderGroup.setVisible(true);
                 itemLabel.setPlaceholder(0, container.workOrder.getDesiredItem().getDisplayName());
-                quantityLabel.setPlaceholder(0, container.workOrder.getDesiredItem().getCount());
+                quantityLabel.setPlaceholder(0, container.workOrder.getDesiredCount());
                 progressLabel.setPlaceholder(0, container.workOrder.getProgress());
-                progressLabel.setPlaceholder(1, container.workOrder.getDesiredItem().getCount());
-                progressBar.setProgress(((float)container.workOrder.getProgress()) / container.workOrder.getDesiredItem().getCount());
+                progressLabel.setPlaceholder(1, container.workOrder.getDesiredCount());
+                progressBar.setProgress(((float)container.workOrder.getProgress()) / container.workOrder.getDesiredCount());
 
                 QuestLocalization questLocalization = QuestManager.INSTANCE.getLocalizationForCurrent(container.workOrder.getQuestId());
                 questLabel.setPlaceholder(0, questLocalization.title);

@@ -1,5 +1,6 @@
 package com.mike_caron.megacorp.block.shipping_depot;
 
+import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.api.ICorporation;
 import com.mike_caron.megacorp.api.ICorporationManager;
 import com.mike_caron.megacorp.block.TEOwnedContainerBase;
@@ -72,6 +73,10 @@ public class ContainerShippingDepot
         {
             this.workOrder = te.workOrder;
             changed = true;
+            if(this.workOrder != null)
+            {
+                MegaCorpMod.logger.warn("Detected quest: " + this.workOrder.getDesiredItem());
+            }
         }
         else
         {
@@ -103,6 +108,8 @@ public class ContainerShippingDepot
         if(tag.hasKey("WorkOrder"))
         {
             workOrder = WorkOrder.fromNBT(tag.getCompoundTag("WorkOrder"));
+
+            MegaCorpMod.logger.warn("Deserialized workorder: " + workOrder.getDesiredItem());
         }
         else
         {
@@ -118,6 +125,8 @@ public class ContainerShippingDepot
         if(workOrder != null)
         {
             tag.setTag("WorkOrder", workOrder.serializeNBT());
+
+            MegaCorpMod.logger.warn("serialized workorder: " + workOrder.getDesiredItem());
         }
 
     }

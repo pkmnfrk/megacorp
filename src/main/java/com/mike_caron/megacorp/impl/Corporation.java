@@ -149,15 +149,16 @@ public class Corporation
     {
         //first, select a quest
         Quest quest = QuestManager.INSTANCE.getRandomQuest();
-        ItemStack qty = quest.getItemForLevel(getCompletedCountFor(quest.id));
+        ItemStack item = quest.item.copy();
+        int qty = quest.getCountForLevel(getCompletedCountFor(quest.id));
 
-        if(qty.isEmpty())
+        if(qty <= 0)
         {
             MegaCorpMod.logger.warn("Not returning quest, because it is bogus");
             return null;
         }
 
-        WorkOrder ret = new WorkOrder(this.owner, quest.id, qty, 1000);
+        WorkOrder ret = new WorkOrder(this.owner, quest.id, item, qty, 1000);
 
         return ret;
     }

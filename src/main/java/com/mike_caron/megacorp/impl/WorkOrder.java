@@ -14,17 +14,19 @@ public class WorkOrder
     private String questId;
     private Kind kind;
     private ItemStack desiredItem;
+    private int desiredCount;
     private FluidStack desiredFluid;
     private int profit;
     private int progress = 0;
 
 
-    public WorkOrder(UUID owner, String questId, ItemStack desiredItem, int profit)
+    public WorkOrder(UUID owner, String questId, ItemStack desiredItem, int desiredCount, int profit)
     {
         this.owner = owner;
         this.questId = questId;
         this.kind = Kind.ITEM;
         this.desiredItem = desiredItem;
+        this.desiredCount = desiredCount;
         this.profit = profit;
     }
 
@@ -34,6 +36,7 @@ public class WorkOrder
         this.questId = questId;
         this.kind = Kind.FLUID;
         this.desiredFluid = desiredFluid;
+        this.desiredCount = this.desiredFluid.amount;
         this.profit = profit;
     }
 
@@ -44,7 +47,7 @@ public class WorkOrder
     @Override
     public int hashCode()
     {
-        return Objects.hash(this.owner, this.questId, this.kind, this.kind == Kind.ITEM ? desiredItem : desiredFluid, this.profit, this.progress);
+        return Objects.hash(this.owner, this.questId, this.kind, this.kind == Kind.ITEM ? desiredItem : desiredFluid, this.desiredCount, this.profit, this.progress);
     }
 
     @Override
@@ -65,6 +68,7 @@ public class WorkOrder
         {
             if(!this.desiredFluid.isFluidStackIdentical(other.desiredFluid)) return false;
         }
+        if(this.desiredCount != other.desiredCount) return false;
         if(this.profit != other.profit) return false;
         if(this.progress != other.progress) return false;
 
@@ -90,35 +94,34 @@ public class WorkOrder
         {
             ret.setTag("Fluid", getDesiredFluid().writeToNBT(new NBTTagCompound()));
         }
+        ret.setInteger("Count", desiredCount);
 
         return ret;
     }
 
     public static WorkOrder fromNBT(NBTTagCompound tag)
     {
-        UUID owner = UUID.fromString(tag.getString("Owner"));
-        String questId = tag.getString("QuestID");
-        Kind kind = Kind.valueOf(tag.getString("Kind"));
-        int profit = tag.getInteger("Profit");
-        int progress = tag.getInteger("Progress");
+        WorkOrder ret = new WorkOrder();
 
-        WorkOrder ret;
-        if (kind == Kind.ITEM)
+        ret.owner = UUID.fromString(tag.getString("Owner"));
+        ret.questId = tag.getString("QuestID");
+        ret.kind = Kind.valueOf(tag.getString("Kind"));
+        ret.profit = tag.getInteger("Profit");
+        ret.progress = tag.getInteger("Progress");
+        ret.desiredCount = tag.getInteger("Count");
+
+        if (ret.kind == Kind.ITEM)
         {
-            ItemStack desired = new ItemStack(tag.getCompoundTag("Item"));
-            ret = new WorkOrder(owner, questId, desired, profit);
+            ret.desiredItem = new ItemStack(tag.getCompoundTag("Item"));
         }
-        else if (kind == Kind.FLUID)
+        else if (ret.kind == Kind.FLUID)
         {
-            FluidStack desired = FluidStack.loadFluidStackFromNBT(tag.getCompoundTag("Fluid"));
-            ret = new WorkOrder(owner, questId, desired, profit);
+            ret.desiredFluid = FluidStack.loadFluidStackFromNBT(tag.getCompoundTag("Fluid"));
         }
         else
         {
             throw new RuntimeException("Unable to discern the work order format");
         }
-
-        ret.progress = progress;
 
         return ret;
     }
@@ -162,21 +165,20 @@ public class WorkOrder
         return progress;
     }
 
+    public int getDesiredCount() {
+        return desiredCount;
+    }
+
     public int addProgress(int progress)
     {
         Preconditions.checkArgument(progress > 0);
 
         int newProgress = Math.addExact(this.progress, progress);
 
-        if(kind == Kind.ITEM && newProgress > desiredItem.getCount())
+        if(newProgress > desiredCount)
         {
-            progress = desiredItem.getCount() - this.progress;
-            newProgress = desiredItem.getCount();
-        }
-        else if(kind == Kind.FLUID && newProgress > desiredFluid.amount)
-        {
-            progress = desiredFluid.amount - this.progress;
-            newProgress = desiredFluid.amount;
+            progress = desiredCount - this.progress;
+            newProgress = desiredCount;
         }
 
         this.progress = newProgress;
@@ -186,16 +188,7 @@ public class WorkOrder
 
     public boolean isComplete()
     {
-        if (kind == Kind.ITEM)
-        {
-            return progress >= desiredItem.getCount();
-        }
-        else if (kind == Kind.FLUID)
-        {
-            return progress >= desiredFluid.amount;
-        }
-
-        return false;
+        return progress >= desiredCount;
     }
 
     public enum Kind

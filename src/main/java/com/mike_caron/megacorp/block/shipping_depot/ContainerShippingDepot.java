@@ -1,10 +1,6 @@
 package com.mike_caron.megacorp.block.shipping_depot;
 
-import com.mike_caron.megacorp.MegaCorpMod;
-import com.mike_caron.megacorp.api.ICorporation;
-import com.mike_caron.megacorp.api.ICorporationManager;
 import com.mike_caron.megacorp.block.TEOwnedContainerBase;
-import com.mike_caron.megacorp.impl.CorporationManager;
 import com.mike_caron.megacorp.impl.WorkOrder;
 import com.mike_caron.megacorp.storage.SlotItemHandlerFixed;
 import net.minecraft.inventory.IInventory;
@@ -14,8 +10,15 @@ import net.minecraft.nbt.NBTTagCompound;
 public class ContainerShippingDepot
     extends TEOwnedContainerBase
 {
+    public static final int GUI_NEW_QUEST = 1;
+    public static final int GUI_REROLL_QUEST = 2;
+    public static final int GUI_AUTOMATIC_QUEST = 3;
+    public static final int GUI_LOCK_QUEST = 4;
+
     public WorkOrder workOrder;
     private int workOrderHash = 0;
+    public boolean questLocked;
+    public boolean automaticallyGenerate;
 
     Slot itemInputSlot;
 
@@ -67,16 +70,14 @@ public class ContainerShippingDepot
 
         if(te.getWorld().isRemote) return;
 
-        ICorporationManager manager = CorporationManager.get(te.getWorld());
-
-        if(workOrder != te.workOrder)
+        if(workOrder != te.getWorkOrder())
         {
-            this.workOrder = te.workOrder;
+            this.workOrder = te.getWorkOrder();
             changed = true;
-            if(this.workOrder != null)
-            {
-                MegaCorpMod.logger.warn("Detected quest: " + this.workOrder.getDesiredItem());
-            }
+            //if(this.workOrder != null)
+            //{
+            //    MegaCorpMod.logger.warn("Detected quest: " + this.workOrder.getDesiredItem());
+            //}
         }
         else
         {
@@ -87,11 +88,16 @@ public class ContainerShippingDepot
             }
         }
 
-        if(owner != null)
+        if(questLocked != te.isQuestLocked())
         {
-            ICorporation corp = manager.getCorporationForOwner(owner);
+            questLocked = te.isQuestLocked();
+            changed = true;
+        }
 
-
+        if(automaticallyGenerate != te.getAutomaticallyGenerate())
+        {
+            automaticallyGenerate = te.getAutomaticallyGenerate();
+            changed = true;
         }
 
         if(changed)
@@ -109,12 +115,14 @@ public class ContainerShippingDepot
         {
             workOrder = WorkOrder.fromNBT(tag.getCompoundTag("WorkOrder"));
 
-            MegaCorpMod.logger.warn("Deserialized workorder: " + workOrder.getDesiredItem());
+            //MegaCorpMod.logger.warn("Deserialized workorder: " + workOrder.getDesiredItem());
         }
         else
         {
             workOrder = null;
         }
+        automaticallyGenerate = tag.getBoolean("AutoGen");
+        questLocked = tag.getBoolean("QuestLocked");
     }
 
     @Override
@@ -126,8 +134,10 @@ public class ContainerShippingDepot
         {
             tag.setTag("WorkOrder", workOrder.serializeNBT());
 
-            MegaCorpMod.logger.warn("serialized workorder: " + workOrder.getDesiredItem());
+            //MegaCorpMod.logger.warn("serialized workorder: " + workOrder.getDesiredItem());
         }
+        tag.setBoolean("AutoGen", automaticallyGenerate);
+        tag.setBoolean("QuestLocked", questLocked);
 
     }
 

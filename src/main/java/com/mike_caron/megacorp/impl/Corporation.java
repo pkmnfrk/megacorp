@@ -145,10 +145,24 @@ public class Corporation
         return questLog.get(questId);
     }
 
-    public WorkOrder createNewWorkorder()
+    public WorkOrder createNewWorkOrder(String questId)
+    {
+        Quest quest = QuestManager.INSTANCE.getSpecificQuest(questId);
+        if(quest == null)
+            return null;
+
+        return createNewWorkOrder(quest);
+    }
+
+    public WorkOrder createNewWorkOrder()
     {
         //first, select a quest
         Quest quest = QuestManager.INSTANCE.getRandomQuest();
+        return createNewWorkOrder(quest);
+    }
+
+    private WorkOrder createNewWorkOrder(Quest quest)
+    {
         ItemStack item = quest.item.copy();
         int qty = quest.getCountForLevel(getCompletedCountFor(quest.id));
 

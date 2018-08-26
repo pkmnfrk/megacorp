@@ -21,7 +21,7 @@ public class QuestManager
 {
     public static final QuestManager INSTANCE = new QuestManager();
 
-    private final List<Quest> quests = new ArrayList<>();
+    private final Map<String, Quest> quests = new HashMap<>();
     private final Map<String, Map<String, QuestLocalization>> localizations = new HashMap<>();
 
     private QuestManager() {}
@@ -66,7 +66,7 @@ public class QuestManager
 
                         Quest q = Quest.fromJson(quest);
 
-                        quests.add(q);
+                        quests.put(q.id, q);
 
                         MegaCorpMod.logger.info("Loaded quest " + q.id);
                     }
@@ -165,6 +165,13 @@ public class QuestManager
     {
         Random rng = new Random();
         int q = rng.nextInt(quests.size());
-        return quests.get(q);
+        return quests.values().stream().skip(q).findFirst().get();
+    }
+
+    public Quest getSpecificQuest(String questId)
+    {
+        if(quests.containsKey(questId))
+            return quests.get(questId);
+        return null;
     }
 }

@@ -22,7 +22,10 @@ public class TileEntityShippingDepot
     extends TileEntityOwnedBase
     implements ITickable
 {
-    public WorkOrder workOrder;
+
+    private WorkOrder workOrder;
+    private String questLocked;
+    private boolean automaticallyGenerate;
 
     public final TweakedItemStackHandler inventory = new TweakedItemStackHandler(1)
     {
@@ -38,7 +41,7 @@ public class TileEntityShippingDepot
         @Override
         public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate)
         {
-            if(workOrder == null || !ItemStack.areItemsEqual(stack, workOrder.getDesiredItem()))
+            if(getWorkOrder() == null || !ItemStack.areItemsEqual(stack, workOrder.getDesiredItem()))
             {
                 return stack;
             }
@@ -49,11 +52,12 @@ public class TileEntityShippingDepot
         @Override
         public int getSlotLimit(int slot)
         {
-            if(workOrder == null) return 0;
+            if(getWorkOrder() == null) return 0;
 
 
             int remaining = workOrder.getDesiredCount() - workOrder.getProgress();
-            return Math.min(remaining, 64);
+            //return Math.min(remaining, 64);
+            return remaining;
         }
     };
 
@@ -118,26 +122,43 @@ public class TileEntityShippingDepot
     {
         if(!canInteractWith(player)) return;
 
-        if(button == 1)
+        if(button == ContainerShippingDepot.GUI_NEW_QUEST)
         {
 
             if(owner != null)
             {
-                Corporation corp = (Corporation)CorporationManager.get(world).getCorporationForOwner(owner);
-                //workOrder = new WorkOrder(this.owner, "test", new ItemStack(ModItems.corporateCard, 3), 1000);
-                workOrder = corp.createNewWorkorder();
+                rollNewWorkOrder();
             }
         }
-        else if(button == 2)
+        else if(button == ContainerShippingDepot.GUI_REROLL_QUEST)
         {
             if(owner != null && workOrder != null)
             {
                 Corporation corp = (Corporation)CorporationManager.get(world).getCorporationForOwner(owner);
 
-                workOrder = corp.createNewWorkorder();
+                rollNewWorkOrder();
 
-                MegaCorpMod.logger.warn("Generated quest: " + workOrder.getDesiredItem());
+                MegaCorpMod.logger.warn("Generated quest: " + getWorkOrder().getDesiredItem());
             }
+        }
+    }
+
+    private void rollNewWorkOrder()
+    {
+        Corporation corp = (Corporation)CorporationManager.get(world).getCorporationForOwner(owner);
+        //workOrder = new WorkOrder(this.owner, "test", new ItemStack(ModItems.corporateCard, 3), 1000);
+        if(questLocked != null)
+        {
+            workOrder = corp.createNewWorkOrder(questLocked);
+            if(workOrder == null)
+            {
+                questLocked = null;
+                workOrder = corp.createNewWorkOrder();
+            }
+        }
+        else
+        {
+            workOrder = corp.createNewWorkOrder();
         }
     }
 
@@ -146,9 +167,23 @@ public class TileEntityShippingDepot
     {
         if(!canInteractWith(player)) return;
 
-        if(element == 3)
+        if(element == ContainerShippingDepot.GUI_AUTOMATIC_QUEST)
         {
-
+            automaticallyGenerate = newState;
+        }
+        else if(element == ContainerShippingDepot.GUI_LOCK_QUEST)
+        {
+            if(workOrder != null)
+            {
+                if(newState)
+                {
+                    questLocked = workOrder.getQuestId();
+                }
+                else
+                {
+                    questLocked = null;
+                }
+            }
         }
     }
 
@@ -156,7 +191,7 @@ public class TileEntityShippingDepot
     {
         if(world.isRemote) return;
         
-        if(workOrder == null) return;
+        if(getWorkOrder() == null) return;
 
         ItemStack stack = inventory.getStackInSlot(0);
         if(stack.isEmpty()) return;
@@ -174,6 +209,11 @@ public class TileEntityShippingDepot
                 if (corp.completeWorkOrder(workOrder))
                 {
                     workOrder = null;
+
+                    if(automaticallyGenerate)
+                    {
+                        rollNewWorkOrder();
+                    }
                 }
             }
         }
@@ -185,5 +225,20 @@ public class TileEntityShippingDepot
         if(world.isRemote) return;
 
         tryConsumeItem();
+    }
+
+    public WorkOrder getWorkOrder()
+    {
+        return workOrder;
+    }
+
+    public boolean isQuestLocked()
+    {
+        return questLocked != null;
+    }
+
+    public boolean getAutomaticallyGenerate()
+    {
+        return automaticallyGenerate;
     }
 }

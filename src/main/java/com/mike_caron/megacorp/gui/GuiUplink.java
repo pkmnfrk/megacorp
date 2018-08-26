@@ -56,11 +56,32 @@ public class GuiUplink
         {
             if(!ownedGroup.isVisible()) ownedGroup.setVisible(true);
             if(unownedGroup.isVisible()) unownedGroup.setVisible(false);
+
+            if(container.corpNameCounter != this.corpNameCounter)
+            {
+                if(corpNameField != null)
+                {
+                    if(container.corpName != null)
+                    {
+                        corpNameField.setText(container.corpName);
+                    }
+                    else
+                    {
+                        corpNameField.setText("");
+                    }
+                    this.corpNameCounter = container.corpNameCounter;
+                }
+            }
+
+            profitLabel.setPlaceholder(0, NumberFormat.getIntegerInstance().format(container.profit));
         }
         else
         {
             if(ownedGroup.isVisible()) ownedGroup.setVisible(false);
             if(!unownedGroup.isVisible()) unownedGroup.setVisible(true);
+
+            establishCorporation.setLabel(GuiUtil.translateConditional(container.hasCorp, "tile.megacorp.uplink.establish", "tile.megacorp.uplink.createcorp"));
+            unownedText.setString(GuiUtil.translateConditional(container.hasCorp, "tile.megacorp:uplink.existcorp", "tile.megacorp:uplink.newcorp"));
         }
     }
 
@@ -88,33 +109,6 @@ public class GuiUplink
     protected String getTitleKey()
     {
         return "tile.megacorp:uplink.name";
-    }
-
-    @Override
-    public void updateScreen()
-    {
-        super.updateScreen();
-
-        if(container.corpNameCounter != this.corpNameCounter)
-        {
-            if(corpNameField != null)
-            {
-                if(container.corpName != null)
-                {
-                    corpNameField.setText(container.corpName);
-                }
-                else
-                {
-                    corpNameField.setText("");
-                }
-                this.corpNameCounter = container.corpNameCounter;
-            }
-        }
-
-        profitLabel.setPlaceholder(0, NumberFormat.getIntegerInstance().format(container.profit));
-
-        establishCorporation.setLabel(GuiUtil.translateConditional(container.hasCorp, "tile.megacorp.uplink.establish", "tile.megacorp.uplink.createcorp"));
-        unownedText.setString(GuiUtil.translateConditional(container.hasCorp, "tile.megacorp:uplink.existcorp", "tile.megacorp:uplink.newcorp"));
     }
 
     @Override

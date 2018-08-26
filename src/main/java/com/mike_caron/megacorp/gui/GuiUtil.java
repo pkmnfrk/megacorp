@@ -7,6 +7,7 @@ import com.mike_caron.megacorp.gui.control.GuiSized;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiButtonImage;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -304,5 +305,35 @@ public class GuiUtil
     public static String translateConditional(boolean condition, String trueKey, String falseKey, Object... args)
     {
         return new TextComponentTranslation(condition ? trueKey : falseKey, args).getFormattedText();
+    }
+
+    public static int getRealX(int x)
+    {
+        final Minecraft mc = Minecraft.getMinecraft();
+        final ScaledResolution scaledresolution = new ScaledResolution(mc);
+
+        return (int)(x / scaledresolution.getScaledWidth_double() * mc.displayWidth);
+    }
+
+    public static int getRealWidth(int x)
+    {
+        final Minecraft mc = Minecraft.getMinecraft();
+        final ScaledResolution scaledresolution = new ScaledResolution(mc);
+
+        return (int)(x / scaledresolution.getScaledWidth_double() * mc.displayWidth);
+    }
+
+    public static int getRealY(int y)
+    {
+        final Minecraft mc = Minecraft.getMinecraft();
+        final ScaledResolution scaledresolution = new ScaledResolution(mc);
+        return (int)(mc.displayHeight - (y / scaledresolution.getScaledHeight_double() * mc.displayHeight));
+    }
+
+    public static int getRealHeight(int y)
+    {
+        final Minecraft mc = Minecraft.getMinecraft();
+        final ScaledResolution scaledresolution = new ScaledResolution(mc);
+        return (int)(y / scaledresolution.getScaledHeight_double() * mc.displayHeight);
     }
 }

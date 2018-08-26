@@ -197,7 +197,9 @@ public abstract class GuiContainerBase
         GlStateManager.pushMatrix();
 
         for (GuiControl control : this.controls) {
+            control.preDraw();
             control.draw();
+            control.postDraw();
         }
 
         GlStateManager.popMatrix();
@@ -277,7 +279,9 @@ public abstract class GuiContainerBase
 
     protected void addControls()
     {
-        titleLabel = GuiUtil.staticLabelFromTranslationKey(6, 6, getTitleKey());
+        String key = getTitleKey();
+        if(key == null) key = "title not set";
+        titleLabel = GuiUtil.staticLabelFromTranslationKey(6, 6, key);
         this.addControl(titleLabel);
     }
 

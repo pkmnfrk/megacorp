@@ -45,7 +45,9 @@ public class GuiGroup
         {
             if(control.isVisible())
             {
+                control.preDraw();
                 control.draw();
+                control.postDraw();
             }
         }
     }

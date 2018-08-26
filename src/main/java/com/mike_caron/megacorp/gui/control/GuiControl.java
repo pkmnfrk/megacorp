@@ -100,7 +100,9 @@ public abstract class GuiControl
     public void onMouseUp(int mouseX, int mouseY, int button) {}
 
     public void update() { }
+    public void preDraw() {}
     public abstract void draw();
+    public void postDraw() {}
 
     @Nullable
     public List<String> getTooltip(int mouseX, int mouseY) { return null; }

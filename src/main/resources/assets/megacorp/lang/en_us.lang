@@ -60,6 +60,7 @@ tile.megacorp:shipping_depot.name=Shipping Depot
 tile.megacorp:shipping_depot.description=The Shipping Depot is the place where work orders for items or liquids is fulfilled. Simply deposit the desired items or liquids, and watch the progress bar fill up. Profit is generated upon completion of a work order.
 tile.megacorp:shipping_depot.item=Item: %s
 tile.megacorp:shipping_depot.quantity=Quantity: %s
+tile.megacorp:shipping_depot.profit=Profit: $%s
 tile.megacorp:shipping_depot.progress=%d / %d
 tile.megacorp:shipping_depot.new_quest=New Work Order
 tile.megacorp:shipping_depot.quest=Job: %s (%d)

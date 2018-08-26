@@ -101,6 +101,16 @@ public class TileEntityShippingDepot
         {
             workOrder = WorkOrder.fromNBT(compound.getCompoundTag("WorkOrder"));
         }
+
+        if(compound.hasKey("QuestLocked"))
+        {
+            questLocked = compound.getString("QuestLocked");
+        }
+
+        if(compound.hasKey("AutoGen"))
+        {
+            automaticallyGenerate = true;
+        }
     }
 
     @Override
@@ -112,6 +122,14 @@ public class TileEntityShippingDepot
         if (workOrder != null)
         {
             ret.setTag("WorkOrder", workOrder.serializeNBT());
+        }
+        if(questLocked != null)
+        {
+            ret.setString("QuestLocked", questLocked);
+        }
+        if(automaticallyGenerate)
+        {
+            ret.setBoolean("AutoGen", true);
         }
 
         return ret;

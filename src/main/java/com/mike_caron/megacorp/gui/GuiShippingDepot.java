@@ -11,6 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 
 import java.awt.*;
+import java.text.NumberFormat;
 
 public class GuiShippingDepot
     extends GuiContainerOwnedBase
@@ -29,6 +30,7 @@ public class GuiShippingDepot
     private GuiTranslatedLabel questLabel = new GuiTranslatedLabel(6, 20, "tile.megacorp:shipping_depot.quest", "", 0);
     private GuiTranslatedLabel itemLabel = new GuiTranslatedLabel(6, 31, "tile.megacorp:shipping_depot.item", "");
     private GuiTranslatedLabel quantityLabel = new GuiTranslatedLabel(6, 42, "tile.megacorp:shipping_depot.quantity", "");
+    private GuiTranslatedLabel profitLabel = new GuiTranslatedLabel(6, 54, "tile.megacorp:shipping_depot.profit", "");
 
     private GuiProgressBar progressBar = new GuiProgressBar(8, 67, 159, 12);
     private GuiTranslatedLabel progressLabel = new GuiTranslatedLabel(80, 69, "tile.megacorp:shipping_depot.progress", 0, 0);
@@ -65,15 +67,17 @@ public class GuiShippingDepot
                 newQuestButton.setVisible(false);
                 workorderGroup.setVisible(true);
                 itemLabel.setPlaceholder(0, container.workOrder.getDesiredItem().getDisplayName());
-                quantityLabel.setPlaceholder(0, container.workOrder.getDesiredCount());
-                progressLabel.setPlaceholder(0, container.workOrder.getProgress());
-                progressLabel.setPlaceholder(1, container.workOrder.getDesiredCount());
+                quantityLabel.setPlaceholder(0, NumberFormat.getIntegerInstance().format(container.workOrder.getDesiredCount()));
+                progressLabel.setPlaceholder(0, NumberFormat.getIntegerInstance().format(container.workOrder.getProgress()));
+                progressLabel.setPlaceholder(1, NumberFormat.getIntegerInstance().format(container.workOrder.getDesiredCount()));
                 progressBar.setProgress(((float)container.workOrder.getProgress()) / container.workOrder.getDesiredCount());
 
                 QuestLocalization questLocalization = QuestManager.INSTANCE.getLocalizationForCurrent(container.workOrder.getQuestId());
                 questLabel.setPlaceholder(0, questLocalization.title);
                 questLabel.setPlaceholder(1, container.workOrder.getLevel());
                 questLabel.setTooltip(questLocalization.description);
+
+                profitLabel.setPlaceholder(0, NumberFormat.getIntegerInstance().format(container.workOrder.getProfit()));
 
                 automaticQuestButton.setPressed(container.automaticallyGenerate);
                 lockQuestButton.setPressed(container.questLocked);
@@ -115,6 +119,7 @@ public class GuiShippingDepot
         workorderGroup.addControl(rerollQuestButton);
         workorderGroup.addControl(automaticQuestButton);
         workorderGroup.addControl(lockQuestButton);
+        workorderGroup.addControl(profitLabel);
 
         newQuestButton.addClickedListener(this);
         rerollQuestButton.addClickedListener(this);

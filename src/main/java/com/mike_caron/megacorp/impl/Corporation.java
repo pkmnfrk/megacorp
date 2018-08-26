@@ -173,7 +173,9 @@ public class Corporation
             return null;
         }
 
-        WorkOrder ret = new WorkOrder(this.owner, quest.id, item, qty, 1000, level);
+        int profit = quest.getProfit(qty);
+
+        WorkOrder ret = new WorkOrder(this.owner, quest.id, item, qty, profit, level);
 
         return ret;
     }

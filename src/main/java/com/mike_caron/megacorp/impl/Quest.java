@@ -124,4 +124,13 @@ public class Quest
 
         return (int)qty;
     }
+
+    public int getProfit(int totalQty)
+    {
+        double basePow = Math.log10(baseQty) - 1;
+        double totalPow = Math.log10(totalQty);
+
+        return (int)((totalPow - basePow) * 100);
+
+    }
 }

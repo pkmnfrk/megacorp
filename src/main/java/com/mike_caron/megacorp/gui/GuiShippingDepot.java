@@ -26,7 +26,7 @@ public class GuiShippingDepot
     private GuiGroup ownedGroup = new GuiGroup();
     private GuiGroup workorderGroup = new GuiGroup();
 
-    private GuiTranslatedLabel questLabel = new GuiTranslatedLabel(6, 20, "tile.megacorp:shipping_depot.quest", "");
+    private GuiTranslatedLabel questLabel = new GuiTranslatedLabel(6, 20, "tile.megacorp:shipping_depot.quest", "", 0);
     private GuiTranslatedLabel itemLabel = new GuiTranslatedLabel(6, 31, "tile.megacorp:shipping_depot.item", "");
     private GuiTranslatedLabel quantityLabel = new GuiTranslatedLabel(6, 42, "tile.megacorp:shipping_depot.quantity", "");
 
@@ -72,6 +72,7 @@ public class GuiShippingDepot
 
                 QuestLocalization questLocalization = QuestManager.INSTANCE.getLocalizationForCurrent(container.workOrder.getQuestId());
                 questLabel.setPlaceholder(0, questLocalization.title);
+                questLabel.setPlaceholder(1, container.workOrder.getLevel());
                 questLabel.setTooltip(questLocalization.description);
 
                 automaticQuestButton.setPressed(container.automaticallyGenerate);

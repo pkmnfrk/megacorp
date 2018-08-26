@@ -164,7 +164,8 @@ public class Corporation
     private WorkOrder createNewWorkOrder(Quest quest)
     {
         ItemStack item = quest.item.copy();
-        int qty = quest.getCountForLevel(getCompletedCountFor(quest.id));
+        int level = getCompletedCountFor(quest.id);
+        int qty = quest.getCountForLevel(level);
 
         if(qty <= 0)
         {
@@ -172,7 +173,7 @@ public class Corporation
             return null;
         }
 
-        WorkOrder ret = new WorkOrder(this.owner, quest.id, item, qty, 1000);
+        WorkOrder ret = new WorkOrder(this.owner, quest.id, item, qty, 1000, level);
 
         return ret;
     }

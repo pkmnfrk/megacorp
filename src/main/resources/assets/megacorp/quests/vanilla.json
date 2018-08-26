@@ -10,8 +10,8 @@
     {
       "id": "letthemeatcake",
       "item": "minecraft:cake",
-      "baseqty": 5,
-      "multqty": 2,
+      "baseqty": 4,
+      "multqty": 1.45,
       "rand": 0.25,
       "levelscale": 0.5
     },
@@ -28,15 +28,14 @@
       "baseqty": 8,
       "multqty": 1.5,
       "rand": 0.25,
-      "levelscale": 1.1
+      "levelscale": 0.75
     },
     {
       "id": "bonepicking",
       "item": "minecraft:bone",
       "baseqty": 12,
-      "multqty": 1.5,
-      "rand": 0.25,
-      "levelscale": 1.25
+      "multqty": 1.4,
+      "rand": 0.25
     }
   ]
 }

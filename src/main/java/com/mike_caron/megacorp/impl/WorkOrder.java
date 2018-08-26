@@ -18,9 +18,10 @@ public class WorkOrder
     private FluidStack desiredFluid;
     private int profit;
     private int progress = 0;
+    private int level = 0;
 
 
-    public WorkOrder(UUID owner, String questId, ItemStack desiredItem, int desiredCount, int profit)
+    public WorkOrder(UUID owner, String questId, ItemStack desiredItem, int desiredCount, int profit, int level)
     {
         this.owner = owner;
         this.questId = questId;
@@ -28,9 +29,10 @@ public class WorkOrder
         this.desiredItem = desiredItem;
         this.desiredCount = desiredCount;
         this.profit = profit;
+        this.level = level;
     }
 
-    public WorkOrder(UUID owner, String questId, FluidStack desiredFluid, int profit)
+    public WorkOrder(UUID owner, String questId, FluidStack desiredFluid, int profit, int level)
     {
         this.owner = owner;
         this.questId = questId;
@@ -38,6 +40,7 @@ public class WorkOrder
         this.desiredFluid = desiredFluid;
         this.desiredCount = this.desiredFluid.amount;
         this.profit = profit;
+        this.level = level;
     }
 
     private WorkOrder()
@@ -47,7 +50,7 @@ public class WorkOrder
     @Override
     public int hashCode()
     {
-        return Objects.hash(this.owner, this.questId, this.kind, this.kind == Kind.ITEM ? desiredItem : desiredFluid, this.desiredCount, this.profit, this.progress);
+        return Objects.hash(this.owner, this.questId, this.kind, this.kind == Kind.ITEM ? desiredItem : desiredFluid, this.desiredCount, this.profit, this.progress, this.level);
     }
 
     @Override
@@ -71,6 +74,7 @@ public class WorkOrder
         if(this.desiredCount != other.desiredCount) return false;
         if(this.profit != other.profit) return false;
         if(this.progress != other.progress) return false;
+        if(this.level != other.level) return false;
 
         return true;
 
@@ -95,6 +99,7 @@ public class WorkOrder
             ret.setTag("Fluid", getDesiredFluid().writeToNBT(new NBTTagCompound()));
         }
         ret.setInteger("Count", desiredCount);
+        ret.setInteger("Level", level);
 
         return ret;
     }
@@ -109,6 +114,7 @@ public class WorkOrder
         ret.profit = tag.getInteger("Profit");
         ret.progress = tag.getInteger("Progress");
         ret.desiredCount = tag.getInteger("Count");
+        ret.level = tag.getInteger("Level");
 
         if (ret.kind == Kind.ITEM)
         {
@@ -122,6 +128,7 @@ public class WorkOrder
         {
             throw new RuntimeException("Unable to discern the work order format");
         }
+
 
         return ret;
     }
@@ -189,6 +196,11 @@ public class WorkOrder
     public boolean isComplete()
     {
         return progress >= desiredCount;
+    }
+
+    public int getLevel()
+    {
+        return level;
     }
 
     public enum Kind

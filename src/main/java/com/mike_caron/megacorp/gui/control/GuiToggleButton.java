@@ -8,26 +8,22 @@ import java.util.EventListener;
 public class GuiToggleButton
     extends GuiSized
 {
-    protected State state = State.NORMAL;
+    //protected State state = State.NORMAL;
+    protected boolean isMouseOver;
+    protected boolean isMouseDown;
     protected boolean pressed;
     protected int id;
 
     @Override
     public void onMouseEnter()
     {
-        if(!pressed)
-        {
-            state = State.HOVERED;
-        }
+        isMouseOver = true;
     }
 
     @Override
     public void onMouseExit()
     {
-        if(!pressed)
-        {
-            state = State.NORMAL;
-        }
+        isMouseOver = false;
     }
 
     public GuiToggleButton(int id, int x, int y, int width, int height)
@@ -44,32 +40,17 @@ public class GuiToggleButton
 
         if(GuiUtil.inBounds(mouseX, mouseY, this))
         {
-            if(pressed)
-            {
-                pressed = false;
-                this.state = State.HOVERED;
-            }
-            else
-            {
-                pressed = true;
-                this.state = State.PRESSED;
-            }
+            pressed = !pressed;
 
             // do action
-            // this.triggerClicked();
+            this.triggerClicked();
         }
-        else
-        {
-            this.state = pressed ? State.PRESSED : State.NORMAL;
-        }
+
+        isMouseDown = false;
     }
 
     public void setPressed(boolean pressed)
     {
-        if(this.state != State.PRESSED || !pressed)
-        {
-            this.state = pressed ? State.PRESSED : State.NORMAL;
-        }
         this.pressed = pressed;
     }
 
@@ -83,7 +64,27 @@ public class GuiToggleButton
     {
         if(button != 0) return;
 
-        this.state = State.PRESSED;
+        isMouseDown = true;
+    }
+
+    private State calcState()
+    {
+        if(isMouseDown)
+        {
+            return State.PRESSED;
+        }
+        else if(isMouseOver && !pressed)
+        {
+            return State.HOVERED;
+        }
+        else if(pressed)
+        {
+            return State.PRESSED;
+        }
+        else
+        {
+            return State.NORMAL;
+        }
     }
 
     @Override
@@ -93,6 +94,8 @@ public class GuiToggleButton
             return;
 
         int sx = 0;
+        State state = calcState();
+
         switch(state)
         {
             case NORMAL:

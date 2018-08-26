@@ -12,6 +12,24 @@ public class GuiToggleButton
     protected boolean pressed;
     protected int id;
 
+    @Override
+    public void onMouseEnter()
+    {
+        if(!pressed)
+        {
+            state = State.HOVERED;
+        }
+    }
+
+    @Override
+    public void onMouseExit()
+    {
+        if(!pressed)
+        {
+            state = State.NORMAL;
+        }
+    }
+
     public GuiToggleButton(int id, int x, int y, int width, int height)
     {
         super(x, y, width, height);

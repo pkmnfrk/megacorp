@@ -74,7 +74,8 @@ public class GuiProxy implements IGuiHandler
         else if(te instanceof TileEntityUplink)
         {
             TileEntityUplink teU = (TileEntityUplink)te;
-            return new GuiUplink(new ContainerUplink(player.inventory, teU, player));
+            //return new GuiUplink(new ContainerUplink(player.inventory, teU, player));
+            return new GuiTest(new ContainerUplink(player.inventory, teU, player));
         }
         else if(te instanceof TileEntitySBS)
         {

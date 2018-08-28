@@ -7,6 +7,8 @@ import com.mike_caron.megacorp.gui.control.GuiList;
 import net.minecraft.util.ResourceLocation;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GuiTest
     extends GuiContainerBase
@@ -21,6 +23,8 @@ public class GuiTest
 
     private boolean goingLeft = false;
     private boolean goingUp = false;
+
+    private List<TestListItem> items = new ArrayList<>();
 
     public GuiTest(ContainerUplink container)
     {
@@ -51,23 +55,22 @@ public class GuiTest
         drawInsertCardBackground();
     }
 
-
     @Override
     public int getNumItems()
     {
-        return 5;
+        return items.size();
     }
 
     @Override
     public int getItemHeight()
     {
-        return 20;
+        return 15;
     }
 
     @Override
     public GuiList.ListItem getItem(int i)
     {
-        return new TestListItem(Integer.toString(i));
+        return items.get(i);
     }
 
     class TestListItem
@@ -87,7 +90,7 @@ public class GuiTest
             GuiUtil.bindTexture(GuiUtil.MISC_RESOURCES);
             GuiUtil.draw3x3Stretched(0, 0, width, height, 16, 16);
 
-            fontRenderer.drawString(string, 1, 1, Color.WHITE.getRGB());
+            fontRenderer.drawString(string, 1, height / 2 - 5, Color.WHITE.getRGB());
         }
     }
 }

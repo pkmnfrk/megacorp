@@ -98,6 +98,8 @@ public abstract class GuiControl
     public void onMouseOver(int mouseX, int mouseY) {}
     public void onMouseDown(int mouseX, int mouseY, int button) {}
     public void onMouseUp(int mouseX, int mouseY, int button) {}
+    public void onMouseMove(int mouseX, int mouseY) {}
+    public void onMouseWheel(int mouseX, int mouseY, int deltaWheel) {}
 
     public void update() { }
     public void preDraw() {}

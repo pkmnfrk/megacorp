@@ -12,8 +12,10 @@ import org.lwjgl.input.Mouse;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Stream;
 
 public abstract class GuiContainerBase
         extends GuiContainer
@@ -23,7 +25,7 @@ public abstract class GuiContainerBase
     private GuiLabel titleLabel;
 
     private GuiControl mouseOverControl = null;
-    private boolean leftDown = false, rightDown = false;
+    private boolean leftDown = false, rightDown = false, middleDown = false;
     private List<List<GuiControl>> waitingForButton = new ArrayList<List<GuiControl>>();
 
     public GuiContainerBase(ContainerBase inventorySlotsIn)
@@ -39,6 +41,7 @@ public abstract class GuiContainerBase
             }
         });
 
+        waitingForButton.add(new ArrayList<>());
         waitingForButton.add(new ArrayList<>());
         waitingForButton.add(new ArrayList<>());
     }
@@ -92,11 +95,21 @@ public abstract class GuiContainerBase
         if(mouseOverControl != null)
         {
             mouseOverControl.onMouseOver(mouseX, mouseY);
+
+            int dWheel = Mouse.getEventDWheel() / 120;
+            if(dWheel != 0)
+            {
+                mouseOverControl.onMouseWheel(mouseX, mouseY, dWheel);
+            }
         }
+
+        Stream<GuiControl> allWaiting = waitingForButton.stream().map(Collection::stream).reduce(Stream.empty(), Stream::concat).distinct();
+
+        allWaiting.forEach(c -> c.onMouseMove(mouseX, mouseY));
 
 
         int button = Mouse.getEventButton();
-        if(button >= 0 && button <= 1)
+        if(button >= 0 && button <= 2)
         {
             boolean newState = Mouse.getEventButtonState();
 
@@ -133,12 +146,15 @@ public abstract class GuiContainerBase
                 }
             }
         }
+
+
     }
 
     private boolean getStateForButton(int button)
     {
         if(button == 0) return leftDown;
         if(button == 1) return rightDown;
+        if(button == 2) return middleDown;
         return false;
     }
 
@@ -146,6 +162,7 @@ public abstract class GuiContainerBase
     {
         if(button == 0) leftDown = state;
         if(button == 1) rightDown = state;
+        if(button == 2) middleDown = state;
     }
 
     @Override

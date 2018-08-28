@@ -84,22 +84,29 @@ public class GuiList
     }
 
     @Override
-    public void onMouseOver(int mouseX, int mouseY)
+    public void onMouseWheel(int mouseX, int mouseY, int deltaWheel)
+    {
+        setNubY(nubY - deltaWheel);
+    }
+
+    @Override
+    public void onMouseMove(int mouseX, int mouseY)
     {
         if(draggingNub)
         {
             int trackHeight = this.height - 26;
             int dy = mouseY - draggingStartMouse;
 
-            nubY = Math.min(trackHeight, Math.max(0, draggingStartNub + dy));
-            int representativeValue = maxScrollHeight() * nubY / trackHeight;
+            //int newNubY = Math.min(trackHeight, Math.max(0, draggingStartNub + dy));
+            //int representativeValue = maxScrollHeight() * nubY / trackHeight;
 
+            setNubY(draggingStartNub + dy);
 
-            if(representativeValue != scrollY)
-            {
-                scrollY = representativeValue;
-                //draggingStartMouse = mouseY;
-            }
+            //if(representativeValue != scrollY)
+            //{
+            //    scrollY = representativeValue;
+            //    //draggingStartMouse = mouseY;
+            //}
         }
     }
 
@@ -116,17 +123,19 @@ public class GuiList
         }
         else if(GuiUtil.inBounds(mouseX - this.x, mouseY - this.y, sX, 1, 8, 8))
         {
-
-            nubY = Math.max(0, nubY - 1);
-            int trackHeight = this.height - 26;
-            scrollY = maxScrollHeight() * nubY / trackHeight;
+            setNubY(nubY - 1);
         }
         else if(GuiUtil.inBounds(mouseX - this.x, mouseY - this.y, sX, this.height - 9, 8, 8))
         {
-            int trackHeight = this.height - 26;
-            nubY = Math.min(trackHeight, nubY + 1);
-            scrollY = maxScrollHeight() * nubY / trackHeight;
+            setNubY(nubY + 1);
         }
+    }
+
+    public void setNubY(int newNubY)
+    {
+        int trackHeight = this.height - 26;
+        this.nubY = Math.max(0, Math.min(trackHeight, newNubY));
+        scrollY = maxScrollHeight() * this.nubY / trackHeight;
     }
 
     public interface Producer

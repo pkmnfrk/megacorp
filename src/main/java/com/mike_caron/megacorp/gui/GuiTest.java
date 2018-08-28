@@ -55,7 +55,7 @@ public class GuiTest
     @Override
     public int getNumItems()
     {
-        return 3;
+        return 5;
     }
 
     @Override

@@ -18,12 +18,7 @@ public abstract class GuiClippedSized
     {
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
 
-        int realX = GuiUtil.getRealX(parent.translateX(this.x));
-        int realY = GuiUtil.getRealY(parent.translateY(this.y) + this.height);
-        int realWidth = GuiUtil.getRealWidth(this.width);
-        int realHeight = GuiUtil.getRealHeight(this.height);
-
-        GL11.glScissor(realX, realY, realWidth, realHeight);
+        setClippingPlane(parent.translateX(this.x), parent.translateY(this.y) + this.height, this.width, this.height);
 
         GL11.glPushMatrix();
         GL11.glTranslatef(x - this.scrollX, y - this.scrollY, 0);
@@ -34,6 +29,16 @@ public abstract class GuiClippedSized
     {
         GL11.glPopMatrix();
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
+    }
+
+    protected void setClippingPlane(int x, int y, int width, int height)
+    {
+        int realX = GuiUtil.getRealX(x);
+        int realY = GuiUtil.getRealY(y);
+        int realWidth = GuiUtil.getRealWidth(width);
+        int realHeight = GuiUtil.getRealHeight(height);
+
+        GL11.glScissor(realX, realY, realWidth, realHeight);
     }
 
     public int getScrollX()

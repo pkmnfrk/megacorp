@@ -3,7 +3,7 @@ package com.mike_caron.megacorp.gui.control;
 import com.mike_caron.megacorp.gui.GuiUtil;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class GuiList
     extends GuiClippedSized
@@ -94,19 +94,9 @@ public class GuiList
     {
         if(draggingNub)
         {
-            int trackHeight = this.height - 26;
             int dy = mouseY - draggingStartMouse;
 
-            //int newNubY = Math.min(trackHeight, Math.max(0, draggingStartNub + dy));
-            //int representativeValue = maxScrollHeight() * nubY / trackHeight;
-
             setNubY(draggingStartNub + dy);
-
-            //if(representativeValue != scrollY)
-            //{
-            //    scrollY = representativeValue;
-            //    //draggingStartMouse = mouseY;
-            //}
         }
     }
 
@@ -128,6 +118,10 @@ public class GuiList
         else if(GuiUtil.inBounds(mouseX - this.x, mouseY - this.y, sX, this.height - 9, 8, 8))
         {
             setNubY(nubY + 1);
+        }
+        else if(GuiUtil.inBounds(mouseX - this.x, mouseY - this.y, sX, 9, 8, this.height - 18))
+        {
+            setNubY(mouseY - this.y - 9 - 4);
         }
     }
 

@@ -19,7 +19,7 @@ public class GuiTest
 
     private static final ResourceLocation background = new ResourceLocation(MegaCorpMod.modId, "textures/gui/uplink.png");
 
-    private GuiList list = new GuiList(10, 20, WIDTH - 20, 60, this);
+    private GuiList list = new GuiList(8, 16, WIDTH - 16, 60, this);
 
     private boolean goingLeft = false;
     private boolean goingUp = false;
@@ -31,6 +31,11 @@ public class GuiTest
         super(container);
 
         initControls();
+
+        for(int i = 0; i < 20; i++)
+        {
+            items.add(new TestListItem("Item " + i));
+        }
     }
 
     @Override

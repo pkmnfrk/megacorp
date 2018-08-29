@@ -27,6 +27,7 @@ public class GuiButton
     @Override
     public void onMouseUp(int mouseX, int mouseY, int button)
     {
+        if(!enabled) return;
         if(button != 0) return;
 
         if(GuiUtil.inBounds(mouseX, mouseY, this))
@@ -45,6 +46,7 @@ public class GuiButton
     @Override
     public void onMouseDown(int mouseX, int mouseY, int button)
     {
+        if(!enabled) return;
         if(button != 0) return;
 
         this.state = State.PRESSED;
@@ -55,6 +57,8 @@ public class GuiButton
     {
         if(!visible)
             return;
+
+        Color fore = Color.WHITE;
 
         int sx = 0;
         switch(state)
@@ -70,6 +74,12 @@ public class GuiButton
                 break;
         }
 
+        if(!enabled)
+        {
+            state = State.NORMAL;
+            fore = Color.LIGHT_GRAY;
+        }
+
         GuiUtil.bindTexture(GuiUtil.MISC_RESOURCES);
         GlStateManager.color(1, 1, 1, 1);
         GuiUtil.draw3x3(this.x, this.y, this.width, this.height, sx, 0);
@@ -79,13 +89,16 @@ public class GuiButton
             int w = this.parent.getFontRenderer().getStringWidth(label);
 
             this.parent.getFontRenderer().drawString(label, this.x + this.width / 2 - w / 2 + 1, this.y + this.height / 2 - 5 + 1, Color.black.getRGB());
-            this.parent.getFontRenderer().drawString(label, this.x + this.width / 2 - w / 2, this.y + this.height / 2 - 5, Color.white.getRGB());
+            this.parent.getFontRenderer().drawString(label, this.x + this.width / 2 - w / 2, this.y + this.height / 2 - 5, fore.getRGB());
         }
     }
 
     @Override
     public void onMouseEnter()
     {
+        if(!this.enabled)
+            return;
+
         if(this.state == State.NORMAL)
         {
             this.state = State.HOVERED;
@@ -123,6 +136,9 @@ public class GuiButton
 
     private void triggerClicked()
     {
+        if(!this.enabled)
+            return;
+
         ClickedEvent evt = new ClickedEvent(this,id);
 
         for(EventListener listener : listeners)

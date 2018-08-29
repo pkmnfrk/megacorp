@@ -64,6 +64,17 @@ public class GuiShippingDepot
     }
 
     @Override
+    public void updateScreen()
+    {
+        super.updateScreen();
+
+        if(noQuestGroup.isVisible())
+        {
+            newQuestButton.setEnabled(selectedQuest != null);
+        }
+    }
+
+    @Override
     protected void onContainerRefresh()
     {
         //update fluid

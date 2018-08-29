@@ -6,6 +6,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.item.ItemStack;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
@@ -380,5 +381,18 @@ public abstract class GuiContainerBase
         }
 
         return true;
+    }
+
+    protected void drawItemStack(ItemStack stack, int x, int y, String altText)
+    {
+        GlStateManager.translate(0.0F, 0.0F, 32.0F);
+        this.zLevel = 200.0F;
+        this.itemRender.zLevel = 200.0F;
+        net.minecraft.client.gui.FontRenderer font = stack.getItem().getFontRenderer(stack);
+        if (font == null) font = fontRenderer;
+        this.itemRender.renderItemAndEffectIntoGUI(stack, x, y);
+        //this.itemRender.renderItemOverlayIntoGUI(font, stack, x, y, altText);
+        this.zLevel = 0.0F;
+        this.itemRender.zLevel = 0.0F;
     }
 }

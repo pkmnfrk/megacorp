@@ -174,4 +174,14 @@ public class QuestManager
             return quests.get(questId);
         return null;
     }
+
+    public int getNumQuests()
+    {
+        return quests.size();
+    }
+
+    public List<Quest> getQuests()
+    {
+        return new ArrayList<>(quests.values());
+    }
 }

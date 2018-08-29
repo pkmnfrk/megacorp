@@ -145,7 +145,7 @@ public class TileEntityShippingDepot
 
             if(owner != null)
             {
-                rollNewWorkOrder();
+                //rollNewWorkOrder();
             }
         }
         else if(button == ContainerShippingDepot.GUI_REROLL_QUEST)

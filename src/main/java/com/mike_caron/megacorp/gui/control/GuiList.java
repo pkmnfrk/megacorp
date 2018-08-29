@@ -3,7 +3,9 @@ package com.mike_caron.megacorp.gui.control;
 import com.mike_caron.megacorp.gui.GuiUtil;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nullable;
 import java.awt.Color;
+import java.util.List;
 
 public class GuiList
     extends GuiClippedSized
@@ -149,7 +151,7 @@ public class GuiList
             {
                 int over = getItemOver(mouseX - this.x, mouseY - this.y - 1, this.producer.getItemHeight());
 
-                if(over != -1)
+                if(over != -1 && over < this.producer.getNumItems())
                 {
                     this.producer.onClick(over);
                 }
@@ -174,6 +176,29 @@ public class GuiList
         return -1;
     }
 
+    @Nullable
+    @Override
+    public List<String> getTooltip(int mouseX, int mouseY)
+    {
+        if(this.producer != null)
+        {
+            int over = getItemOver(mouseX - this.x, mouseY - this.y - 1, this.producer.getItemHeight());
+
+            if(over != -1 && over < this.producer.getNumItems())
+            {
+                int itemHeight = this.producer.getItemHeight();
+
+                int adjustedY = mouseY + scrollY - this.y - 1;
+
+                int realY = adjustedY - (itemHeight * (adjustedY / itemHeight));
+
+                return this.producer.getItem(over).getTooltip(mouseX - this.x - 1, realY, this.width - 10);
+            }
+        }
+
+        return null;
+    }
+
     public interface Producer
     {
         int getNumItems();
@@ -186,6 +211,7 @@ public class GuiList
     {
         //void draw(int y);
         void draw(int width, int height, ListItemState state);
+        default List<String> getTooltip(int mouseX, int mouseY, int width) { return null; };
     }
 
     public enum ListItemState

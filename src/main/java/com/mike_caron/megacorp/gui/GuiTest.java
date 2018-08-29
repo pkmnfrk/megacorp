@@ -1,5 +1,6 @@
 package com.mike_caron.megacorp.gui;
 
+import com.google.common.base.Preconditions;
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.block.uplink.ContainerUplink;
 import com.mike_caron.megacorp.gui.control.GuiContainerBase;
@@ -25,6 +26,7 @@ public class GuiTest
     private boolean goingUp = false;
 
     private List<TestListItem> items = new ArrayList<>();
+    private TestListItem selectedItem = null;
 
     public GuiTest(ContainerUplink container)
     {
@@ -78,6 +80,14 @@ public class GuiTest
         return items.get(i);
     }
 
+    @Override
+    public void onClick(int i)
+    {
+        Preconditions.checkArgument( i >= 0 && i < items.size());
+
+        selectedItem = items.get(i);
+    }
+
     class TestListItem
         implements GuiList.ListItem
     {
@@ -89,11 +99,26 @@ public class GuiTest
         }
 
         @Override
-        public void draw(int width, int height)
+        public void draw(int width, int height, GuiList.ListItemState state)
         {
-            GuiUtil.setGLColor(Color.RED);
+            if(selectedItem == this)
+            {
+                GuiUtil.setGLColor(Color.YELLOW);
+            }
+            else
+            {
+                GuiUtil.setGLColor(Color.RED);
+            }
             GuiUtil.bindTexture(GuiUtil.MISC_RESOURCES);
-            GuiUtil.draw3x3Stretched(0, 0, width, height, 16, 16);
+
+            int sy = 16;
+
+            if(state.isOver())
+            {
+                sy = 32;
+            }
+
+            GuiUtil.draw3x3Stretched(0, 0, width, height, 16, sy);
 
             fontRenderer.drawString(string, 1, height / 2 - 5, Color.WHITE.getRGB());
         }

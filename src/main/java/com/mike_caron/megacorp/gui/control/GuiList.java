@@ -14,6 +14,7 @@ public class GuiList
     boolean draggingNub = false;
     int draggingStartMouse = 0;
     int draggingStartNub = 0;
+    int mouseX = -1, mouseY = -1;
 
     public GuiList(int x, int y, int width, int height, Producer producer)
     {
@@ -47,6 +48,9 @@ public class GuiList
             int numItems = maxVisibleItems();
 
             int numSkipped = scrollY / itemHeight;
+            int over = -1;
+
+            over = getItemOver(mouseX,mouseY - 1, itemHeight);
 
             GL11.glPushMatrix();
             GL11.glTranslatef(1, 1 + numSkipped * itemHeight, 0);
@@ -54,9 +58,11 @@ public class GuiList
             {
                 ListItem item = this.producer.getItem(i + numSkipped);
 
-                item.draw(this.width - 2 - 8, itemHeight);
-                GL11.glTranslatef(0, itemHeight, 0);
+                item.draw(this.width - 2 - 8, itemHeight, ListItemState.forState(over == i + numSkipped));
 
+                //if(i == 1) GuiUtil.drawDebugFlatRectangle(1, i * itemHeight - scrollX, this.width - 2 - 8, itemHeight);
+
+                GL11.glTranslatef(0, itemHeight, 0);
             }
             GL11.glPopMatrix();
 
@@ -101,6 +107,20 @@ public class GuiList
     }
 
     @Override
+    public void onMouseExit()
+    {
+        this.mouseX = -1;
+        this.mouseY = -1;
+    }
+
+    @Override
+    public void onMouseOver(int mouseX, int mouseY)
+    {
+        this.mouseX = mouseX - this.x;
+        this.mouseY = mouseY - this.y;
+    }
+
+    @Override
     public void onMouseDown(int mouseX, int mouseY, int button)
     {
         int sX = this.width - 9;
@@ -123,6 +143,18 @@ public class GuiList
         {
             setNubY(mouseY - this.y - 9 - 4);
         }
+        else if(GuiUtil.inBounds(mouseX - this.x, mouseY - this.y, 1, 1, this.width - 8 - 1 - 1, this.height - 2))
+        {
+            if(this.producer != null)
+            {
+                int over = getItemOver(mouseX - this.x, mouseY - this.y - 1, this.producer.getItemHeight());
+
+                if(over != -1)
+                {
+                    this.producer.onClick(over);
+                }
+            }
+        }
     }
 
     public void setNubY(int newNubY)
@@ -132,16 +164,57 @@ public class GuiList
         scrollY = maxScrollHeight() * this.nubY / trackHeight;
     }
 
+    private int getItemOver(int mouseX, int mouseY, int itemHeight)
+    {
+        if(mouseX >= 1 && mouseX < this.width - 9)
+        {
+            return (mouseY + scrollY) / itemHeight;
+        }
+
+        return -1;
+    }
+
     public interface Producer
     {
         int getNumItems();
         int getItemHeight();
         ListItem getItem(int i);
+        void onClick(int i);
     }
 
     public interface ListItem
     {
         //void draw(int y);
-        void draw(int width, int height);
+        void draw(int width, int height, ListItemState state);
+    }
+
+    public enum ListItemState
+    {
+        NORMAL(false),
+        MOUSE_OVER(true)
+        ;
+
+        boolean isOver;
+        ListItemState(boolean isOver)
+        {
+            this.isOver = isOver;
+        }
+
+        public boolean isOver()
+        {
+            return this.isOver;
+        }
+
+        public static ListItemState forState(boolean isOver)
+        {
+            if(isOver)
+            {
+                return ListItemState.MOUSE_OVER;
+            }
+            else
+            {
+                return ListItemState.NORMAL;
+            }
+        }
     }
 }

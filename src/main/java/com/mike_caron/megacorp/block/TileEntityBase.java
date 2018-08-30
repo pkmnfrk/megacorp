@@ -19,7 +19,7 @@ public class TileEntityBase extends TileEntity
         return !isInvalid() && entityPlayer.getDistanceSq(pos.add(0.5D, 0.5D, 0.5D)) <= 64D; //8 blocks
     }
 
-    public void handleGuiButton(EntityPlayerMP player, int button) {}
+    public void handleGuiButton(EntityPlayerMP player, int button,  String extraData) {}
 
     public void handleGuiString(EntityPlayerMP player, int element, String string) {}
 

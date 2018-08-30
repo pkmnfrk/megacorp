@@ -19,7 +19,7 @@ public class TileEntityLiquidShippingDepot
     }
 
     @Override
-    public void handleGuiButton(EntityPlayerMP player, int button)
+    public void handleGuiButton(EntityPlayerMP player, int button, String extraData)
     {
         if(button == 1)
         {

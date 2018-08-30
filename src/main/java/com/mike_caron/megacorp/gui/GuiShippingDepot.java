@@ -39,9 +39,8 @@ public class GuiShippingDepot
     private GuiProgressBar progressBar = new GuiProgressBar(8, 67, 159, 12);
     private GuiTranslatedLabel progressLabel = new GuiTranslatedLabel(80, 69, "tile.megacorp:shipping_depot.progress", 0, 0);
 
-    private GuiImageToggleButton lockQuestButton = new GuiImageToggleButton(ContainerShippingDepot.GUI_LOCK_QUEST,157, 18, 14, 14, background, 6, 8, 181, 37);
-    private GuiButton rerollQuestButton = new GuiImageButton(ContainerShippingDepot.GUI_REROLL_QUEST, 157, 34, 14, 14, background, 7, 10, 180, 19);
-    private GuiImageToggleButton automaticQuestButton = new GuiImageToggleButton(ContainerShippingDepot.GUI_AUTOMATIC_QUEST,157, 50, 14, 14, background, 8, 8, 180, 4);
+    private GuiButton rerollQuestButton = new GuiImageButton(ContainerShippingDepot.GUI_REROLL_QUEST, 152, 21, 16, 16, background, 8, 8, 180, 52);
+    private GuiImageToggleButton automaticQuestButton = new GuiImageToggleButton(ContainerShippingDepot.GUI_AUTOMATIC_QUEST,152, 45, 16, 16, background, 7, 10, 180, 19);
 
     private GuiList questList = new GuiList(6, 19, 162, 61, this);
     private GuiButton newQuestButton = new GuiButton(ContainerShippingDepot.GUI_NEW_QUEST, 96, 3, 72, 14, GuiUtil.translate("tile.megacorp:shipping_depot.new_quest"));
@@ -102,7 +101,6 @@ public class GuiShippingDepot
                 profitLabel.setPlaceholder(0, NumberFormat.getIntegerInstance().format(container.workOrder.getProfit()));
 
                 automaticQuestButton.setPressed(container.automaticallyGenerate);
-                lockQuestButton.setPressed(container.questLocked);
 
             }
             else
@@ -143,17 +141,14 @@ public class GuiShippingDepot
         workorderGroup.addControl(questLabel);
         workorderGroup.addControl(rerollQuestButton);
         workorderGroup.addControl(automaticQuestButton);
-        workorderGroup.addControl(lockQuestButton);
         workorderGroup.addControl(profitLabel);
 
         newQuestButton.addClickedListener(this);
         rerollQuestButton.addClickedListener(this);
-        lockQuestButton.addListener(this);
         automaticQuestButton.addListener(this);
 
         rerollQuestButton.setTooltip(new TextComponentTranslation("tile.megacorp:shipping_depot.reroll").getUnformattedText());
         automaticQuestButton.setTooltip(new TextComponentTranslation("tile.megacorp:shipping_depot.automate").getUnformattedText());
-        lockQuestButton.setTooltip(new TextComponentTranslation("tile.megacorp:shipping_depot.lock").getUnformattedText());
     }
 
     @Override
@@ -180,8 +175,19 @@ public class GuiShippingDepot
     @Override
     public void clicked(GuiButton.ClickedEvent event)
     {
-        CtoSMessage packet = CtoSMessage.forGuiButton(container.getPos(), event.id);
-        MegaCorpMod.networkWrapper.sendToServer(packet);
+        if(event.id == ContainerShippingDepot.GUI_NEW_QUEST)
+        {
+            if (selectedQuest != null)
+            {
+                CtoSMessage packet = CtoSMessage.forGuiButton(container.getPos(), event.id, selectedQuest.id);
+                MegaCorpMod.networkWrapper.sendToServer(packet);
+            }
+        }
+        else
+        {
+            CtoSMessage packet = CtoSMessage.forGuiButton(container.getPos(), event.id);
+            MegaCorpMod.networkWrapper.sendToServer(packet);
+        }
     }
 
     @Override

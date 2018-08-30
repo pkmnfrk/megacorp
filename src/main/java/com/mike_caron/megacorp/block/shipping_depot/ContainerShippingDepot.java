@@ -13,7 +13,6 @@ public class ContainerShippingDepot
     public static final int GUI_NEW_QUEST = 1;
     public static final int GUI_REROLL_QUEST = 2;
     public static final int GUI_AUTOMATIC_QUEST = 3;
-    public static final int GUI_LOCK_QUEST = 4;
 
     public WorkOrder workOrder;
     private int workOrderHash = 0;
@@ -86,12 +85,6 @@ public class ContainerShippingDepot
                 this.workOrderHash = workOrder.hashCode();
                 changed = true;
             }
-        }
-
-        if(questLocked != te.isQuestLocked())
-        {
-            questLocked = te.isQuestLocked();
-            changed = true;
         }
 
         if(automaticallyGenerate != te.getAutomaticallyGenerate())

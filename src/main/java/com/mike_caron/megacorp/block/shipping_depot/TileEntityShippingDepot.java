@@ -1,6 +1,5 @@
 package com.mike_caron.megacorp.block.shipping_depot;
 
-import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.api.ICorporation;
 import com.mike_caron.megacorp.block.TileEntityOwnedBase;
 import com.mike_caron.megacorp.impl.Corporation;
@@ -24,7 +23,6 @@ public class TileEntityShippingDepot
 {
 
     private WorkOrder workOrder;
-    private String questLocked;
     private boolean automaticallyGenerate;
 
     public final TweakedItemStackHandler inventory = new TweakedItemStackHandler(1)
@@ -102,11 +100,6 @@ public class TileEntityShippingDepot
             workOrder = WorkOrder.fromNBT(compound.getCompoundTag("WorkOrder"));
         }
 
-        if(compound.hasKey("QuestLocked"))
-        {
-            questLocked = compound.getString("QuestLocked");
-        }
-
         if(compound.hasKey("AutoGen"))
         {
             automaticallyGenerate = true;
@@ -123,10 +116,6 @@ public class TileEntityShippingDepot
         {
             ret.setTag("WorkOrder", workOrder.serializeNBT());
         }
-        if(questLocked != null)
-        {
-            ret.setString("QuestLocked", questLocked);
-        }
         if(automaticallyGenerate)
         {
             ret.setBoolean("AutoGen", true);
@@ -136,7 +125,7 @@ public class TileEntityShippingDepot
     }
 
     @Override
-    public void handleGuiButton(EntityPlayerMP player, int button)
+    public void handleGuiButton(EntityPlayerMP player, int button, String extraData)
     {
         if(!canInteractWith(player)) return;
 
@@ -145,39 +134,23 @@ public class TileEntityShippingDepot
 
             if(owner != null)
             {
-                //rollNewWorkOrder();
+                rollNewWorkOrder(extraData);
             }
         }
         else if(button == ContainerShippingDepot.GUI_REROLL_QUEST)
         {
             if(owner != null && workOrder != null)
             {
-                Corporation corp = (Corporation)CorporationManager.get(world).getCorporationForOwner(owner);
-
-                rollNewWorkOrder();
-
-                MegaCorpMod.logger.warn("Generated quest: " + getWorkOrder().getDesiredItem());
+                workOrder = null;
             }
         }
     }
 
-    private void rollNewWorkOrder()
+    private void rollNewWorkOrder(String id)
     {
         Corporation corp = (Corporation)CorporationManager.get(world).getCorporationForOwner(owner);
-        //workOrder = new WorkOrder(this.owner, "test", new ItemStack(ModItems.corporateCard, 3), 1000);
-        if(questLocked != null)
-        {
-            workOrder = corp.createNewWorkOrder(questLocked);
-            if(workOrder == null)
-            {
-                questLocked = null;
-                workOrder = corp.createNewWorkOrder();
-            }
-        }
-        else
-        {
-            workOrder = corp.createNewWorkOrder();
-        }
+
+        workOrder = corp.createNewWorkOrder(id);
     }
 
     @Override
@@ -188,20 +161,6 @@ public class TileEntityShippingDepot
         if(element == ContainerShippingDepot.GUI_AUTOMATIC_QUEST)
         {
             automaticallyGenerate = newState;
-        }
-        else if(element == ContainerShippingDepot.GUI_LOCK_QUEST)
-        {
-            if(workOrder != null)
-            {
-                if(newState)
-                {
-                    questLocked = workOrder.getQuestId();
-                }
-                else
-                {
-                    questLocked = null;
-                }
-            }
         }
     }
 
@@ -226,11 +185,9 @@ public class TileEntityShippingDepot
                 ICorporation corp = CorporationManager.get(world).getCorporationForOwner(owner);
                 if (corp.completeWorkOrder(workOrder))
                 {
-                    workOrder = null;
-
                     if(automaticallyGenerate)
                     {
-                        rollNewWorkOrder();
+                        rollNewWorkOrder(workOrder.getQuestId());
                     }
                 }
             }
@@ -248,11 +205,6 @@ public class TileEntityShippingDepot
     public WorkOrder getWorkOrder()
     {
         return workOrder;
-    }
-
-    public boolean isQuestLocked()
-    {
-        return questLocked != null;
     }
 
     public boolean getAutomaticallyGenerate()

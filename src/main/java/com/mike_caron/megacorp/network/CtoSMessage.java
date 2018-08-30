@@ -22,19 +22,26 @@ public class CtoSMessage implements IMessage
     private int guiElement;
     private String theString;
     private boolean theBoolean;
+    private String extraData;
 
     // add message-specific fields here
 
     public CtoSMessage() {}
 
-    public static CtoSMessage forGuiButton(BlockPos pos, int guiElement)
+    public static CtoSMessage forGuiButton(BlockPos pos, int guiElement, String extraData)
     {
         CtoSMessage ret = new CtoSMessage();
         ret.kind = KindEnum.GuiButton;
         //ret.dim = dim;
         ret.pos = pos;
         ret.guiElement = guiElement;
+        ret.extraData = extraData;
         return ret;
+    }
+
+    public static CtoSMessage forGuiButton(BlockPos pos, int guiElement)
+    {
+        return forGuiButton(pos, guiElement, null);
     }
 
     public static CtoSMessage forGuiString(BlockPos pos, int guiElement, String string)
@@ -70,6 +77,7 @@ public class CtoSMessage implements IMessage
         {
             case GuiButton:
                 guiElement = buf.readInt();
+                extraData = readString(buf);
                 break;
             case GuiString:
                 guiElement = buf.readInt();
@@ -96,6 +104,7 @@ public class CtoSMessage implements IMessage
         {
             case GuiButton:
                 buf.writeInt(guiElement);
+                writeString(buf, extraData);
                 break;
             case GuiString:
                 buf.writeInt(guiElement);
@@ -120,6 +129,8 @@ public class CtoSMessage implements IMessage
 
     public boolean getBoolean() { return theBoolean; }
 
+    public String getExtraData() { return extraData; }
+
     public enum KindEnum {
         Unknown,
         GuiButton,
@@ -134,6 +145,11 @@ public class CtoSMessage implements IMessage
 
     private static void writeString(ByteBuf byteBuf, String string)
     {
+        if(string == null)
+        {
+            string = "";
+        }
+
         ByteBufUtils.writeUTF8String(byteBuf, string);
     }
 
@@ -162,7 +178,7 @@ public class CtoSMessage implements IMessage
                                 case GuiButton:
                                 {
                                     TileEntityOwnedBase teb = (TileEntityOwnedBase) te;
-                                    teb.handleGuiButton(player, message.getGuiElement());
+                                    teb.handleGuiButton(player, message.getGuiElement(), message.getExtraData());
                                 }
                                 break;
                                 case GuiString:

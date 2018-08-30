@@ -1,0 +1,23 @@
+[
+  {
+    "id": "lower_quest_requirements",
+    "ranks": 5,
+    "rankValue": 5,
+    "firstCost": 1000,
+    "costScale": "mult",
+    "costScaleFactor": 2
+  },
+  {
+    "id": "extra_profits",
+    "ranks": 5,
+    "rankValue": 5,
+    "firstCost": 1500,
+    "costScale": "mult",
+    "costScaleFactor": 2
+  },
+  {
+    "id": "faster_generation",
+    "class": "com.mike_caron.megacorp.reward.FasterGeneration$Factory"
+  }
+]
+

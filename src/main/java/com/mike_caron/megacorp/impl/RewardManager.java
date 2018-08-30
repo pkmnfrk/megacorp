@@ -5,6 +5,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mike_caron.megacorp.MegaCorpMod;
+import com.mike_caron.megacorp.api.IReward;
+import com.mike_caron.megacorp.api.IRewardFactory;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.common.Loader;
@@ -15,33 +17,35 @@ import org.apache.commons.io.FilenameUtils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class QuestManager
+public class RewardManager
 {
-    public static final QuestManager INSTANCE = new QuestManager();
+    public static final RewardManager INSTANCE = new RewardManager();
 
-    private final Map<String, Quest> quests = new HashMap<>();
+    private Map<String, IReward> rewards = new HashMap<>();
     private final Map<String, Map<String, QuestLocalization>> localizations = new HashMap<>();
 
-    private QuestManager() {}
+    private RewardManager() {}
 
-    public void loadQuests()
+    public void loadRewards()
     {
-        quests.clear();
+        rewards.clear();
 
         JsonParser parser = new JsonParser();
 
-        CraftingHelper.findFiles(Loader.instance().getReversedModObjectList().get(MegaCorpMod.instance), "assets/" + MegaCorpMod.modId + "/quests", null, (root, url) ->
+        CraftingHelper.findFiles(Loader.instance().getReversedModObjectList().get(MegaCorpMod.instance), "assets/" + MegaCorpMod.modId + "/rewards", null, (root, url) ->
         {
             String extension = FilenameUtils.getExtension(url.toString());
 
             if("json".equals(extension))
             {
-                JsonObject json;
+                JsonArray json;
                 try (BufferedReader stream = Files.newBufferedReader(url))
                 {
-                    json = parser.parse(stream).getAsJsonObject();
+                    json = parser.parse(stream).getAsJsonArray();
                 }
                 catch(RuntimeException | IOException ex)
                 {
@@ -49,26 +53,39 @@ public class QuestManager
                     return true;
                 }
 
+                /*
                 String mod = json.get("mod").getAsString();
 
                 if(!Loader.isModLoaded(mod))
                 {
                     MegaCorpMod.logger.info("Skipping " + mod + " quests, because it's not loaded");
                 }
+                */
 
-                JsonArray qs = json.getAsJsonArray("quests");
-
-                for(JsonElement obj : qs)
+                for(JsonElement obj : json)
                 {
                     try
                     {
-                        JsonObject quest = (JsonObject)obj;
+                        JsonObject reward = (JsonObject)obj;
 
-                        Quest q = Quest.fromJson(quest);
+                        String factory = "com.mike_caron.megacorp.reward.GenericReward$Factory";
 
-                        quests.put(q.id, q);
+                        if(reward.has("class"))
+                        {
+                            factory = reward.get("class").getAsString();
+                        }
 
-                        MegaCorpMod.logger.info("Loaded quest " + q.id);
+                        Class factoryClass = Class.forName(factory);
+
+                        IRewardFactory factoryInstance = (IRewardFactory)factoryClass.newInstance();
+
+                        IReward instance = factoryInstance.createReward(reward);
+
+                        String id = reward.get("id").getAsString();
+
+                        rewards.put(id, instance);
+
+                        MegaCorpMod.logger.info("Loaded reward " + id);
                     }
                     catch (Exception ex)
                     {
@@ -142,46 +159,22 @@ public class QuestManager
         }
     }
 
-    public QuestLocalization getLocalizationFor(String locale, String questId)
+    public QuestLocalization getLocalizationFor(String locale, String rewardId)
     {
         if(!localizations.containsKey(locale))
             locale = "en_us";
 
-        if(!localizations.get(locale).containsKey(questId))
+        if(!localizations.get(locale).containsKey(rewardId))
         {
-            localizations.get(locale).put(questId, new QuestLocalization(questId + ".title", questId + ".desc"));
+            localizations.get(locale).put(rewardId, new QuestLocalization(rewardId + ".title", rewardId + ".desc"));
         }
 
-        return localizations.get(locale).get(questId);
+        return localizations.get(locale).get(rewardId);
     }
 
     @SideOnly(Side.CLIENT)
     public QuestLocalization getLocalizationForCurrent(String questId)
     {
         return getLocalizationFor(Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage().getLanguageCode(), questId);
-    }
-
-    public Quest getRandomQuest()
-    {
-        Random rng = new Random();
-        int q = rng.nextInt(quests.size());
-        return quests.values().stream().skip(q).findFirst().get();
-    }
-
-    public Quest getSpecificQuest(String questId)
-    {
-        if(quests.containsKey(questId))
-            return quests.get(questId);
-        return null;
-    }
-
-    public int getNumQuests()
-    {
-        return quests.size();
-    }
-
-    public List<Quest> getQuests()
-    {
-        return new ArrayList<>(quests.values());
     }
 }

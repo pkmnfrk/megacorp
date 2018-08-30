@@ -1,0 +1,9 @@
+lower_quest_requirements.title=Smaller Work Orders
+lower_quest_requirements.desc=Reduce work order demands by %s%%.
+
+extra_profits.title=Extra Profits
+extra_profits.desc=Generate an extra %s%% profit for work order completion.
+
+faster_generation.title=Faster Generation
+faster_generation.desc=Allow the Profit Materializer to generate %smB every %s ticks.
+

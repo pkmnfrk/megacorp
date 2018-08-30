@@ -1,6 +1,7 @@
 package com.mike_caron.megacorp;
 
 import com.mike_caron.megacorp.impl.QuestManager;
+import com.mike_caron.megacorp.impl.RewardManager;
 import com.mike_caron.megacorp.integrations.MainCompatHandler;
 import com.mike_caron.megacorp.network.CtoSMessage;
 import com.mike_caron.megacorp.network.MessageUpdateGui;
@@ -79,6 +80,7 @@ public class MegaCorpMod
         SBSRecipeManager.addDefaultRecipes();
         PCRecipeManager.addDefaultRecipes();
         QuestManager.INSTANCE.loadQuests();
+        RewardManager.INSTANCE.loadRewards();
     }
 
     @Mod.EventHandler

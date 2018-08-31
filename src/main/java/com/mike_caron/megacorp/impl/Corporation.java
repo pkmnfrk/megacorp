@@ -3,12 +3,15 @@ package com.mike_caron.megacorp.impl;
 import com.google.common.base.Preconditions;
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.api.ICorporation;
+import com.mike_caron.megacorp.api.IReward;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -21,20 +24,21 @@ public class Corporation
     private String name;
     private long availableProfit;
     private long totalProfit;
-    private Map<String, Integer> questLog;
+    private Map<String, Integer> questLog = new HashMap<>();
+    private Map<String, Integer> rewardLog = new HashMap<>();
 
+    @Nonnull
     private final CorporationManager manager;
 
-    public Corporation(CorporationManager manager)
+    public Corporation(@Nonnull CorporationManager manager)
     {
         this.manager = manager;
     }
 
-    public Corporation(CorporationManager manager, UUID owner)
+    public Corporation(@Nonnull CorporationManager manager,@Nonnull UUID owner)
     {
         this.manager = manager;
         this.owner = owner;
-        this.questLog = new HashMap<>();
     }
 
     @Override
@@ -44,12 +48,14 @@ public class Corporation
     }
 
     @Override
+    @Nonnull
     public UUID getOwner()
     {
         return owner;
     }
 
     @Override
+    @Nonnull
     public String getName()
     {
         return name;
@@ -237,5 +243,50 @@ public class Corporation
                 questLog.put(quest, tag.getInteger(quest));
             }
         }
+    }
+
+    @Override
+    public int getRankInReward(String id)
+    {
+        if(rewardLog.containsKey(id))
+        {
+            return rewardLog.get(id);
+        }
+
+        return 0;
+    }
+
+    public Optional<Integer> getCostForReward(String id)
+    {
+        IReward reward = RewardManager.INSTANCE.getRewardWithId(id);
+        if(reward == null)
+            throw new IllegalArgumentException(id);
+
+        int currentRank = getRankInReward(id);
+
+        if(currentRank >= reward.numRanks())
+        {
+            return Optional.empty();
+        }
+
+        return Optional.of(reward.costForRank(currentRank + 1));
+    }
+
+    public boolean purchaseReward(String id)
+    {
+        IReward reward = RewardManager.INSTANCE.getRewardWithId(id);
+        if(reward == null)
+            throw new IllegalArgumentException(id);
+
+        int currentRank = getRankInReward(id);
+
+        if(currentRank >= reward.numRanks())
+        {
+            return false;
+        }
+
+        rewardLog.put(id, currentRank + 1);
+
+        return true;
     }
 }

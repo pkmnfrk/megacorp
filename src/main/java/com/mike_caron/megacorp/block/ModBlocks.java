@@ -2,6 +2,7 @@ package com.mike_caron.megacorp.block;
 
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.block.capital_investor.BlockCapitalInvestor;
+import com.mike_caron.megacorp.block.capital_investor.TileEntityCapitalInvestor;
 import com.mike_caron.megacorp.block.liquid_shipping_depot.BlockLiquidShippingDepot;
 import com.mike_caron.megacorp.block.liquid_shipping_depot.TileEntityLiquidShippingDepot;
 import com.mike_caron.megacorp.block.profit_condenser.BlockProfitCondenser;
@@ -101,6 +102,7 @@ public class ModBlocks
         GameRegistry.registerTileEntity(TileEntityProfitCondenser.class, new ResourceLocation(MegaCorpMod.modId, "profit_condenser"));
         GameRegistry.registerTileEntity(TileEntityShippingDepot.class, new ResourceLocation(MegaCorpMod.modId, "shipping_depot"));
         GameRegistry.registerTileEntity(TileEntityLiquidShippingDepot.class, new ResourceLocation(MegaCorpMod.modId, "liquid_shipping_depot"));
+        GameRegistry.registerTileEntity(TileEntityCapitalInvestor.class, new ResourceLocation(MegaCorpMod.modId, "capital_investor"));
     }
 
     @SuppressWarnings("ConstantConditions")

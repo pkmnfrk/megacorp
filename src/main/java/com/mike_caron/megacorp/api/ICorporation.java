@@ -13,4 +13,6 @@ public interface ICorporation
     int consumeProfit(int amount);
 
     boolean completeWorkOrder(WorkOrder workOrder);
+
+    int getRankInReward(String rewardId);
 }

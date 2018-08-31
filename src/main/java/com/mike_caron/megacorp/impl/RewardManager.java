@@ -14,9 +14,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.io.FilenameUtils;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +28,7 @@ public class RewardManager
 {
     public static final RewardManager INSTANCE = new RewardManager();
 
-    private Map<String, IReward> rewards = new HashMap<>();
+    private final Map<String, IReward> rewards = new HashMap<>();
     private final Map<String, Map<String, QuestLocalization>> localizations = new HashMap<>();
 
     private RewardManager() {}
@@ -68,6 +71,7 @@ public class RewardManager
                     {
                         JsonObject reward = (JsonObject)obj;
 
+                        String id = reward.get("id").getAsString();
                         String factory = "com.mike_caron.megacorp.reward.GenericReward$Factory";
 
                         if(reward.has("class"))
@@ -79,9 +83,7 @@ public class RewardManager
 
                         IRewardFactory factoryInstance = (IRewardFactory)factoryClass.newInstance();
 
-                        IReward instance = factoryInstance.createReward(reward);
-
-                        String id = reward.get("id").getAsString();
+                        IReward instance = factoryInstance.createReward(id, reward);
 
                         rewards.put(id, instance);
 
@@ -116,7 +118,7 @@ public class RewardManager
 
     }
 
-    private void loadLocalization(String locale, List<String> lines)
+    private void loadLocalization(@Nonnull String locale, @Nonnull List<String> lines)
     {
         Map<String, QuestLocalization> quests = localizations.get(locale);
         final QuestLocalization EMPTY = new QuestLocalization();
@@ -159,7 +161,8 @@ public class RewardManager
         }
     }
 
-    public QuestLocalization getLocalizationFor(String locale, String rewardId)
+    @Nonnull
+    public QuestLocalization getLocalizationFor(@Nonnull String locale,@Nonnull String rewardId)
     {
         if(!localizations.containsKey(locale))
             locale = "en_us";
@@ -173,8 +176,24 @@ public class RewardManager
     }
 
     @SideOnly(Side.CLIENT)
-    public QuestLocalization getLocalizationForCurrent(String questId)
+    @Nonnull
+    public QuestLocalization getLocalizationForCurrent(@Nonnull String questId)
     {
         return getLocalizationFor(Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage().getLanguageCode(), questId);
+    }
+
+    @Nonnull
+    public List<IReward> getRewards()
+    {
+        return new ArrayList<>(rewards.values());
+    }
+
+    @Nullable
+    public IReward getRewardWithId(@Nonnull String id)
+    {
+        if(rewards.containsKey(id))
+            return rewards.get(id);
+
+        return null;
     }
 }

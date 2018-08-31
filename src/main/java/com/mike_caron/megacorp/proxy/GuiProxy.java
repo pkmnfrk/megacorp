@@ -1,5 +1,7 @@
 package com.mike_caron.megacorp.proxy;
 
+import com.mike_caron.megacorp.block.capital_investor.ContainerCapitalInvestor;
+import com.mike_caron.megacorp.block.capital_investor.TileEntityCapitalInvestor;
 import com.mike_caron.megacorp.block.profit_condenser.ContainerProfitCondenser;
 import com.mike_caron.megacorp.block.profit_condenser.TileEntityProfitCondenser;
 import com.mike_caron.megacorp.block.profit_materializer.ContainerProfitMaterializer;
@@ -48,6 +50,10 @@ public class GuiProxy implements IGuiHandler
         else if(te instanceof TileEntityShippingDepot)
         {
             return new ContainerShippingDepot(player.inventory, (TileEntityShippingDepot)te);
+        }
+        else if(te instanceof TileEntityCapitalInvestor)
+        {
+            return new ContainerCapitalInvestor(player.inventory, (TileEntityCapitalInvestor)te);
         }
         /*
         else if(te instanceof TileEntityLiquidShippingDepot)
@@ -99,6 +105,11 @@ public class GuiProxy implements IGuiHandler
             return new GuiLiquidShippingDepot(new ContainerLiquidShippingDepot(player.inventory, tePC));
         }
         */
+        else if(te instanceof TileEntityCapitalInvestor)
+        {
+            TileEntityCapitalInvestor teCI = (TileEntityCapitalInvestor)te;
+            return new GuiCapitalInvestor(new ContainerCapitalInvestor(player.inventory, teCI));
+        }
 
         return null;
     }

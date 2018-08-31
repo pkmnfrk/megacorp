@@ -336,4 +336,9 @@ public class GuiUtil
         final ScaledResolution scaledresolution = new ScaledResolution(mc);
         return (int)(y / scaledresolution.getScaledHeight_double() * mc.displayHeight);
     }
+
+    public String i18n(String key, Object ... variables)
+    {
+        return new TextComponentTranslation(key, variables).getFormattedText();
+    }
 }

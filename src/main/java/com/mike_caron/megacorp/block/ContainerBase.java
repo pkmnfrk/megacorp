@@ -9,6 +9,7 @@ import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nonnull;
 
@@ -60,12 +61,22 @@ public abstract class ContainerBase
         this.playerInventory = player;
     }
 
+    @Override
+    public void onContainerClosed(EntityPlayer playerIn)
+    {
+        super.onContainerClosed(playerIn);
+
+        MinecraftForge.EVENT_BUS.unregister(this);
+    }
+
     protected void init()
     {
         addOwnSlots();
         addPlayerSlots(playerInventory);
 
         knownSlots = NonNullList.withSize(inventorySlots.size(), ItemStack.EMPTY);
+
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     @Override

@@ -4,8 +4,10 @@ import com.google.common.base.Preconditions;
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.api.ICorporation;
 import com.mike_caron.megacorp.api.IReward;
+import com.mike_caron.megacorp.api.events.CorporationRewardsChangedEvent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.INBTSerializable;
 
 import javax.annotation.Nonnull;
@@ -199,7 +201,10 @@ public class Corporation
         {
             tag.setTag("Quests", serializeLog());
         }
-
+        if(!rewardLog.isEmpty())
+        {
+            tag.setTag("Rewards", serializeRewards());
+        }
         return tag;
     }
 
@@ -217,6 +222,15 @@ public class Corporation
         else
         {
             deserializeLog(null);
+        }
+
+        if(tag.hasKey("Rewards"))
+        {
+            deserializeRewards(tag.getCompoundTag("Rewards"));
+        }
+        else
+        {
+            deserializeRewards(null);
         }
     }
 
@@ -241,6 +255,31 @@ public class Corporation
             for(String quest : tag.getKeySet())
             {
                 questLog.put(quest, tag.getInteger(quest));
+            }
+        }
+    }
+
+    private NBTTagCompound serializeRewards()
+    {
+        NBTTagCompound ret = new NBTTagCompound();
+
+        for(String reward : rewardLog.keySet())
+        {
+            ret.setInteger(reward, rewardLog.get(reward));
+        }
+
+        return ret;
+    }
+
+    private void deserializeRewards(NBTTagCompound tag)
+    {
+        rewardLog = new HashMap<>();
+
+        if(tag != null)
+        {
+            for(String reward : tag.getKeySet())
+            {
+                rewardLog.put(reward, tag.getInteger(reward));
             }
         }
     }
@@ -286,6 +325,8 @@ public class Corporation
         }
 
         rewardLog.put(id, currentRank + 1);
+
+        MinecraftForge.EVENT_BUS.post(new CorporationRewardsChangedEvent(owner, id, currentRank + 1));
 
         return true;
     }

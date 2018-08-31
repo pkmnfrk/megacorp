@@ -6,6 +6,8 @@ import com.mike_caron.megacorp.api.IReward;
 import com.mike_caron.megacorp.api.events.CorporationRewardsChangedEvent;
 import com.mike_caron.megacorp.block.TEOwnedContainerBase;
 import com.mike_caron.megacorp.impl.RewardManager;
+import com.mike_caron.megacorp.util.DataUtils;
+import com.mike_caron.megacorp.util.StringUtil;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -44,7 +46,7 @@ public class ContainerCapitalInvestor
     @Override
     protected int playerInventoryY()
     {
-        return 84;
+        return 100;
     }
 
     @Override
@@ -67,6 +69,28 @@ public class ContainerCapitalInvestor
             lastRewardsSerial = rewardsSerial;
             rewardList = null;
 
+            changed = true;
+        }
+
+        String tFluid = null;
+        if(te.fluidTank.getFluid() != null)
+            tFluid = te.fluidTank.getFluid().getFluid().getName();
+
+        if(!StringUtil.areEqual(fluid, tFluid))
+        {
+            fluid = tFluid;
+            changed = true;
+        }
+
+        if(fluidAmount != te.fluidTank.getFluidAmount())
+        {
+            fluidAmount = te.fluidTank.getFluidAmount();
+            changed = true;
+        }
+
+        if(fluidCapacity != te.fluidTank.getCapacity())
+        {
+            fluidCapacity = te.fluidTank.getCapacity();
             changed = true;
         }
 
@@ -96,6 +120,17 @@ public class ContainerCapitalInvestor
                 rewardList.add(data);
             }
         }
+
+        fluidAmount = tag.getInteger("fluidAmount");
+        fluidCapacity = tag.getInteger("fluidCapacity");
+        if(tag.hasKey("fluid"))
+        {
+            fluid = tag.getString("fluid");
+        }
+        else
+        {
+            fluid = null;
+        }
     }
 
     @Override
@@ -124,6 +159,13 @@ public class ContainerCapitalInvestor
             tag.setTag("rewards", rewards);
         }
 
+        if(fluid != null)
+        {
+            tag.setString("fluid", fluid);
+        }
+        tag.setInteger("fluidAmount", fluidAmount);
+        tag.setInteger("fluidCapacity", fluidCapacity);
+
     }
 
     private void buildRewardList(ICorporation corp)
@@ -140,6 +182,7 @@ public class ContainerCapitalInvestor
 
             rd.nextRank = rd.currentRank + 1;
             rd.nextRankCost = reward.costForRank(rd.nextRank);
+            rd.nextRankVariables = DataUtils.box(reward.getValuesForRank(rd.nextRank));
             rewardList.add(rd);
         }
     }
@@ -165,16 +208,20 @@ public class ContainerCapitalInvestor
         public int currentRank;
         public int nextRank;
         public int nextRankCost;
+        public Integer[] nextRankVariables;
 
         public NBTTagCompound serialize()
         {
             NBTTagCompound ret = new NBTTagCompound();
 
+            int[] data = new int[nextRankVariables.length + 3];
+            data[0] = currentRank;
+            data[1] = nextRank;
+            data[2] = nextRankCost;
+            System.arraycopy(DataUtils.unbox(nextRankVariables), 0, data, 3, nextRankVariables.length);
+
             ret.setString("id", id);
-            ret.setIntArray("d", new int[] { currentRank, nextRank, nextRankCost });
-            ret.setInteger("currentRank", currentRank);
-            ret.setInteger("nextRank", nextRank);
-            ret.setInteger("nextRankCost", nextRankCost);
+            ret.setIntArray("d", data);
 
             return ret;
         }
@@ -188,6 +235,8 @@ public class ContainerCapitalInvestor
             ret.currentRank = data[0];
             ret.nextRank = data[1];
             ret.nextRankCost = data[2];
+            ret.nextRankVariables = new Integer[data.length - 3];
+            System.arraycopy(DataUtils.box(data), 3, ret.nextRankVariables, 0, ret.nextRankVariables.length);
 
             return ret;
         }

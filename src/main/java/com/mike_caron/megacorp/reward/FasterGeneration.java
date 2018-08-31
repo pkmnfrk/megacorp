@@ -23,11 +23,11 @@ public class FasterGeneration
     }
 
     @Override
-    public Object[] getValuesForRank(int rank)
+    public int[] getValuesForRank(int rank)
     {
         Fraction frac = Fraction.getReducedFraction(rank + 2, 8);
 
-        return new Object[]{frac.getNumerator(), frac.getDenominator()};
+        return new int[] { frac.getNumerator(), frac.getDenominator() };
     }
 
     @Override

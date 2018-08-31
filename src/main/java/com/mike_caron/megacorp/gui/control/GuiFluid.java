@@ -19,10 +19,18 @@ public class GuiFluid
     private Fluid fluid;
     private FluidStack fluidStack;
     private boolean gradEnabled = false;
+    private Orientation orientation;
+
+    public GuiFluid(int x, int y, int width, int height, Orientation orientation)
+    {
+        super(x,y, width, height);
+
+        this.orientation = orientation;
+    }
 
     public GuiFluid(int x, int y, int width, int height)
     {
-        super(x,y, width, height);
+        this(x, y, width, height, Orientation.VERTICAL);
     }
 
     @Nullable
@@ -98,9 +106,19 @@ public class GuiFluid
     {
         if(!this.visible) return;
 
-        int scaledHeight = getScaled(this.height);
+        int drawWidth = this.width;
+        int drawHeight = this.height;
 
-        GuiUtil.drawFluid(this.x, this.y + this.height - scaledHeight, fluidStack, this.width, scaledHeight);
+        if(orientation == Orientation.VERTICAL)
+        {
+            drawHeight = getScaled(drawHeight);
+        }
+        else if(orientation == Orientation.HORIZONTAL)
+        {
+            drawWidth = getScaled(drawWidth);
+        }
+
+        GuiUtil.drawFluid(this.x, this.y + this.height - drawHeight, fluidStack, drawWidth, drawHeight);
 
         if(gradEnabled)
         {
@@ -113,12 +131,18 @@ public class GuiFluid
         }
     }
 
-    private int getScaled(int height)
+    private int getScaled(int i)
     {
-        int ret = (int)Math.floor(((double)amount) / capacity * height);
+        int ret = (int)Math.floor(((double)amount) / capacity * i);
         if(ret == 0 && amount > 0)
             return 1;
         return ret;
+    }
+
+    public enum Orientation
+    {
+        VERTICAL,
+        HORIZONTAL
     }
 
 }

@@ -51,9 +51,9 @@ public class GenericReward
     }
 
     @Override
-    public Object[] getValuesForRank(int rank)
+    public int[] getValuesForRank(int rank)
     {
-        return new Object[] { rankValue * rank };
+        return new int[] { rankValue * rank };
     }
 
     public String getId()

@@ -12,6 +12,7 @@ import com.mike_caron.megacorp.impl.RewardManager;
 import com.mike_caron.megacorp.network.CtoSMessage;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.FluidRegistry;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class GuiCapitalInvestor
     implements GuiButton.ClickedListener, GuiList.Producer
 {
     public static final int WIDTH = 176;
-    public static final int HEIGHT = 166;
+    public static final int HEIGHT = 182;
 
     public static final ResourceLocation background = new ResourceLocation(MegaCorpMod.modId, "textures/gui/capital_investor.png");
 
@@ -30,9 +31,9 @@ public class GuiCapitalInvestor
 
     private GuiGroup ownedGroup = new GuiGroup();
 
-    private GuiList rewardList = new GuiList(6, 19, 162, 61, this);
-    private GuiButton buyRewardButton = new GuiButton(ContainerShippingDepot.GUI_NEW_QUEST, 96, 3, 72, 14, GuiUtil.translate("tile.megacorp:shipping_depot.new_quest"));
-    private GuiFluid fluidGauge = new GuiFluid(125, 24, 43, 38);
+    private GuiList rewardList = new GuiList(6, 17, 163, 62, this);
+    private GuiButton buyRewardButton = new GuiButton(ContainerShippingDepot.GUI_NEW_QUEST,  124, 82, 45, 14, GuiUtil.translate("tile.megacorp:capital_investor.buy"));
+    private GuiFluid fluidGauge = new GuiFluid(7, 83, 113, 12, GuiFluid.Orientation.HORIZONTAL);
 
     private ContainerCapitalInvestor.RewardData selectedReward = null;
 
@@ -53,7 +54,7 @@ public class GuiCapitalInvestor
     {
         super.updateScreen();
 
-        buyRewardButton.setEnabled(selectedReward != null);
+        buyRewardButton.setEnabled(selectedReward != null && container.fluidAmount >= selectedReward.nextRankCost);
     }
 
     @Override
@@ -64,6 +65,10 @@ public class GuiCapitalInvestor
         {
             ownedGroup.setVisible(true);
             insertCardLabel.setVisible(false);
+
+            fluidGauge.setFluid(FluidRegistry.getFluid(container.fluid));
+            fluidGauge.setAmount(container.fluidAmount);
+            fluidGauge.setCapacity(container.fluidCapacity);
         }
         else
         {
@@ -168,7 +173,7 @@ public class GuiCapitalInvestor
             if(GuiUtil.inBounds(mouseX, mouseY, width - 14, 4, 10, 10))
             {
                 ArrayList<String> ret = new ArrayList<>();
-                ret.add(rewardLocalization.description);
+                ret.add(String.format(rewardLocalization.description, (Object[])reward.nextRankVariables));
                 return ret;
             }
             return null;

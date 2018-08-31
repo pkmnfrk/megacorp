@@ -1,6 +1,7 @@
 package com.mike_caron.megacorp.block.profit_materializer;
 
 import com.mike_caron.megacorp.api.ICorporation;
+import com.mike_caron.megacorp.api.events.CorporationRewardsChangedEvent;
 import com.mike_caron.megacorp.block.TileEntityOwnedBase;
 import com.mike_caron.megacorp.fluid.ModFluids;
 import com.mike_caron.megacorp.impl.CorporationManager;
@@ -11,6 +12,8 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.apache.commons.lang3.math.Fraction;
 
 import javax.annotation.Nullable;
 
@@ -29,12 +32,12 @@ public class TileEntityProfitMaterializer
     };
 
     private int timer = 0;
+    private Fraction speed = null;
 
     public TileEntityProfitMaterializer()
     {
         fluidTank.setCanDrain(true);
         fluidTank.setCanFill(false);
-
     }
 
     @Override
@@ -85,6 +88,17 @@ public class TileEntityProfitMaterializer
         return super.getCapability(capability, facing);
     }
 
+    private Fraction calculateSpeed()
+    {
+        if(owner == null) return Fraction.ONE_QUARTER;
+
+        ICorporation corp = CorporationManager.get(world).getCorporationForOwner(owner);
+
+        int rewardRank = corp.getRankInReward("faster_generation");
+
+        return Fraction.getReducedFraction(rewardRank + 2, 8);
+    }
+
     @Override
     public void update()
     {
@@ -92,12 +106,17 @@ public class TileEntityProfitMaterializer
 
         if(owner == null) return;
 
+        if(speed == null)
+        {
+            speed = calculateSpeed();
+        }
+
         timer += 1;
 
-        int amount = Math.min(fluidTank.getCapacity() - fluidTank.getFluidAmount(), 2);
+        int amount = Math.min(fluidTank.getCapacity() - fluidTank.getFluidAmount(), speed.getNumerator());
         if(amount > 0)
         {
-            if(timer > 8)
+            if(timer > speed.getDenominator())
             {
                 ICorporation corp = CorporationManager.get(world).getCorporationForOwner(owner);
 
@@ -113,5 +132,21 @@ public class TileEntityProfitMaterializer
 
 
 
+    }
+
+    @SubscribeEvent
+    public void onRewardsChanged(CorporationRewardsChangedEvent event)
+    {
+        if(world.isRemote) return;
+
+        if(event.owner.equals(owner) && event.rewardId.equals("faster_generation"))
+        {
+            speed = calculateSpeed();
+        }
+    }
+
+    public Fraction getSpeed()
+    {
+        return speed;
     }
 }

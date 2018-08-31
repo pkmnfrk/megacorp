@@ -2,7 +2,10 @@ package com.mike_caron.megacorp.gui;
 
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.block.profit_materializer.ContainerProfitMaterializer;
-import com.mike_caron.megacorp.gui.control.*;
+import com.mike_caron.megacorp.gui.control.GuiFluid;
+import com.mike_caron.megacorp.gui.control.GuiGroup;
+import com.mike_caron.megacorp.gui.control.GuiLabel;
+import com.mike_caron.megacorp.gui.control.GuiTranslatedLabel;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -22,14 +25,16 @@ public class GuiProfitMaterializer
     private final ContainerProfitMaterializer container;
 
     private GuiGroup activeGroup;
-    private GuiFluid fluid;
-    private GuiLabel profitRemainingTitleLabel;
-    private GuiTranslatedLabel profitRemainingLabel;
+    private GuiFluid fluid = new GuiFluid(26, 21, 43, 52);
+    private GuiLabel profitRemainingTitleLabel = GuiUtil.staticLabelFromTranslationKey(74, 22, "tile.megacorp:profit_materializer.remaining");
+    private GuiTranslatedLabel profitRemainingLabel = new GuiTranslatedLabel(74, 31 , "tile.megacorp:profit_materializer.remainingval", "");
+    private GuiLabel speedTitleLabel = GuiUtil.staticLabelFromTranslationKey(74,45, "tile.megacorp:profit_materializer.speed");
+    private GuiTranslatedLabel speedLabel = new GuiTranslatedLabel(74, 56, "tile.megacorp:profit_materializer.speedval", "", "");
 
     @Override
-    public void updateScreen()
+    protected void onContainerRefresh()
     {
-        super.updateScreen();
+        super.onContainerRefresh();
 
         if(container.owner == null && fluid.isVisible())
         {
@@ -50,6 +55,11 @@ public class GuiProfitMaterializer
             fluid.setFluid(FluidRegistry.getFluid(container.fluid));
 
             profitRemainingLabel.setPlaceholder(0, NumberFormat.getIntegerInstance().format(container.profitRemaining));
+            if(container.speed != null)
+            {
+                speedLabel.setPlaceholder(0, NumberFormat.getIntegerInstance().format(container.speed.getNumerator()));
+                speedLabel.setPlaceholder(1, NumberFormat.getIntegerInstance().format(container.speed.getDenominator()));
+            }
         }
     }
 
@@ -78,15 +88,13 @@ public class GuiProfitMaterializer
 
         activeGroup = new GuiGroup();
 
-        fluid = new GuiFluid(26, 21, 43, 52);
         fluid.setGradEnabled(true);
-
-        profitRemainingTitleLabel = GuiUtil.staticLabelFromTranslationKey(74, 22, "tile.megacorp:profit_materializer.remaining");
-        profitRemainingLabel = new GuiTranslatedLabel(74, 31 , "tile.megacorp:profit_materializer.remainingval", "");
 
         activeGroup.addControl(fluid);
         activeGroup.addControl(profitRemainingLabel);
         activeGroup.addControl(profitRemainingTitleLabel);
+        activeGroup.addControl(speedTitleLabel);
+        activeGroup.addControl(speedLabel);
 
         this.addControl(activeGroup);
 

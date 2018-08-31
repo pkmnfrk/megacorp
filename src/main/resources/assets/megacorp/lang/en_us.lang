@@ -45,6 +45,8 @@ tile.megacorp:profit_materializer.name=Profit Materializer
 item.megacorp:profit_materializer.description=The Profit Materializer is responsible for extracting collected profit from the Mega Corp and producing liquid assets in the form of Money. It is capable of producing about 5mb of Money per second.
 tile.megacorp:profit_materializer.remaining=Profit Remaining:
 tile.megacorp:profit_materializer.remainingval=$%s
+tile.megacorp:profit_materializer.speed=Speed:
+tile.megacorp:profit_materializer.speedval=%s per %s tick(s)
 
 
 tile.megacorp:misc.empty=Empty

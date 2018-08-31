@@ -9,11 +9,19 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.annotation.Nonnull;
 
 public class TileEntityBase extends TileEntity
 {
+    public TileEntityBase()
+    {
+
+    }
+
     public boolean canInteractWith(EntityPlayer entityPlayer)
     {
         return !isInvalid() && entityPlayer.getDistanceSq(pos.add(0.5D, 0.5D, 0.5D)) <= 64D; //8 blocks
@@ -51,5 +59,32 @@ public class TileEntityBase extends TileEntity
     public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate)
     {
         return oldState.getBlock() != newSate.getBlock();
+    }
+
+    @Override
+    public void onChunkUnload()
+    {
+        super.onChunkUnload();
+
+        if(world.isRemote) return;
+
+        MinecraftForge.EVENT_BUS.unregister(this);
+    }
+
+    @Override
+    public void onLoad()
+    {
+        super.onLoad();
+
+        if(world.isRemote) return;
+
+        MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    @SubscribeEvent
+    public void onEvent(WorldEvent.Unload event)
+    {
+
+        MinecraftForge.EVENT_BUS.unregister(this);
     }
 }

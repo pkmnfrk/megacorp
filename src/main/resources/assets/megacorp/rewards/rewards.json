@@ -17,7 +17,13 @@
   },
   {
     "id": "faster_generation",
-    "class": "com.mike_caron.megacorp.reward.FasterGeneration$Factory"
+    "class": "com.mike_caron.megacorp.reward.FractionalReward$Factory",
+    "ranks": 10,
+    "firstCost": 500,
+    "costScale": "add",
+    "costScaleFactor": 500,
+    "baseValue": "2/8",
+    "numPerRank": 1
   }
 ]
 

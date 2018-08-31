@@ -10,11 +10,13 @@ import com.mike_caron.megacorp.gui.control.GuiList;
 import com.mike_caron.megacorp.impl.QuestLocalization;
 import com.mike_caron.megacorp.impl.RewardManager;
 import com.mike_caron.megacorp.network.CtoSMessage;
+import com.mike_caron.megacorp.util.StringUtil;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidRegistry;
 
 import java.awt.Color;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -160,11 +162,19 @@ public class GuiCapitalInvestor
     {
         ContainerCapitalInvestor.RewardData reward;
         QuestLocalization rewardLocalization;
+        String suffix;
+        List<String> toolTip;
 
         public RewardListItem(ContainerCapitalInvestor.RewardData reward)
         {
             this.reward = reward;
             this.rewardLocalization = RewardManager.INSTANCE.getLocalizationForCurrent(this.reward.id);
+            suffix = " " + StringUtil.toRoman(this.reward.nextRank);
+
+            toolTip = new ArrayList<>();
+            toolTip.add(GuiUtil.i18n("tile.megacorp:capital_investor.rank", StringUtil.toRoman(reward.nextRank)));
+            toolTip.add(GuiUtil.i18n("tile.megacorp:capital_investor.cost", NumberFormat.getIntegerInstance().format(reward.nextRankCost)));
+            toolTip.add(String.format(rewardLocalization.description, (Object[])reward.nextRankVariables));
         }
 
         @Override
@@ -172,9 +182,7 @@ public class GuiCapitalInvestor
         {
             if(GuiUtil.inBounds(mouseX, mouseY, width - 14, 4, 10, 10))
             {
-                ArrayList<String> ret = new ArrayList<>();
-                ret.add(String.format(rewardLocalization.description, (Object[])reward.nextRankVariables));
-                return ret;
+               return toolTip;
             }
             return null;
         }
@@ -196,7 +204,7 @@ public class GuiCapitalInvestor
             drawGradientRect(0, 0, width, height, color.getRGB(), color.getRGB());
 
             //drawItemStack(reward.item, 1, 1, "");
-            fontRenderer.drawString(rewardLocalization.title, 20, 5, Color.WHITE.getRGB());
+            fontRenderer.drawString(rewardLocalization.title + suffix, 20, 5, Color.WHITE.getRGB());
 
             GuiUtil.bindTexture(GuiUtil.MISC_RESOURCES);
             GuiUtil.drawTexturePart(width - 14, 4, 10, 10, 80, 0, 256, 256);

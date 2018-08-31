@@ -337,7 +337,7 @@ public class GuiUtil
         return (int)(y / scaledresolution.getScaledHeight_double() * mc.displayHeight);
     }
 
-    public String i18n(String key, Object ... variables)
+    public static String i18n(String key, Object ... variables)
     {
         return new TextComponentTranslation(key, variables).getFormattedText();
     }

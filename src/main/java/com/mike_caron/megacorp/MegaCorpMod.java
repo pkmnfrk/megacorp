@@ -1,5 +1,6 @@
 package com.mike_caron.megacorp;
 
+import com.mike_caron.megacorp.command.MegaCorpCommand;
 import com.mike_caron.megacorp.impl.QuestManager;
 import com.mike_caron.megacorp.impl.RewardManager;
 import com.mike_caron.megacorp.integrations.MainCompatHandler;
@@ -86,6 +87,7 @@ public class MegaCorpMod
     @Mod.EventHandler
     public void serverLoad(FMLServerStartingEvent evt)
     {
+        evt.registerServerCommand(new MegaCorpCommand());
     }
 
     @Mod.EventHandler

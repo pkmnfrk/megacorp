@@ -29,6 +29,8 @@ tile.megacorp:small_business_simulator.description=The Small Business Simulator 
 tile.megacorp:capital_investor.name=Capital Investor
 tile.megacorp:capital_investor.description=The Capital Investor takes liquid assets (in the form of Money) and uses it to produce various benefits for you and your Mega Corp.
 tile.megacorp:capital_investor.buy=Buy
+tile.megacorp:capital_investor.cost=Cost: %smb
+tile.megacorp:capital_investor.rank=Rank: %s
 
 tile.megacorp:profit_condenser.name=Profit Condenser
 tile.megacorp:profit_condenser.description=The Profit Condenser takes liquid assets (in the form of Money) and condenses it into an incredibly valuable substance known as Dense Money. This liquid is 1000x as dense as regular Money.

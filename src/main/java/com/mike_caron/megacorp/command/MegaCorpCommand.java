@@ -1,9 +1,12 @@
 package com.mike_caron.megacorp.command;
 
+import com.mike_caron.megacorp.api.CorporationManager;
+import com.mike_caron.megacorp.impl.Corporation;
 import com.mike_caron.megacorp.impl.RewardManager;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
@@ -25,6 +28,8 @@ public class MegaCorpCommand
         aliases.add("corp");
 
         subCommands.put("reloadRewards", MegaCorpCommand::reloadRewards);
+        subCommands.put("setRewardLevel", MegaCorpCommand::setRewardLevel);
+        subCommands.put("clearRewards", MegaCorpCommand::clearRewards);
     }
 
     @Nonnull
@@ -95,6 +100,72 @@ public class MegaCorpCommand
         throws CommandException
     {
         RewardManager.INSTANCE.loadRewards();
+        sender.sendMessage(new TextComponentString("Done"));
+    }
+
+    // /megacorp setRewardLevel <rewardid> <level>
+    private static void setRewardLevel(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args)
+        throws CommandException
+    {
+        if(args.length < 2)
+        {
+            sender.sendMessage(new TextComponentString("Usage: megacorp setRewardLevel <reward_id> <level>"));
+            return;
+        }
+
+        try {
+            String reward_id = args[0];
+            int level = Integer.parseInt(args[1]);
+
+            UUID id = ((EntityPlayerMP)sender).getUniqueID();
+
+            Corporation corp = (Corporation)CorporationManager.getInstance(((EntityPlayerMP) sender).getServerWorld()).getCorporationForOwner(id);
+
+            if(corp == null)
+            {
+                sender.sendMessage(new TextComponentString("You don't own a corporation."));
+                return;
+            }
+
+            if(level < 0)
+            {
+                sender.sendMessage(new TextComponentString("Level is invalid"));
+                return;
+            }
+
+            corp.setRewardLevel(reward_id, level);
+        }
+        catch(NumberFormatException ex)
+        {
+            sender.sendMessage(new TextComponentString("Level is invalid"));
+            return;
+        }
+        catch(IllegalArgumentException ex)
+        {
+            sender.sendMessage(new TextComponentString("Reward does not exist"));
+            return;
+        }
+
+
+        sender.sendMessage(new TextComponentString("Done"));
+    }
+
+    // megacorp clearRewards
+    private static void clearRewards(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args)
+        throws CommandException
+    {
+        UUID id = ((EntityPlayerMP)sender).getUniqueID();
+
+        Corporation corp = (Corporation)CorporationManager.getInstance(((EntityPlayerMP) sender).getServerWorld()).getCorporationForOwner(id);
+
+        if(corp == null)
+        {
+            sender.sendMessage(new TextComponentString("You don't own a corporation."));
+            return;
+        }
+
+        corp.clearRewards();
+
         sender.sendMessage(new TextComponentString("Done"));
     }
 

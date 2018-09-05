@@ -11,12 +11,10 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.INBTSerializable;
 
 import javax.annotation.Nonnull;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
 
 public class Corporation
         implements ICorporation, INBTSerializable<NBTTagCompound>
@@ -338,8 +336,46 @@ public class Corporation
 
         rewardLog.put(id, currentRank + 1);
 
+        this.manager.markDirty();
+
         MinecraftForge.EVENT_BUS.post(new CorporationRewardsChangedEvent(owner, id, currentRank + 1));
 
         return true;
+    }
+
+    public void setRewardLevel(String id, int level)
+    {
+        IReward reward = RewardManager.INSTANCE.getRewardWithId(id);
+        if(reward == null)
+            throw new IllegalArgumentException(id);
+
+        rewardLog.put(id, level);
+
+        this.manager.markDirty();
+
+        MinecraftForge.EVENT_BUS.post(new CorporationRewardsChangedEvent(owner, id, level));
+    }
+
+    public void clearRewards()
+    {
+        // calculate events
+
+        List<CorporationRewardsChangedEvent> events = rewardLog
+            .keySet()
+            .stream()
+            .filter(k -> rewardLog.get(k) > 0)
+            .map(k -> new CorporationRewardsChangedEvent(owner,k, 0))
+            .collect(Collectors.toList());
+
+        rewardLog.clear();
+
+        this.manager.markDirty();
+
+        // post events
+
+        for(CorporationRewardsChangedEvent event : events)
+        {
+            MinecraftForge.EVENT_BUS.post(event);
+        }
     }
 }

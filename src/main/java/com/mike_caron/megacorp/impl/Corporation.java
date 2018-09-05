@@ -175,6 +175,12 @@ public class Corporation
         int level = getCompletedCountFor(quest.id);
         int qty = quest.getCountForLevel(level);
 
+        int lower_quest_req = getRankInReward("lower_quest_requirements");
+
+        float reduction = 1f - (lower_quest_req * 0.05f);
+
+        qty = (int)Math.ceil(qty * reduction);
+
         if(qty <= 0)
         {
             MegaCorpMod.logger.warn("Not returning quest, because it is bogus");
@@ -182,6 +188,12 @@ public class Corporation
         }
 
         int profit = quest.getProfit(qty);
+
+        int extra_profit = getRankInReward("extra_profits");
+
+        float profit_increase = 1f + (extra_profit * 0.05f);
+
+        profit = (int)Math.ceil(profit * profit_increase);
 
         WorkOrder ret = new WorkOrder(this.owner, quest.id, item, qty, profit, level);
 

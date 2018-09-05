@@ -84,7 +84,7 @@ public class TileEntityBase extends TileEntity
     @SubscribeEvent
     public void onEvent(WorldEvent.Unload event)
     {
-
-        MinecraftForge.EVENT_BUS.unregister(this);
+        if(event.getWorld() == world)
+            MinecraftForge.EVENT_BUS.unregister(this);
     }
 }

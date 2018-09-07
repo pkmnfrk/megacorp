@@ -214,7 +214,7 @@ public final class ModelBottle implements IModel
         @Override
         public boolean accepts(ResourceLocation modelLocation)
         {
-            return modelLocation.getResourceDomain().equals(MegaCorpMod.modId) && modelLocation.getResourcePath().contains("bottle");
+            return modelLocation.getNamespace().equals(MegaCorpMod.modId) && modelLocation.getPath().contains("bottle");
         }
 
         /*

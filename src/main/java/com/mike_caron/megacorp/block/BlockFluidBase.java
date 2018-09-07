@@ -1,7 +1,5 @@
 package com.mike_caron.megacorp.block;
 
-import com.mike_caron.megacorp.MegaCorpMod;
-import com.mike_caron.megacorp.fluid.ModFluids;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -22,7 +20,7 @@ public class BlockFluidBase extends BlockFluidClassic
     {
         super(fluid, Material.WATER);
         setRegistryName(name);
-        setUnlocalizedName(getRegistryName().toString());
+        setTranslationKey(getRegistryName().toString());
         //setCreativeTab(MegaCorpMod.creativeTab);
         this.mapColor = color;
 

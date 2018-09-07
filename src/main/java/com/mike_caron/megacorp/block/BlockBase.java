@@ -24,7 +24,7 @@ public class BlockBase extends Block
     {
         super(material);
         setRegistryName(name);
-        setUnlocalizedName(getRegistryName().toString());
+        setTranslationKey(getRegistryName().toString());
         setCreativeTab(MegaCorpMod.creativeTab);
     }
 

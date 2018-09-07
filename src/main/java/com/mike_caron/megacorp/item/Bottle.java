@@ -34,7 +34,7 @@ public class Bottle
         super();
 
         setRegistryName("bottle");
-        setUnlocalizedName("megacorp:bottle");
+        setTranslationKey("megacorp:bottle");
         setMaxStackSize(1);
 
     }

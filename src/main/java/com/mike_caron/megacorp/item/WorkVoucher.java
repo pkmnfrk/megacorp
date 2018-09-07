@@ -18,7 +18,7 @@ public class WorkVoucher extends ItemBase
         super();
 
         setRegistryName("work_voucher");
-        setUnlocalizedName("megacorp:work_voucher");
+        setTranslationKey("megacorp:work_voucher");
         setMaxStackSize(1);
 
         //intentionally not set:

@@ -46,7 +46,7 @@ public class ModItems
         registry.register(new CorporateCard());
         registry.register(new DebugItemBase()
                             .setRegistryName("black_card")
-                            .setUnlocalizedName("megacorp:black_card")
+                            .setTranslationKey("megacorp:black_card")
                             .setCreativeTab(MegaCorpMod.creativeTab)
                             .setMaxStackSize(1)
         );

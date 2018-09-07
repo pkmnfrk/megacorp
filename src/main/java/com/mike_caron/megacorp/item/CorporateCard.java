@@ -17,7 +17,7 @@ public class CorporateCard extends ItemBase
         super();
 
         setRegistryName("corporate_card");
-        setUnlocalizedName("megacorp:corporate_card");
+        setTranslationKey("megacorp:corporate_card");
         setMaxStackSize(1);
 
         //intentionally not set:

@@ -61,8 +61,8 @@ public class JEIPlugin
 
         transferRegistry.addRecipeTransferHandler(ContainerSBS.class, SBS_CATEGORY, 0, 2, 2, 36);
 
-        ModBlocks.getAllBlocks().forEach(block -> registry.addIngredientInfo(new ItemStack(block), VanillaTypes.ITEM,  block.getUnlocalizedName() + ".description"));
-        ModItems.getAllItems().forEach(item -> registry.addIngredientInfo(new ItemStack(item), VanillaTypes.ITEM, item.getUnlocalizedName() + ".description"));
+        ModBlocks.getAllBlocks().forEach(block -> registry.addIngredientInfo(new ItemStack(block), VanillaTypes.ITEM,  block.getTranslationKey() + ".description"));
+        ModItems.getAllItems().forEach(item -> registry.addIngredientInfo(new ItemStack(item), VanillaTypes.ITEM, item.getTranslationKey() + ".description"));
         ModFluids.getAllFluids().forEach(fluid -> registry.addIngredientInfo(new FluidStack(fluid, 1000), VanillaTypes.FLUID, fluid.getUnlocalizedName() + ".description"));
     }
 }

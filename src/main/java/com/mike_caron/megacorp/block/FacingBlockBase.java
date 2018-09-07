@@ -85,7 +85,7 @@ public class FacingBlockBase extends BlockBase
     public IBlockState getStateFromMeta(int meta)
     {
         return getDefaultState()
-                .withProperty(FACING, EnumFacing.getFront((meta & 3) + 2))
+                .withProperty(FACING, EnumFacing.byIndex((meta & 3) + 2))
         ;
 
     }

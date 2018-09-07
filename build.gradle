@@ -29,7 +29,7 @@ minecraft {
     // stable_#            stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not always work.
     // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "snapshot_20171003"
+    mappings = "snapshot_20180714"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
@@ -52,16 +52,6 @@ repositories {
         name = "ModMaven"
         url = "modmaven.k-4u.nl"
     }
-    //maven {
-    //    name = "CoFH Maven"
-    //    url = "http://maven.covers1624.net"
-    //}
-
-    // ivy {
-    //     name 'ProjectE'
-    //     ivyPattern "https://maven.tterrag.com/[module]-[revision].[ext]"
-    //     artifactPattern "http://media.forgecdn.net/files/${pe_cf}/[module]-[revision].[ext]"
-    // }
 }
 
 dependencies {

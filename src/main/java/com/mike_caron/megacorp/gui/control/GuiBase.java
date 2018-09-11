@@ -1,12 +1,12 @@
 package com.mike_caron.megacorp.gui.control;
 
-import com.mike_caron.megacorp.block.ContainerBase;
 import com.mike_caron.megacorp.gui.GuiUtil;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
@@ -18,10 +18,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
-public abstract class GuiContainerBase
-        extends GuiContainer
+public class GuiBase
+    extends GuiScreen
     implements IGuiGroup
 {
+    protected int guiLeft, guiTop, xSize, ySize;
+
+    protected ResourceLocation background;
+
     protected final List<GuiControl> controls = new ArrayList<>();
     private GuiLabel titleLabel;
 
@@ -29,27 +33,17 @@ public abstract class GuiContainerBase
     private boolean leftDown = false, rightDown = false, middleDown = false;
     private List<List<GuiControl>> waitingForButton = new ArrayList<List<GuiControl>>();
 
-    public GuiContainerBase(ContainerBase inventorySlotsIn)
+    public GuiBase(int width, int height, ResourceLocation background)
     {
-        super(inventorySlotsIn);
+        super();
 
-        inventorySlotsIn.setGuiListener(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                onContainerRefresh();
-            }
-        });
+        this.xSize = width;
+        this.ySize = height;
+        this.background = background;
 
         waitingForButton.add(new ArrayList<>());
         waitingForButton.add(new ArrayList<>());
         waitingForButton.add(new ArrayList<>());
-    }
-
-    protected void onContainerRefresh()
-    {
-
     }
 
     @Override
@@ -208,10 +202,8 @@ public abstract class GuiContainerBase
         super.initGui();
     }
 
-    @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
-
         GlStateManager.pushMatrix();
 
         for (GuiControl control : this.controls) {
@@ -221,15 +213,22 @@ public abstract class GuiContainerBase
         }
 
         GlStateManager.popMatrix();
+    }
 
-        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
+    public void drawGuiContainerBackgroundLayer(int mouseX, int mouseY)
+    {
+        GlStateManager.color(1, 1, 1, 1);
+        mc.getTextureManager().bindTexture(background);
+        drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
         this.drawDefaultBackground();
-        super.drawScreen(mouseX, mouseY, partialTicks);
+        drawGuiContainerBackgroundLayer(mouseX, mouseY);
+        //super.drawScreen(mouseX, mouseY, partialTicks);
+        drawGuiContainerForegroundLayer(mouseX, mouseY);
         this.renderHoveredToolTip(mouseX, mouseY);
     }
 
@@ -319,7 +318,6 @@ public abstract class GuiContainerBase
 
     }
 
-    @Override
     protected void renderHoveredToolTip(int mouseX, int mouseY)
     {
         int goodX = mouseX - guiLeft;
@@ -332,10 +330,9 @@ public abstract class GuiContainerBase
             {
                 this.drawHoveringText(toolTip, mouseX, mouseY);
             }
-            return;
         }
 
-        super.renderHoveredToolTip(mouseX, mouseY);
+        //super.renderHoveredToolTip(mouseX, mouseY);
     }
 
     @Nullable

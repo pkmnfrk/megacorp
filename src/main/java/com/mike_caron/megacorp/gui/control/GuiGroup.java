@@ -114,6 +114,12 @@ public class GuiGroup
     }
 
     @Override
+    public void clearControls()
+    {
+        this.controls.clear();
+    }
+
+    @Override
     public FontRenderer getFontRenderer()
     {
         return parent.getFontRenderer();

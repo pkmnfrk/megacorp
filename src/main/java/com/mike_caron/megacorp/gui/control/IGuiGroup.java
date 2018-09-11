@@ -8,6 +8,7 @@ public interface IGuiGroup
 {
     void addControl(GuiControl control);
     void removeControl(GuiControl control);
+    void clearControls();
     FontRenderer getFontRenderer();
     boolean notifyTakeFocus(GuiControl taker);
     @Nullable

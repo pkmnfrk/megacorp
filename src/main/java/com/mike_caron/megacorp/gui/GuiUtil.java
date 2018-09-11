@@ -1,11 +1,11 @@
 package com.mike_caron.megacorp.gui;
 
 import com.mike_caron.megacorp.MegaCorpMod;
+import com.mike_caron.megacorp.gui.control.GuiButton;
 import com.mike_caron.megacorp.gui.control.GuiLabel;
 import com.mike_caron.megacorp.gui.control.GuiMultilineLabel;
 import com.mike_caron.megacorp.gui.control.GuiSized;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiButtonImage;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -18,7 +18,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class GuiUtil
 {
@@ -51,11 +51,6 @@ public class GuiUtil
     public static TextureAtlasSprite getTexture(ResourceLocation location) {
 
         return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
-    }
-
-    public static boolean inBounds(int mouseX, int mouseY, GuiButton button)
-    {
-        return inBounds(mouseX, mouseY, button.x, button.y, button.width, button.height);
     }
 
     public static boolean inBounds(int mouseX, int mouseY, GuiSized button)
@@ -200,6 +195,13 @@ public class GuiUtil
     public static GuiButtonImage makeGuiButtonImage(int buttonId, int x, int y, int width, int height, int xTex, int yTex, ResourceLocation resourceLocation)
     {
         return new GuiButtonImage(buttonId, x, y, width, height, xTex, yTex, 0, resourceLocation);
+    }
+
+    public static GuiButton translatedButton(int buttonId, int x, int y, int width, int height, String key, Object... replacements)
+    {
+        String translated = new TextComponentTranslation(key, replacements).getFormattedText();
+
+        return new GuiButton(buttonId, x, y, width, height, translated);
     }
 
     public static GuiLabel staticLabelFromTranslationKey(int x, int y, String key, Object ... placeholders)

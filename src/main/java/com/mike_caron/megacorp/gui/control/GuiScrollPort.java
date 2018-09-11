@@ -1,5 +1,6 @@
 package com.mike_caron.megacorp.gui.control;
 
+import com.mike_caron.megacorp.gui.GuiUtil;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 
@@ -9,19 +10,25 @@ import java.util.List;
 
 public class GuiScrollPort
     extends GuiClippedSized
-    implements IGuiGroup
+    implements IGuiGroup, GuiScrollBar.ScrollListener
 {
     protected final List<GuiControl> controls = new ArrayList<>();
 
     private boolean enableScrollBar = false;
 
-    private GuiScrollBar scrollBar;
+    protected final GuiScrollBar scrollBar;
+
+    int maxScrollX = 100000;
+    int maxScrollY = 100000;
+
 
     public GuiScrollPort(int x, int y, int width, int height)
     {
         super(x, y, width, height);
 
         scrollBar = new GuiScrollBar(this.width - 8, 0, 8, this.height);
+        scrollBar.addListener(this);
+
     }
 
     @Override
@@ -128,17 +135,22 @@ public class GuiScrollPort
     @Override
     public GuiControl hitTest(int x, int y)
     {
-        for(GuiControl control : controls)
+        if(GuiUtil.inBoundsThis(x, y, this))
         {
-            if(control.isVisible())
+            for(GuiControl control : controls)
             {
-                int transX = x - control.getX();
-                int transY = y - control.getY();
+                if(control.isVisible())
+                {
+                    int transX = x - control.getX() + scrollX;
+                    int transY = y - control.getY() + scrollY;
 
-                GuiControl res = control.hitTest(transX, transY);
-                if (res != null)
-                    return res;
+                    GuiControl res = control.hitTest(transX, transY);
+                    if (res != null)
+                        return res;
+                }
             }
+
+            return this;
         }
 
         return null;
@@ -234,13 +246,106 @@ public class GuiScrollPort
     }
 
     @Override
-    protected int getRightMargin()
+    public void onMouseOver(int mouseX, int mouseY)
     {
-        return enableScrollBar ? 8 : 0;
+        if(enableScrollBar)
+        {
+            if(GuiUtil.inBoundsThis(mouseX, mouseY, scrollBar))
+            {
+                scrollBar.onMouseOver(mouseX - scrollBar.getX(), mouseY - scrollBar.getY());
+            }
+        }
+    }
+
+    @Override
+    public void onMouseDown(int mouseX, int mouseY, int button)
+    {
+        if(enableScrollBar)
+        {
+            if(GuiUtil.inBounds(mouseX, mouseY, scrollBar))
+            {
+                scrollBar.onMouseDown(mouseX - scrollBar.getX(), mouseY - scrollBar.getY(), button);
+            }
+        }
+    }
+
+    @Override
+    public void onMouseUp(int mouseX, int mouseY, int button)
+    {
+        if(enableScrollBar)
+        {
+            scrollBar.onMouseUp(mouseX - scrollBar.getX(), mouseY - scrollBar.getY(), button);
+        }
+    }
+
+    @Override
+    public void onMouseMove(int mouseX, int mouseY)
+    {
+        if(enableScrollBar)
+        {
+            scrollBar.onMouseMove(mouseX - scrollBar.getX(), mouseY - scrollBar.getY());
+        }
+    }
+
+    @Override
+    public void onMouseWheel(int mouseX, int mouseY, int deltaWheel)
+    {
+        scrollBar.setProgress(scrollBar.getProgress() - scrollBar.getOneClick() * deltaWheel);
     }
 
     public void setEnableScrollBar(boolean enable)
     {
         this.enableScrollBar = enable;
+        if(this.enableScrollBar)
+        {
+            this.marginRight = 8;
+        }
+        else
+        {
+            this.marginRight = 0;
+        }
+    }
+
+    @Override
+    public void scrolled(GuiScrollBar.ScrollEvent event)
+    {
+        this.scrollY = (int)Math.floor(maxScrollY * event.progress);
+    }
+
+    @Override
+    public void setScrollY(int scrollY)
+    {
+        super.setScrollY(scrollY);
+
+        if(maxScrollY == 0)
+        {
+            scrollBar.setProgress(0f);
+        }
+        else
+        {
+            scrollBar.setProgress((1f * scrollY) / maxScrollY);
+        }
+    }
+
+    public void setMaxScrollY(int maxScrollY)
+    {
+        if(maxScrollY < 0)
+        {
+            maxScrollY = 0;
+        }
+        this.maxScrollY = maxScrollY;
+        if(maxScrollY != 0)
+        {
+            this.scrollBar.setOneClick(7f / maxScrollY);
+        }
+        else
+        {
+            this.scrollBar.setOneClick(1f);
+        }
+
+        if(this.scrollY > maxScrollY)
+        {
+            this.scrollY = maxScrollY;
+        }
     }
 }

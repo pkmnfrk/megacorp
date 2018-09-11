@@ -38,7 +38,7 @@ public class GuiToggleButton
     {
         if(button != 0) return;
 
-        if(GuiUtil.inBounds(mouseX, mouseY, this))
+        if(GuiUtil.inBoundsThis(mouseX, mouseY, this))
         {
             pressed = !pressed;
 
@@ -111,7 +111,7 @@ public class GuiToggleButton
 
         GuiUtil.bindTexture(GuiUtil.MISC_RESOURCES);
         GlStateManager.color(1, 1, 1, 1);
-        GuiUtil.draw3x3(this.x, this.y, this.width, this.height, sx, 0);
+        GuiUtil.draw3x3(0, 0, this.width, this.height, sx, 0);
 
         /*
         if(label != null)
@@ -129,16 +129,6 @@ public class GuiToggleButton
         NORMAL,
         HOVERED,
         PRESSED
-    }
-
-    public void addListener(ChangedListener listener)
-    {
-        this.listeners.add(listener);
-    }
-
-    public void removeListener(ChangedListener listener)
-    {
-        this.listeners.remove(listener);
     }
 
     private void triggerClicked()

@@ -38,7 +38,7 @@ public class GuiImage
     {
         GuiUtil.bindTexture(texture);
         GuiUtil.setGLColor(Color.WHITE);
-        GuiUtil.drawStretchedTexturePart(this.x, this.y , this.width, this.height, this.sourceX, this.sourceY, this.sourceWidth, this.sourceHeight, this.textureWidth, this.textureHeight);
+        GuiUtil.drawStretchedTexturePart(0, 0, this.width, this.height, this.sourceX, this.sourceY, this.sourceWidth, this.sourceHeight, this.textureWidth, this.textureHeight);
     }
 
     public void setSourceX(int sourceX)

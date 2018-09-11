@@ -43,6 +43,7 @@ public class GuiGuidePage
 
         yPos = 0;
         nextId = 0;
+        scrollY = 0;
 
         ResourceLocation rl = new ResourceLocation(MegaCorpMod.modId, baseFile(uri));
 
@@ -111,6 +112,8 @@ public class GuiGuidePage
                 }
             }
         }
+
+        setMaxScrollY(yPos - this.height);
     }
 
     private void addLabelsForList(JsonObject body, JsonObject translation, String seealso2)
@@ -217,16 +220,22 @@ public class GuiGuidePage
         catch(IOException ex)
         {
             //try US
-
-            try
+            if(!locale.equals("en_us"))
             {
-                ResourceLocation loc = new ResourceLocation(MegaCorpMod.modId, localeFile(uri, "en_us"));
-                currentJson = loc.getPath();
+                try
+                {
+                    ResourceLocation loc = new ResourceLocation(MegaCorpMod.modId, localeFile(uri, "en_us"));
+                    currentJson = loc.getPath();
 
-                IResource res = Minecraft.getMinecraft().getResourceManager().getResource(loc);
-                stream = res.getInputStream();
+                    IResource res = Minecraft.getMinecraft().getResourceManager().getResource(loc);
+                    stream = res.getInputStream();
+                }
+                catch (IOException ex2)
+                {
+                    return null;
+                }
             }
-            catch (IOException ex2)
+            else
             {
                 return null;
             }

@@ -7,6 +7,7 @@ public abstract class GuiClippedSized
     extends GuiSized
 {
     protected int scrollX, scrollY;
+    protected int marginLeft = 0, marginRight = 0, marginTop = 0, marginBottom = 0;
 
     private boolean clippingEnabled = false;
 
@@ -29,14 +30,11 @@ public abstract class GuiClippedSized
 
     protected void assertClippingPlane()
     {
-        int lm = getLeftMargin();
-        int rm = getRightMargin();
-
         setClippingPlane(
-            parent.translateToScreenX(this.x) + lm,
-            parent.translateToScreenY(this.y) + this.height,
-            this.width - lm - rm,
-            this.height
+            parent.translateToScreenX(this.x) + marginLeft,
+            parent.translateToScreenY(this.y + marginTop) + this.height - marginTop - marginBottom,
+            this.width - marginLeft - marginTop,
+            this.height - marginTop - marginBottom
         );
     }
 
@@ -77,15 +75,5 @@ public abstract class GuiClippedSized
     public void setScrollY(int scrollY)
     {
         this.scrollY = scrollY;
-    }
-
-    protected int getLeftMargin()
-    {
-        return 0;
-    }
-
-    protected int getRightMargin()
-    {
-        return 0;
     }
 }

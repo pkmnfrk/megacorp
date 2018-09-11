@@ -39,7 +39,7 @@ public class GuiProgressBar
         GuiUtil.bindTexture(GuiUtil.MISC_RESOURCES);
         GuiUtil.setGLColor(backColor);
         //GuiUtil.draw3x3Stretched(x, y, width, height, 32, 16);
-        GuiUtil.drawStretchedTexturePart(x, y, width, height, 36, 16, 1, 16, 256, 256);
+        GuiUtil.drawStretchedTexturePart(0, 0, width, height, 36, 16, 1, 16, 256, 256);
         //GuiUtil.drawDebugFlatRectangle(x, y, width, height);
 
         GuiUtil.setGLColor(foreColor);
@@ -50,7 +50,7 @@ public class GuiProgressBar
 
         //GuiUtil.drawDebugFlatRectangle(-parent.translateToScreenX(0), -parent.translateToScreenY(0), 1000, 1000 );
         //GuiUtil.draw3x3Stretched(x, y, (int)(width * progress + 4), height, 32, 16);
-        GuiUtil.drawStretchedTexturePart(x, y, (int)(width * progress), height, 36, 16, 1, 16, 256, 256);
+        GuiUtil.drawStretchedTexturePart(0, 0, (int)(width * progress), height, 36, 16, 1, 16, 256, 256);
         //GL11.glDisable(GL11.GL_SCISSOR_TEST);
     }
 }

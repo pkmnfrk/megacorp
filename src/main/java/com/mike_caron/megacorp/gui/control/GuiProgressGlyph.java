@@ -37,11 +37,11 @@ public class GuiProgressGlyph
         GuiUtil.bindTexture(texture);
         if(orientation == Orientation.HORIZONTAL)
         {
-            drawTexturedModalRect(x, y, sourceX, sourceY, (int) (width * progress), height);
+            drawTexturedModalRect(0, 0, sourceX, sourceY, (int) (width * progress), height);
         }
-        else
+        else if(orientation == Orientation.VERTICAL)
         {
-            drawTexturedModalRect(x, y, sourceX, sourceY, width, (int)(height * progress));
+            drawTexturedModalRect(0, height - (height * progress), sourceX, sourceY, width, (int)(height * progress));
         }
     }
 

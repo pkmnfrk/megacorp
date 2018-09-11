@@ -18,4 +18,11 @@ public interface IGuiGroup
     int translateToScreenY(int y);
     int translateFromScreenX(int x);
     int translateFromScreenY(int y);
+    void onMouseEnter();
+    void onMouseExit();
+    void onMouseOver(int mouseX, int mouseY);
+    void onMouseDown(int mouseX, int mouseY, int button);
+    void onMouseUp(int mouseX, int mouseY, int button);
+    void onMouseMove(int mouseX, int mouseY);
+    void onMouseWheel(int mouseX, int mouseY, int deltaWheel);
 }

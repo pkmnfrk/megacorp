@@ -30,7 +30,7 @@ public class GuiButton
         if(!enabled) return;
         if(button != 0) return;
 
-        if(GuiUtil.inBounds(mouseX, mouseY, this))
+        if(GuiUtil.inBoundsThis(mouseX, mouseY, this))
         {
             this.state = State.HOVERED;
 

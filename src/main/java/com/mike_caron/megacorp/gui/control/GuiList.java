@@ -1,6 +1,7 @@
 package com.mike_caron.megacorp.gui.control;
 
 import com.mike_caron.megacorp.gui.GuiUtil;
+import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
@@ -9,13 +10,14 @@ import java.util.List;
 
 public class GuiList
     extends GuiClippedSized
+    implements GuiScrollBar.ScrollListener
 {
     Producer producer;
-    int nubY = 0;
 
-    boolean draggingNub = false;
-    int draggingStartMouse = 0;
-    int draggingStartNub = 0;
+    private GuiScrollBar scrollBar;
+
+    private int lastNumItems = -1;
+
     int mouseX = -1, mouseY = -1;
 
     public GuiList(int x, int y, int width, int height, Producer producer)
@@ -23,26 +25,57 @@ public class GuiList
         super(x, y, width, height);
 
         this.producer = producer;
+        this.scrollBar = new GuiScrollBar(this.width - 9, 1, 8, this.height - 2);
+        this.scrollBar.addListener(this);
+
+        lastNumItems = this.producer.getNumItems();
+        this.scrollBar.setOneClick(getScrollClick());
+
+        marginTop = 1;
+        marginBottom = 1;
+        marginLeft = 1;
+        marginRight = 1;
+    }
+
+    @Override
+    public void update()
+    {
+        if(this.producer.getNumItems() != lastNumItems)
+        {
+            lastNumItems = this.producer.getNumItems();
+            this.scrollBar.setOneClick(getScrollClick());
+        }
     }
 
     @Override
     public void draw()
     {
+        int sw = scrollBarWidth();
+
         GuiUtil.setGLColor(Color.WHITE);
         GuiUtil.bindTexture(GuiUtil.MISC_RESOURCES);
 
-        GuiUtil.draw3x3Stretched(scrollX, scrollY, this.width, this.height, 16, 16);
-        GuiUtil.drawTexturePart(this.width - 9 + scrollX, 1 + scrollY, 8, 8, 64, 0, 256, 256);
-        GuiUtil.drawTexturePart(this.width - 9 + scrollX, this.height - 9 + scrollY, 8, 8, 64, 8, 256, 256);
+        GuiUtil.draw3x3Stretched(0, 0, this.width, this.height, 16, 16);
 
-        int trackHeight = this.height - 18;
+        if(sw > 0)
+        {
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(scrollBar.getX(), scrollBar.getY(), 0);
+            scrollBar.draw();
+            GlStateManager.popMatrix();
+        }
 
-        GuiUtil.draw3x3(this.width - 9 + scrollX, 9 + scrollY, 8, trackHeight, 72, 0, 2, 4);
+        //GuiUtil.drawTexturePart(this.width - 9 + scrollX, 1 + scrollY, 8, 8, 64, 0, 256, 256);
+        //GuiUtil.drawTexturePart(this.width - 9 + scrollX, this.height - 9 + scrollY, 8, 8, 64, 8, 256, 256);
 
-        GuiUtil.drawTexturePart(this.width - 9 + scrollX, 9 + nubY + scrollY, 8, 8, 72, 8, 256, 256);
+        //int trackHeight = this.height - 18;
+
+        //GuiUtil.draw3x3(this.width - 9 + scrollX, 9 + scrollY, 8, trackHeight, 72, 0, 2, 4);
+
+        //GuiUtil.drawTexturePart(this.width - 9 + scrollX, 9 + nubY + scrollY, 8, 8, 72, 8, 256, 256);
 
 
-        setClippingPlane(parent.translateToScreenX(this.x) + 1, parent.translateToScreenY(this.y) + this.height - 1, this.width - 2, this.height - 2);
+        //setClippingPlane(parent.translateToScreenX(this.x) + 1, parent.translateToScreenY(this.y) + this.height - 1, this.width - 2, this.height - 2);
 
         if(this.producer != null)
         {
@@ -52,7 +85,9 @@ public class GuiList
             int numSkipped = scrollY / itemHeight;
             int over = -1;
 
-            over = getItemOver(mouseX,mouseY - 1, itemHeight);
+            over = getItemOver(mouseX,mouseY - 1, this.width - 2 - scrollBarWidth(), itemHeight);
+
+            start();
 
             GL11.glPushMatrix();
             GL11.glTranslatef(1, 1 + numSkipped * itemHeight, 0);
@@ -60,7 +95,7 @@ public class GuiList
             {
                 ListItem item = this.producer.getItem(i + numSkipped);
 
-                item.draw(this.width - 2 - 8, itemHeight, ListItemState.forState(over == i + numSkipped));
+                item.draw(this.width - 2 - sw, itemHeight, ListItemState.forState(over == i + numSkipped));
 
                 //if(i == 1) GuiUtil.drawDebugFlatRectangle(1, i * itemHeight - scrollX, this.width - 2 - 8, itemHeight);
 
@@ -68,6 +103,7 @@ public class GuiList
             }
             GL11.glPopMatrix();
 
+            finish();
         }
     }
 
@@ -86,26 +122,41 @@ public class GuiList
     }
 
     @Override
+    public void setWidth(int width)
+    {
+        super.setWidth(width);
+
+        scrollBar.setX(this.width - 9);
+    }
+
+    @Override
+    public void setHeight(int height)
+    {
+        super.setHeight(height);
+
+        this.scrollBar.setHeight(this.height - 2);
+        this.scrollBar.setOneClick(getScrollClick());
+    }
+
+    @Override
     public void onMouseUp(int mouseX, int mouseY, int button)
     {
-        draggingNub = false;
+        scrollBar.onMouseUp(mouseX, mouseY, button);
     }
 
     @Override
     public void onMouseWheel(int mouseX, int mouseY, int deltaWheel)
     {
-        setNubY(nubY - deltaWheel);
+        scrollBar.setProgress(scrollBar.getProgress() - scrollBar.getOneClick() * deltaWheel);
     }
 
     @Override
     public void onMouseMove(int mouseX, int mouseY)
     {
-        if(draggingNub)
-        {
-            int dy = mouseY - draggingStartMouse;
-
-            setNubY(draggingStartNub + dy);
-        }
+        //if(GuiUtil.inBounds(mouseX, mouseY, scrollBar))
+        //{
+            scrollBar.onMouseMove(mouseX - scrollBar.getX(), mouseY - scrollBar.getY());
+        //}
     }
 
     @Override
@@ -127,29 +178,15 @@ public class GuiList
     {
         int sX = this.width - 9;
 
-        if(GuiUtil.inBounds(mouseX, mouseY, sX, 9 + nubY, 8, 8))
+        if(GuiUtil.inBounds(mouseX, mouseY, scrollBar))
         {
-            draggingNub = true;
-            draggingStartMouse = mouseY;
-            draggingStartNub = nubY;
+            scrollBar.onMouseDown(mouseX - scrollBar.getX(), mouseY - scrollBar.getY(), button);
         }
-        else if(GuiUtil.inBounds(mouseX, mouseY, sX, 1, 8, 8))
-        {
-            setNubY(nubY - 1);
-        }
-        else if(GuiUtil.inBounds(mouseX, mouseY, sX, this.height - 9, 8, 8))
-        {
-            setNubY(nubY + 1);
-        }
-        else if(GuiUtil.inBounds(mouseX, mouseY, sX, 9, 8, this.height - 18))
-        {
-            setNubY(mouseY - 9 - 4);
-        }
-        else if(GuiUtil.inBounds(mouseX, mouseY, 1, 1, this.width - 8 - 1 - 1, this.height - 2))
+        else //if(GuiUtil.inBounds(mouseX, mouseY, 1, 1, this.width - scrollBarWidth() - 1 - 1, this.height - 2))
         {
             if(this.producer != null)
             {
-                int over = getItemOver(mouseX, mouseY - 1, this.producer.getItemHeight());
+                int over = getItemOver(mouseX, mouseY - 1, this.width - 2 - scrollBarWidth(), this.producer.getItemHeight());
 
                 if(over != -1 && over < this.producer.getNumItems())
                 {
@@ -159,21 +196,28 @@ public class GuiList
         }
     }
 
-    public void setNubY(int newNubY)
+    private float getScrollClick()
     {
-        int trackHeight = this.height - 26;
-        this.nubY = Math.max(0, Math.min(trackHeight, newNubY));
-        scrollY = maxScrollHeight() * this.nubY / trackHeight;
+        int h = maxScrollHeight();
+        if(h == 0) return 1f;
+
+        return 7f / h;
     }
 
-    private int getItemOver(int mouseX, int mouseY, int itemHeight)
+    private int getItemOver(int mouseX, int mouseY, int itemWidth, int itemHeight)
     {
-        if(mouseX >= 1 && mouseX < this.width - 9)
+        if(mouseX >= 1 && mouseX < itemWidth + 1)
         {
             return (mouseY + scrollY) / itemHeight;
         }
 
         return -1;
+    }
+
+    private int scrollBarWidth()
+    {
+        if(producer == null || producer.getNumItems() * producer.getItemHeight() <= this.height - 2) return 0;
+        return 8;
     }
 
     @Nullable
@@ -182,7 +226,8 @@ public class GuiList
     {
         if(this.producer != null)
         {
-            int over = getItemOver(mouseX, mouseY - 1, this.producer.getItemHeight());
+            int iw = this.width - 2 - scrollBarWidth();
+            int over = getItemOver(mouseX, mouseY - 1, iw, this.producer.getItemHeight());
 
             if(over >= 0 && over < this.producer.getNumItems())
             {
@@ -192,11 +237,17 @@ public class GuiList
 
                 int realY = adjustedY - (itemHeight * (adjustedY / itemHeight));
 
-                return this.producer.getItem(over).getTooltip(mouseX - 1, realY, this.width - 10);
+                return this.producer.getItem(over).getTooltip(mouseX - 1, realY, iw);
             }
         }
 
         return null;
+    }
+
+    @Override
+    public void scrolled(GuiScrollBar.ScrollEvent event)
+    {
+        this.scrollY = (int)Math.floor(maxScrollHeight() * event.progress);
     }
 
     public interface Producer

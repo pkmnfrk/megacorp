@@ -27,6 +27,6 @@ public class GuiImageButton
         GuiUtil.bindTexture(texture);
         float dx = this.width / 2f - texWidth / 2f;
         float dy = this.height / 2f - texHeight / 2f;
-        GuiUtil.drawTexturePart(this.x + dx, this.y + dy, texWidth, texHeight, sourceX, sourceY, 256, 256);
+        GuiUtil.drawTexturePart(dx, dy, texWidth, texHeight, sourceX, sourceY, 256, 256);
     }
 }

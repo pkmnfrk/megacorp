@@ -200,7 +200,7 @@ public class GuiShippingDepot
     @Override
     public int getNumItems()
     {
-        return listOfQuests.size();
+        return listOfQuests != null ? listOfQuests.size() : 0;
     }
 
     @Override

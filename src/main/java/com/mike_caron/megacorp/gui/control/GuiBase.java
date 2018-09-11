@@ -66,7 +66,7 @@ public class GuiBase
 
         GuiControl newMouseControl = null;
 
-        newMouseControl = this.hitTest(mouseX, mouseY);
+        newMouseControl = this.hitTest(mouseX - guiLeft, mouseY - guiTop);
 
         if(mouseOverControl != newMouseControl)
         {
@@ -354,6 +354,48 @@ public class GuiBase
         }
     }
 
+    @Override
+    public void onMouseEnter()
+    {
+
+    }
+
+    @Override
+    public void onMouseExit()
+    {
+
+    }
+
+    @Override
+    public void onMouseOver(int mouseX, int mouseY)
+    {
+
+    }
+
+    @Override
+    public void onMouseDown(int mouseX, int mouseY, int button)
+    {
+
+    }
+
+    @Override
+    public void onMouseUp(int mouseX, int mouseY, int button)
+    {
+
+    }
+
+    @Override
+    public void onMouseMove(int mouseX, int mouseY)
+    {
+
+    }
+
+    @Override
+    public void onMouseWheel(int mouseX, int mouseY, int deltaWheel)
+    {
+
+    }
+
     @Nullable
     @Override
     public GuiControl hitTest(int x, int y)
@@ -363,8 +405,8 @@ public class GuiBase
             if(!control.isVisible() || !control.isEnabled())
                 continue;
 
-            int transX = x - control.getX() - guiLeft;
-            int transY = y - control.getY() - guiTop;
+            int transX = x - control.getX();
+            int transY = y - control.getY();
 
             GuiControl ret = control.hitTest(transX, transY);
             if(ret != null)

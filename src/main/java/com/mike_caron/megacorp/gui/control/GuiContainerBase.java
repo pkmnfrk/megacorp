@@ -53,6 +53,48 @@ public abstract class GuiContainerBase
     }
 
     @Override
+    public void onMouseEnter()
+    {
+
+    }
+
+    @Override
+    public void onMouseExit()
+    {
+
+    }
+
+    @Override
+    public void onMouseOver(int mouseX, int mouseY)
+    {
+
+    }
+
+    @Override
+    public void onMouseDown(int mouseX, int mouseY, int button)
+    {
+
+    }
+
+    @Override
+    public void onMouseUp(int mouseX, int mouseY, int button)
+    {
+
+    }
+
+    @Override
+    public void onMouseMove(int mouseX, int mouseY)
+    {
+
+    }
+
+    @Override
+    public void onMouseWheel(int mouseX, int mouseY, int deltaWheel)
+    {
+
+    }
+
+    @Override
     public void handleMouseInput() throws IOException
     {
         super.handleMouseInput();
@@ -93,7 +135,10 @@ public abstract class GuiContainerBase
 
         Stream<GuiControl> allWaiting = waitingForButton.stream().map(Collection::stream).reduce(Stream.empty(), Stream::concat).distinct();
 
-        allWaiting.forEach(c -> c.onMouseMove(c.parent.translateFromScreenX(mouseX), c.parent.translateFromScreenY(mouseY)));
+        allWaiting.forEach(c -> c.onMouseMove(
+            c.parent.translateFromScreenX(mouseX) - guiLeft - c.getX(),
+            c.parent.translateFromScreenY(mouseY) - guiTop - c.getY()
+        ));
 
 
         int button = Mouse.getEventButton();

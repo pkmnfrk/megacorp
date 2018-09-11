@@ -93,13 +93,59 @@ public abstract class GuiControl
 
     public void onKeyTyped(char typedChar, int keyCode) { }
 
-    public void onMouseEnter() {}
-    public void onMouseExit() {}
-    public void onMouseOver(int mouseX, int mouseY) {}
-    public void onMouseDown(int mouseX, int mouseY, int button) {}
-    public void onMouseUp(int mouseX, int mouseY, int button) {}
-    public void onMouseMove(int mouseX, int mouseY) {}
-    public void onMouseWheel(int mouseX, int mouseY, int deltaWheel) {}
+    public void onMouseEnter() {
+        if(parent != null)
+        {
+            parent.onMouseEnter();
+        }
+    }
+
+    public void onMouseExit() {
+        if(parent != null)
+        {
+            parent.onMouseEnter();
+        }
+    }
+
+    public void onMouseOver(int mouseX, int mouseY)
+    {
+        if(parent != null)
+        {
+            parent.onMouseOver(mouseX + this.getX(), mouseY + this.getY());
+        }
+    }
+
+    public void onMouseDown(int mouseX, int mouseY, int button)
+    {
+        if(parent != null)
+        {
+            parent.onMouseDown(mouseX + this.getX(), mouseY + this.getY(), button);
+        }
+    }
+
+    public void onMouseUp(int mouseX, int mouseY, int button)
+    {
+        if(parent != null)
+        {
+            parent.onMouseUp(mouseX + this.getX(), mouseY + this.getY(), button);
+        }
+    }
+
+    public void onMouseMove(int mouseX, int mouseY)
+    {
+        if(parent != null)
+        {
+            parent.onMouseMove(mouseX + this.getX(), mouseY + this.getY());
+        }
+    }
+
+    public void onMouseWheel(int mouseX, int mouseY, int deltaWheel)
+    {
+        if(parent != null)
+        {
+            parent.onMouseWheel(mouseX + this.getX(), mouseY + this.getY(), deltaWheel);
+        }
+    }
 
     public void update() { }
     public void preDraw() {}

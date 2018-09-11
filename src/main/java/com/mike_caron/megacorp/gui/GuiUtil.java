@@ -55,8 +55,14 @@ public class GuiUtil
 
     public static boolean inBounds(int mouseX, int mouseY, GuiSized button)
     {
+        return inBounds(mouseX, mouseY, button.getX(), button.getY(), button.getWidth(), button.getHeight());
+    }
+
+    public static boolean inBoundsThis(int mouseX, int mouseY, GuiSized button)
+    {
         return inBounds(mouseX, mouseY, 0, 0, button.getWidth(), button.getHeight());
     }
+
 
     public static boolean inBounds(int mouseX, int mouseY, int bx, int by, int bw, int bh)
     {

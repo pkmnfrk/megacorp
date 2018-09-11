@@ -20,6 +20,7 @@ public class GuiGuide
     private GuiGuidePage guidePage = new GuiGuidePage(7, 18, 161, 126);
 
     private final Stack<String> pageNav = new Stack<>();
+    private final Stack<Integer> scrolls = new Stack<>();
 
     private String currentPage = "index";
     public GuiGuide()
@@ -60,6 +61,8 @@ public class GuiGuide
             backButton.setEnabled(!pageNav.isEmpty());
 
             loadPage();
+
+            guidePage.setScrollY(scrolls.pop());
         }
     }
 
@@ -72,6 +75,7 @@ public class GuiGuide
     public void navigated(String newUri)
     {
         pageNav.push(currentPage);
+        scrolls.push(guidePage.getScrollY());
         currentPage = newUri;
         backButton.setEnabled(true);
         loadPage();

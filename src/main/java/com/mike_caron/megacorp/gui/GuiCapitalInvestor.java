@@ -136,7 +136,7 @@ public class GuiCapitalInvestor
     @Override
     public int getNumItems()
     {
-        return container.rewardList != null ? container.rewardList.size() : 0;
+        return (container != null && container.rewardList != null) ? container.rewardList.size() : 0;
     }
 
     @Override

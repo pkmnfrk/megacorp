@@ -6,6 +6,7 @@ import com.mike_caron.megacorp.gui.GuiUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentTranslation;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,12 +31,15 @@ public class GuiGuidePage
     public GuiGuidePage(int x, int y, int width, int height)
     {
         super(x, y, width, height);
+
+        //scrollX = -20;
     }
 
     public void loadPage(String uri)
     {
         this.clearControls();
         navigationDirectory.clear();
+        setEnableScrollBar(false);
 
         yPos = 0;
         nextId = 0;
@@ -68,14 +72,44 @@ public class GuiGuidePage
         }
         catch(IOException ex)
         {
+            String message = new TextComponentTranslation("gui.megacorp:guide.pagenotfound", currentJson).getFormattedText();
 
+            GuiMultilineLabel label = new GuiMultilineLabel(2, 0, this.width - 4 - 8, message);
+            this.addControl(label);
+
+            yPos += label.getHeight();
         }
         catch(JsonParseException ex)
         {
             String message = "Error while parsing " + currentJson + "\r\n" + ex.getMessage();
 
-            GuiMultilineLabel label = new GuiMultilineLabel(2, 0, this.width - 4 - 8, this.height, message);
+            GuiMultilineLabel label = new GuiMultilineLabel(2, 0, this.width - 4 - 8, message);
             this.addControl(label);
+
+            yPos += label.getHeight();
+        }
+
+        if(yPos > this.height)
+        {
+            //enable scroll bar
+            setEnableScrollBar(true);
+
+            //reflow everything
+
+            yPos = 0;
+            for(GuiControl control : controls)
+            {
+                GuiSized sized = (GuiSized)control;
+                sized.setWidth(this.width - 4 - 8);
+                sized.setY(yPos);
+
+                yPos += sized.getHeight();
+
+                if(control instanceof GuiMultilineLabel)
+                {
+                    yPos += 10;
+                }
+            }
         }
     }
 
@@ -96,7 +130,7 @@ public class GuiGuidePage
                     key = translation.get(key).getAsString();
                 }
 
-                GuiMultilineLabel label = new GuiMultilineLabel(2, yPos, this.width - 4 - 8, key);
+                GuiMultilineLabel label = new GuiMultilineLabel(2, yPos, this.width - 4, key);
 
                 this.addControl(label);
 
@@ -124,7 +158,7 @@ public class GuiGuidePage
                 label = otherTranslation.get("title").getAsString();
             }
 
-            GuiButton button = new GuiButton(nextId, 2, yPos, this.width - 4 - 8, 14, label);
+            GuiButton button = new GuiButton(nextId, 2, yPos, this.width - 4, 14, label);
             button.addListener(this);
             this.addControl(button);
 
@@ -153,11 +187,12 @@ public class GuiGuidePage
     private JsonObject loadResourceAsJson(ResourceLocation res)
         throws IOException
     {
+        currentJson = res.getPath();
+
         IResource resource = Minecraft.getMinecraft().getResourceManager().getResource(res);
         JsonParser parser = new JsonParser();
         JsonObject ret;
 
-        currentJson = res.toString();
         InputStreamReader is = new InputStreamReader(resource.getInputStream());
         ret = parser.parse(is).getAsJsonObject();
         is.close();
@@ -174,10 +209,10 @@ public class GuiGuidePage
         try
         {
             ResourceLocation loc = new ResourceLocation(MegaCorpMod.modId, localeFile(uri, locale));
+            currentJson = loc.getPath();
+
             IResource res = Minecraft.getMinecraft().getResourceManager().getResource(loc);
             stream = res.getInputStream();
-
-            currentJson = loc.toString();
         }
         catch(IOException ex)
         {
@@ -185,11 +220,11 @@ public class GuiGuidePage
 
             try
             {
-                ResourceLocation loc = new ResourceLocation(MegaCorpMod.modId, localeFile(uri, "en-us"));
+                ResourceLocation loc = new ResourceLocation(MegaCorpMod.modId, localeFile(uri, "en_us"));
+                currentJson = loc.getPath();
+
                 IResource res = Minecraft.getMinecraft().getResourceManager().getResource(loc);
                 stream = res.getInputStream();
-
-                currentJson = loc.toString();
             }
             catch (IOException ex2)
             {

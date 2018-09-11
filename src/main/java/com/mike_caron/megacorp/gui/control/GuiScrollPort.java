@@ -11,7 +11,34 @@ public class GuiScrollPort
     extends GuiClippedSized
     implements IGuiGroup
 {
-    private final List<GuiControl> controls = new ArrayList<>();
+    protected final List<GuiControl> controls = new ArrayList<>();
+
+    private boolean enableScrollBar = false;
+
+    private GuiScrollBar scrollBar;
+
+    public GuiScrollPort(int x, int y, int width, int height)
+    {
+        super(x, y, width, height);
+
+        scrollBar = new GuiScrollBar(this.width - 8, 0, 8, this.height);
+    }
+
+    @Override
+    public void setWidth(int width)
+    {
+        super.setWidth(width);
+
+        scrollBar.setX(this.width - 8);
+    }
+
+    @Override
+    public void setHeight(int height)
+    {
+        super.setHeight(height);
+
+        scrollBar.setHeight(this.height);
+    }
 
     @Override
     public void addControl(GuiControl control)
@@ -169,18 +196,23 @@ public class GuiScrollPort
         return parent.translateFromScreenY(y + scrollY) - this.y;
     }
 
-    public GuiScrollPort(int x, int y, int width, int height)
-    {
-        super(x, y, width, height);
-    }
-
     @Override
     public void draw()
     {
         if(!this.visible)
             return;
 
-        GlStateManager.pushMatrix();
+        if(this.enableScrollBar)
+        {
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(this.scrollBar.getX(), this.scrollBar.getY(), 0);
+            this.scrollBar.draw();
+            GlStateManager.popMatrix();
+        }
+
+        this.start();
+
+        //GlStateManager.pushMatrix();
         //GlStateManager.translate(this.x, this.y, 0);
 
         for(GuiControl control : controls)
@@ -196,6 +228,19 @@ public class GuiScrollPort
                 GlStateManager.popMatrix();
             }
         }
-        GlStateManager.popMatrix();
+        //GlStateManager.popMatrix();
+
+        this.finish();
+    }
+
+    @Override
+    protected int getRightMargin()
+    {
+        return enableScrollBar ? 8 : 0;
+    }
+
+    public void setEnableScrollBar(boolean enable)
+    {
+        this.enableScrollBar = enable;
     }
 }

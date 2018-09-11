@@ -15,8 +15,7 @@ public abstract class GuiClippedSized
         super(x, y, width, height);
     }
 
-    @Override
-    public void preDraw()
+    protected void start()
     {
         clippingEnabled = GL11.glIsEnabled(GL11.GL_SCISSOR_TEST);
 
@@ -30,11 +29,18 @@ public abstract class GuiClippedSized
 
     protected void assertClippingPlane()
     {
-        setClippingPlane(parent.translateToScreenX(this.x), parent.translateToScreenY(this.y) + this.height, this.width, this.height);
+        int lm = getLeftMargin();
+        int rm = getRightMargin();
+
+        setClippingPlane(
+            parent.translateToScreenX(this.x) + lm,
+            parent.translateToScreenY(this.y) + this.height,
+            this.width - lm - rm,
+            this.height
+        );
     }
 
-    @Override
-    public void postDraw()
+    protected void finish()
     {
         GL11.glPopMatrix();
         if(!clippingEnabled)
@@ -71,5 +77,15 @@ public abstract class GuiClippedSized
     public void setScrollY(int scrollY)
     {
         this.scrollY = scrollY;
+    }
+
+    protected int getLeftMargin()
+    {
+        return 0;
+    }
+
+    protected int getRightMargin()
+    {
+        return 0;
     }
 }

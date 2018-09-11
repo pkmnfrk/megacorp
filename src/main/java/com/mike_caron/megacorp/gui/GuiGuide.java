@@ -16,11 +16,12 @@ public class GuiGuide
     private static final ResourceLocation background = new ResourceLocation(MegaCorpMod.modId, "textures/gui/guide.png");
 
     private GuiButton backButton = GuiUtil.translatedButton(1, 7, 147, 55, 14, "gui.megacorp:guide.back");
+
     private GuiGuidePage guidePage = new GuiGuidePage(7, 18, 161, 126);
 
     private final Stack<String> pageNav = new Stack<>();
-    private String currentPage = "index";
 
+    private String currentPage = "index";
     public GuiGuide()
     {
         super(176, 166, background);
@@ -28,6 +29,12 @@ public class GuiGuide
         initControls();
 
         loadPage();
+    }
+
+    @Override
+    protected String getTitleKey()
+    {
+        return "gui.megacorp:guide.title";
     }
 
     @Override

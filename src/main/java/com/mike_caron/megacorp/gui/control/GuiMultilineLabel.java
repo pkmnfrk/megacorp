@@ -16,6 +16,8 @@ public class GuiMultilineLabel
 
     private List<String> lines;
 
+    private boolean autoHeight = false;
+
     public GuiMultilineLabel(int x, int y, int width, String string)
     {
         this(x, y, width, -1, string);
@@ -49,6 +51,11 @@ public class GuiMultilineLabel
         this.string = string;
         this.alignment = alignment;
         this.valignment = valignment;
+
+        if(height == -1)
+        {
+            autoHeight = true;
+        }
     }
 
     public String getString()
@@ -93,11 +100,41 @@ public class GuiMultilineLabel
     }
 
     @Override
+    public void setHeight(int height)
+    {
+        super.setHeight(height);
+
+        if(height == -1 && !autoHeight)
+        {
+            autoHeight = true;
+            lines = null;
+        }
+        else if(height != -1 && autoHeight)
+        {
+            autoHeight = false;
+            lines = null;
+        }
+    }
+
+    @Override
+    public void setWidth(int width)
+    {
+        super.setWidth(width);
+
+        lines = null;
+    }
+
+    @Override
     public int getHeight()
     {
-        if(this.height == -1)
+        if(autoHeight)
         {
-            updateCache();
+            if (lines == null)
+            {
+                updateCache();
+            }
+
+            return lines.size() * 10;
         }
 
         return super.getHeight();

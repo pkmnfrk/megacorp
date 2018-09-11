@@ -44,11 +44,11 @@ public class GuiProgressBar
 
         GuiUtil.setGLColor(foreColor);
 
-        //GL11.glScissor(parent.translateX(x), y, (int)(width * progress), height);
+        //GL11.glScissor(parent.translateToScreenX(x), y, (int)(width * progress), height);
 
         //GL11.glEnable(GL11.GL_SCISSOR_TEST);
 
-        //GuiUtil.drawDebugFlatRectangle(-parent.translateX(0), -parent.translateY(0), 1000, 1000 );
+        //GuiUtil.drawDebugFlatRectangle(-parent.translateToScreenX(0), -parent.translateToScreenY(0), 1000, 1000 );
         //GuiUtil.draw3x3Stretched(x, y, (int)(width * progress + 4), height, 32, 16);
         GuiUtil.drawStretchedTexturePart(x, y, (int)(width * progress), height, 36, 16, 1, 16, 256, 256);
         //GL11.glDisable(GL11.GL_SCISSOR_TEST);

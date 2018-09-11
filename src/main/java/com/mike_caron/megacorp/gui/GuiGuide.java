@@ -35,6 +35,7 @@ public class GuiGuide
         super.addControls();
 
         this.addControl(backButton);
+        this.addControl(guidePage);
         backButton.setEnabled(false);
     }
 

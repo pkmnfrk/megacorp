@@ -38,6 +38,9 @@ public class ModItems
     @GameRegistry.ObjectHolder("work_voucher")
     public static ItemBase work_voucher;
 
+    @GameRegistry.ObjectHolder("manual")
+    public static Manual manual;
+
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event)
     {
@@ -52,7 +55,7 @@ public class ModItems
         );
         registry.register(new Bottle());
         registry.register(new WorkVoucher());
-
+        registry.register(new Manual());
 
         /*
         registry.register(ingotMoney = new Item()

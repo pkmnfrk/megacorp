@@ -177,7 +177,7 @@ public class GuiWrappedTextBox
             tempText = textField.getText();
         }
 
-        textField = new GuiTextField(1, this.parent.getFontRenderer(), this.x, this.y, this.width, this.height);
+        textField = new GuiTextField(1, this.parent.getFontRenderer(), 0, 0, this.width, this.height);
 
         textField.setCanLoseFocus(true);
 

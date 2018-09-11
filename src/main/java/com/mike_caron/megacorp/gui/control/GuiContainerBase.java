@@ -57,28 +57,12 @@ public abstract class GuiContainerBase
     {
         super.handleMouseInput();
 
-        int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth - guiLeft;
-        int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1 - guiTop;
+        int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
+        int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
 
         GuiControl newMouseControl = null;
 
-        for(Gui control : this.controls)
-        {
-            if(control instanceof GuiControl)
-            {
-                GuiControl ctrl = (GuiControl)control;
-
-                if(!ctrl.isVisible() || !ctrl.isEnabled())
-                    continue;
-
-                GuiControl result = ctrl.hitTest(mouseX, mouseY);
-
-                if(result != null)
-                {
-                    newMouseControl = result;
-                }
-            }
-        }
+        newMouseControl = this.hitTest(mouseX, mouseY);
 
         if(mouseOverControl != newMouseControl)
         {
@@ -95,18 +79,21 @@ public abstract class GuiContainerBase
 
         if(mouseOverControl != null)
         {
-            mouseOverControl.onMouseOver(mouseX, mouseY);
+            int transX = mouseOverControl.parent.translateFromScreenX(mouseX) - guiLeft - mouseOverControl.getX();
+            int transY = mouseOverControl.parent.translateFromScreenY(mouseY) - guiTop - mouseOverControl.getY();
+
+            mouseOverControl.onMouseOver(transX, transY);
 
             int dWheel = Mouse.getEventDWheel() / 120;
             if(dWheel != 0)
             {
-                mouseOverControl.onMouseWheel(mouseX, mouseY, dWheel);
+                mouseOverControl.onMouseWheel(transX, transY, dWheel);
             }
         }
 
         Stream<GuiControl> allWaiting = waitingForButton.stream().map(Collection::stream).reduce(Stream.empty(), Stream::concat).distinct();
 
-        allWaiting.forEach(c -> c.onMouseMove(mouseX, mouseY));
+        allWaiting.forEach(c -> c.onMouseMove(c.parent.translateFromScreenX(mouseX), c.parent.translateFromScreenY(mouseY)));
 
 
         int button = Mouse.getEventButton();
@@ -121,7 +108,9 @@ public abstract class GuiContainerBase
                 //mouseOverControl.onMouseUp(mouseX, mouseY, button);
                 for(GuiControl waiting : waitingForButton.get(button))
                 {
-                    waiting.onMouseUp(mouseX, mouseY, button);
+                    int transX = waiting.parent.translateFromScreenX(mouseX) - guiLeft - waiting.getX();
+                    int transY = waiting.parent.translateFromScreenY(mouseY) - guiTop - waiting.getY();
+                    waiting.onMouseUp(transX, transY, button);
                 }
                 waitingForButton.get(button).clear();
             }
@@ -130,7 +119,9 @@ public abstract class GuiContainerBase
                 setStateForButton(button, true);
                 if(mouseOverControl != null)
                 {
-                    mouseOverControl.onMouseDown(mouseX, mouseY, button);
+                    int transX = mouseOverControl.parent.translateFromScreenX(mouseX) - guiLeft - mouseOverControl.getX();
+                    int transY = mouseOverControl.parent.translateFromScreenY(mouseY) - guiTop - mouseOverControl.getY();
+                    mouseOverControl.onMouseDown(transX, transY, button);
                     waitingForButton.get(button).add(mouseOverControl);
                 }
 
@@ -213,11 +204,19 @@ public abstract class GuiContainerBase
     {
 
         GlStateManager.pushMatrix();
+        //GlStateManager.translate(guiLeft, guiTop, 0);
 
-        for (GuiControl control : this.controls) {
-            control.preDraw();
-            control.draw();
-            control.postDraw();
+        for (GuiControl control : this.controls)
+        {
+            if(control.isVisible())
+            {
+                GlStateManager.pushMatrix();
+                GlStateManager.translate(control.getX(), control.getY(), 0);
+                control.preDraw();
+                control.draw();
+                control.postDraw();
+                GlStateManager.popMatrix();
+            }
         }
 
         GlStateManager.popMatrix();
@@ -242,15 +241,27 @@ public abstract class GuiContainerBase
     }
 
     @Override
-    public int translateX(int x)
+    public int translateToScreenX(int x)
     {
         return guiLeft + x;
     }
 
     @Override
-    public int translateY(int y)
+    public int translateToScreenY(int y)
     {
         return guiTop + y;
+    }
+
+    @Override
+    public int translateFromScreenX(int x)
+    {
+        return x;
+    }
+
+    @Override
+    public int translateFromScreenY(int y)
+    {
+        return y;
     }
 
     @Override
@@ -322,11 +333,11 @@ public abstract class GuiContainerBase
     @Override
     protected void renderHoveredToolTip(int mouseX, int mouseY)
     {
-        int goodX = mouseX - guiLeft;
-        int goodY = mouseY - guiTop;
-
         if(mouseOverControl != null)
         {
+            int goodX = mouseOverControl.parent.translateFromScreenX(mouseX - guiLeft - mouseOverControl.getX());
+            int goodY = mouseOverControl.parent.translateFromScreenY(mouseY - guiTop - mouseOverControl.getY());
+
             List<String> toolTip = mouseOverControl.getTooltip(goodX, goodY);
             if(toolTip != null)
             {
@@ -347,7 +358,10 @@ public abstract class GuiContainerBase
             if(!control.isVisible() || !control.isEnabled())
                 continue;
 
-            GuiControl ret = control.hitTest(x, y);
+            int transX = x - control.getX() - guiLeft;
+            int transY = y - control.getY() - guiTop;
+
+            GuiControl ret = control.hitTest(transX, transY);
             if(ret != null)
                 return ret;
         }

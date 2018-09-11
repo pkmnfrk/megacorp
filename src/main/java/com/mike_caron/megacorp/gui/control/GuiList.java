@@ -42,7 +42,7 @@ public class GuiList
         GuiUtil.drawTexturePart(this.width - 9 + scrollX, 9 + nubY + scrollY, 8, 8, 72, 8, 256, 256);
 
 
-        setClippingPlane(parent.translateX(this.x) + 1, parent.translateY(this.y) + this.height - 1, this.width - 2, this.height - 2);
+        setClippingPlane(parent.translateToScreenX(this.x) + 1, parent.translateToScreenY(this.y) + this.height - 1, this.width - 2, this.height - 2);
 
         if(this.producer != null)
         {
@@ -118,8 +118,8 @@ public class GuiList
     @Override
     public void onMouseOver(int mouseX, int mouseY)
     {
-        this.mouseX = mouseX - this.x;
-        this.mouseY = mouseY - this.y;
+        this.mouseX = mouseX;
+        this.mouseY = mouseY;
     }
 
     @Override
@@ -127,29 +127,29 @@ public class GuiList
     {
         int sX = this.width - 9;
 
-        if(GuiUtil.inBounds(mouseX - this.x, mouseY - this.y, sX, 9 + nubY, 8, 8))
+        if(GuiUtil.inBounds(mouseX, mouseY, sX, 9 + nubY, 8, 8))
         {
             draggingNub = true;
             draggingStartMouse = mouseY;
             draggingStartNub = nubY;
         }
-        else if(GuiUtil.inBounds(mouseX - this.x, mouseY - this.y, sX, 1, 8, 8))
+        else if(GuiUtil.inBounds(mouseX, mouseY, sX, 1, 8, 8))
         {
             setNubY(nubY - 1);
         }
-        else if(GuiUtil.inBounds(mouseX - this.x, mouseY - this.y, sX, this.height - 9, 8, 8))
+        else if(GuiUtil.inBounds(mouseX, mouseY, sX, this.height - 9, 8, 8))
         {
             setNubY(nubY + 1);
         }
-        else if(GuiUtil.inBounds(mouseX - this.x, mouseY - this.y, sX, 9, 8, this.height - 18))
+        else if(GuiUtil.inBounds(mouseX, mouseY, sX, 9, 8, this.height - 18))
         {
-            setNubY(mouseY - this.y - 9 - 4);
+            setNubY(mouseY - 9 - 4);
         }
-        else if(GuiUtil.inBounds(mouseX - this.x, mouseY - this.y, 1, 1, this.width - 8 - 1 - 1, this.height - 2))
+        else if(GuiUtil.inBounds(mouseX, mouseY, 1, 1, this.width - 8 - 1 - 1, this.height - 2))
         {
             if(this.producer != null)
             {
-                int over = getItemOver(mouseX - this.x, mouseY - this.y - 1, this.producer.getItemHeight());
+                int over = getItemOver(mouseX, mouseY - 1, this.producer.getItemHeight());
 
                 if(over != -1 && over < this.producer.getNumItems())
                 {
@@ -182,17 +182,17 @@ public class GuiList
     {
         if(this.producer != null)
         {
-            int over = getItemOver(mouseX - this.x, mouseY - this.y - 1, this.producer.getItemHeight());
+            int over = getItemOver(mouseX, mouseY - 1, this.producer.getItemHeight());
 
-            if(over != -1 && over < this.producer.getNumItems())
+            if(over >= 0 && over < this.producer.getNumItems())
             {
                 int itemHeight = this.producer.getItemHeight();
 
-                int adjustedY = mouseY + scrollY - this.y - 1;
+                int adjustedY = mouseY + scrollY - 1;
 
                 int realY = adjustedY - (itemHeight * (adjustedY / itemHeight));
 
-                return this.producer.getItem(over).getTooltip(mouseX - this.x - 1, realY, this.width - 10);
+                return this.producer.getItem(over).getTooltip(mouseX - 1, realY, this.width - 10);
             }
         }
 

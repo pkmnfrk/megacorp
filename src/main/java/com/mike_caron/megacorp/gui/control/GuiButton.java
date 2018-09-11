@@ -82,14 +82,14 @@ public class GuiButton
 
         GuiUtil.bindTexture(GuiUtil.MISC_RESOURCES);
         GlStateManager.color(1, 1, 1, 1);
-        GuiUtil.draw3x3(this.x, this.y, this.width, this.height, sx, 0);
+        GuiUtil.draw3x3(0, 0, this.width, this.height, sx, 0);
 
         if(label != null)
         {
             int w = this.parent.getFontRenderer().getStringWidth(label);
 
-            this.parent.getFontRenderer().drawString(label, this.x + this.width / 2 - w / 2 + 1, this.y + this.height / 2 - 5 + 1, Color.black.getRGB());
-            this.parent.getFontRenderer().drawString(label, this.x + this.width / 2 - w / 2, this.y + this.height / 2 - 5, fore.getRGB());
+            this.parent.getFontRenderer().drawString(label, this.width / 2 - w / 2 + 1, this.height / 2 - 5 + 1, Color.black.getRGB());
+            this.parent.getFontRenderer().drawString(label, this.width / 2 - w / 2, this.height / 2 - 5, fore.getRGB());
         }
     }
 

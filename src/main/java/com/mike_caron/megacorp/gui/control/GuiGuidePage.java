@@ -2,6 +2,7 @@ package com.mike_caron.megacorp.gui.control;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.mike_caron.megacorp.MegaCorpMod;
 import net.minecraft.client.Minecraft;
@@ -16,6 +17,8 @@ public class GuiGuidePage
     extends GuiScrollPort
 {
     String title;
+
+    String currentJson = null;
 
     public GuiGuidePage(int x, int y, int width, int height)
     {
@@ -72,6 +75,13 @@ public class GuiGuidePage
         {
 
         }
+        catch(JsonParseException ex)
+        {
+            String message = "Error while parsing " + currentJson + "\r\n" + ex.getMessage();
+
+            GuiMultilineLabel label = new GuiMultilineLabel(2, 0, this.width - 4, this.height, message);
+            this.addControl(label);
+        }
     }
 
     public String getTitle()
@@ -96,6 +106,7 @@ public class GuiGuidePage
         JsonParser parser = new JsonParser();
         JsonObject ret;
 
+        currentJson = res.toString();
         InputStreamReader is = new InputStreamReader(resource.getInputStream());
         ret = parser.parse(is).getAsJsonObject();
         is.close();
@@ -114,6 +125,8 @@ public class GuiGuidePage
             ResourceLocation loc = new ResourceLocation(MegaCorpMod.modId, localeFile(uri, locale));
             IResource res = Minecraft.getMinecraft().getResourceManager().getResource(loc);
             stream = res.getInputStream();
+
+            currentJson = loc.toString();
         }
         catch(IOException ex)
         {
@@ -124,6 +137,8 @@ public class GuiGuidePage
                 ResourceLocation loc = new ResourceLocation(MegaCorpMod.modId, localeFile(uri, "en-us"));
                 IResource res = Minecraft.getMinecraft().getResourceManager().getResource(loc);
                 stream = res.getInputStream();
+
+                currentJson = loc.toString();
             }
             catch (IOException ex2)
             {

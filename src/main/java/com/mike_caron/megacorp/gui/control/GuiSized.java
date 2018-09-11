@@ -15,7 +15,7 @@ public abstract class GuiSized extends GuiControl
     @Override
     public GuiControl hitTest(int x, int y)
     {
-        if(GuiUtil.inBounds(x,y, this.getX(), this.getY(), this.getWidth(), this.getHeight()))
+        if(GuiUtil.inBounds(x, y, 0, 0, this.getWidth(), this.getHeight()))
         {
             return this;
         }

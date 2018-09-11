@@ -1,6 +1,7 @@
 package com.mike_caron.megacorp.gui.control;
 
 import com.mike_caron.megacorp.gui.GuiUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
@@ -47,32 +48,25 @@ public class GuiBase
     }
 
     @Override
+    public void setWorldAndResolution(Minecraft mc, int width, int height)
+    {
+        super.setWorldAndResolution(mc, width, height);
+
+        this.guiLeft = (this.width - this.xSize) / 2;
+        this.guiTop = (this.height - this.ySize) / 2;
+    }
+
+    @Override
     public void handleMouseInput() throws IOException
     {
         super.handleMouseInput();
 
-        int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth - guiLeft;
-        int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1 - guiTop;
+        int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
+        int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
 
         GuiControl newMouseControl = null;
 
-        for(Gui control : this.controls)
-        {
-            if(control instanceof GuiControl)
-            {
-                GuiControl ctrl = (GuiControl)control;
-
-                if(!ctrl.isVisible() || !ctrl.isEnabled())
-                    continue;
-
-                GuiControl result = ctrl.hitTest(mouseX, mouseY);
-
-                if(result != null)
-                {
-                    newMouseControl = result;
-                }
-            }
-        }
+        newMouseControl = this.hitTest(mouseX, mouseY);
 
         if(mouseOverControl != newMouseControl)
         {
@@ -89,18 +83,21 @@ public class GuiBase
 
         if(mouseOverControl != null)
         {
-            mouseOverControl.onMouseOver(mouseX, mouseY);
+            int transX = mouseOverControl.parent.translateFromScreenX(mouseX) - guiLeft - mouseOverControl.getX();
+            int transY = mouseOverControl.parent.translateFromScreenY(mouseY) - guiTop - mouseOverControl.getY();
+
+            mouseOverControl.onMouseOver(transX, transY);
 
             int dWheel = Mouse.getEventDWheel() / 120;
             if(dWheel != 0)
             {
-                mouseOverControl.onMouseWheel(mouseX, mouseY, dWheel);
+                mouseOverControl.onMouseWheel(transX, transY, dWheel);
             }
         }
 
         Stream<GuiControl> allWaiting = waitingForButton.stream().map(Collection::stream).reduce(Stream.empty(), Stream::concat).distinct();
 
-        allWaiting.forEach(c -> c.onMouseMove(mouseX, mouseY));
+        allWaiting.forEach(c -> c.onMouseMove(c.parent.translateFromScreenX(mouseX), c.parent.translateFromScreenY(mouseY)));
 
 
         int button = Mouse.getEventButton();
@@ -115,7 +112,9 @@ public class GuiBase
                 //mouseOverControl.onMouseUp(mouseX, mouseY, button);
                 for(GuiControl waiting : waitingForButton.get(button))
                 {
-                    waiting.onMouseUp(mouseX, mouseY, button);
+                    int transX = waiting.parent.translateFromScreenX(mouseX) - guiLeft - waiting.getX();
+                    int transY = waiting.parent.translateFromScreenY(mouseY) - guiTop - waiting.getY();
+                    waiting.onMouseUp(transX, transY, button);
                 }
                 waitingForButton.get(button).clear();
             }
@@ -124,7 +123,9 @@ public class GuiBase
                 setStateForButton(button, true);
                 if(mouseOverControl != null)
                 {
-                    mouseOverControl.onMouseDown(mouseX, mouseY, button);
+                    int transX = mouseOverControl.parent.translateFromScreenX(mouseX) - guiLeft - mouseOverControl.getX();
+                    int transY = mouseOverControl.parent.translateFromScreenY(mouseY) - guiTop - mouseOverControl.getY();
+                    mouseOverControl.onMouseDown(transX, transY, button);
                     waitingForButton.get(button).add(mouseOverControl);
                 }
 
@@ -205,11 +206,18 @@ public class GuiBase
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
         GlStateManager.pushMatrix();
+        GlStateManager.translate(guiLeft, guiTop, 0);
 
         for (GuiControl control : this.controls) {
-            control.preDraw();
-            control.draw();
-            control.postDraw();
+            if(control.isVisible())
+            {
+                GlStateManager.pushMatrix();
+                GlStateManager.translate(control.getX(), control.getY(), 0);
+                control.preDraw();
+                control.draw();
+                control.postDraw();
+                GlStateManager.popMatrix();
+            }
         }
 
         GlStateManager.popMatrix();
@@ -241,15 +249,27 @@ public class GuiBase
     }
 
     @Override
-    public int translateX(int x)
+    public int translateToScreenX(int x)
     {
         return guiLeft + x;
     }
 
     @Override
-    public int translateY(int y)
+    public int translateToScreenY(int y)
     {
         return guiTop + y;
+    }
+
+    @Override
+    public int translateFromScreenX(int x)
+    {
+        return x - guiLeft;
+    }
+
+    @Override
+    public int translateFromScreenY(int y)
+    {
+        return y - guiTop;
     }
 
     @Override
@@ -262,13 +282,6 @@ public class GuiBase
     public void clearControls()
     {
         this.controls.clear();
-    }
-
-    protected void drawInsertCardBackground()
-    {
-        GlStateManager.color(1, 1, 1, 1);
-        mc.getTextureManager().bindTexture(GuiUtil.EMPTY_GUI);
-        drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
     }
 
     protected String getTitleKey()
@@ -320,19 +333,17 @@ public class GuiBase
 
     protected void renderHoveredToolTip(int mouseX, int mouseY)
     {
-        int goodX = mouseX - guiLeft;
-        int goodY = mouseY - guiTop;
-
         if(mouseOverControl != null)
         {
+            int goodX = mouseOverControl.parent.translateFromScreenX(mouseX);
+            int goodY = mouseOverControl.parent.translateFromScreenY(mouseY);
+
             List<String> toolTip = mouseOverControl.getTooltip(goodX, goodY);
             if(toolTip != null)
             {
                 this.drawHoveringText(toolTip, mouseX, mouseY);
             }
         }
-
-        //super.renderHoveredToolTip(mouseX, mouseY);
     }
 
     @Nullable
@@ -344,7 +355,10 @@ public class GuiBase
             if(!control.isVisible() || !control.isEnabled())
                 continue;
 
-            GuiControl ret = control.hitTest(x, y);
+            int transX = x - control.getX() - guiLeft;
+            int transY = y - control.getY() - guiTop;
+
+            GuiControl ret = control.hitTest(transX, transY);
             if(ret != null)
                 return ret;
         }

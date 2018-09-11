@@ -69,9 +69,13 @@ public class GuiProxy implements IGuiHandler
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
     {
+        if(ID == 100)
+        {
+            return new GuiGuide();
+        }
+
         BlockPos pos = new BlockPos(x,y,z);
         TileEntity te = world.getTileEntity(pos);
-
 
         if(te instanceof TileEntityProfitMaterializer) {
             TileEntityProfitMaterializer tePM = (TileEntityProfitMaterializer) te;

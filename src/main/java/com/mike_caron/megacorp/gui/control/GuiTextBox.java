@@ -65,13 +65,13 @@ public class GuiTextBox
         if(!visible)
             return;
 
-        GuiUtil.draw3x3Stretched(this.x, this.y, this.width, this.height, 16, 16);
+        GuiUtil.draw3x3Stretched(0,0, this.width, this.height, 16, 16);
 
         String beforeCursor = currentString.substring(0, cursorPosition);
 
         int cursorX = this.parent.getFontRenderer().getStringWidth(beforeCursor);
 
-        this.parent.getFontRenderer().drawString(currentString, this.x + 1, this.y + 1, foreColor);
+        this.parent.getFontRenderer().drawString(currentString, 1, 1, foreColor);
 
     }
 

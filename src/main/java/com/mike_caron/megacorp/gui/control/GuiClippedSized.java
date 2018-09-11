@@ -18,10 +18,10 @@ public abstract class GuiClippedSized
     {
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
 
-        setClippingPlane(parent.translateX(this.x), parent.translateY(this.y) + this.height, this.width, this.height);
+        setClippingPlane(parent.translateToScreenX(this.x), parent.translateToScreenY(this.y) + this.height, this.width, this.height);
 
         GL11.glPushMatrix();
-        GL11.glTranslatef(x - this.scrollX, y - this.scrollY, 0);
+        GL11.glTranslatef(-this.scrollX, - this.scrollY, 0);
     }
 
     @Override

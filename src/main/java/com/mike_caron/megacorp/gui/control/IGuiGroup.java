@@ -14,6 +14,8 @@ public interface IGuiGroup
     @Nullable
     GuiControl hitTest(int x, int y);
     void sort();
-    int translateX(int x);
-    int translateY(int y);
+    int translateToScreenX(int x);
+    int translateToScreenY(int y);
+    int translateFromScreenX(int x);
+    int translateFromScreenY(int y);
 }

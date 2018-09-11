@@ -47,6 +47,6 @@ public class GuiLabel
     {
         if(!this.visible) return;
 
-        this.parent.getFontRenderer().drawString(stringLabel, this.x, this.y, this.color.getRGB());
+        this.parent.getFontRenderer().drawString(stringLabel, 0, 0, this.color.getRGB());
     }
 }

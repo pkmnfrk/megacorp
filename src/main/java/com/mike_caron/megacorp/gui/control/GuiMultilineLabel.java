@@ -99,35 +99,35 @@ public class GuiMultilineLabel
         FontRenderer renderer = parent.getFontRenderer();
 
         int dh = renderer.FONT_HEIGHT * lines.size();
-        int dy = 0;
+        int dy = -1;
         switch(valignment)
         {
             case TOP:
-                dy = this.y;
+                dy = 0;
                 break;
             case CENTER:
-                dy = this.y + this.height / 2 - dh / 2;
+                dy = this.height / 2 - dh / 2;
                 break;
             case BOTTOM:
-                dy = this.y + this.height - dh;
+                dy = this.height - dh;
                 break;
         }
 
         for(int i = 0; i < lines.size(); i++)
         {
             int w = renderer.getStringWidth(lines.get(i));
-            int dx = 0;
+            int dx = -1;
 
             switch (alignment)
             {
                 case LEFT:
-                    dx = this.x;
+                    dx = 0;
                     break;
                 case CENTER:
-                    dx = this.x + this.width / 2 - w / 2;
+                    dx = this.width / 2 - w / 2;
                     break;
                 case RIGHT:
-                    dx = this.x + this.width - w;
+                    dx = this.width - w;
                     break;
             }
 

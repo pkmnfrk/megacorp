@@ -118,7 +118,7 @@ public class GuiFluid
             drawWidth = getScaled(drawWidth);
         }
 
-        GuiUtil.drawFluid(this.x, this.y + this.height - drawHeight, fluidStack, drawWidth, drawHeight);
+        GuiUtil.drawFluid(0,  this.height - drawHeight, fluidStack, drawWidth, drawHeight);
 
         if(gradEnabled)
         {
@@ -127,7 +127,7 @@ public class GuiFluid
             //drawTexturedModalRect(this.x + this.width - 18, this.y + 30, 0, 1, 18, 46);
             //drawModalRectWithCustomSizedTexture(this.x + this.width - 18, this.y + 1, 0, 1/128f, this.width / 3, this.height - 2, 128f, 128f);
             //GuiUtil.drawTiledTexture(this.parent, this.x + this.width - 16, this.y, GuiUtil.getTexture(GuiUtil.MISC_RESOURCES), 16, this.height);
-            GuiUtil.drawTiledTexturePart(this.x + this.width - 16, this.y, 16, this.height, 0, 0, 16, 16, 256, 256);
+            GuiUtil.drawTiledTexturePart(this.width - 16, 0, 16, this.height, 0, 0, 16, 16, 256, 256);
         }
     }
 

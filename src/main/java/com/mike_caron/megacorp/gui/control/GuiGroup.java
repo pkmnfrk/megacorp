@@ -1,6 +1,7 @@
 package com.mike_caron.megacorp.gui.control;
 
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -18,15 +19,27 @@ public class GuiGroup
     }
 
     @Override
-    public int translateX(int x)
+    public int translateToScreenX(int x)
     {
-        return parent.translateX(x);
+        return parent.translateToScreenX(x + this.x);
     }
 
     @Override
-    public int translateY(int y)
+    public int translateToScreenY(int y)
     {
-        return parent.translateY(y);
+        return parent.translateToScreenY(y + this.y);
+    }
+
+    @Override
+    public int translateFromScreenX(int x)
+    {
+        return parent.translateFromScreenX(x) - this.x;
+    }
+
+    @Override
+    public int translateFromScreenY(int y)
+    {
+        return parent.translateFromScreenX(y) - this.y;
     }
 
     @Override
@@ -41,15 +54,22 @@ public class GuiGroup
         if(!this.visible)
             return;
 
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(this.x, this.y, 0);
+
         for(GuiControl control : controls)
         {
             if(control.isVisible())
             {
+                GlStateManager.pushMatrix();
+                GlStateManager.translate(control.getX(), control.getY(), 0);
                 control.preDraw();
                 control.draw();
                 control.postDraw();
+                GlStateManager.popMatrix();
             }
         }
+        GlStateManager.popMatrix();
     }
 
     @Override
@@ -90,7 +110,7 @@ public class GuiGroup
         {
             if(control.isVisible())
             {
-                GuiControl res = control.hitTest(x, y);
+                GuiControl res = control.hitTest(x - control.getX(), y - control.getY());
                 if (res != null)
                     return res;
             }

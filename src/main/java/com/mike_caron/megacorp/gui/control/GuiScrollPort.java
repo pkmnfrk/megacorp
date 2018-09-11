@@ -1,6 +1,7 @@
 package com.mike_caron.megacorp.gui.control;
 
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -104,7 +105,10 @@ public class GuiScrollPort
         {
             if(control.isVisible())
             {
-                GuiControl res = control.hitTest(x, y);
+                int transX = x - control.getX();
+                int transY = y - control.getY();
+
+                GuiControl res = control.hitTest(transX, transY);
                 if (res != null)
                     return res;
             }
@@ -142,15 +146,27 @@ public class GuiScrollPort
     }
 
     @Override
-    public int translateX(int x)
+    public int translateToScreenX(int x)
     {
-        return this.x + x - scrollX;
+        return parent.translateToScreenX(this.x + x) - scrollX;
     }
 
     @Override
-    public int translateY(int y)
+    public int translateToScreenY(int y)
     {
-        return this.y + y - scrollY;
+        return parent.translateFromScreenY(this.y + y) - scrollY;
+    }
+
+    @Override
+    public int translateFromScreenX(int x)
+    {
+        return parent.translateFromScreenX(x + scrollX) - this.x;
+    }
+
+    @Override
+    public int translateFromScreenY(int y)
+    {
+        return parent.translateFromScreenX(y + scrollY) - this.y;
     }
 
     public GuiScrollPort(int x, int y, int width, int height)
@@ -164,14 +180,21 @@ public class GuiScrollPort
         if(!this.visible)
             return;
 
+        GlStateManager.pushMatrix();
+        //GlStateManager.translate(this.x, this.y, 0);
+
         for(GuiControl control : controls)
         {
             if(control.isVisible())
             {
+                GlStateManager.pushMatrix();
+                GlStateManager.translate(control.getX(), control.getY(), 0);
                 control.preDraw();
                 control.draw();
                 control.postDraw();
+                GlStateManager.popMatrix();
             }
         }
+        GlStateManager.popMatrix();
     }
 }

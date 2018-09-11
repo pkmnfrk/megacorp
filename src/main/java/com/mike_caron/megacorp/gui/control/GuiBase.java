@@ -194,7 +194,15 @@ public class GuiBase
         }
 
         if (!textFocused)
+        {
+            if(keyCode == Keyboard.KEY_ESCAPE || this.mc.gameSettings.keyBindInventory.isActiveAndMatches(keyCode))
+            {
+                this.mc.player.closeScreen();
+                return;
+            }
+
             super.keyTyped(typedChar, keyCode);
+        }
     }
 
     @Override

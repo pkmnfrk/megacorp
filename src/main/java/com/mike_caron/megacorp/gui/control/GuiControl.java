@@ -108,4 +108,14 @@ public abstract class GuiControl
 
     @Nullable
     public List<String> getTooltip(int mouseX, int mouseY) { return null; }
+
+    public void addListener(EventListener obj)
+    {
+        this.listeners.add(obj);
+    }
+
+    public void removeListener(EventListener obj)
+    {
+        this.listeners.remove(obj);
+    }
 }

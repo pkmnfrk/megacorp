@@ -124,16 +124,6 @@ public class GuiButton
         return this.label;
     }
 
-    public void addClickedListener(ClickedListener listener)
-    {
-        this.listeners.add(listener);
-    }
-
-    public void removeClickedListener(ClickedListener listener)
-    {
-        this.listeners.remove(listener);
-    }
-
     private void triggerClicked()
     {
         if(!this.enabled)

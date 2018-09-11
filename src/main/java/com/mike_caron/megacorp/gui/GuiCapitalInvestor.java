@@ -91,7 +91,7 @@ public class GuiCapitalInvestor
         ownedGroup.addControl(rewardList);
         ownedGroup.addControl(fluidGauge);
 
-        buyRewardButton.addClickedListener(this);
+        buyRewardButton.addListener(this);
     }
 
     @Override

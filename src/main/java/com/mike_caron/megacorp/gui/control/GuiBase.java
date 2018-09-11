@@ -112,8 +112,8 @@ public class GuiBase
                 //mouseOverControl.onMouseUp(mouseX, mouseY, button);
                 for(GuiControl waiting : waitingForButton.get(button))
                 {
-                    int transX = waiting.parent.translateFromScreenX(mouseX) - guiLeft - waiting.getX();
-                    int transY = waiting.parent.translateFromScreenY(mouseY) - guiTop - waiting.getY();
+                    int transX = waiting.parent.translateFromScreenX(mouseX) - waiting.getX();
+                    int transY = waiting.parent.translateFromScreenY(mouseY) - waiting.getY();
                     waiting.onMouseUp(transX, transY, button);
                 }
                 waitingForButton.get(button).clear();

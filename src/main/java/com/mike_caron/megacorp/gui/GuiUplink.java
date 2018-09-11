@@ -101,7 +101,7 @@ public class GuiUplink
         unownedGroup.addControl(unownedText);
 
         unownedText.setAlignment(GuiMultilineLabel.Alignment.CENTER);
-        establishCorporation.addClickedListener(this);
+        establishCorporation.addListener(this);
         corpNameField.addTextboxListener(this);
     }
 

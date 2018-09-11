@@ -166,7 +166,7 @@ public class GuiScrollPort
     @Override
     public int translateFromScreenY(int y)
     {
-        return parent.translateFromScreenX(y + scrollY) - this.y;
+        return parent.translateFromScreenY(y + scrollY) - this.y;
     }
 
     public GuiScrollPort(int x, int y, int width, int height)

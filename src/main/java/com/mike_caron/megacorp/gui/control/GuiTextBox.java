@@ -88,16 +88,6 @@ public class GuiTextBox
         }
     }
 
-    public void addTextboxListener(TextboxListener listener)
-    {
-        this.listeners.add(listener);
-    }
-
-    public void removeTextboxListener(TextboxListener listener)
-    {
-        this.listeners.remove(listener);
-    }
-
     public interface TextboxListener
         extends EventListener
     {

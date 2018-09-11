@@ -143,8 +143,8 @@ public class GuiShippingDepot
         workorderGroup.addControl(automaticQuestButton);
         workorderGroup.addControl(profitLabel);
 
-        newQuestButton.addClickedListener(this);
-        rerollQuestButton.addClickedListener(this);
+        newQuestButton.addListener(this);
+        rerollQuestButton.addListener(this);
         automaticQuestButton.addListener(this);
 
         rerollQuestButton.setTooltip(new TextComponentTranslation("tile.megacorp:shipping_depot.reroll").getUnformattedText());

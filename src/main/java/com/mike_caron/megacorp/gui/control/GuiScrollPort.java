@@ -190,6 +190,7 @@ public class GuiScrollPort
                 GlStateManager.pushMatrix();
                 GlStateManager.translate(control.getX(), control.getY(), 0);
                 control.preDraw();
+                assertClippingPlane();
                 control.draw();
                 control.postDraw();
                 GlStateManager.popMatrix();

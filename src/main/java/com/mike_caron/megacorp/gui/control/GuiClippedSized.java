@@ -8,6 +8,8 @@ public abstract class GuiClippedSized
 {
     protected int scrollX, scrollY;
 
+    private boolean clippingEnabled = false;
+
     public GuiClippedSized(int x, int y, int width, int height)
     {
         super(x, y, width, height);
@@ -16,19 +18,29 @@ public abstract class GuiClippedSized
     @Override
     public void preDraw()
     {
+        clippingEnabled = GL11.glIsEnabled(GL11.GL_SCISSOR_TEST);
+
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
 
-        setClippingPlane(parent.translateToScreenX(this.x), parent.translateToScreenY(this.y) + this.height, this.width, this.height);
+        assertClippingPlane();
 
         GL11.glPushMatrix();
         GL11.glTranslatef(-this.scrollX, - this.scrollY, 0);
+    }
+
+    protected void assertClippingPlane()
+    {
+        setClippingPlane(parent.translateToScreenX(this.x), parent.translateToScreenY(this.y) + this.height, this.width, this.height);
     }
 
     @Override
     public void postDraw()
     {
         GL11.glPopMatrix();
-        GL11.glDisable(GL11.GL_SCISSOR_TEST);
+        if(!clippingEnabled)
+        {
+            GL11.glDisable(GL11.GL_SCISSOR_TEST);
+        }
     }
 
     protected void setClippingPlane(int x, int y, int width, int height)

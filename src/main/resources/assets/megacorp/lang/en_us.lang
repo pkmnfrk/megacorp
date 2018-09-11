@@ -83,3 +83,4 @@ item.megacorp:work_voucher.tooltip=%s (%2s/%1s)
 
 gui.megacorp:guide.back=Back
 gui.megacorp:guide.pagenotfound=The page "%s" could not be found.
+gui.megacorp:guide.seealso=See Also:

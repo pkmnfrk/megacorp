@@ -16,9 +16,19 @@ public class GuiMultilineLabel
 
     private List<String> lines;
 
+    public GuiMultilineLabel(int x, int y, int width, String string)
+    {
+        this(x, y, width, -1, string);
+    }
+
     public GuiMultilineLabel(int x, int y, int width, int height, String string)
     {
         this(x, y, width, height, GuiUtil.FONT_COLOUR, Alignment.LEFT, VerticalAlignment.CENTER, string);
+    }
+
+    public GuiMultilineLabel(int x, int y, int width, Color color, String string)
+    {
+        this(x, y, width, -1, color, Alignment.LEFT, VerticalAlignment.CENTER, string);
     }
 
     public GuiMultilineLabel(int x, int y, int width, int height, Color color, String string)
@@ -83,6 +93,17 @@ public class GuiMultilineLabel
     }
 
     @Override
+    public int getHeight()
+    {
+        if(this.height == -1)
+        {
+            updateCache();
+        }
+
+        return super.getHeight();
+    }
+
+    @Override
     public void draw()
     {
         if(!visible)
@@ -140,6 +161,11 @@ public class GuiMultilineLabel
         if(this.parent == null) return;
 
         lines = this.parent.getFontRenderer().listFormattedStringToWidth(string, this.width);
+
+        if(this.height == -1)
+        {
+            this.height = lines.size() * 10;
+        }
     }
 
     public enum Alignment

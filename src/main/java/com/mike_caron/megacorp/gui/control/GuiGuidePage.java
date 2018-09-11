@@ -1,10 +1,8 @@
 package com.mike_caron.megacorp.gui.control;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import com.mike_caron.megacorp.MegaCorpMod;
+import com.mike_caron.megacorp.gui.GuiUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.util.ResourceLocation;
@@ -12,13 +10,22 @@ import net.minecraft.util.ResourceLocation;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.EventListener;
+import java.util.List;
 
 public class GuiGuidePage
     extends GuiScrollPort
+    implements GuiButton.ClickedListener
 {
     String title;
 
     String currentJson = null;
+
+    private final List<String> navigationDirectory = new ArrayList<>();
+
+    int yPos = 0;
+    int nextId = 0;
 
     public GuiGuidePage(int x, int y, int width, int height)
     {
@@ -28,6 +35,10 @@ public class GuiGuidePage
     public void loadPage(String uri)
     {
         this.clearControls();
+        navigationDirectory.clear();
+
+        yPos = 0;
+        nextId = 0;
 
         ResourceLocation rl = new ResourceLocation(MegaCorpMod.modId, baseFile(uri));
 
@@ -36,38 +47,22 @@ public class GuiGuidePage
             JsonObject body = loadResourceAsJson(rl);
             JsonObject translation = loadLocalizedResourceAsJson(uri);
 
-            int yPos = 0;
-
             if(body.has("index"))
             {
-                JsonArray index = body.get("index").getAsJsonArray();
-
-                for(int i = 0; i < index.size(); i++)
-                {
-                    String otherUri = index.get(i).getAsString();
-
-                    JsonObject otherTranslation = loadLocalizedResourceAsJson(otherUri);
-                    String label = otherUri;
-                    if(otherTranslation != null)
-                    {
-                        label = otherTranslation.get("title").getAsString();
-                    }
-
-                    GuiButton button = new GuiButton(i, 2, yPos, this.width - 4, 14, label);
-                    this.addControl(button);
-
-                    yPos += 14;
-                }
+                addButtonsForList(body, "index");
             }
 
             if(body.has("body"))
             {
-
+                addLabelsForList(body, translation, "body");
             }
 
             if(body.has("seealso"))
             {
+                GuiLabel seealso = GuiUtil.staticLabelFromTranslationKey(2, yPos, "gui.megacorp:guide.seealso");
+                yPos += 10;
 
+                addButtonsForList(body, "seealso");
             }
 
         }
@@ -79,8 +74,64 @@ public class GuiGuidePage
         {
             String message = "Error while parsing " + currentJson + "\r\n" + ex.getMessage();
 
-            GuiMultilineLabel label = new GuiMultilineLabel(2, 0, this.width - 4, this.height, message);
+            GuiMultilineLabel label = new GuiMultilineLabel(2, 0, this.width - 4 - 8, this.height, message);
             this.addControl(label);
+        }
+    }
+
+    private void addLabelsForList(JsonObject body, JsonObject translation, String seealso2)
+    {
+        JsonArray index = body.get(seealso2).getAsJsonArray();
+
+        for (int i = 0; i < index.size(); i++)
+        {
+            JsonElement p = index.get(i);
+
+            if(p.isJsonPrimitive())
+            {
+                String key = p.getAsString();
+
+                if(translation.has(key))
+                {
+                    key = translation.get(key).getAsString();
+                }
+
+                GuiMultilineLabel label = new GuiMultilineLabel(2, yPos, this.width - 4 - 8, key);
+
+                this.addControl(label);
+
+                yPos += label.getHeight() + 10;
+            }
+            else
+            {
+
+            }
+        }
+    }
+
+    private void addButtonsForList(JsonObject body, String seealso2)
+    {
+        JsonArray index = body.get(seealso2).getAsJsonArray();
+
+        for (int i = 0; i < index.size(); i++)
+        {
+            String otherUri = index.get(i).getAsString();
+
+            JsonObject otherTranslation = loadLocalizedResourceAsJson(otherUri);
+            String label = otherUri;
+            if (otherTranslation != null)
+            {
+                label = otherTranslation.get("title").getAsString();
+            }
+
+            GuiButton button = new GuiButton(nextId, 2, yPos, this.width - 4 - 8, 14, label);
+            button.addListener(this);
+            this.addControl(button);
+
+            navigationDirectory.add(otherUri);
+
+            yPos += 14;
+            nextId += 1;
         }
     }
 
@@ -158,5 +209,31 @@ public class GuiGuidePage
         {
             return null;
         }
+    }
+
+    private void triggerNavigated(String newUri)
+    {
+        if(!this.enabled)
+            return;
+
+        for(EventListener listener : listeners)
+        {
+            if(listener instanceof NavigationListener)
+            {
+                ((NavigationListener) listener).navigated(newUri);
+            }
+        }
+    }
+
+    @Override
+    public void clicked(GuiButton.ClickedEvent event)
+    {
+        triggerNavigated(navigationDirectory.get(event.id));
+    }
+
+    public interface NavigationListener
+        extends EventListener
+    {
+        void navigated(String newUri);
     }
 }

@@ -10,12 +10,13 @@ import java.util.Stack;
 
 public class GuiGuide
     extends GuiBase
-    implements GuiButton.ClickedListener
+    implements GuiButton.ClickedListener,
+               GuiGuidePage.NavigationListener
 {
     private static final ResourceLocation background = new ResourceLocation(MegaCorpMod.modId, "textures/gui/guide.png");
 
     private GuiButton backButton = GuiUtil.translatedButton(1, 7, 147, 55, 14, "gui.megacorp:guide.back");
-    private GuiGuidePage guidePage = new GuiGuidePage(7, 18, 161, 128);
+    private GuiGuidePage guidePage = new GuiGuidePage(7, 18, 161, 126);
 
     private final Stack<String> pageNav = new Stack<>();
     private String currentPage = "index";
@@ -37,6 +38,9 @@ public class GuiGuide
         this.addControl(backButton);
         this.addControl(guidePage);
         backButton.setEnabled(false);
+        backButton.addListener(this);
+        guidePage.addListener(this);
+
     }
 
 
@@ -55,5 +59,14 @@ public class GuiGuide
     private void loadPage()
     {
         guidePage.loadPage(currentPage);
+    }
+
+    @Override
+    public void navigated(String newUri)
+    {
+        pageNav.push(currentPage);
+        currentPage = newUri;
+        backButton.setEnabled(true);
+        loadPage();
     }
 }

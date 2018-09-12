@@ -123,8 +123,8 @@ public class GuiBase
                 setStateForButton(button, true);
                 if(mouseOverControl != null)
                 {
-                    int transX = mouseOverControl.parent.translateFromScreenX(mouseX) - guiLeft - mouseOverControl.getX();
-                    int transY = mouseOverControl.parent.translateFromScreenY(mouseY) - guiTop - mouseOverControl.getY();
+                    int transX = mouseOverControl.parent.translateFromScreenX(mouseX) - mouseOverControl.getX();
+                    int transY = mouseOverControl.parent.translateFromScreenY(mouseY) - mouseOverControl.getY();
                     mouseOverControl.onMouseDown(transX, transY, button);
                     waitingForButton.get(button).add(mouseOverControl);
                 }

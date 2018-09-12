@@ -33,7 +33,7 @@ public abstract class GuiClippedSized
         setClippingPlane(
             parent.translateToScreenX(this.x) + marginLeft,
             parent.translateToScreenY(this.y + marginTop) + this.height - marginTop - marginBottom,
-            this.width - marginLeft - marginTop,
+            this.width - marginLeft - marginRight,
             this.height - marginTop - marginBottom
         );
     }

@@ -13,14 +13,26 @@ public class GuiImageItemStack
 
     public GuiImageItemStack(int x, int y, ItemStack itemStack)
     {
-        super(x, y, 16, 16);
+        super(x, y);
         this.itemStack = itemStack;
         this.itemRender = Minecraft.getMinecraft().getRenderItem();
     }
 
     @Override
+    public int getWidth()
+    {
+        return 16;
+    }
+
+    @Override
+    public int getHeight()
+    {
+        return 16;
+    }
+
+    @Override
     public void draw()
     {
-        GuiUtil.drawItemStack(itemStack, 0, 0, "", itemRender, parent.getFontRenderer());
+        GuiUtil.drawItemStack(itemStack, 0, 0, itemRender);
     }
 }

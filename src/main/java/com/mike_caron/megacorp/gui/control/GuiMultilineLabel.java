@@ -134,6 +134,11 @@ public class GuiMultilineLabel
                 updateCache();
             }
 
+            if(lines == null)
+            {
+                return 10;
+            }
+
             return lines.size() * 10;
         }
 
@@ -195,7 +200,7 @@ public class GuiMultilineLabel
 
     private void updateCache()
     {
-        if(this.parent == null) return;
+        if(this.parent == null || this.parent.getFontRenderer() == null) return;
 
         lines = this.parent.getFontRenderer().listFormattedStringToWidth(string, this.width);
 

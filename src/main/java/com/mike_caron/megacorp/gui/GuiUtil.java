@@ -1,15 +1,14 @@
 package com.mike_caron.megacorp.gui;
 
 import com.mike_caron.megacorp.MegaCorpMod;
-import com.mike_caron.megacorp.gui.control.GuiButton;
-import com.mike_caron.megacorp.gui.control.GuiLabel;
-import com.mike_caron.megacorp.gui.control.GuiMultilineLabel;
-import com.mike_caron.megacorp.gui.control.GuiSized;
+import com.mike_caron.megacorp.gui.control.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButtonImage;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
@@ -53,14 +52,14 @@ public class GuiUtil
         return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
     }
 
-    public static boolean inBounds(int mouseX, int mouseY, GuiSized button)
+    public static boolean inBounds(int mouseX, int mouseY, GuiControl button)
     {
         return inBounds(mouseX, mouseY, button.getX(), button.getY(), button.getWidth(), button.getHeight());
     }
 
-    public static boolean inBoundsThis(int mouseX, int mouseY, GuiSized button)
+    public static boolean inBoundsThis(int mouseX, int mouseY, GuiControl control)
     {
-        return inBounds(mouseX, mouseY, 0, 0, button.getWidth(), button.getHeight());
+        return inBounds(mouseX, mouseY, 0, 0, control.getWidth(), control.getHeight());
     }
 
 
@@ -350,13 +349,11 @@ public class GuiUtil
         return new TextComponentTranslation(key, variables).getFormattedText();
     }
 
-    public static void drawItemStack(ItemStack stack, int x, int y, String altText, RenderItem itemRender, FontRenderer defaultFont)
+    public static void drawItemStack(ItemStack stack, int x, int y, RenderItem itemRender)
     {
         GlStateManager.translate(0.0F, 0.0F, 32.0F);
 
         itemRender.zLevel = 200.0F;
-        FontRenderer font = stack.getItem().getFontRenderer(stack);
-        if (font == null) font = defaultFont;
 
         itemRender.renderItemAndEffectIntoGUI(stack, x, y);
         //this.itemRender.renderItemOverlayIntoGUI(font, stack, x, y, altText);

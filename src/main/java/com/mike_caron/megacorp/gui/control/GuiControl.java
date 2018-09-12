@@ -1,5 +1,6 @@
 package com.mike_caron.megacorp.gui.control;
 
+import com.mike_caron.megacorp.gui.GuiUtil;
 import net.minecraft.client.gui.Gui;
 
 import javax.annotation.Nullable;
@@ -17,6 +18,7 @@ public abstract class GuiControl
     protected final Vector<EventListener> listeners = new Vector<>();
 
     public final Map<String, Object> extraData = new HashMap<>();
+    protected List<String> tooltipText = null;
 
     public GuiControl(int x, int y)
     {
@@ -51,6 +53,9 @@ public abstract class GuiControl
         if(this.parent != null)
             this.parent.sort();
     }
+
+    public abstract int getWidth();
+    public abstract int getHeight();
 
     public boolean isEnabled()
     {
@@ -89,7 +94,15 @@ public abstract class GuiControl
     public void setFocused(boolean focused) { }
 
     @Nullable
-    public GuiControl hitTest(int x, int y) { return null; }
+    public GuiControl hitTest(int x, int y)
+    {
+        if(GuiUtil.inBoundsThis(x, y, this))
+        {
+            return this;
+        }
+
+        return null;
+    }
 
     public void onKeyTyped(char typedChar, int keyCode) { }
 
@@ -152,8 +165,11 @@ public abstract class GuiControl
     public abstract void draw();
     public void postDraw() {}
 
-    @Nullable
-    public List<String> getTooltip(int mouseX, int mouseY) { return null; }
+    public void setTooltip(String text)
+    {
+        this.tooltipText = new ArrayList<>();
+        this.tooltipText.add(text);
+    }
 
     public void addListener(EventListener obj)
     {
@@ -163,5 +179,17 @@ public abstract class GuiControl
     public void removeListener(EventListener obj)
     {
         this.listeners.remove(obj);
+    }
+
+    @Nullable
+    public List<String> getTooltip(int mouseX, int mouseY)
+    {
+        return this.tooltipText;
+    }
+
+    public void setTooltip(List<String> text)
+    {
+        this.tooltipText = new ArrayList<>();
+        this.tooltipText.addAll(text);
     }
 }

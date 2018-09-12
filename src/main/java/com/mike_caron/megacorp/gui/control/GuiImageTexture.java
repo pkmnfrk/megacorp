@@ -8,6 +8,7 @@ import java.awt.Color;
 public class GuiImageTexture
     extends GuiImage
 {
+    private int width, height;
     private int sourceX, sourceY, sourceWidth, sourceHeight, textureWidth, textureHeight;
     private ResourceLocation texture;
 
@@ -23,8 +24,10 @@ public class GuiImageTexture
 
     public GuiImageTexture(int x, int y, int width, int height, int sourceX, int sourceY, int sourceWidth, int sourceHeight, ResourceLocation texture, int textureWidth, int textureHeight)
     {
-        super(x, y, width, height);
+        super(x, y);
 
+        this.width = width;
+        this.height = height;
         this.sourceX = sourceX;
         this.sourceY = sourceY;
         this.sourceWidth = sourceWidth;
@@ -59,5 +62,17 @@ public class GuiImageTexture
     public void setSourceHeight(int sourceHeight)
     {
         this.sourceHeight = sourceHeight;
+    }
+
+    @Override
+    public int getWidth()
+    {
+        return width;
+    }
+
+    @Override
+    public int getHeight()
+    {
+        return height;
     }
 }

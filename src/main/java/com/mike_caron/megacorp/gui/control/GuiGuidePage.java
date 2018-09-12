@@ -1,15 +1,18 @@
 package com.mike_caron.megacorp.gui.control;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.gui.GuiUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -59,6 +62,11 @@ public class GuiGuidePage
             {
                 JsonObject translation = loadLocalizedResourceAsJson(uri);
 
+                if(translation.has("title"))
+                {
+                    insertLabel(translation, new JsonPrimitive("title"), true);
+                }
+
                 if (body.has("index"))
                 {
                     addButtonsForList(body, "index");
@@ -66,7 +74,7 @@ public class GuiGuidePage
 
                 if (body.has("body"))
                 {
-                    addLabelsForList(body, translation, "body");
+                    addLabelsForList(body.get("body").getAsJsonArray(), translation);
                 }
 
                 if (body.has("seealso"))
@@ -101,20 +109,19 @@ public class GuiGuidePage
             yPos = 4;
             for(GuiControl control : controls)
             {
-                GuiSized sized = (GuiSized)control;
-                if(control instanceof GuiLabel
-                    || control instanceof GuiButton
+                if(control instanceof GuiButton
                     || control instanceof GuiMultilineLabel)
                 {
-                    sized.setWidth(this.width - 4 - marginRight);
+                    ((GuiSized)control).setWidth(this.width - 4 - marginRight);
                 }
-                else if(control instanceof GuiImage)
+                else if(control instanceof GuiImage
+                    || control instanceof GuiLabel)
                 {
-                    sized.setX((this.width - marginRight) / 2 - sized.getWidth() / 2);
+                    control.setX((this.width - marginRight) / 2 - control.getWidth() / 2);
                 }
-                sized.setY(yPos);
+                control.setY(yPos);
 
-                yPos += sized.getHeight();
+                yPos += control.getHeight();
 
                 if(control.extraData.containsKey("spacing"))
                 {
@@ -126,42 +133,72 @@ public class GuiGuidePage
         setMaxScrollY(yPos - this.height);
     }
 
-    private void addLabelsForList(JsonObject body, JsonObject translation, String seealso2)
+    private void addLabelsForList(JsonArray index, JsonObject translation)
     {
-        JsonArray index = body.get(seealso2).getAsJsonArray();
+        //JsonArray index = body.get(seealso2).getAsJsonArray();
 
         for (int i = 0; i < index.size(); i++)
         {
             JsonElement p = index.get(i);
 
-            if(p.isJsonPrimitive())
-            {
-                String key = p.getAsString();
+            insertLabel(translation, p, false);
+        }
+    }
 
-                if(translation.has(key))
+    private void insertLabel(JsonObject translation, JsonElement l, boolean isTitle)
+    {
+        if(l.isJsonPrimitive())
+        {
+            JsonPrimitive p = l.getAsJsonPrimitive();
+
+            if(p.isString())
+            {
+                String key = l.getAsString();
+
+                if (translation.has(key))
                 {
                     key = translation.get(key).getAsString();
                 }
 
-                GuiMultilineLabel label = new GuiMultilineLabel(2, yPos, this.width - 4, key);
+                GuiMultilineLabel label;
+
+                if(isTitle)
+                {
+                    key = TextFormatting.UNDERLINE + key + TextFormatting.RESET;
+                }
+
+                label = new GuiMultilineLabel(2, yPos, this.width - 4, key);
+
+                if(isTitle)
+                {
+                    label.setAlignment(GuiMultilineLabel.Alignment.CENTER);
+                }
 
                 this.addControl(label);
 
-                label.extraData.put("spacing", 10);
+                label.extraData.put("spacing", 6);
 
-                yPos += label.getHeight() + 10;
+                yPos += label.getHeight() + 6;
             }
-            else
+            else if(p.isNumber())
             {
-                JsonObject obj = p.getAsJsonObject();
-                if(obj.has("link"))
-                {
-                    insertLink(obj);
-                }
-                else if(obj.has("img"))
-                {
-                    insertImage(obj);
-                }
+                int space = p.getAsInt();
+
+                GuiEmpty empty = new GuiEmpty(2, yPos, this.width - 4, space);
+
+                yPos += space;
+            }
+        }
+        else
+        {
+            JsonObject obj = l.getAsJsonObject();
+            if(obj.has("link"))
+            {
+                insertLink(obj);
+            }
+            else if(obj.has("img"))
+            {
+                insertImage(obj);
             }
         }
     }
@@ -285,7 +322,7 @@ public class GuiGuidePage
 
         GuiImage image = null;
 
-        JsonObject otherPage = loadResourceAsJson(new ResourceLocation(MegaCorpMod.modId, otherUri));
+        JsonObject otherPage = loadResourceAsJson(new ResourceLocation(MegaCorpMod.modId, baseFile(otherUri)));
         JsonObject otherTranslation = loadLocalizedResourceAsJson(otherUri);
 
         if(otherPage != null)
@@ -302,7 +339,7 @@ public class GuiGuidePage
             label = otherTranslation.get("title").getAsString();
         }
 
-        GuiButton button = new GuiButton(0, 2, yPos, this.width - 4, 14, label);
+        GuiButton button = new GuiButton(0, 2, yPos, this.width - 4, Math.max(14, image != null ? image.getHeight() + 4 : 0), label, image);
         button.addListener(this);
         this.addControl(button);
 
@@ -434,6 +471,18 @@ public class GuiGuidePage
 
     private GuiImage imageForIcon(JsonObject icon)
     {
+        //return new GuiImageItemStack(0, 0, new ItemStack(Items.EMERALD, 1));
+        if(icon.has("bucket"))
+        {
+            String fluidId = icon.get("bucket").getAsString();
+            Fluid fluid = FluidRegistry.getFluid(fluidId);
+
+            if(fluid != null)
+            {
+                ItemStack item = FluidUtil.getFilledBucket(new FluidStack(fluid, 1000));
+                return new GuiImageItemStack(0, 0, item);
+            }
+        }
         return null;
     }
 }

@@ -26,16 +26,7 @@ public class GuiTranslatedLabel
     public void setPlaceholder(int i, Object value)
     {
         this.placeholders[i] = value;
-        this.width = 0;
-    }
-
-    @Override
-    public void draw()
-    {
-        if(!this.visible) return;
 
         stringLabel = new TextComponentTranslation(stringKey, placeholders).getFormattedText();
-
-        super.draw();
     }
 }

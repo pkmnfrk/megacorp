@@ -1,11 +1,10 @@
 package com.mike_caron.megacorp.gui.control;
 
 public abstract class GuiImage
-    extends GuiSized
+    extends GuiControl
 {
-
-    public GuiImage(int x, int y, int width, int height)
+    public GuiImage(int x, int y)
     {
-        super(x,y,width,height);
+        super(x,y);
     }
 }

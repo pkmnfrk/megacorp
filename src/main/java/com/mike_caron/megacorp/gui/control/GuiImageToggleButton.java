@@ -23,8 +23,8 @@ public class GuiImageToggleButton
     {
         super.draw();
 
-        float dx = this.width / 2f - image.width / 2f;
-        float dy = this.height / 2f - image.height / 2f;
+        float dx = this.width / 2f - image.getWidth() / 2f;
+        float dy = this.height / 2f - image.getHeight() / 2f;
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(dx, dy, 0);

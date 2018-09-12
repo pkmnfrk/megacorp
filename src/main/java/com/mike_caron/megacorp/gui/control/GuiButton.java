@@ -14,6 +14,7 @@ public class GuiButton
 
     private String label;
     private State state;
+    private GuiImage image;
 
     public GuiButton(int id, int x, int y, int width, int height, String label)
     {
@@ -22,6 +23,16 @@ public class GuiButton
         this.id = id;
         this.label = label;
         this.state = State.NORMAL;
+    }
+
+    public GuiButton(int id, int x, int y, int width, int height, String label, GuiImage image)
+    {
+        super(x, y, width, height);
+
+        this.id = id;
+        this.label = label;
+        this.state = State.NORMAL;
+        this.image = image;
     }
 
     @Override
@@ -63,23 +74,6 @@ public class GuiButton
         if(!enabled)
         {
             fore = Color.LIGHT_GRAY;
-        }
-
-        drawBackground();
-
-        if(label != null)
-        {
-            int w = this.parent.getFontRenderer().getStringWidth(label);
-
-            this.parent.getFontRenderer().drawString(label, this.width / 2 - w / 2 + 1, this.height / 2 - 5 + 1, Color.black.getRGB());
-            this.parent.getFontRenderer().drawString(label, this.width / 2 - w / 2, this.height / 2 - 5, fore.getRGB());
-        }
-    }
-
-    protected void drawBackground()
-    {
-        if(!enabled)
-        {
             state = State.NORMAL;
         }
 
@@ -100,6 +94,46 @@ public class GuiButton
         GuiUtil.bindTexture(GuiUtil.MISC_RESOURCES);
         GlStateManager.color(1, 1, 1, 1);
         GuiUtil.draw3x3(0, 0, this.width, this.height, sx, 0);
+
+        int imageX = this.width / 2;
+        int labelX = this.width / 2;
+        int labelWidth = 0;
+
+        if(label != null)
+        {
+            labelWidth = this.parent.getFontRenderer().getStringWidth(label);
+            labelX -= labelWidth / 2;
+        }
+
+        if(image != null)
+        {
+            imageX -= image.getWidth() / 2;
+        }
+
+
+
+        if(image != null && label != null)
+        {
+            imageX -= labelWidth / 2 + 2;
+            labelX += image.getWidth() / 2 + 2;
+        }
+
+        if(label != null)
+        {
+            drawShadowedText(label, labelX, this.height / 2 - 5, fore, Color.BLACK);
+        }
+        if(image != null)
+        {
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(imageX, this.height / 2 - image.getHeight() / 2, 0);
+            image.draw();
+            GlStateManager.popMatrix();
+        }
+    }
+    private void drawShadowedText(String label, int x, int y, Color fore, Color shadow)
+    {
+        this.parent.getFontRenderer().drawString(label, x + 1, y + 1, shadow.getRGB());
+        this.parent.getFontRenderer().drawString(label, x, y, fore.getRGB());
     }
 
     @Override

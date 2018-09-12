@@ -19,6 +19,18 @@ public class GuiGroup
     }
 
     @Override
+    public int getWidth()
+    {
+        return 0;
+    }
+
+    @Override
+    public int getHeight()
+    {
+        return 0;
+    }
+
+    @Override
     public int translateToScreenX(int x)
     {
         return parent.translateToScreenX(x + this.x);

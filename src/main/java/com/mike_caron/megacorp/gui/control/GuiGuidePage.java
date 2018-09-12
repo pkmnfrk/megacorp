@@ -1,6 +1,9 @@
 package com.mike_caron.megacorp.gui.control;
 
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.gui.GuiUtil;
 import net.minecraft.client.Minecraft;
@@ -11,9 +14,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.EventListener;
-import java.util.List;
 
 public class GuiGuidePage
     extends GuiScrollPort
@@ -23,10 +24,7 @@ public class GuiGuidePage
 
     String currentJson = null;
 
-    private final List<String> navigationDirectory = new ArrayList<>();
-
     int yPos = 0;
-    int nextId = 0;
 
     public GuiGuidePage(int x, int y, int width, int height)
     {
@@ -38,11 +36,9 @@ public class GuiGuidePage
     public void loadPage(String uri)
     {
         this.clearControls();
-        navigationDirectory.clear();
         setEnableScrollBar(false);
 
-        yPos = 0;
-        nextId = 0;
+        yPos = 4;
         scrollY = 0;
 
         ResourceLocation rl = new ResourceLocation(MegaCorpMod.modId, baseFile(uri));
@@ -50,37 +46,40 @@ public class GuiGuidePage
         try
         {
             JsonObject body = loadResourceAsJson(rl);
-            JsonObject translation = loadLocalizedResourceAsJson(uri);
-
-            if(body.has("index"))
+            if(body == null)
             {
-                addButtonsForList(body, "index");
+                String message = new TextComponentTranslation("gui.megacorp:guide.pagenotfound", currentJson).getFormattedText();
+
+                GuiMultilineLabel label = new GuiMultilineLabel(2, 0, this.width - 4 - 8, message);
+                this.addControl(label);
+
+                yPos += label.getHeight();
             }
-
-            if(body.has("body"))
+            else
             {
-                addLabelsForList(body, translation, "body");
-            }
+                JsonObject translation = loadLocalizedResourceAsJson(uri);
 
-            if(body.has("seealso"))
-            {
-                GuiLabel seealso = GuiUtil.staticLabelFromTranslationKey(2, yPos, "gui.megacorp:guide.seealso");
-                yPos += 10;
+                if (body.has("index"))
+                {
+                    addButtonsForList(body, "index");
+                }
 
-                addButtonsForList(body, "seealso");
+                if (body.has("body"))
+                {
+                    addLabelsForList(body, translation, "body");
+                }
+
+                if (body.has("seealso"))
+                {
+                    GuiLabel seealso = GuiUtil.staticLabelFromTranslationKey(2, yPos, "gui.megacorp:guide.seealso");
+                    yPos += 10;
+
+                    addButtonsForList(body, "seealso");
+                }
             }
 
         }
-        catch(IOException ex)
-        {
-            String message = new TextComponentTranslation("gui.megacorp:guide.pagenotfound", currentJson).getFormattedText();
-
-            GuiMultilineLabel label = new GuiMultilineLabel(2, 0, this.width - 4 - 8, message);
-            this.addControl(label);
-
-            yPos += label.getHeight();
-        }
-        catch(JsonParseException ex)
+        catch(Exception ex)
         {
             String message = "Error while parsing " + currentJson + "\r\n" + ex.getMessage();
 
@@ -88,6 +87,8 @@ public class GuiGuidePage
             this.addControl(label);
 
             yPos += label.getHeight();
+
+            ex.printStackTrace();
         }
 
         if(yPos > this.height)
@@ -97,18 +98,27 @@ public class GuiGuidePage
 
             //reflow everything
 
-            yPos = 0;
+            yPos = 4;
             for(GuiControl control : controls)
             {
                 GuiSized sized = (GuiSized)control;
-                sized.setWidth(this.width - 4 - 8);
+                if(control instanceof GuiLabel
+                    || control instanceof GuiButton
+                    || control instanceof GuiMultilineLabel)
+                {
+                    sized.setWidth(this.width - 4 - marginRight);
+                }
+                else if(control instanceof GuiImage)
+                {
+                    sized.setX((this.width - marginRight) / 2 - sized.getWidth() / 2);
+                }
                 sized.setY(yPos);
 
                 yPos += sized.getHeight();
 
-                if(control instanceof GuiMultilineLabel)
+                if(control.extraData.containsKey("spacing"))
                 {
-                    yPos += 10;
+                    yPos += (Integer)control.extraData.get("spacing");
                 }
             }
         }
@@ -137,11 +147,21 @@ public class GuiGuidePage
 
                 this.addControl(label);
 
+                label.extraData.put("spacing", 10);
+
                 yPos += label.getHeight() + 10;
             }
             else
             {
-
+                JsonObject obj = p.getAsJsonObject();
+                if(obj.has("link"))
+                {
+                    insertLink(obj);
+                }
+                else if(obj.has("img"))
+                {
+                    insertImage(obj);
+                }
             }
         }
     }
@@ -152,24 +172,149 @@ public class GuiGuidePage
 
         for (int i = 0; i < index.size(); i++)
         {
-            String otherUri = index.get(i).getAsString();
-
-            JsonObject otherTranslation = loadLocalizedResourceAsJson(otherUri);
-            String label = otherUri;
-            if (otherTranslation != null)
-            {
-                label = otherTranslation.get("title").getAsString();
-            }
-
-            GuiButton button = new GuiButton(nextId, 2, yPos, this.width - 4, 14, label);
-            button.addListener(this);
-            this.addControl(button);
-
-            navigationDirectory.add(otherUri);
-
-            yPos += 14;
-            nextId += 1;
+            insertLink(index.get(i));
         }
+    }
+
+    private void insertImage(JsonObject img)
+    {
+        ResourceLocation src;
+
+        if(img.has("mod"))
+        {
+            src = new ResourceLocation(img.get("mod").getAsString(), img.get("img").getAsString());
+        }
+        else
+        {
+            src = new ResourceLocation(MegaCorpMod.modId, img.get("img").getAsString());
+        }
+
+        int width = img.get("width").getAsInt();
+        int height = img.get("height").getAsInt();
+        int sourceX = 0;
+        int sourceY = 0;
+        int sourceWidth = width;
+        int sourceHeight = height;
+        int textureWidth = 256;
+        int textureHeight = 256;
+        int spacing = 0;
+
+        boolean sub = false;
+
+        if (img.has("sx"))
+        {
+            sourceX = img.get("sx").getAsInt();
+            sub = true;
+        }
+        if(img.has("sy"))
+        {
+            sourceY = img.get("sy").getAsInt();
+            sub = true;
+        }
+        if(img.has("sw"))
+        {
+            sourceWidth = img.get("sw").getAsInt();
+            sub = true;
+        }
+        if(img.has("sh"))
+        {
+            sourceHeight = img.get("sh").getAsInt();
+            sub = true;
+        }
+        if(img.has("tw"))
+        {
+            textureWidth = img.get("tw").getAsInt();
+            sub = true;
+        }
+        if(img.has("th"))
+        {
+            textureHeight = img.get("th").getAsInt();
+            sub = true;
+        }
+        if(img.has("spacing"))
+        {
+            spacing = img.get("spacing").getAsInt();
+        }
+
+        if(!sub)
+        {
+            // if they only specified width and height, then it's probably a separate full-sized texture
+            textureWidth = width;
+            textureHeight = height;
+        }
+
+        int x = (this.width - marginRight) / 2 - width / 2;
+
+        GuiImage image = new GuiImageTexture(
+            x, yPos,
+            width, height,
+            sourceX, sourceY,
+            sourceWidth, sourceHeight,
+            src,
+            textureWidth, textureHeight
+        );
+
+        this.addControl(image);
+
+        if(spacing > 0)
+        {
+            image.extraData.put("spacing", spacing);
+        }
+
+        yPos += height + spacing;
+    }
+
+    private void insertLink(JsonElement ele)
+    {
+        String otherUri = null;
+        int spacing = 0;
+
+        if(ele.isJsonPrimitive())
+        {
+            otherUri = ele.getAsString();
+        }
+        else
+        {
+            JsonObject obj = ele.getAsJsonObject();
+            otherUri = obj.get("link").getAsString();
+            if(obj.has("spacing"))
+            {
+                spacing = obj.get("spacing").getAsInt();
+            }
+        }
+
+        GuiImage image = null;
+
+        JsonObject otherPage = loadResourceAsJson(new ResourceLocation(MegaCorpMod.modId, otherUri));
+        JsonObject otherTranslation = loadLocalizedResourceAsJson(otherUri);
+
+        if(otherPage != null)
+        {
+            if(otherPage.has("icon"))
+            {
+                image = imageForIcon(otherPage.get("icon").getAsJsonObject());
+            }
+        }
+
+        String label = otherUri;
+        if (otherTranslation != null)
+        {
+            label = otherTranslation.get("title").getAsString();
+        }
+
+        GuiButton button = new GuiButton(0, 2, yPos, this.width - 4, 14, label);
+        button.addListener(this);
+        this.addControl(button);
+
+        button.extraData.put("link", otherUri);
+
+        if(spacing > 0)
+        {
+            yPos += spacing;
+            button.extraData.put("spacing", spacing);
+        }
+
+        yPos += 14;
     }
 
     public String getTitle()
@@ -188,19 +333,25 @@ public class GuiGuidePage
     }
 
     private JsonObject loadResourceAsJson(ResourceLocation res)
-        throws IOException
     {
         currentJson = res.getPath();
 
-        IResource resource = Minecraft.getMinecraft().getResourceManager().getResource(res);
-        JsonParser parser = new JsonParser();
-        JsonObject ret;
+        try
+        {
+            IResource resource = Minecraft.getMinecraft().getResourceManager().getResource(res);
+            JsonParser parser = new JsonParser();
+            JsonObject ret;
 
-        InputStreamReader is = new InputStreamReader(resource.getInputStream());
-        ret = parser.parse(is).getAsJsonObject();
-        is.close();
+            InputStreamReader is = new InputStreamReader(resource.getInputStream());
+            ret = parser.parse(is).getAsJsonObject();
+            is.close();
 
-        return ret;
+            return ret;
+        }
+        catch(IOException ex)
+        {
+            return null;
+        }
     }
 
     private JsonObject loadLocalizedResourceAsJson(String uri)
@@ -272,12 +423,17 @@ public class GuiGuidePage
     @Override
     public void clicked(GuiButton.ClickedEvent event)
     {
-        triggerNavigated(navigationDirectory.get(event.id));
+        triggerNavigated((String)event.control.extraData.get("link"));
     }
 
     public interface NavigationListener
         extends EventListener
     {
         void navigated(String newUri);
+    }
+
+    private GuiImage imageForIcon(JsonObject icon)
+    {
+        return null;
     }
 }

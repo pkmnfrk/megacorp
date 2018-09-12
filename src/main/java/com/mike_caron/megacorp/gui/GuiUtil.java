@@ -6,13 +6,13 @@ import com.mike_caron.megacorp.gui.control.GuiLabel;
 import com.mike_caron.megacorp.gui.control.GuiMultilineLabel;
 import com.mike_caron.megacorp.gui.control.GuiSized;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButtonImage;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fluids.FluidStack;
@@ -348,5 +348,19 @@ public class GuiUtil
     public static String i18n(String key, Object ... variables)
     {
         return new TextComponentTranslation(key, variables).getFormattedText();
+    }
+
+    public static void drawItemStack(ItemStack stack, int x, int y, String altText, RenderItem itemRender, FontRenderer defaultFont)
+    {
+        GlStateManager.translate(0.0F, 0.0F, 32.0F);
+
+        itemRender.zLevel = 200.0F;
+        FontRenderer font = stack.getItem().getFontRenderer(stack);
+        if (font == null) font = defaultFont;
+
+        itemRender.renderItemAndEffectIntoGUI(stack, x, y);
+        //this.itemRender.renderItemOverlayIntoGUI(font, stack, x, y, altText);
+
+        itemRender.zLevel = 0.0F;
     }
 }

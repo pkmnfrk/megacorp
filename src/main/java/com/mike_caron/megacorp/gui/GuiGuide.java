@@ -16,8 +16,9 @@ public class GuiGuide
     private static final ResourceLocation background = new ResourceLocation(MegaCorpMod.modId, "textures/gui/guide.png");
 
     private GuiButton backButton = GuiUtil.translatedButton(1, 7, 147, 55, 14, "gui.megacorp:guide.back");
+    private GuiButton closeButton = GuiUtil.translatedButton(2, 194, 147, 55, 14, "gui.megacorp:guide.close");
 
-    private GuiGuidePage guidePage = new GuiGuidePage(7, 18, 161, 126);
+    private GuiGuidePage guidePage = new GuiGuidePage(7, 18, 242, 126);
 
     private final Stack<String> pageNav = new Stack<>();
     private final Stack<Integer> scrolls = new Stack<>();
@@ -25,7 +26,7 @@ public class GuiGuide
     private String currentPage = "index";
     public GuiGuide()
     {
-        super(176, 166, background);
+        super(256, 166, background);
 
         initControls();
 
@@ -45,8 +46,10 @@ public class GuiGuide
 
         this.addControl(backButton);
         this.addControl(guidePage);
+        this.addControl(closeButton);
         backButton.setEnabled(false);
         backButton.addListener(this);
+        closeButton.addListener(this);
         guidePage.addListener(this);
 
     }
@@ -63,6 +66,10 @@ public class GuiGuide
             loadPage();
 
             guidePage.setScrollY(scrolls.pop());
+        }
+        else if(event.id == 2)
+        {
+            this.mc.player.closeScreen();
         }
     }
 

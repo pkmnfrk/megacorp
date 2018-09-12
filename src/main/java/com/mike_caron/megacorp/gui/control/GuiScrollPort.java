@@ -137,19 +137,21 @@ public class GuiScrollPort
     {
         if(GuiUtil.inBoundsThis(x, y, this))
         {
-            for(GuiControl control : controls)
+            if(GuiUtil.inBounds(x, y, marginLeft, marginTop, this.width - marginLeft - marginRight, this.height - marginTop - marginBottom))
             {
-                if(control.isVisible())
+                for (GuiControl control : controls)
                 {
-                    int transX = x - control.getX() + scrollX;
-                    int transY = y - control.getY() + scrollY;
+                    if (control.isVisible())
+                    {
+                        int transX = x - control.getX() + scrollX;
+                        int transY = y - control.getY() + scrollY;
 
-                    GuiControl res = control.hitTest(transX, transY);
-                    if (res != null)
-                        return res;
+                        GuiControl res = control.hitTest(transX, transY);
+                        if (res != null)
+                            return res;
+                    }
                 }
             }
-
             return this;
         }
 

@@ -39,8 +39,18 @@ public class GuiShippingDepot
     private GuiProgressBar progressBar = new GuiProgressBar(8, 67, 159, 12);
     private GuiTranslatedLabel progressLabel = new GuiTranslatedLabel(80, 69, "tile.megacorp:shipping_depot.progress", 0, 0);
 
-    private GuiButton rerollQuestButton = new GuiImageButton(ContainerShippingDepot.GUI_REROLL_QUEST, 152, 21, 16, 16, background, 8, 8, 180, 52);
-    private GuiImageToggleButton automaticQuestButton = new GuiImageToggleButton(ContainerShippingDepot.GUI_AUTOMATIC_QUEST,152, 45, 16, 16, background, 7, 10, 180, 19);
+    private GuiButton rerollQuestButton = new GuiImageButton(
+        ContainerShippingDepot.GUI_REROLL_QUEST,
+        152, 21,
+        16, 16,
+        new GuiImageTexture(0, 0, 8, 8, 180, 52, background)
+    );
+    private GuiImageToggleButton automaticQuestButton = new GuiImageToggleButton(
+        ContainerShippingDepot.GUI_AUTOMATIC_QUEST,
+        152, 45,
+        16, 16,
+        new GuiImageTexture(0, 0, 7, 10, 180, 19, background)
+    );
 
     private GuiList questList = new GuiList(6, 19, 162, 61, this);
     private GuiButton newQuestButton = new GuiButton(ContainerShippingDepot.GUI_NEW_QUEST, 96, 3, 72, 14, GuiUtil.translate("tile.megacorp:shipping_depot.new_quest"));
@@ -261,7 +271,8 @@ public class GuiShippingDepot
 
             drawGradientRect(0, 0, width, height, color.getRGB(), color.getRGB());
 
-            drawItemStack(quest.item, 1, 1, "");
+            GuiUtil.drawItemStack(quest.item, 1, 1, "", itemRender, fontRenderer);
+
             fontRenderer.drawString(questLocalization.title, 20, 5, Color.WHITE.getRGB());
 
             GuiUtil.bindTexture(GuiUtil.MISC_RESOURCES);

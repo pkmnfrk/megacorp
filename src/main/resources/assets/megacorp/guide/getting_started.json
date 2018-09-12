@@ -2,12 +2,19 @@
 	"body": [
 		"para1",
 		"para2",
+		{
+			"link":"liquids/money",
+			"spacing": 10
+		},
 		"para3",
-		"para4"
-	],
-	"seealso": [
-		"blocks/sbs",
-		"liquids/money",
-		"blocks/uplink"
+		{
+			"link":"blocks/sbs",
+			"spacing": 10
+		},
+		"para4",
+		{
+			"link":"blocks/uplink",
+			"spacing": 10
+		}
 	]
 }

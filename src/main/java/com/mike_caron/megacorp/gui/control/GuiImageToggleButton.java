@@ -1,24 +1,21 @@
 package com.mike_caron.megacorp.gui.control;
 
-import com.mike_caron.megacorp.gui.GuiUtil;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.GlStateManager;
 
 public class GuiImageToggleButton
     extends GuiToggleButton
 {
-    ResourceLocation texture;
-    int texWidth, texHeight, sourceX, sourceY;
+    //ResourceLocation texture;
+    //int texWidth, texHeight, sourceX, sourceY;
+    GuiImage image;
     int id;
 
-    public GuiImageToggleButton(int id, int x, int y, int width, int height, ResourceLocation texture, int texWidth, int texHeight, int sourceX, int sourceY)
+
+    public GuiImageToggleButton(int id, int x, int y, int width, int height, GuiImage image)
     {
         super(id, x, y, width, height);
 
-        this.texture = texture;
-        this.texWidth = texWidth;
-        this.texHeight = texHeight;
-        this.sourceX = sourceX;
-        this.sourceY = sourceY;
+        this.image = image;
     }
 
     @Override
@@ -26,9 +23,12 @@ public class GuiImageToggleButton
     {
         super.draw();
 
-        GuiUtil.bindTexture(texture);
-        float dx = this.width / 2f - texWidth / 2f;
-        float dy = this.height / 2f - texHeight / 2f;
-        GuiUtil.drawTexturePart(this.x + dx, this.y + dy, texWidth, texHeight, sourceX, sourceY, 256, 256);
+        float dx = this.width / 2f - image.width / 2f;
+        float dy = this.height / 2f - image.height / 2f;
+
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(dx, dy, 0);
+        image.draw();
+        GlStateManager.popMatrix();
     }
 }

@@ -1,6 +1,11 @@
 {
 	"body": [
 		"para1",
-		"para2"
+		"para2",
+		{
+			"img":"textures/guide/intro_image.png",
+			"width": 111,
+			"height": 96
+		}
 	]
 }

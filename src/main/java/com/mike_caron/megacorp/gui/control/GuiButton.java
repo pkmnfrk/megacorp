@@ -60,6 +60,29 @@ public class GuiButton
 
         Color fore = Color.WHITE;
 
+        if(!enabled)
+        {
+            fore = Color.LIGHT_GRAY;
+        }
+
+        drawBackground();
+
+        if(label != null)
+        {
+            int w = this.parent.getFontRenderer().getStringWidth(label);
+
+            this.parent.getFontRenderer().drawString(label, this.width / 2 - w / 2 + 1, this.height / 2 - 5 + 1, Color.black.getRGB());
+            this.parent.getFontRenderer().drawString(label, this.width / 2 - w / 2, this.height / 2 - 5, fore.getRGB());
+        }
+    }
+
+    protected void drawBackground()
+    {
+        if(!enabled)
+        {
+            state = State.NORMAL;
+        }
+
         int sx = 0;
         switch(state)
         {
@@ -74,23 +97,9 @@ public class GuiButton
                 break;
         }
 
-        if(!enabled)
-        {
-            state = State.NORMAL;
-            fore = Color.LIGHT_GRAY;
-        }
-
         GuiUtil.bindTexture(GuiUtil.MISC_RESOURCES);
         GlStateManager.color(1, 1, 1, 1);
         GuiUtil.draw3x3(0, 0, this.width, this.height, sx, 0);
-
-        if(label != null)
-        {
-            int w = this.parent.getFontRenderer().getStringWidth(label);
-
-            this.parent.getFontRenderer().drawString(label, this.width / 2 - w / 2 + 1, this.height / 2 - 5 + 1, Color.black.getRGB());
-            this.parent.getFontRenderer().drawString(label, this.width / 2 - w / 2, this.height / 2 - 5, fore.getRGB());
-        }
     }
 
     @Override

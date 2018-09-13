@@ -5,6 +5,7 @@ import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.gui.GuiUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -13,7 +14,10 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+import org.apache.commons.io.FilenameUtils;
 
+import javax.annotation.Nonnull;
+import java.awt.Color;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -26,6 +30,8 @@ public class GuiGuidePage
     String title;
 
     String currentJson = null;
+
+    String currentUri = null;
 
     int yPos = 0;
 
@@ -40,6 +46,8 @@ public class GuiGuidePage
     {
         this.clearControls();
         setEnableScrollBar(false);
+
+        this.currentUri = uri;
 
         yPos = 4;
         scrollY = 0;
@@ -168,6 +176,7 @@ public class GuiGuidePage
                 }
 
                 label = new GuiMultilineLabel(2, yPos, this.width - 4, key);
+                label.setColor(Color.BLACK);
 
                 if(isTitle)
                 {
@@ -196,7 +205,7 @@ public class GuiGuidePage
             {
                 insertLink(obj);
             }
-            else if(obj.has("img"))
+            else if(obj.has("img") || obj.has("bucket"))
             {
                 insertImage(obj);
             }
@@ -215,90 +224,20 @@ public class GuiGuidePage
 
     private void insertImage(JsonObject img)
     {
-        ResourceLocation src;
+        GuiImage image = imageForIcon(img);
 
-        if(img.has("mod"))
-        {
-            src = new ResourceLocation(img.get("mod").getAsString(), img.get("img").getAsString());
-        }
-        else
-        {
-            src = new ResourceLocation(MegaCorpMod.modId, img.get("img").getAsString());
-        }
+        int x = (this.width - marginRight) / 2 - image.getWidth() / 2;
 
-        int width = img.get("width").getAsInt();
-        int height = img.get("height").getAsInt();
-        int sourceX = 0;
-        int sourceY = 0;
-        int sourceWidth = width;
-        int sourceHeight = height;
-        int textureWidth = 256;
-        int textureHeight = 256;
-        int spacing = 0;
-
-        boolean sub = false;
-
-        if (img.has("sx"))
-        {
-            sourceX = img.get("sx").getAsInt();
-            sub = true;
-        }
-        if(img.has("sy"))
-        {
-            sourceY = img.get("sy").getAsInt();
-            sub = true;
-        }
-        if(img.has("sw"))
-        {
-            sourceWidth = img.get("sw").getAsInt();
-            sub = true;
-        }
-        if(img.has("sh"))
-        {
-            sourceHeight = img.get("sh").getAsInt();
-            sub = true;
-        }
-        if(img.has("tw"))
-        {
-            textureWidth = img.get("tw").getAsInt();
-            sub = true;
-        }
-        if(img.has("th"))
-        {
-            textureHeight = img.get("th").getAsInt();
-            sub = true;
-        }
-        if(img.has("spacing"))
-        {
-            spacing = img.get("spacing").getAsInt();
-        }
-
-        if(!sub)
-        {
-            // if they only specified width and height, then it's probably a separate full-sized texture
-            textureWidth = width;
-            textureHeight = height;
-        }
-
-        int x = (this.width - marginRight) / 2 - width / 2;
-
-        GuiImage image = new GuiImageTexture(
-            x, yPos,
-            width, height,
-            sourceX, sourceY,
-            sourceWidth, sourceHeight,
-            src,
-            textureWidth, textureHeight
-        );
+        image.setX(x);
 
         this.addControl(image);
 
-        if(spacing > 0)
+        if(image.extraData.containsKey("spacing"))
         {
-            image.extraData.put("spacing", spacing);
+            yPos += (Integer)image.extraData.get("spacing");
         }
 
-        yPos += height + spacing;
+        yPos += height;
     }
 
     private void insertLink(JsonElement ele)
@@ -308,12 +247,12 @@ public class GuiGuidePage
 
         if(ele.isJsonPrimitive())
         {
-            otherUri = ele.getAsString();
+            otherUri = resolveUri(currentUri, ele.getAsString());
         }
         else
         {
             JsonObject obj = ele.getAsJsonObject();
-            otherUri = obj.get("link").getAsString();
+            otherUri = resolveUri(currentUri, obj.get("link").getAsString());
             if(obj.has("spacing"))
             {
                 spacing = obj.get("spacing").getAsInt();
@@ -361,12 +300,12 @@ public class GuiGuidePage
 
     private String baseFile(String uri)
     {
-        return "guide/" + uri + ".json";
+        return "guide" + uri + ".json";
     }
 
     private String localeFile(String uri, String locale)
     {
-        return "guide/" + uri + "." + locale + ".json";
+        return "guide" + uri + "." + locale + ".json";
     }
 
     private JsonObject loadResourceAsJson(ResourceLocation res)
@@ -469,6 +408,7 @@ public class GuiGuidePage
         void navigated(String newUri);
     }
 
+    @Nonnull
     private GuiImage imageForIcon(JsonObject icon)
     {
         //return new GuiImageItemStack(0, 0, new ItemStack(Items.EMERALD, 1));
@@ -483,6 +423,112 @@ public class GuiGuidePage
                 return new GuiImageItemStack(0, 0, item);
             }
         }
-        return null;
+        else if(icon.has("img"))
+        {
+            ResourceLocation src;
+
+            if(icon.has("mod"))
+            {
+                src = new ResourceLocation(icon.get("mod").getAsString(), icon.get("img").getAsString());
+            }
+            else
+            {
+                src = new ResourceLocation(MegaCorpMod.modId, icon.get("img").getAsString());
+            }
+
+            int width = icon.get("width").getAsInt();
+            int height = icon.get("height").getAsInt();
+            int sourceX = 0;
+            int sourceY = 0;
+            int sourceWidth = width;
+            int sourceHeight = height;
+            int textureWidth = 256;
+            int textureHeight = 256;
+            int spacing = 0;
+
+            boolean sub = false;
+
+            if (icon.has("sx"))
+            {
+                sourceX = icon.get("sx").getAsInt();
+                sub = true;
+            }
+            if(icon.has("sy"))
+            {
+                sourceY = icon.get("sy").getAsInt();
+                sub = true;
+            }
+            if(icon.has("sw"))
+            {
+                sourceWidth = icon.get("sw").getAsInt();
+                sub = true;
+            }
+            if(icon.has("sh"))
+            {
+                sourceHeight = icon.get("sh").getAsInt();
+                sub = true;
+            }
+            if(icon.has("tw"))
+            {
+                textureWidth = icon.get("tw").getAsInt();
+                sub = true;
+            }
+            if(icon.has("th"))
+            {
+                textureHeight = icon.get("th").getAsInt();
+                sub = true;
+            }
+            if(icon.has("spacing"))
+            {
+                spacing = icon.get("spacing").getAsInt();
+            }
+
+            if(!sub)
+            {
+                // if they only specified width and height, then it's probably a separate full-sized texture
+                textureWidth = width;
+                textureHeight = height;
+            }
+
+            GuiImage image = new GuiImageTexture(
+                0, 0,
+                width, height,
+                sourceX, sourceY,
+                sourceWidth, sourceHeight,
+                src,
+                textureWidth, textureHeight
+            );
+
+            if(spacing > 0)
+            {
+                image.extraData.put("spacing", spacing);
+            }
+
+            return image;
+        }
+        return new GuiImageItemStack(0, 0, new ItemStack(Items.SKULL));
+    }
+
+    private String resolveUri(String currentUri, String newUri)
+    {
+        if(newUri.startsWith("/"))
+            return newUri;
+
+        if(!currentUri.contains("/"))
+        {
+            currentUri = "/" + currentUri;
+        }
+
+        String currentPath = FilenameUtils.getPath(currentUri);
+
+        if(!currentPath.endsWith("/"))
+            currentPath += "/";
+
+        if(!currentPath.startsWith("/"))
+        {
+            currentPath = "/" + currentPath;
+        }
+
+        return currentPath + newUri;
     }
 }

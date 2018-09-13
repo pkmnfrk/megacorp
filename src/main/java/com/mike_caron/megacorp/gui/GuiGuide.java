@@ -23,7 +23,7 @@ public class GuiGuide
     private final Stack<String> pageNav = new Stack<>();
     private final Stack<Integer> scrolls = new Stack<>();
 
-    private String currentPage = "index";
+    private String currentPage = "/index";
     public GuiGuide()
     {
         super(256, 166, background);

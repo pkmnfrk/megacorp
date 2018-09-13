@@ -1,5 +1,14 @@
 {
   "icon": {
     "bucket": "money"
-  }
+  },
+  "body": [
+    "para1",
+    "para2",
+    {
+      "link": "/blocks/sbs"
+    },
+    "para3",
+    "para4"
+  ]
 }

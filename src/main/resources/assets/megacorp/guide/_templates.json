@@ -1,0 +1,82 @@
+{
+  "3x3": {
+    "canvas": [
+      {
+        "img": "textures/guide/crafting.png",
+        "width": 92,
+        "height": 52
+      },
+      {
+        "x": 1,
+        "y": 1,
+        "placeholder": 0
+      },
+      {
+        "x": 18,
+        "y": 1,
+        "placeholder": 1
+      },
+      {
+        "x": 35,
+        "y": 1,
+        "placeholder": 2
+      },
+      {
+        "x": 1,
+        "y": 18,
+        "placeholder": 3
+      },
+      {
+        "x": 18,
+        "y": 18,
+        "placeholder": 4
+      },
+      {
+        "x": 35,
+        "y": 18,
+        "placeholder": 5
+      },
+      {
+        "x": 1,
+        "y": 35,
+        "placeholder": 6
+      },
+      {
+        "x": 18,
+        "y": 35,
+        "placeholder": 7
+      },
+      {
+        "x": 35,
+        "y": 35,
+        "placeholder": 8
+      }
+
+    ]
+  },
+  "1+1": {
+    "spacing": 8,
+    "height": 20,
+    "horiz": [
+      {
+        "placeholder": 0
+      },
+      {
+        "img": "textures/guide/plus.png",
+        "width":16,
+        "height":16
+      },
+      {
+        "placeholder": 1
+      },
+      {
+        "img": "textures/guide/arrow.png",
+        "width":16,
+        "height":16
+      },
+      {
+        "placeholder": 2
+      }
+    ]
+  }
+}

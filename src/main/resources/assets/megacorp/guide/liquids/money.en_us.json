@@ -1,7 +1,8 @@
 {
   "title": "Money",
   "para1": "Money is, as they say, what makes the world go 'round. It is the reward you get for completing work orders, and its accumulation is the reason for everything you do for your MegaCorp.",
-  "para2": "That said, there are a few other ways to acquire it other than work orders. The first one is by using a Small Business Simulator. By giving it emeralds and gold blocks at a 1:1 ratio, you may produce small amounts of Money.",
-  "para3": "You may also use Emerald Blocks and stacks of 9 Gold Blocks, which is slightly faster.",
-  "para4": "If you have Tinker's Construct installed, you may also use a standard Alloy Smelter to produce the Money with the same ratio of ingredients."
+  "para2": "That said, there are a few other ways to acquire it other than work orders. The first one is by using a Small Business Simulator.",
+  "para3": "By giving it Emeralds and Blocks of Gold at a 1:1 ratio, you may produce small amounts of Money.",
+  "para4": "You may also use Emerald Blocks and stacks of 9 Blocks of Gold, which is slightly faster.",
+  "para5": "If you have Tinker's Construct installed, you may also use a standard Alloy Smelter to produce the Money with the same ratio of ingredients."
 }

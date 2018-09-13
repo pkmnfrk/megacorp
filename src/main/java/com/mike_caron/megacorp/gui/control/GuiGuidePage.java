@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.EventListener;
+import java.util.Map;
 
 public class GuiGuidePage
     extends GuiScrollPort
@@ -57,6 +58,7 @@ public class GuiGuidePage
 
         try
         {
+            JsonObject templates = loadResourceAsJson(new ResourceLocation(MegaCorpMod.modId, baseFile("/_templates")));
             JsonObject body = loadResourceAsJson(rl);
             if(body == null)
             {
@@ -83,7 +85,7 @@ public class GuiGuidePage
 
                 if (body.has("body"))
                 {
-                    addLabelsForList(body.get("body").getAsJsonArray(), translation);
+                    addLabelsForList(body.get("body").getAsJsonArray(), translation, templates);
                 }
 
                 if (body.has("seealso"))
@@ -142,7 +144,7 @@ public class GuiGuidePage
         setMaxScrollY(yPos - this.height);
     }
 
-    private void addLabelsForList(JsonArray index, JsonObject translation)
+    private void addLabelsForList(JsonArray index, JsonObject translation, JsonObject templates)
     {
         //JsonArray index = body.get(seealso2).getAsJsonArray();
 
@@ -150,9 +152,103 @@ public class GuiGuidePage
         {
             JsonElement p = index.get(i);
 
+            p = resolveTemplate(p, templates);
+
             insertLabel(translation, p, false);
         }
     }
+
+    private JsonElement resolveTemplate(JsonElement src, JsonObject templates)
+    {
+        if(!src.isJsonObject())
+            return src;
+
+        if(templates == null)
+            return src;
+
+        JsonObject obj = src.getAsJsonObject();
+
+        if(!obj.has("template"))
+            return src;
+
+        String templateName = obj.get("template").getAsString();
+        if(!templates.has(templateName))
+            return src;
+
+        JsonArray elements = src.getAsJsonObject().get("elements").getAsJsonArray();
+
+        JsonObject template = templates.get(templateName).getAsJsonObject();
+        JsonObject ret = new JsonObject();
+
+        for(Map.Entry<String, JsonElement> entry : template.entrySet())
+        {
+            ret.add(entry.getKey(), resolveTemplateObject(elements, entry.getValue()));
+        }
+
+        for(Map.Entry<String, JsonElement> entry : obj.entrySet())
+        {
+            if(entry.getKey().equals("template") || entry.getKey().equals("elements"))
+                continue;
+
+            ret.add(entry.getKey(), entry.getValue());
+        }
+
+        return ret;
+    }
+
+    private JsonElement resolveTemplateObject(JsonArray elements, JsonElement entry)
+    {
+        if(entry.isJsonPrimitive())
+            return entry;
+
+        if(entry.isJsonNull())
+            return entry;
+
+        if(entry.isJsonArray())
+        {
+            JsonArray newArray = new JsonArray();
+
+            for(JsonElement el : entry.getAsJsonArray())
+            {
+                newArray.add(resolveTemplateObject(elements, el));
+            }
+
+            return newArray;
+        }
+
+        if(entry.isJsonObject())
+        {
+            JsonObject newObj = entry.getAsJsonObject();
+
+            if (entry.getAsJsonObject().has("placeholder"))
+            {
+                newObj = new JsonObject();
+
+                for (Map.Entry<String, JsonElement> subentry : entry.getAsJsonObject().entrySet())
+                {
+                    if (!subentry.getKey().equals("placeholder"))
+                    {
+                        newObj.add(subentry.getKey(), subentry.getValue());
+                        continue;
+                    }
+
+                    int placeholderId = subentry.getValue().getAsInt();
+
+                    if (placeholderId < 0 || placeholderId >= elements.size())
+                        continue;
+
+                    for (Map.Entry<String, JsonElement> srcEntry : elements.get(placeholderId).getAsJsonObject().entrySet())
+                    {
+                        newObj.add(srcEntry.getKey(), resolveTemplateObject(elements, srcEntry.getValue()));
+                    }
+                }
+            }
+            return newObj;
+        }
+
+        throw new RuntimeException("This can't happen");
+    }
+
 
     private void insertLabel(JsonObject translation, JsonElement l, boolean isTitle)
     {
@@ -218,18 +314,53 @@ public class GuiGuidePage
                 control = insertImage(obj);
                 control.setX((this.width - marginRight) / 2 - control.getWidth() / 2);
             }
-            else if(obj.has("horiz"))
+            else if(
+                   obj.has("horiz")
+                || obj.has("canvas")
+            )
             {
-                JsonArray elements = obj.get("horiz").getAsJsonArray();
+
+                JsonArray elements = null;
+                GuiGroup layout = null;
+
+                if(obj.has("horiz"))
+                {
+                    elements = obj.get("horiz").getAsJsonArray();
+                    layout = new GuiHorizontalLayout(2, yPos, this.width - 2 - marginRight, 0, 2);
+                }
+                else if(obj.has("canvas"))
+                {
+                    elements = obj.get("canvas").getAsJsonArray();
+                    layout = new GuiGroup(2, yPos, 0, height);
+                }
+                else
+                {
+                    throw new RuntimeException("This can't happen");
+                }
+
                 int height = 0;
+                int width = layout.getWidth();
+                int z = 0;
+
                 boolean autoHeight = true;
+                boolean autoWidth = true;
+
                 if(obj.has("height"))
                 {
                     height = obj.get("height").getAsInt();
                     autoHeight = false;
                 }
 
-                GuiHorizontalLayout layout = new GuiHorizontalLayout(2, yPos, this.width - 2 - marginRight, height, 2);
+                if(obj.has("width"))
+                {
+                    width = obj.get("width").getAsInt();
+                    autoWidth = false;
+                }
+
+                if(obj.has("spacing"))
+                {
+                    layout.extraData.put("spacing", obj.get("spacing").getAsInt());
+                }
 
                 for(int i = 0; i < elements.size(); i++)
                 {
@@ -237,18 +368,31 @@ public class GuiGuidePage
 
                     GuiImage image = imageForIcon(el);
 
+                    image.setzIndex(z++);
+
                     layout.addControl(image);
 
                     if(autoHeight)
                     {
-                        if(height < image.getHeight())
+                        if(height < image.getY() + image.getHeight())
                         {
-                            height = image.getHeight();
+                            height = image.getY() + image.getHeight();
+                        }
+                    }
+
+                    if(autoWidth)
+                    {
+                        if(width < image.getX() + image.getWidth())
+                        {
+                            width = image.getX() + image.getWidth();
                         }
                     }
 
                 }
                 layout.setHeight(height);
+                layout.setWidth(width);
+
+                layout.setX(this.width / 2 - layout.getWidth() / 2);
 
                 control = layout;
 
@@ -471,6 +615,25 @@ public class GuiGuidePage
     private GuiImage imageForIcon(JsonObject icon)
     {
         //return new GuiImageItemStack(0, 0, new ItemStack(Items.EMERALD, 1));
+        int x = 0;
+        int y = 0;
+        String link = null;
+
+        if(icon.has("x"))
+        {
+            x = icon.get("x").getAsInt();
+        }
+        if(icon.has("y"))
+        {
+            y = icon.get("y").getAsInt();
+        }
+        if(icon.has("link"))
+        {
+            link = icon.get("link").getAsString();
+        }
+
+        GuiImage ret = null;
+
         if(icon.has("bucket"))
         {
             String fluidId = icon.get("bucket").getAsString();
@@ -479,7 +642,7 @@ public class GuiGuidePage
             if(fluid != null)
             {
                 ItemStack item = FluidUtil.getFilledBucket(new FluidStack(fluid, 1000));
-                return new GuiImageItemStack(0, 0, item);
+                ret = new GuiImageItemStack(x, y, item);
             }
         }
         else if(icon.has("img"))
@@ -550,7 +713,7 @@ public class GuiGuidePage
             }
 
             GuiImage image = new GuiImageTexture(
-                0, 0,
+                x, y,
                 width, height,
                 sourceX, sourceY,
                 sourceWidth, sourceHeight,
@@ -563,7 +726,7 @@ public class GuiGuidePage
                 image.extraData.put("spacing", spacing);
             }
 
-            return image;
+            ret = image;
         }
         else if(icon.has("item"))
         {
@@ -586,9 +749,21 @@ public class GuiGuidePage
 
             ItemStack stack = new ItemStack(item, qty, meta);
 
-            return new GuiImageItemStack(0,0, stack);
+            ret = new GuiImageItemStack(x,y, stack);
         }
-        return new GuiImageItemStack(0, 0, new ItemStack(Items.SKULL));
+
+        if(ret == null)
+        {
+            ret = new GuiImageItemStack(x, y, new ItemStack(Items.SKULL));
+        }
+
+        if(link != null)
+        {
+            ret.extraData.put("link", link);
+            ret.addListener(this);
+        }
+
+        return ret;
     }
 
     private String resolveUri(String currentUri, String newUri)

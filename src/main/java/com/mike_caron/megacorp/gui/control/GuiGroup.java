@@ -8,26 +8,19 @@ import java.util.Comparator;
 import java.util.List;
 
 public class GuiGroup
-    extends GuiControl
+    extends GuiSized
     implements IGuiGroup
 {
-    private final List<GuiControl> controls = new ArrayList<>();
+    protected final List<GuiControl> controls = new ArrayList<>();
 
     public GuiGroup()
     {
-        super(0, 0);
+        super(0, 0, 0, 0);
     }
 
-    @Override
-    public int getWidth()
+    public GuiGroup(int x, int y, int w, int h)
     {
-        return 0;
-    }
-
-    @Override
-    public int getHeight()
-    {
-        return 0;
+        super(x, y, w, h);
     }
 
     @Override
@@ -114,8 +107,10 @@ public class GuiGroup
     @Override
     public GuiControl hitTest(int x, int y)
     {
-        for(GuiControl control : controls)
+        //for(GuiControl control : controls)
+        for(int i = controls.size() - 1; i >= 0; i--)
         {
+            GuiControl control = controls.get(i);
             if(control.isVisible())
             {
                 GuiControl res = control.hitTest(x - control.getX(), y - control.getY());

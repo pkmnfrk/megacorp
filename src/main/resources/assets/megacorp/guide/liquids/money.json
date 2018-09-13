@@ -9,59 +9,24 @@
       "link": "/blocks/sbs",
       "spacing": 4
     },
-    {
-      "height": 18,
-      "spacing": 8,
-      "horiz": [
-        {
-          "item": "minecraft:emerald"
-        },
-        {
-          "img": "textures/guide/plus.png",
-          "width":16,
-          "height":16
-        },
-        {
-          "item": "minecraft:gold_block"
-        },
-        {
-          "img": "textures/guide/arrow.png",
-          "width":16,
-          "height":16
-        },
-        {
-          "item": "megacorp:money",
-          "qty": 2
-        }
-      ]
-    },
     "para3",
     {
-      "spacing": 8,
-      "horiz": [
-        {
-          "item": "minecraft:emerald_block"
-        },
-        {
-          "img": "textures/guide/plus.png",
-          "width":16,
-          "height":16
-        },
-        {
-          "item": "minecraft:gold_block",
-          "qty": 9
-        },
-        {
-          "img": "textures/guide/arrow.png",
-          "width":16,
-          "height":16
-        },
-        {
-          "item": "megacorp:money",
-          "qty": 18
-        }
+      "template": "1+1",
+      "elements": [
+        { "item": "minecraft:emerald" },
+        { "item": "minecraft:gold_block", "qty": 1 },
+        { "item": "megacorp:money", qty: 2 },
       ]
     },
-    "para4"
+    "para4",
+    {
+      "template": "1+1",
+      "elements": [
+        { "item": "minecraft:emerald_block" },
+        { "item": "minecraft:gold_block", "qty": 9 },
+        { "item": "megacorp:money", qty: 18 },
+      ]
+    },
+    "para5"
   ]
 }

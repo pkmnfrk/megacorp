@@ -1,0 +1,43 @@
+{
+  "icon": {
+    "item": "megacorp:small_business_simulator"
+  },
+  "body": [
+    {
+      "template": "3x3",
+      "elements": [
+        {
+          "item": "minecraft:gold_ingot"
+        },
+        {
+          "item": "minecraft:gold_ingot"
+        },
+        {
+          "item": "minecraft:gold_ingot"
+        },
+        {
+          "item": "minecraft:gold_ingot"
+        },
+        {
+          "item": "minecraft:emerald"
+        },
+        {
+          "item": "minecraft:gold_ingot"
+        },
+        {
+          "item": "minecraft:gold_ingot"
+        },
+        {
+          "item": "minecraft:gold_ingot"
+        },
+        {
+          "item": "minecraft:gold_ingot"
+        },
+        {
+          "item": "megacorp:small_business_simulator"
+        }
+
+      ]
+    }
+  ]
+}

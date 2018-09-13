@@ -350,4 +350,13 @@ public class GuiScrollPort
             this.scrollY = maxScrollY;
         }
     }
+
+    @Override
+    public void update()
+    {
+        for(GuiControl control : controls)
+        {
+            control.update();
+        }
+    }
 }

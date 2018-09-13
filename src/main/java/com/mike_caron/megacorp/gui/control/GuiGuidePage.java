@@ -8,6 +8,8 @@ import net.minecraft.client.resources.IResource;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
@@ -17,7 +19,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import org.apache.commons.io.FilenameUtils;
 
-import javax.annotation.Nonnull;
 import java.awt.Color;
 import java.io.IOException;
 import java.io.InputStream;
@@ -196,6 +197,35 @@ public class GuiGuidePage
         return ret;
     }
 
+    private JsonArray getElements(JsonElement elementsEl)
+    {
+        if(elementsEl == null || elementsEl.isJsonNull() || elementsEl.isJsonPrimitive())
+        {
+            return new JsonArray();
+        }
+
+        if(elementsEl.isJsonArray())
+        {
+            return elementsEl.getAsJsonArray();
+        }
+
+        JsonObject obj = elementsEl.getAsJsonObject();
+
+        if(obj.has("recipe"))
+        {
+            String itemId = obj.get("recipe").getAsString();
+
+            IRecipe recipe = CraftingManager.getRecipe(new ResourceLocation(itemId));
+            JsonArray ret = new JsonArray();
+
+
+
+            return ret;
+        }
+
+        return new JsonArray();
+    }
+
     private JsonElement resolveTemplateObject(JsonArray elements, JsonElement entry)
     {
         if(entry.isJsonPrimitive())
@@ -299,20 +329,19 @@ public class GuiGuidePage
         {
             GuiControl control = null;
             JsonObject obj = l.getAsJsonObject();
-            if(obj.has("link"))
+
+            // image-types are super diverse, so it's easier to try this first, and try other stuff if it fails
+            control = insertImage(obj);
+
+            if(control != null)
+            {
+                control.setX((this.width - marginRight) / 2 - control.getWidth() / 2);
+            }
+            else if(obj.has("link"))
             {
                 control = insertLink(obj);
                 control.setX(2);
                 ((GuiSized)control).setWidth(this.width - 4);
-            }
-            else if(
-                   obj.has("img")
-                || obj.has("bucket")
-                || obj.has("item")
-            )
-            {
-                control = insertImage(obj);
-                control.setX((this.width - marginRight) / 2 - control.getWidth() / 2);
             }
             else if(
                    obj.has("horiz")
@@ -367,6 +396,9 @@ public class GuiGuidePage
                     JsonObject el = elements.get(i).getAsJsonObject();
 
                     GuiImage image = imageForIcon(el);
+
+                    if(image == null)
+                        continue;
 
                     image.setzIndex(z++);
 
@@ -611,7 +643,6 @@ public class GuiGuidePage
         void navigated(String newUri);
     }
 
-    @Nonnull
     private GuiImage imageForIcon(JsonObject icon)
     {
         //return new GuiImageItemStack(0, 0, new ItemStack(Items.EMERALD, 1));
@@ -634,7 +665,22 @@ public class GuiGuidePage
 
         GuiImage ret = null;
 
-        if(icon.has("bucket"))
+        if(icon.has("imgarray"))
+        {
+            JsonArray images = icon.get("imgarray").getAsJsonArray();
+
+            GuiImageFlipper flipper = new GuiImageFlipper(x, y);
+
+            for(JsonElement el : images)
+            {
+                if(!el.isJsonObject())
+                    continue;
+
+                flipper.addImage(imageForIcon(el.getAsJsonObject()));
+            }
+
+            ret = flipper;
+        } else if(icon.has("bucket"))
         {
             String fluidId = icon.get("bucket").getAsString();
             Fluid fluid = FluidRegistry.getFluid(fluidId);
@@ -754,7 +800,7 @@ public class GuiGuidePage
 
         if(ret == null)
         {
-            ret = new GuiImageItemStack(x, y, new ItemStack(Items.SKULL));
+            return null;
         }
 
         if(link != null)

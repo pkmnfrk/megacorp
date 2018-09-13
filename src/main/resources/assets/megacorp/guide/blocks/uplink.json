@@ -1,0 +1,13 @@
+{
+  "icon": {
+    "item": "megacorp:uplink"
+  },
+  "body": [
+    {
+      "template": "3x3",
+      "elements": {
+        "recipe": "megacorp:uplink"
+      }
+    }
+  ]
+}

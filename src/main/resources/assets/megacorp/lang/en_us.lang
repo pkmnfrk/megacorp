@@ -14,20 +14,20 @@ item.megacorp:ingot_dense_money.name=Fat Stack of Cash
 tile.megacorp:money_block.name=Block of Money
 tile.megacorp:dense_money_block.name=Block of Dense Money
 
-tile.megacorp:uplink.name=Mega Corp Uplink
+tile.megacorp:uplink.name=MegaCorp Uplink
 tile.megacorp:uplink.corpname=Corporation Name:
 tile.megacorp:uplink.profit=Profit Generated: $%s
-tile.megacorp:uplink.newcorp=No Mega Corp registered to this owner. Insert a Corporate Card, or:
-tile.megacorp:uplink.existcorp=Mega Corp registered to this owner exists. Insert a Corporate Card, or:
-tile.megacorp.uplink.createcorp=Create Mega Corp
+tile.megacorp:uplink.newcorp=No MegaCorp registered to this owner. Insert a Corporate Card, or:
+tile.megacorp:uplink.existcorp=MegaCorp registered to this owner exists. Insert a Corporate Card, or:
+tile.megacorp.uplink.createcorp=Create MegaCorp
 tile.megacorp.uplink.establish=Establish Uplink
-tile.megacorp:uplink.description=The Mega Corp Uplink allows you establish a remote connection to your Mega Corp. In practical terms, this means you can create a new Mega Corp if you don't own one, and link Corporate Cards to it.
+tile.megacorp:uplink.description=The MegaCorp Uplink allows you establish a remote connection to your MegaCorp. In practical terms, this means you can create a new MegaCorp if you don't own one, and link Corporate Cards to it.
 
 tile.megacorp:small_business_simulator.name=Small Business Simulator
 tile.megacorp:small_business_simulator.description=The Small Business Simulator takes some seed funding (in the form of Emerald and Gold) and uses it to generate liquid Money. Check the Money recipe page for the correct ratios.
 
 tile.megacorp:capital_investor.name=Capital Investor
-tile.megacorp:capital_investor.description=The Capital Investor takes liquid assets (in the form of Money) and uses it to produce various benefits for you and your Mega Corp.
+tile.megacorp:capital_investor.description=The Capital Investor takes liquid assets (in the form of Money) and uses it to produce various benefits for you and your MegaCorp.
 tile.megacorp:capital_investor.buy=Buy
 tile.megacorp:capital_investor.cost=Cost: %smb
 tile.megacorp:capital_investor.rank=Rank: %s
@@ -36,15 +36,15 @@ tile.megacorp:profit_condenser.name=Profit Condenser
 tile.megacorp:profit_condenser.description=The Profit Condenser takes liquid assets (in the form of Money) and condenses it into an incredibly valuable substance known as Dense Money. This liquid is 1000x as dense as regular Money.
 
 item.megacorp:corporate_card.name=Corporate Card
-item.megacorp:corporate_card.description=The Corporate Card is used to link various machines to the Mega Corp. Most machines require such a link in order to function correctly.\n\nA card may be linked at a Mega Corp Uplink. One linked, simply right-click another machine to link it as well.
+item.megacorp:corporate_card.description=The Corporate Card is used to link various machines to the MegaCorp. Most machines require such a link in order to function correctly.\n\nA card may be linked at a MegaCorp Uplink. One linked, simply right-click another machine to link it as well.
 item.megacorp:corporate_card.linked=Registered
 item.megacorp:corporate_card.notlinked=Unregistered
 
 item.megacorp:black_card.name=Black Card
-item.megacorp:black_card.description=This mystical card is capable of producing profit at will.\n\nUse on the Mega Corp Uplink.
+item.megacorp:black_card.description=This mystical card is capable of producing profit at will.\n\nUse on the MegaCorp Uplink.
 
 tile.megacorp:profit_materializer.name=Profit Materializer
-item.megacorp:profit_materializer.description=The Profit Materializer is responsible for extracting collected profit from the Mega Corp and producing liquid assets in the form of Money. It is capable of producing about 5mb of Money per second.
+item.megacorp:profit_materializer.description=The Profit Materializer is responsible for extracting collected profit from the MegaCorp and producing liquid assets in the form of Money. It is capable of producing about 5mb of Money per second.
 tile.megacorp:profit_materializer.remaining=Profit Remaining:
 tile.megacorp:profit_materializer.remainingval=$%s
 tile.megacorp:profit_materializer.speed=Speed:

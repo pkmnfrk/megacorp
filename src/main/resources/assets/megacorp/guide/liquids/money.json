@@ -6,9 +6,62 @@
     "para1",
     "para2",
     {
-      "link": "/blocks/sbs"
+      "link": "/blocks/sbs",
+      "spacing": 4
+    },
+    {
+      "height": 18,
+      "spacing": 8,
+      "horiz": [
+        {
+          "item": "minecraft:emerald"
+        },
+        {
+          "img": "textures/guide/plus.png",
+          "width":16,
+          "height":16
+        },
+        {
+          "item": "minecraft:gold_block"
+        },
+        {
+          "img": "textures/guide/arrow.png",
+          "width":16,
+          "height":16
+        },
+        {
+          "item": "megacorp:money",
+          "qty": 2
+        }
+      ]
     },
     "para3",
+    {
+      "spacing": 8,
+      "horiz": [
+        {
+          "item": "minecraft:emerald_block"
+        },
+        {
+          "img": "textures/guide/plus.png",
+          "width":16,
+          "height":16
+        },
+        {
+          "item": "minecraft:gold_block",
+          "qty": 9
+        },
+        {
+          "img": "textures/guide/arrow.png",
+          "width":16,
+          "height":16
+        },
+        {
+          "item": "megacorp:money",
+          "qty": 18
+        }
+      ]
+    },
     "para4"
   ]
 }

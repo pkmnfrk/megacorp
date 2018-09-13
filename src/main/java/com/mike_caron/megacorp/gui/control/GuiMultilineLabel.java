@@ -176,6 +176,8 @@ public class GuiMultilineLabel
                 break;
         }
 
+        GuiUtil.setGLColor(Color.WHITE);
+
         for(int i = 0; i < lines.size(); i++)
         {
             int w = renderer.getStringWidth(lines.get(i));

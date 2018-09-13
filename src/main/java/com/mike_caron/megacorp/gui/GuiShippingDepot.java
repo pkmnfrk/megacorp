@@ -272,7 +272,7 @@ public class GuiShippingDepot
 
             drawGradientRect(0, 0, width, height, color.getRGB(), color.getRGB());
 
-            GuiUtil.drawItemStack(quest.item, 1, 1, itemRender);
+            GuiUtil.drawItemStack(quest.item, 1, 1, itemRender, null);
 
             fontRenderer.drawString(questLocalization.title, 20, 5, Color.WHITE.getRGB());
 

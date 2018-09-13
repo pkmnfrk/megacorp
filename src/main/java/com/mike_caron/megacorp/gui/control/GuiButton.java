@@ -25,6 +25,16 @@ public class GuiButton
         this.state = State.NORMAL;
     }
 
+    @Override
+    public void setParent(IGuiGroup parent)
+    {
+        super.setParent(parent);
+        if(image != null)
+        {
+            image.setParent(parent);
+        }
+    }
+
     public GuiButton(int id, int x, int y, int width, int height, String label, GuiImage image)
     {
         super(x, y, width, height);

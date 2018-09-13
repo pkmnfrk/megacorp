@@ -3,6 +3,7 @@ package com.mike_caron.megacorp.gui.control;
 import com.mike_caron.megacorp.gui.GuiUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 
 public class GuiImageItemStack
@@ -16,6 +17,8 @@ public class GuiImageItemStack
         super(x, y);
         this.itemStack = itemStack;
         this.itemRender = Minecraft.getMinecraft().getRenderItem();
+
+        setTooltip(itemStack.getTooltip(Minecraft.getMinecraft().player, ITooltipFlag.TooltipFlags.NORMAL));
     }
 
     @Override
@@ -33,6 +36,6 @@ public class GuiImageItemStack
     @Override
     public void draw()
     {
-        GuiUtil.drawItemStack(itemStack, 0, 0, itemRender);
+        GuiUtil.drawItemStack(itemStack, 0, 0, itemRender, parent != null ? parent.getFontRenderer() : null);
     }
 }

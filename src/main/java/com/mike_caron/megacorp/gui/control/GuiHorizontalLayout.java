@@ -7,27 +7,35 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class GuiGroup
-    extends GuiControl
+public class GuiHorizontalLayout
+    extends GuiSized
     implements IGuiGroup
 {
+    private int margin;
+
     private final List<GuiControl> controls = new ArrayList<>();
 
-    public GuiGroup()
+    public GuiHorizontalLayout(int x, int y, int width, int height, int margin)
     {
-        super(0, 0);
+        super(x, y, width, height);
+
+        this.margin = margin;
     }
 
     @Override
-    public int getWidth()
+    public void setWidth(int width)
     {
-        return 0;
+        super.setWidth(width);
+
+        doLayout();
     }
 
     @Override
-    public int getHeight()
+    public void setHeight(int height)
     {
-        return 0;
+        super.setHeight(height);
+
+        doLayout();
     }
 
     @Override
@@ -133,12 +141,14 @@ public class GuiGroup
         this.controls.add(control);
         control.setParent(this);
         this.sort();
+        this.doLayout();
     }
 
     @Override
     public void removeControl(GuiControl control)
     {
         this.controls.remove(control);
+        this.doLayout();
     }
 
     @Override
@@ -209,6 +219,30 @@ public class GuiGroup
                 control.onKeyTyped(typedChar, keyCode);
                 break;
             }
+        }
+    }
+
+    private void doLayout()
+    {
+        if(controls.size() < 1) return;
+
+        int totalWidth = 0;
+
+        totalWidth += margin * (controls.size() - 1);
+
+        for(GuiControl control : controls)
+        {
+            totalWidth += control.getWidth();
+        }
+
+        int left = this.width / 2 - totalWidth / 2;
+
+        for(GuiControl control : controls)
+        {
+            control.setY(this.height / 2 - control.getHeight() / 2);
+            control.setX(left);
+
+            left += control.getWidth() + margin;
         }
     }
 }

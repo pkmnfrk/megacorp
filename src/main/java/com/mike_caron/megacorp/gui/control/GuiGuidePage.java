@@ -6,6 +6,7 @@ import com.mike_caron.megacorp.gui.GuiUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -70,7 +71,7 @@ public class GuiGuidePage
             {
                 JsonObject translation = loadLocalizedResourceAsJson(uri);
 
-                if(translation.has("title"))
+                if(translation != null && translation.has("title"))
                 {
                     insertLabel(translation, new JsonPrimitive("title"), true);
                 }
@@ -200,14 +201,70 @@ public class GuiGuidePage
         }
         else
         {
+            GuiControl control = null;
             JsonObject obj = l.getAsJsonObject();
             if(obj.has("link"))
             {
-                insertLink(obj);
+                control = insertLink(obj);
+                control.setX(2);
+                ((GuiSized)control).setWidth(this.width - 4);
             }
-            else if(obj.has("img") || obj.has("bucket"))
+            else if(
+                   obj.has("img")
+                || obj.has("bucket")
+                || obj.has("item")
+            )
             {
-                insertImage(obj);
+                control = insertImage(obj);
+                control.setX((this.width - marginRight) / 2 - control.getWidth() / 2);
+            }
+            else if(obj.has("horiz"))
+            {
+                JsonArray elements = obj.get("horiz").getAsJsonArray();
+                int height = 0;
+                boolean autoHeight = true;
+                if(obj.has("height"))
+                {
+                    height = obj.get("height").getAsInt();
+                    autoHeight = false;
+                }
+
+                GuiHorizontalLayout layout = new GuiHorizontalLayout(2, yPos, this.width - 2 - marginRight, height, 2);
+
+                for(int i = 0; i < elements.size(); i++)
+                {
+                    JsonObject el = elements.get(i).getAsJsonObject();
+
+                    GuiImage image = imageForIcon(el);
+
+                    layout.addControl(image);
+
+                    if(autoHeight)
+                    {
+                        if(height < image.getHeight())
+                        {
+                            height = image.getHeight();
+                        }
+                    }
+
+                }
+                layout.setHeight(height);
+
+                control = layout;
+
+            }
+
+            if(control != null)
+            {
+                this.addControl(control);
+                control.setY(yPos);
+
+                yPos += control.getHeight();
+
+                if (control.extraData.containsKey("spacing"))
+                {
+                    yPos += (Integer) control.extraData.get("spacing");
+                }
             }
         }
     }
@@ -218,29 +275,29 @@ public class GuiGuidePage
 
         for (int i = 0; i < index.size(); i++)
         {
-            insertLink(index.get(i));
+            GuiSized control = insertLink(index.get(i));
+
+            control.setY(yPos);
+            control.setX(2);
+            control.setWidth(this.width - 4);
+
+            this.addControl(control);
+
+            yPos += control.getHeight();
+
+            if(control.extraData.containsKey("spacing"))
+            {
+                yPos += (Integer)control.extraData.get("spacing");
+            }
         }
     }
 
-    private void insertImage(JsonObject img)
+    private GuiControl insertImage(JsonObject img)
     {
-        GuiImage image = imageForIcon(img);
-
-        int x = (this.width - marginRight) / 2 - image.getWidth() / 2;
-
-        image.setX(x);
-
-        this.addControl(image);
-
-        if(image.extraData.containsKey("spacing"))
-        {
-            yPos += (Integer)image.extraData.get("spacing");
-        }
-
-        yPos += height;
+        return imageForIcon(img);
     }
 
-    private void insertLink(JsonElement ele)
+    private GuiSized insertLink(JsonElement ele)
     {
         String otherUri = null;
         int spacing = 0;
@@ -278,19 +335,21 @@ public class GuiGuidePage
             label = otherTranslation.get("title").getAsString();
         }
 
-        GuiButton button = new GuiButton(0, 2, yPos, this.width - 4, Math.max(14, image != null ? image.getHeight() + 4 : 0), label, image);
+        GuiButton button = new GuiButton(0, 0, 0, this.width - 4, Math.max(14, image != null ? image.getHeight() + 4 : 0), label, image);
         button.addListener(this);
-        this.addControl(button);
+        //this.addControl(button);
 
         button.extraData.put("link", otherUri);
 
         if(spacing > 0)
         {
-            yPos += spacing;
+            //yPos += spacing;
             button.extraData.put("spacing", spacing);
         }
 
-        yPos += 14;
+        //yPos += 14;
+
+        return button;
     }
 
     public String getTitle()
@@ -505,6 +564,29 @@ public class GuiGuidePage
             }
 
             return image;
+        }
+        else if(icon.has("item"))
+        {
+            String key = icon.get("item").getAsString();
+            int qty = 1;
+            int meta = 0;
+            if(icon.has("qty"))
+            {
+                qty = icon.get("qty").getAsInt();
+            }
+            if(icon.has("meta"))
+            {
+                meta = icon.get("meta").getAsInt();
+            }
+            Item item = Item.getByNameOrId(key);
+            if(item == null)
+            {
+                item = Items.AIR;
+            }
+
+            ItemStack stack = new ItemStack(item, qty, meta);
+
+            return new GuiImageItemStack(0,0, stack);
         }
         return new GuiImageItemStack(0, 0, new ItemStack(Items.SKULL));
     }

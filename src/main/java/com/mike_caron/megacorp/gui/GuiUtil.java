@@ -1,14 +1,15 @@
 package com.mike_caron.megacorp.gui;
 
 import com.mike_caron.megacorp.MegaCorpMod;
-import com.mike_caron.megacorp.gui.control.*;
+import com.mike_caron.megacorp.gui.control.GuiButton;
+import com.mike_caron.megacorp.gui.control.GuiControl;
+import com.mike_caron.megacorp.gui.control.GuiLabel;
+import com.mike_caron.megacorp.gui.control.GuiMultilineLabel;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButtonImage;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderItem;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
@@ -17,6 +18,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nullable;
 import java.awt.Color;
 
 public class GuiUtil
@@ -349,14 +351,23 @@ public class GuiUtil
         return new TextComponentTranslation(key, variables).getFormattedText();
     }
 
-    public static void drawItemStack(ItemStack stack, int x, int y, RenderItem itemRender)
+    public static void drawItemStack(ItemStack stack, int x, int y, RenderItem itemRender, @Nullable FontRenderer fontRenderer)
     {
         GlStateManager.translate(0.0F, 0.0F, 32.0F);
 
-        itemRender.zLevel = 200.0F;
+        itemRender.zLevel = 100.0F;
 
-        itemRender.renderItemAndEffectIntoGUI(stack, x, y);
-        //this.itemRender.renderItemOverlayIntoGUI(font, stack, x, y, altText);
+        GlStateManager.translate(0.0F, 0.0F, 32.0F);
+
+        RenderHelper.enableGUIStandardItemLighting();
+
+        itemRender.renderItemIntoGUI(stack, x, y);
+        if(fontRenderer != null)
+        {
+            itemRender.renderItemOverlayIntoGUI(fontRenderer, stack, x, y, null);
+        }
+
+        RenderHelper.disableStandardItemLighting();
 
         itemRender.zLevel = 0.0F;
     }

@@ -12,6 +12,7 @@ import net.minecraftforge.common.crafting.JsonContext;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 
 import javax.annotation.Nonnull;
 
@@ -33,13 +34,13 @@ public class FluidIngredientFactory
             throw new JsonSyntaxException("Unknown fluid '" + fluidName + "'");
         }
 
-        //final ItemStack filledBucket = FluidUtil.getFilledBucket(new FluidStack(fluid, 0));
-        final ItemStack filledBucket = Bottle.with(new FluidStack(fluid, amount));
+        final ItemStack filledBucket = FluidUtil.getFilledBucket(new FluidStack(fluid, 0));
+        final ItemStack filledBottle = Bottle.with(new FluidStack(fluid, amount));
 
-        if (filledBucket.isEmpty()) {
+        if (filledBottle.isEmpty()) {
             throw new JsonSyntaxException("No bucket registered for fluid '" + fluidName + "'");
         }
 
-        return IngredientNBT.fromStacks(filledBucket);
+        return IngredientNBT.fromStacks(filledBottle, filledBucket);
     }
 }

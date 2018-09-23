@@ -18,7 +18,10 @@ public class GuiImageItemStack
         this.itemStack = itemStack;
         this.itemRender = Minecraft.getMinecraft().getRenderItem();
 
-        setTooltip(itemStack.getTooltip(Minecraft.getMinecraft().player, ITooltipFlag.TooltipFlags.NORMAL));
+        if(!this.itemStack.isEmpty())
+        {
+            setTooltip(itemStack.getTooltip(Minecraft.getMinecraft().player, ITooltipFlag.TooltipFlags.NORMAL));
+        }
     }
 
     @Override

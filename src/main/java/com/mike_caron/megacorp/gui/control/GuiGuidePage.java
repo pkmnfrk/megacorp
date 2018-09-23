@@ -3,16 +3,18 @@ package com.mike_caron.megacorp.gui.control;
 import com.google.gson.*;
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.gui.GuiUtil;
+import com.mike_caron.megacorp.util.DataUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.common.crafting.IShapedRecipe;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -176,7 +178,7 @@ public class GuiGuidePage
         if(!templates.has(templateName))
             return src;
 
-        JsonArray elements = src.getAsJsonObject().get("elements").getAsJsonArray();
+        JsonArray elements = getElements(src.getAsJsonObject().get("elements"));
 
         JsonObject template = templates.get(templateName).getAsJsonObject();
         JsonObject ret = new JsonObject();
@@ -217,13 +219,94 @@ public class GuiGuidePage
 
             IRecipe recipe = CraftingManager.getRecipe(new ResourceLocation(itemId));
             JsonArray ret = new JsonArray();
+            int numIng = 0;
 
+            JsonObject air = new JsonObject();
+            air.addProperty("item", "minecraft:air");
 
+            //protocol is that the ingredients are listed as items 0-8, and the result is item 9
+
+            int recipe_width = 3;
+            int recipe_height = 3;
+
+            if(obj.has("recipe_width"))
+            {
+                recipe_width = obj.get("recipe_width").getAsInt();
+            }
+
+            if(obj.has("recipe_height"))
+            {
+                recipe_height = obj.get("recipe_height").getAsInt();
+            }
+
+            if(recipe != null)
+            {
+                NonNullList<Ingredient> ingredients = recipe.getIngredients();
+
+                numIng = ingredients.size();
+                int w = 100;
+                int h = 100;
+                if(recipe instanceof IShapedRecipe)
+                {
+                    w = ((IShapedRecipe) recipe).getRecipeWidth();
+                    h = ((IShapedRecipe) recipe).getRecipeHeight();
+                }
+
+                int x = 0;
+                int y = 0;
+                int q = 0;
+                for (int i = 0; i < 9; i++)
+                {
+                    if((w != 0 && x >= w) || (h != 0 && y >= h) || q >= ingredients.size())
+                    {
+                        ret.add(air);
+                    }
+                    else
+                    {
+                        Ingredient ing = ingredients.get(q++);
+
+                        ret.add(elementForIngredient(ing));
+                    }
+
+                    x += 1;
+                    if(x >= recipe_width)
+                    {
+                        x = 0;
+                        y += 1;
+                        if(y >= recipe_height)
+                            break;
+                    }
+                }
+
+                ret.add(DataUtils.toJson(recipe.getRecipeOutput()));
+            }
 
             return ret;
         }
 
         return new JsonArray();
+    }
+
+    private JsonElement elementForIngredient(Ingredient ing)
+    {
+        ItemStack[] stacks = ing.getMatchingStacks();
+
+        if (stacks.length == 1)
+        {
+            return DataUtils.toJson(stacks[0]);
+        }
+        else
+        {
+            JsonObject arrHolder = new JsonObject();
+            JsonArray arr = new JsonArray();
+
+            for (int j = 0; j < stacks.length; j++)
+            {
+                arr.add(DataUtils.toJson(stacks[j]));
+            }
+            arrHolder.add("imgarray", arr);
+            return arrHolder;
+        }
     }
 
     private JsonElement resolveTemplateObject(JsonArray elements, JsonElement entry)
@@ -776,26 +859,9 @@ public class GuiGuidePage
         }
         else if(icon.has("item"))
         {
-            String key = icon.get("item").getAsString();
-            int qty = 1;
-            int meta = 0;
-            if(icon.has("qty"))
-            {
-                qty = icon.get("qty").getAsInt();
-            }
-            if(icon.has("meta"))
-            {
-                meta = icon.get("meta").getAsInt();
-            }
-            Item item = Item.getByNameOrId(key);
-            if(item == null)
-            {
-                item = Items.AIR;
-            }
+            ItemStack stack = DataUtils.toItemStack(icon);
 
-            ItemStack stack = new ItemStack(item, qty, meta);
-
-            ret = new GuiImageItemStack(x,y, stack);
+            ret = new GuiImageItemStack(x, y, stack);
         }
 
         if(ret == null)

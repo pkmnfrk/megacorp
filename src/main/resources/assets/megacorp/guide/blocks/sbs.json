@@ -7,7 +7,14 @@
       "template": "3x3",
       "elements": [
         {
-          "item": "minecraft:gold_ingot"
+          "imgarray":[
+            {
+              "item": "minecraft:gold_ingot"
+            },
+            {
+              "item": "minecraft:gold_block"
+            }
+          ]
         },
         {
           "item": "minecraft:gold_ingot"

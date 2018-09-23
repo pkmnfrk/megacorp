@@ -1,5 +1,7 @@
 {
   "3x3": {
+    "recipe_width": 3,
+    "recipe_height": 3,
     "canvas": [
       {
         "img": "textures/guide/crafting.png",

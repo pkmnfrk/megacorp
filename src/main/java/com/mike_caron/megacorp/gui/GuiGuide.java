@@ -17,6 +17,7 @@ public class GuiGuide
 
     private GuiButton backButton = GuiUtil.translatedButton(1, 7, 147, 55, 14, "gui.megacorp:guide.back");
     private GuiButton closeButton = GuiUtil.translatedButton(2, 194, 147, 55, 14, "gui.megacorp:guide.close");
+    private GuiButton indexButton = GuiUtil.translatedButton(3, 104, 147, 55, 14, "gui.megacorp:guide.index");
 
     private GuiGuidePage guidePage = new GuiGuidePage(7, 18, 242, 126);
 
@@ -47,10 +48,12 @@ public class GuiGuide
         this.addControl(backButton);
         this.addControl(guidePage);
         this.addControl(closeButton);
+        this.addControl(indexButton);
         backButton.setEnabled(false);
         backButton.addListener(this);
         closeButton.addListener(this);
         guidePage.addListener(this);
+        indexButton.addListener(this);
 
     }
 
@@ -70,6 +73,10 @@ public class GuiGuide
         else if(event.id == 2)
         {
             this.mc.player.closeScreen();
+        }
+        else if(event.id == 3)
+        {
+            navigated("/index");
         }
     }
 

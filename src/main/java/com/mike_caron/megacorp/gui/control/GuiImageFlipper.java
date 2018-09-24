@@ -41,9 +41,21 @@ public class GuiImageFlipper
         return subImages.stream().map(GuiControl::getHeight).max(Integer::compareTo).orElse(0);
     }
 
+    @Override
+    public void setParent(IGuiGroup parent)
+    {
+        super.setParent(parent);
+
+        for(GuiImage image : subImages)
+        {
+            image.setParent(parent);
+        }
+    }
+
     public void addImage(GuiImage image)
     {
         this.subImages.add(image);
+        image.setParent(this.parent);
     }
 
     public void clearImages()

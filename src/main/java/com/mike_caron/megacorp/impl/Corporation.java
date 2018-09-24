@@ -192,7 +192,7 @@ public class Corporation
             return null;
         }
 
-        int profit = quest.getProfit(qty);
+        int profit = quest.getProfit(qty, level);
 
         int extra_profit = getRankInReward("extra_profits");
 

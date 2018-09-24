@@ -164,10 +164,10 @@ public class Quest
         return (int)Math.max(1, Math.floor(qty));
     }
 
-    public int getProfit(int totalQty)
+    public int getProfit(int totalQty, int level)
     {
         double basePow = Math.log10(baseQty) - 1;
-        double totalPow = Math.log10(totalQty);
+        double totalPow = Math.log10(totalQty * (1 + level));
 
         return (int)((totalPow - basePow) * 100);
 

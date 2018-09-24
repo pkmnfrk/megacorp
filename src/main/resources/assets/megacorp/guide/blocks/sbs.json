@@ -5,46 +5,9 @@
   "body": [
     {
       "template": "3x3",
-      "elements": [
-        {
-          "imgarray":[
-            {
-              "item": "minecraft:gold_ingot"
-            },
-            {
-              "item": "minecraft:gold_block"
-            }
-          ]
-        },
-        {
-          "item": "minecraft:gold_ingot"
-        },
-        {
-          "item": "minecraft:gold_ingot"
-        },
-        {
-          "item": "minecraft:gold_ingot"
-        },
-        {
-          "item": "minecraft:emerald"
-        },
-        {
-          "item": "minecraft:gold_ingot"
-        },
-        {
-          "item": "minecraft:gold_ingot"
-        },
-        {
-          "item": "minecraft:gold_ingot"
-        },
-        {
-          "item": "minecraft:gold_ingot"
-        },
-        {
-          "item": "megacorp:small_business_simulator"
-        }
-
-      ]
+      "elements": {
+        "recipe": "megacorp:sbs"
+      }
     }
   ]
 }

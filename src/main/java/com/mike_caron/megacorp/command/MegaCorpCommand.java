@@ -2,6 +2,7 @@ package com.mike_caron.megacorp.command;
 
 import com.mike_caron.megacorp.api.CorporationManager;
 import com.mike_caron.megacorp.impl.Corporation;
+import com.mike_caron.megacorp.impl.QuestManager;
 import com.mike_caron.megacorp.impl.RewardManager;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -30,6 +31,7 @@ public class MegaCorpCommand
         subCommands.put("reloadRewards", MegaCorpCommand::reloadRewards);
         subCommands.put("setRewardLevel", MegaCorpCommand::setRewardLevel);
         subCommands.put("clearRewards", MegaCorpCommand::clearRewards);
+        subCommands.put("reloadQuests", MegaCorpCommand::reloadQuests);
     }
 
     @Nonnull
@@ -80,7 +82,7 @@ public class MegaCorpCommand
     @Override
     public String getUsage(@Nonnull ICommandSender sender)
     {
-        return "Usage: megacorp " + String.join("|", subCommands.keySet());
+        return "Usage: megacorp " + String.join(" | ", subCommands.keySet());
     }
 
     @Override
@@ -100,6 +102,14 @@ public class MegaCorpCommand
         throws CommandException
     {
         RewardManager.INSTANCE.loadRewards();
+        sender.sendMessage(new TextComponentString("Done"));
+    }
+
+    private static void reloadQuests(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args)
+        throws CommandException
+    {
+        //RewardManager.INSTANCE.loadRewards();
+        QuestManager.INSTANCE.loadQuests();
         sender.sendMessage(new TextComponentString("Done"));
     }
 

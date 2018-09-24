@@ -11,7 +11,7 @@ public final class QuestFactories
 {
     private QuestFactories(){}
 
-    public static class ThermalFoundation
+    public static class ThermalFoundationIngots
         implements IQuestFactory
     {
         private static final Map<String, Double> materials = new HashMap<>();
@@ -42,48 +42,143 @@ public final class QuestFactories
         public List<Quest> createQuests()
         {
             //return null;
-            List<Quest> ret = new ArrayList<>(materials.size() * 4);
+            List<Quest> ret = new ArrayList<>(materials.size());
 
             for(Map.Entry<String, Double> kvp : materials.entrySet())
             {
-                ret.add(new Quest(
+                if(kvp.getKey().equals("Iron") || kvp.getKey().equals("Gold"))
+                    continue;
+
+                Quest q = new Quest(
                     "thermalfoundation:ingot_" + kvp.getKey(),
                     "ingot" + kvp.getKey(),
                     kvp.getValue().floatValue(),
                     1f,
                     0.25f,
                     0.9f
-                ));
+                );
 
-                ret.add(new Quest(
+                q.extraData.put("material", kvp.getKey());
+
+                ret.add(q);
+            }
+
+            return ret;
+        }
+
+        @Override
+        public QuestLocalization localize(String locale, Quest quest)
+        {
+            QuestLocalization localization = QuestManager.INSTANCE.getLocalizationFor(locale, "thermalfoundation:ingotGeneric");
+            return localization.withDescription(String.format(localization.description, quest.extraData.get("material")));
+        }
+    }
+
+    public static class ThermalFoundationGears
+        implements IQuestFactory
+    {
+        @Override
+        public List<Quest> createQuests()
+        {
+            //return null;
+            List<Quest> ret = new ArrayList<>(ThermalFoundationIngots.materials.size());
+
+            for(Map.Entry<String, Double> kvp : ThermalFoundationIngots.materials.entrySet())
+            {
+                Quest q = new Quest(
                     "thermalfoundation:gear_" + kvp.getKey(),
                     "gear" + kvp.getKey(),
                     kvp.getValue().floatValue(),
                     0.25f,
                     0.25f,
                     0.9f
-                ));
+                );
 
-                ret.add(new Quest(
+                q.extraData.put("material", kvp.getKey());
+
+                ret.add(q);
+            }
+
+            return ret;
+        }
+
+        @Override
+        public QuestLocalization localize(String locale, Quest quest)
+        {
+            QuestLocalization localization = QuestManager.INSTANCE.getLocalizationFor(locale, "thermalfoundation:gearGeneric");
+            return localization.withDescription(String.format(localization.description, quest.extraData.get("material")));
+        }
+    }
+
+    public static class ThermalFoundationPlates
+        implements IQuestFactory
+    {
+        @Override
+        public List<Quest> createQuests()
+        {
+            //return null;
+            List<Quest> ret = new ArrayList<>(ThermalFoundationIngots.materials.size());
+
+            for(Map.Entry<String, Double> kvp : ThermalFoundationIngots.materials.entrySet())
+            {
+                Quest q = new Quest(
                     "thermalfoundation:plate_" + kvp.getKey(),
                     "plate" + kvp.getKey(),
                     kvp.getValue().floatValue(),
                     0.9f,
                     0.25f,
                     0.9f
-                ));
+                );
 
-                ret.add(new Quest(
-                    "thermalfoundation:coin_" + kvp.getKey(),
-                    "coin" + kvp.getKey(),
-                    kvp.getValue().floatValue(),
-                    4f,
-                    0.5f,
-                    0.9f
-                ));
+                q.extraData.put("material", kvp.getKey());
+
+                ret.add(q);
             }
 
             return ret;
+        }
+
+        @Override
+        public QuestLocalization localize(String locale, Quest quest)
+        {
+            QuestLocalization localization = QuestManager.INSTANCE.getLocalizationFor(locale, "thermalfoundation:plateGeneric");
+            return localization.withDescription(String.format(localization.description, quest.extraData.get("material")));
+        }
+    }
+
+    public static class ThermalFoundationCoins
+        implements IQuestFactory
+    {
+        @Override
+        public List<Quest> createQuests()
+        {
+            //return null;
+            List<Quest> ret = new ArrayList<>(ThermalFoundationIngots.materials.size());
+
+            for(Map.Entry<String, Double> kvp : ThermalFoundationIngots.materials.entrySet())
+            {
+                Quest q = new Quest(
+                    "thermalfoundation:coin_" + kvp.getKey(),
+                    "coin" + kvp.getKey(),
+                    3,
+                    5f * kvp.getValue().floatValue(),
+                    0.5f,
+                    0.9f
+                );
+
+                q.extraData.put("material", kvp.getKey());
+
+                ret.add(q);
+            }
+
+            return ret;
+        }
+
+        @Override
+        public QuestLocalization localize(String locale, Quest quest)
+        {
+            QuestLocalization localization = QuestManager.INSTANCE.getLocalizationFor(locale, "thermalfoundation:coinGeneric");
+            return localization.withDescription(String.format(localization.description, quest.extraData.get("material")));
         }
     }
 }

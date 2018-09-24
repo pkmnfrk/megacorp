@@ -24,6 +24,7 @@ public class QuestManager
 
     private final Map<String, Quest> quests = new HashMap<>();
     private final Map<String, Map<String, QuestLocalization>> localizations = new HashMap<>();
+    private final Map<Quest, IQuestFactory> questFactories = new HashMap<>();
 
     private QuestManager() {}
 
@@ -107,6 +108,7 @@ public class QuestManager
                             for(Quest q : qs)
                             {
                                 quests.put(q.id, q);
+                                questFactories.put(q, fact);
 
                                 MegaCorpMod.logger.info("Loaded quest " + q.id + " from " + className);
                             }
@@ -187,7 +189,7 @@ public class QuestManager
         }
     }
 
-    public QuestLocalization getLocalizationFor(String locale, String questId)
+    QuestLocalization getLocalizationFor(String locale, String questId)
     {
         if(!localizations.containsKey(locale))
             locale = "en_us";
@@ -200,10 +202,26 @@ public class QuestManager
         return localizations.get(locale).get(questId);
     }
 
+    public QuestLocalization getLocalizationFor(String locale, Quest quest)
+    {
+        if(questFactories.containsKey(quest))
+        {
+            return questFactories.get(quest).localize(locale, quest);
+        }
+
+        return getLocalizationFor(locale, quest.id);
+    }
+
     @SideOnly(Side.CLIENT)
     public QuestLocalization getLocalizationForCurrent(String questId)
     {
-        return getLocalizationFor(Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage().getLanguageCode(), questId);
+        return getLocalizationForCurrent(quests.get(questId));
+    }
+
+    @SideOnly(Side.CLIENT)
+    public QuestLocalization getLocalizationForCurrent(Quest quest)
+    {
+        return getLocalizationFor(Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage().getLanguageCode(), quest);
     }
 
     public Quest getRandomQuest()

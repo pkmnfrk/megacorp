@@ -8,6 +8,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class Quest
@@ -19,7 +21,7 @@ public class Quest
     public final float multQty;
     public final float randomFactor;
     public final float levelScale;
-
+    public final Map<String, Object> extraData = new HashMap<>();
 
     public Quest(String id, ItemStack item, float baseQty, float multQty, float randomFactor, float levelScale)
     {
@@ -159,7 +161,7 @@ public class Quest
             qty *= fin;
         }
 
-        return (int)qty;
+        return (int)Math.max(1, Math.floor(qty));
     }
 
     public int getProfit(int totalQty)

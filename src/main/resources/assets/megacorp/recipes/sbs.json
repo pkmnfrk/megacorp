@@ -1,0 +1,25 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "ggg",
+    "ekb",
+    "ggg"
+  ],
+  "key": {
+    "g": {
+      "item": "minecraft:gold_ingot"
+    },
+    "e": {
+      "item": "minecraft:emerald"
+    },
+    "b": {
+      "item": "minecraft:gold_block"
+    },
+    "k": {
+      "item": "minecraft:bucket"
+    }
+  },
+  "result": {
+    "item": "megacorp:small_business_simulator"
+  }
+}

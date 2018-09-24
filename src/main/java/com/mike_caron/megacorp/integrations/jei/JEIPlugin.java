@@ -2,11 +2,9 @@ package com.mike_caron.megacorp.integrations.jei;
 
 import com.mike_caron.megacorp.block.ModBlocks;
 import com.mike_caron.megacorp.block.sbs.ContainerSBS;
-import com.mike_caron.megacorp.fluid.ModFluids;
 import com.mike_caron.megacorp.gui.GuiProfitCondenser;
 import com.mike_caron.megacorp.gui.GuiSBS;
 import com.mike_caron.megacorp.gui.control.GuiContainerBase;
-import com.mike_caron.megacorp.item.ModItems;
 import com.mike_caron.megacorp.recipes.PCRecipe;
 import com.mike_caron.megacorp.recipes.PCRecipeManager;
 import com.mike_caron.megacorp.recipes.SBSRecipe;
@@ -15,11 +13,9 @@ import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
-import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
 @mezz.jei.api.JEIPlugin
 public class JEIPlugin
@@ -61,8 +57,8 @@ public class JEIPlugin
 
         transferRegistry.addRecipeTransferHandler(ContainerSBS.class, SBS_CATEGORY, 0, 2, 2, 36);
 
-        ModBlocks.getAllBlocks().forEach(block -> registry.addIngredientInfo(new ItemStack(block), VanillaTypes.ITEM,  block.getTranslationKey() + ".description"));
-        ModItems.getAllItems().forEach(item -> registry.addIngredientInfo(new ItemStack(item), VanillaTypes.ITEM, item.getTranslationKey() + ".description"));
-        ModFluids.getAllFluids().forEach(fluid -> registry.addIngredientInfo(new FluidStack(fluid, 1000), VanillaTypes.FLUID, fluid.getUnlocalizedName() + ".description"));
+        //ModBlocks.getAllBlocks().forEach(block -> registry.addIngredientInfo(new ItemStack(block), VanillaTypes.ITEM,  block.getTranslationKey() + ".description"));
+        //ModItems.getAllItems().forEach(item -> registry.addIngredientInfo(new ItemStack(item), VanillaTypes.ITEM, item.getTranslationKey() + ".description"));
+        //ModFluids.getAllFluids().forEach(fluid -> registry.addIngredientInfo(new FluidStack(fluid, 1000), VanillaTypes.FLUID, fluid.getUnlocalizedName() + ".description"));
     }
 }

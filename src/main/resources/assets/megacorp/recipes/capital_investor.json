@@ -1,0 +1,22 @@
+{
+  "type": "megacorp:fluid",
+  "pattern": [
+    "ggg",
+    "bmb",
+    "ggg"
+  ],
+  "key": {
+    "g": {
+      "item": "minecraft:gold_ingot"
+    },
+    "m": {
+      "item": "#FLUID_MONEY"
+    },
+    "b": {
+      "item": "minecraft:bucket"
+    }
+  },
+  "result": {
+    "item": "megacorp:capital_investor"
+  }
+}

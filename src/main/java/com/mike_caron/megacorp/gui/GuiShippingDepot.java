@@ -117,6 +117,8 @@ public class GuiShippingDepot
 
             if(container.workOrder != null)
             {
+                currentItemStack = container.workOrder.getDesiredItems().get(currentItemStackIndex % container.workOrder.getDesiredItems().size());
+
                 noQuestGroup.setVisible(false);
                 workorderGroup.setVisible(true);
                 itemLabel.setPlaceholder(0, currentItemStack.getDisplayName());

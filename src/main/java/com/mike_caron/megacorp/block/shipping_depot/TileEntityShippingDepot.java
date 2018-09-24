@@ -192,7 +192,15 @@ public class TileEntityShippingDepot
                     {
                         rollNewWorkOrder(workOrder.getQuestId());
                     }
+                    else
+                    {
+                        workOrder = null;
+                    }
                 }
+
+                this.markDirty();
+                this.markAndNotify();
+
             }
         }
     }

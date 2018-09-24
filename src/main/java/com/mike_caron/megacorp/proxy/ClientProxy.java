@@ -50,7 +50,7 @@ public class ClientProxy
     public static void onToolTip(ItemTooltipEvent event)
     {
         if(!doOreDictTooltips) return;
-        
+
         if(event.getFlags().isAdvanced())
         {
             try

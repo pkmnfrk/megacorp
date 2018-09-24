@@ -87,4 +87,10 @@ public class TileEntityBase extends TileEntity
         if(event.getWorld() == world)
             MinecraftForge.EVENT_BUS.unregister(this);
     }
+
+    protected void markAndNotify()
+    {
+        IBlockState state = this.world.getBlockState(getPos());
+        this.world.markAndNotifyBlock(getPos(), null, state, state, 3);
+    }
 }

@@ -1,0 +1,9 @@
+{
+  "mod": "thermalfoundation",
+  "factories": [
+    "com.mike_caron.megacorp.impl.QuestFactories$ThermalFoundationIngots",
+    "com.mike_caron.megacorp.impl.QuestFactories$ThermalFoundationGears",
+    "com.mike_caron.megacorp.impl.QuestFactories$ThermalFoundationPlates",
+    "com.mike_caron.megacorp.impl.QuestFactories$ThermalFoundationCoins"
+  ]
+}

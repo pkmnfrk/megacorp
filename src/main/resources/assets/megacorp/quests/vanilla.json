@@ -36,6 +36,43 @@
       "baseqty": 12,
       "multqty": 1.4,
       "rand": 0.25
+    },
+    {
+      "id": "blazingrods",
+      "item": "minecraft:blaze_rod",
+      "baseqty": 4,
+      "rand": 0.25,
+      "levelscale": 0.6
+    },
+    {
+      "id": "balancedapproach",
+      "item": "minecraft:clay",
+      "baseqty": 5,
+      "rand": 0.25,
+      "levelscale": 1
+    },
+    {
+      "id": "cleancoal",
+      "item": "minecraft:coal",
+      "baseqty": 8,
+      "rand": 0.35,
+      "levelscale": 0.8
+    },
+    {
+      "id": "pretties",
+      "item": "minecraft:diamond",
+      "baseqty": 4,
+      "rand": 0.5,
+      "levelscale": 1
+    },
+    {
+      "id": "breath",
+      "item": "minecraft:dragon_breath",
+      "baseqty": 1,
+      "rand": 0.1,
+      "levelscale": 0.5
     }
+
+
   ]
 }

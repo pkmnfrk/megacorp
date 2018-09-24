@@ -1,0 +1,22 @@
+{
+  "icon": { "item": "megacorp:bottle" },
+  "body": [
+    {
+      "horiz": [
+        {
+          "item": "megacorp:bottle"
+        },
+        {
+          "item": "megacorp:bottle",
+          "tag": {
+            "Fluid": "money",
+            "Amount": 1000
+          }
+        }
+      ],
+      "spacing": 8
+    },
+    "para1",
+    "para2"
+  ]
+}

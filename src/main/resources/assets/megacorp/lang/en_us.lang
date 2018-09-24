@@ -81,6 +81,8 @@ item.megacorp:work_voucher.name=Work Voucher
 item.megacorp:work_voucher.tooltip_blank=Blank?
 item.megacorp:work_voucher.tooltip=%s (%2s/%1s)
 
+item.megacorp:manual.name=MegaCorp Employee Handbook
+
 gui.megacorp:guide.title=MegaCorp Employee Handbook
 gui.megacorp:guide.back=Back
 gui.megacorp:guide.close=Close

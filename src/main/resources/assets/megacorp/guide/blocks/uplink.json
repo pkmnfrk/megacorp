@@ -9,10 +9,10 @@
         "recipe": "megacorp:uplink"
       }
     },
-    "The MegaCorp Uplink is one of the most important blocks, as it is the primary means by which you interface directly with your MegaCorp.",
-    "When first placing it in the world, you will be prompted to either insert a Corporate Card (more on this later), or to create a new MegaCorp. Go ahead and press that button.",
-    "Once established, you will be able to see and modify your MegaCorp's name, as well as view your to-date profits.",
-    "However, the most important function of the Uplink is to link Corporate Cards to your MegaCorp, which will be required to link other machines to your Corporation. Check the Corporate Card page for more details.",
+    "para1",
+    "para2",
+    "para3",
+    "para4",
     {
       "link": "/items/corporate_card"
     }

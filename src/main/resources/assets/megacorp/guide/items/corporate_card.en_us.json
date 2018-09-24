@@ -1,3 +1,8 @@
 {
-  "title": "Corporate Card"
+  "title": "Corporate Card",
+  "para1": "The Corporate Card is an item with a single use: To link unlinked machines to your Corporation. To do this, simply follow these steps:",
+  "para2": "1. If your card is unlinked (freshly crafted), go to a MegaCorp Uplink that is already linked to the desired MegaCorp, and insert the card into the slot on its Gui. This will link the card.",
+  "para3": "2. With the Corporate Card in your hand, go to the unlinked machine and right click on it.",
+  "para4": "Note: A machine may only ever be linked to a single corporation. If linked to the wrong corporation, you will need to break and re-place it in order to try again.",
+  "para5": "Note: Not all machines need linking. If a machine needs linking, its Gui will only show a message stating as much."
 }

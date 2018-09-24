@@ -17,14 +17,14 @@
     },
     {
       "id": "egginc",
-      "item": "minecraft:egg",
+      "oredict": "egg",
       "baseqty": 16,
       "multqty": 1.5,
       "rand": 0.25
     },
     {
       "id": "cowtippers",
-      "item": "minecraft:leather",
+      "oredict": "leather",
       "baseqty": 8,
       "multqty": 1.5,
       "rand": 0.25,
@@ -32,35 +32,35 @@
     },
     {
       "id": "bonepicking",
-      "item": "minecraft:bone",
+      "oredict": "bone",
       "baseqty": 12,
       "multqty": 1.4,
       "rand": 0.25
     },
     {
       "id": "blazingrods",
-      "item": "minecraft:blaze_rod",
+      "oredict": "rodBlaze",
       "baseqty": 4,
       "rand": 0.25,
       "levelscale": 0.6
     },
     {
       "id": "balancedapproach",
-      "item": "minecraft:clay",
+      "item": "minecraft:clay_ball",
       "baseqty": 5,
       "rand": 0.25,
       "levelscale": 1
     },
     {
       "id": "cleancoal",
-      "item": "minecraft:coal",
+      "oredict": "coal",
       "baseqty": 8,
       "rand": 0.35,
       "levelscale": 0.8
     },
     {
       "id": "pretties",
-      "item": "minecraft:diamond",
+      "oredict": "gemDiamond",
       "baseqty": 4,
       "rand": 0.5,
       "levelscale": 1

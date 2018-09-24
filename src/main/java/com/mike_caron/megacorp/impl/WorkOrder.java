@@ -3,7 +3,11 @@ package com.mike_caron.megacorp.impl;
 import com.google.common.base.Preconditions;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.NonNullList;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -13,7 +17,7 @@ public class WorkOrder
     private UUID owner;
     private String questId;
     private Kind kind;
-    private ItemStack desiredItem;
+    private NonNullList<ItemStack> desiredItem;
     private int desiredCount;
     private FluidStack desiredFluid;
     private int profit;
@@ -26,7 +30,21 @@ public class WorkOrder
         this.owner = owner;
         this.questId = questId;
         this.kind = Kind.ITEM;
-        this.desiredItem = desiredItem;
+        this.desiredItem = NonNullList.create();
+        this.desiredItem.add(desiredItem);
+        this.desiredCount = desiredCount;
+        this.profit = profit;
+        this.level = level;
+    }
+
+    public WorkOrder(UUID owner, String questId, NonNullList<ItemStack> desiredItems, int desiredCount, int profit, int level)
+    {
+        Preconditions.checkArgument(desiredItems.size() > 0, "No desired items??");
+
+        this.owner = owner;
+        this.questId = questId;
+        this.kind = Kind.ITEM;
+        this.desiredItem = desiredItems;
         this.desiredCount = desiredCount;
         this.profit = profit;
         this.level = level;
@@ -65,7 +83,14 @@ public class WorkOrder
         if(!this.kind.equals(other.kind)) return false;
         if(this.kind == Kind.ITEM)
         {
-            if(!ItemStack.areItemStacksEqual(this.desiredItem,  other.desiredItem)) return false;
+            if(this.desiredItem.size() != other.desiredItem.size())
+                return false;
+
+            for(int i = 0; i < this.desiredItem.size(); i++)
+            {
+                if(!ItemStack.areItemsEqual(this.desiredItem.get(i), other.desiredItem.get(i)))
+                    return false;
+            }
         }
         else if(this.kind == Kind.FLUID)
         {
@@ -92,7 +117,12 @@ public class WorkOrder
 
         if(getKind() == Kind.ITEM)
         {
-            ret.setTag("Item", getDesiredItem().writeToNBT(new NBTTagCompound()));
+            NBTTagList items = new NBTTagList();
+            for(ItemStack item : getDesiredItems())
+            {
+                items.appendTag(item.writeToNBT(new NBTTagCompound()));
+            }
+            ret.setTag("Items", items);
         }
         else if(getKind() == Kind.FLUID)
         {
@@ -118,7 +148,19 @@ public class WorkOrder
 
         if (ret.kind == Kind.ITEM)
         {
-            ret.desiredItem = new ItemStack(tag.getCompoundTag("Item"));
+            if(tag.hasKey("Item"))
+            {
+                ret.desiredItem = NonNullList.from(ItemStack.EMPTY, new ItemStack(tag.getCompoundTag("Item")));
+            }
+            else
+            {
+                ret.desiredItem = NonNullList.create();
+                NBTTagList items = tag.getTagList("Items", Constants.NBT.TAG_COMPOUND);
+                for(int i = 0; i < items.tagCount(); i++)
+                {
+                    ret.desiredItem.add(new ItemStack(items.getCompoundTagAt(i)));
+                }
+            }
         }
         else if (ret.kind == Kind.FLUID)
         {
@@ -148,7 +190,7 @@ public class WorkOrder
         return kind;
     }
 
-    public ItemStack getDesiredItem()
+    public NonNullList<ItemStack> getDesiredItems()
     {
         Preconditions.checkArgument(kind == Kind.ITEM);
 
@@ -201,6 +243,11 @@ public class WorkOrder
     public int getLevel()
     {
         return level;
+    }
+
+    public boolean isItemAcceptable(ItemStack item)
+    {
+        return OreDictionary.containsMatch(true, this.desiredItem, item);
     }
 
     public enum Kind

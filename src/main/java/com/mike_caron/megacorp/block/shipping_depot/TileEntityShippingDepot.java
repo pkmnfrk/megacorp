@@ -39,10 +39,13 @@ public class TileEntityShippingDepot
         @Override
         public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate)
         {
-            if(getWorkOrder() == null || !ItemStack.areItemsEqual(stack, workOrder.getDesiredItem()))
+            if(getWorkOrder() == null)
             {
                 return stack;
             }
+
+            if(!getWorkOrder().isItemAcceptable(stack))
+                return stack;
 
             return super.insertItem(slot, stack, simulate);
         }
@@ -173,7 +176,7 @@ public class TileEntityShippingDepot
         ItemStack stack = inventory.getStackInSlot(0);
         if(stack.isEmpty()) return;
 
-        if(ItemStack.areItemsEqual(workOrder.getDesiredItem(), stack))
+        if(workOrder.isItemAcceptable(stack))
         {
             int consumed = workOrder.addProgress(stack.getCount());
 

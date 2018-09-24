@@ -8,6 +8,8 @@ import com.mike_caron.megacorp.impl.QuestLocalization;
 import com.mike_caron.megacorp.impl.QuestManager;
 import com.mike_caron.megacorp.network.CtoSMessage;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 
@@ -57,7 +59,13 @@ public class GuiShippingDepot
     private GuiButton newQuestButton = new GuiButton(ContainerShippingDepot.GUI_NEW_QUEST, 96, 3, 72, 14, GuiUtil.translate("tile.megacorp:shipping_depot.new_quest"));
 
     private List<Quest> listOfQuests;
+    private List<QuestListItem> listOfListItems;
+
     private Quest selectedQuest = null;
+
+    private int frameCounter = 0;
+    private int currentItemStackIndex = 0;
+    private ItemStack currentItemStack = ItemStack.EMPTY;
 
     public GuiShippingDepot(ContainerShippingDepot container)
     {
@@ -82,6 +90,19 @@ public class GuiShippingDepot
         {
             newQuestButton.setEnabled(selectedQuest != null);
         }
+
+        frameCounter += 1;
+
+        if (frameCounter >= 20)
+        {
+            frameCounter = 0;
+            currentItemStackIndex += 1;
+
+            if(container.workOrder != null)
+            {
+                currentItemStack = container.workOrder.getDesiredItems().get(currentItemStackIndex % container.workOrder.getDesiredItems().size());
+            }
+        }
     }
 
     @Override
@@ -98,7 +119,7 @@ public class GuiShippingDepot
             {
                 noQuestGroup.setVisible(false);
                 workorderGroup.setVisible(true);
-                itemLabel.setPlaceholder(0, container.workOrder.getDesiredItem().getDisplayName());
+                itemLabel.setPlaceholder(0, currentItemStack.getDisplayName());
                 quantityLabel.setPlaceholder(0, NumberFormat.getIntegerInstance().format(container.workOrder.getDesiredCount()));
                 progressLabel.setPlaceholder(0, NumberFormat.getIntegerInstance().format(container.workOrder.getProgress()));
                 progressLabel.setPlaceholder(1, NumberFormat.getIntegerInstance().format(container.workOrder.getDesiredCount()));
@@ -124,6 +145,8 @@ public class GuiShippingDepot
         {
             ownedGroup.setVisible(false);
             insertCardLabel.setVisible(true);
+
+            listOfListItems = null;
         }
 
     }
@@ -223,7 +246,15 @@ public class GuiShippingDepot
     @Override
     public GuiList.ListItem getItem(int i)
     {
-        return new QuestListItem(listOfQuests.get(i));
+        if(listOfListItems == null)
+        {
+            listOfListItems = new ArrayList<>(listOfQuests.size());
+            for(Quest q : listOfQuests)
+            {
+                listOfListItems.add(new QuestListItem(q));
+            }
+        }
+        return listOfListItems.get(i);
     }
 
     @Override
@@ -238,10 +269,13 @@ public class GuiShippingDepot
         Quest quest;
         QuestLocalization questLocalization;
 
+        private NonNullList<ItemStack> possibleItems;
+
         public QuestListItem(Quest quest)
         {
             this.quest = quest;
             this.questLocalization = QuestManager.INSTANCE.getLocalizationForCurrent(this.quest.id);
+            this.possibleItems = this.quest.possibleItems();
         }
 
         @Override
@@ -272,7 +306,10 @@ public class GuiShippingDepot
 
             drawGradientRect(0, 0, width, height, color.getRGB(), color.getRGB());
 
-            GuiUtil.drawItemStack(quest.item, 1, 1, itemRender, null);
+            if(possibleItems.size() > 0)
+            {
+                GuiUtil.drawItemStack(possibleItems.get(currentItemStackIndex % possibleItems.size()), 1, 1, itemRender, null);
+            }
 
             fontRenderer.drawString(questLocalization.title, 20, 5, Color.WHITE.getRGB());
 

@@ -1,5 +1,6 @@
 package com.mike_caron.megacorp.item;
 
+import com.mike_caron.megacorp.impl.QuestManager;
 import com.mike_caron.megacorp.impl.WorkOrder;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -38,7 +39,8 @@ public class WorkVoucher extends ItemBase
         }
         else
         {
-            tooltip.add(I18n.format("item.megacorp:work_order.tooltip", workOrder.getDesiredItem().getDisplayName(), workOrder.getDesiredItem().getCount(), workOrder.getProgress()));
+            String name = QuestManager.INSTANCE.getLocalizationForCurrent(workOrder.getQuestId()).title;
+            tooltip.add(I18n.format("item.megacorp:work_voucher.tooltip", name, workOrder.getDesiredCount(), workOrder.getProgress()));
         }
 
 

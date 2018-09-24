@@ -7,6 +7,7 @@ import com.mike_caron.megacorp.api.IReward;
 import com.mike_caron.megacorp.api.events.CorporationRewardsChangedEvent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.INBTSerializable;
 
@@ -169,7 +170,13 @@ public class Corporation
 
     private WorkOrder createNewWorkOrder(Quest quest)
     {
-        ItemStack item = quest.item.copy();
+        NonNullList<ItemStack> item = quest.possibleItems();
+
+        if(item.size() == 0)
+        {
+            MegaCorpMod.logger.error("Quest returned 0 possible items!");
+        }
+
         int level = getCompletedCountFor(quest.id);
         int qty = quest.getCountForLevel(level);
 

@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mike_caron.megacorp.MegaCorpMod;
+import com.mike_caron.megacorp.api.IQuestFactory;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.common.Loader;
@@ -56,24 +57,68 @@ public class QuestManager
                     MegaCorpMod.logger.info("Skipping " + mod + " quests, because it's not loaded");
                 }
 
-                JsonArray qs = json.getAsJsonArray("quests");
-
-                for(JsonElement obj : qs)
+                if(json.has("quests"))
                 {
-                    try
+                    JsonArray qs = json.getAsJsonArray("quests");
+
+                    for (JsonElement obj : qs)
                     {
-                        JsonObject quest = (JsonObject)obj;
+                        try
+                        {
+                            JsonObject quest = (JsonObject) obj;
 
-                        Quest q = Quest.fromJson(quest);
+                            Quest q = Quest.fromJson(quest);
 
-                        quests.put(q.id, q);
+                            quests.put(q.id, q);
 
-                        MegaCorpMod.logger.info("Loaded quest " + q.id);
+                            MegaCorpMod.logger.info("Loaded quest " + q.id);
+                        }
+                        catch (Exception ex)
+                        {
+                            MegaCorpMod.logger.error("Error loading quests from " + url, ex);
+                        }
                     }
-                    catch (Exception ex)
+                }
+
+                if(json.has("factories"))
+                {
+                    JsonArray factories = json.get("factories").getAsJsonArray();
+
+                    for(JsonElement factory : factories)
                     {
-                        MegaCorpMod.logger.error("Error loading quests from " + url, ex);
+                        String className;
+                        if(factory.isJsonPrimitive())
+                        {
+                            className = factory.getAsString();
+                        }
+                        else
+                        {
+                            JsonObject ob = factory.getAsJsonObject();
+                            className = ob.get("class").getAsString();
+                        }
+
+                        try
+                        {
+                            Class clazz = Class.forName(className);
+                            IQuestFactory fact = (IQuestFactory)clazz.newInstance();
+
+                            List<Quest> qs = fact.createQuests();
+
+                            for(Quest q : qs)
+                            {
+                                quests.put(q.id, q);
+
+                                MegaCorpMod.logger.info("Loaded quest " + q.id + " from " + className);
+                            }
+                        }
+                        catch(Exception ex)
+                        {
+                            MegaCorpMod.logger.error("Error loading quests from " + url, ex);
+                        }
+
+
                     }
+
                 }
             }
             else if("lang".equals(extension))

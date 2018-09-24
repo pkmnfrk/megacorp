@@ -5,13 +5,16 @@ import com.google.gson.JsonObject;
 import com.mike_caron.megacorp.MegaCorpMod;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.Random;
 
 public class Quest
 {
     public final String id;
-    public final ItemStack item;
+    private final ItemStack item;
+    private final String oreDict;
     public final float baseQty;
     public final float multQty;
     public final float randomFactor;
@@ -22,6 +25,18 @@ public class Quest
     {
         this.id = id;
         this.item = item;
+        this.oreDict = null;
+        this.baseQty = baseQty;
+        this.multQty = multQty;
+        this.randomFactor = randomFactor;
+        this.levelScale = levelScale;
+    }
+
+    public Quest(String id, String oreDict, float baseQty, float multQty, float randomFactor, float levelScale)
+    {
+        this.id = id;
+        this.item = null;
+        this.oreDict = oreDict;
         this.baseQty = baseQty;
         this.multQty = multQty;
         this.randomFactor = randomFactor;
@@ -31,9 +46,24 @@ public class Quest
     public static Quest fromJson(JsonObject obj)
     {
         String id = obj.get("id").getAsString();
-        ItemStack item = getStackFromTag(obj.get("item").getAsString());
+        ItemStack item = null;
+        String oreDict = null;
+
+        if(obj.has("item")){
+            item = getStackFromTag(obj.get("item").getAsString());
+        }
+        else if(obj.has("oredict"))
+        {
+            oreDict = obj.get("oredict").getAsString();
+        }
+
         float baseQty = obj.get("baseqty").getAsFloat();
-        float multQty = obj.get("multqty").getAsFloat();
+        float multQty = 1.5f;
+        if(obj.has("multqty"))
+        {
+            obj.get("multqty").getAsFloat();
+        }
+
         float randomFactor = 0;
         float levelScale = 1;
         if(obj.has("rand"))
@@ -45,7 +75,14 @@ public class Quest
             levelScale = obj.get("levelscale").getAsFloat();
         }
 
-        return new Quest(id, item, baseQty, multQty, randomFactor, levelScale);
+        if(item != null)
+        {
+            return new Quest(id, item, baseQty, multQty, randomFactor, levelScale);
+        }
+        else
+        {
+            return new Quest(id, oreDict, baseQty, multQty, randomFactor, levelScale);
+        }
     }
 
     private static ItemStack getStackFromTag(String tag)
@@ -132,5 +169,13 @@ public class Quest
 
         return (int)((totalPow - basePow) * 100);
 
+    }
+
+    public NonNullList<ItemStack> possibleItems()
+    {
+        if(this.oreDict != null)
+            return OreDictionary.getOres(this.oreDict);
+
+        return NonNullList.from(ItemStack.EMPTY, this.item);
     }
 }

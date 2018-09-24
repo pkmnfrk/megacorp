@@ -1,5 +1,4 @@
 {
-  "mod": "thermalfoundation",
   "factories": [
     "com.mike_caron.megacorp.impl.QuestFactories$ThermalFoundationIngots",
     "com.mike_caron.megacorp.impl.QuestFactories$ThermalFoundationGears",

@@ -51,7 +51,10 @@ public class QuestManager
                     return true;
                 }
 
-                String mod = json.get("mod").getAsString();
+                String mod = "minecraft";
+
+                if(json.has("mod"))
+                    mod = json.get("mod").getAsString();
 
                 if(!Loader.isModLoaded(mod))
                 {
@@ -69,6 +72,12 @@ public class QuestManager
                             JsonObject quest = (JsonObject) obj;
 
                             Quest q = Quest.fromJson(quest);
+
+                            if(q.possibleItems().isEmpty())
+                            {
+                                MegaCorpMod.logger.info("Skipping quest " + q.id + " because no items exist");
+                                continue;
+                            }
 
                             quests.put(q.id, q);
 
@@ -107,6 +116,12 @@ public class QuestManager
 
                             for(Quest q : qs)
                             {
+                                if(q.possibleItems().isEmpty())
+                                {
+                                    MegaCorpMod.logger.info("Skipping quest " + q.id + " because no items exist");
+                                    continue;
+                                }
+
                                 quests.put(q.id, q);
                                 questFactories.put(q, fact);
 
@@ -200,6 +215,28 @@ public class QuestManager
         }
 
         return localizations.get(locale).get(questId);
+    }
+
+    /**
+     * Determines whether a string exists. It does _not_ determine whether the string has been localized, only whether
+     * it exists at all. Intended to be used by dynamic quests (eg, so you can have a generic localization that can be
+     * overridden for specific instances)
+     * @param locale the locale in question (eg, en_us)
+     * @param questId the string to look up
+     */
+
+    boolean localizationExists(String locale, String questId)
+    {
+        if(!localizations.containsKey(locale))
+            locale = "en_us";
+
+        if(localizations.get(locale).containsKey(questId))
+            return true;
+
+        if(!locale.equals("en_us"))
+            return localizations.get("en_us").containsKey(locale);
+
+        return false;
     }
 
     public QuestLocalization getLocalizationFor(String locale, Quest quest)

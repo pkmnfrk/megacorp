@@ -26,7 +26,13 @@ breath.title=Breath of the Vile
 breath.desc=Dragon's Breath has all number of applications, from perfume to rocket fuel.
 
 thermalfoundation:ingotGeneric.title=New Materials
-thermalfoundation:ingotGeneric.desc=We wish to study the potential applications of %s, so please provide some
+thermalfoundation:ingotGeneric.desc=We wish to study the potential applications of %s.
+
+thermalfoundation:ingotIron.title=Old Materials
+thermalfoundation:ingotIron.desc=We wish to study new potential applications of %s.
+
+thermalfoundation:ingotGold.title=Old Materials
+thermalfoundation:ingotGold.desc=We wish to study new potential applications of %s.
 
 thermalfoundation:gearGeneric.title=Metal Gear
 thermalfoundation:gearGeneric.desc=A customer has need of %s gears for potential military applications.

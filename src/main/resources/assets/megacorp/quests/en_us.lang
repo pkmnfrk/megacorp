@@ -46,8 +46,23 @@ thermalfoundation:coinGeneric.desc=We wish to increase our trade with a nation t
 contemplatingtheinfinite.title=Bits of the Infinite
 contemplatingtheinfinite.desc=Word has reached us that you have the capacity to shave bits of bedrock off. We would like to see that.
 
-vibranium.title=Vibranium
-vibranium.desc=A certain top-secret government agency is running low on Vibrant Alloy, and needs some reserves.
+pulsingcrystal.title=Strange Crystals
+pulsingcrystal.desc=A customer has asked about an unusual crystal that seems to pulse and shift at odd rhythms. Do you have any?
 
 vibraniumcrystal.title=Vibranium Crystal
 vibraniumcrystal.desc=Representatives from a poor African nation have made us promise never to crysalize Vibrant Alloy. Naturally, this has made us curious.
+
+endercrystal.title=Strange Crystals
+endercrystal.desc=A group of customers has asked about a kind of crystal that seems to phase in and out of this plane of existence. We are a little frightened, but the customer is always right, so...
+
+enticingcrystal.title=Attractive Crystal
+enticingcrystal.desc=A noisy customer asked about a crystal that is said to be oddly enticing and desirable. Please, get some, so we can see it too!
+
+weathercrystal.title=Cloudy With a Chance of Crystals
+weathercrystal.desc=Legends tell of a mysterious crystal able to control the weather. We would like to get our hands on some... for no particular reason.
+
+enderio:ingotGeneric.title=Weird Science
+enderio:ingotGeneric.desc=The latest research into %s has yielded... interesting results. Profitable results. But, we need to go deeper.
+
+enderio:ballGeneric.title=Maceration is for Suckers
+enderio:ballGeneric.desc=Our clients have a ton of SAG Mills, and need grinding balls to put in them.

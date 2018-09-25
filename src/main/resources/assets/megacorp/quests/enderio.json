@@ -9,7 +9,31 @@
     {
       "id": "vibraniumcrystal",
       "item": "enderio:item_material:15",
+      "baseqty": 3,
+      "multqty": 1.15
+    },
+    {
+      "id": "pulsingcrystal",
+      "item": "enderio:item_material:14",
       "baseqty": 4,
+      "multqty": 1.15
+    },
+    {
+      "id": "endercrystal",
+      "item": "enderio:item_material:16",
+      "baseqty": 2,
+      "multqty": 1.15
+    },
+    {
+      "id": "enticingcrystal",
+      "item": "enderio:item_material:17",
+      "baseqty": 2,
+      "multqty": 1.15
+    },
+    {
+      "id": "weathercrystal",
+      "item": "enderio:item_material:18",
+      "baseqty": 1,
       "multqty": 1.15
     }
   ],

@@ -41,10 +41,7 @@ public class GuiCapitalInvestor
 
     public GuiCapitalInvestor(ContainerCapitalInvestor container)
     {
-        super(container);
-
-        xSize = WIDTH;
-        ySize = HEIGHT;
+        super(container, WIDTH, HEIGHT);
 
         this.container = container;
 

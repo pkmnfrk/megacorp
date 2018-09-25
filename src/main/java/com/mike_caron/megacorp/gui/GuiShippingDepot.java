@@ -22,9 +22,6 @@ public class GuiShippingDepot
     extends GuiContainerOwnedBase
     implements GuiButton.ClickedListener, GuiToggleButton.ChangedListener, GuiList.Producer
 {
-    public static final int WIDTH = 176;
-    public static final int HEIGHT = 166;
-
     private static final ResourceLocation background = new ResourceLocation(MegaCorpMod.modId, "textures/gui/shipping_depot.png");
 
     private final ContainerShippingDepot container;
@@ -38,25 +35,25 @@ public class GuiShippingDepot
     private GuiTranslatedLabel quantityLabel = new GuiTranslatedLabel(6, 42, "tile.megacorp:shipping_depot.quantity", "");
     private GuiTranslatedLabel profitLabel = new GuiTranslatedLabel(6, 54, "tile.megacorp:shipping_depot.profit", "");
 
-    private GuiProgressBar progressBar = new GuiProgressBar(8, 67, 159, 12);
-    private GuiTranslatedLabel progressLabel = new GuiTranslatedLabel(80, 69, "tile.megacorp:shipping_depot.progress", 0, 0);
+    private GuiProgressBar progressBar = new GuiProgressBar(8, 67, 239, 12);
+    private GuiTranslatedLabel progressLabel = new GuiTranslatedLabel(127, 69, GuiLabel.Alignment.CENTER, "tile.megacorp:shipping_depot.progress", 0, 0);
 
     private GuiButton rerollQuestButton = new GuiButton(
         ContainerShippingDepot.GUI_REROLL_QUEST,
-        152, 21,
+        231, 21,
         16, 16,
         null,
-        new GuiImageTexture(0, 0, 8, 8, 180, 52, background)
+        new GuiImageTexture(0, 0, 8, 8, 10, 221, background)
     );
     private GuiImageToggleButton automaticQuestButton = new GuiImageToggleButton(
         ContainerShippingDepot.GUI_AUTOMATIC_QUEST,
-        152, 45,
+        231, 45,
         16, 16,
-        new GuiImageTexture(0, 0, 7, 10, 180, 19, background)
+        new GuiImageTexture(0, 0, 7, 10, 10, 188, background)
     );
 
-    private GuiList questList = new GuiList(6, 19, 162, 61, this);
-    private GuiButton newQuestButton = new GuiButton(ContainerShippingDepot.GUI_NEW_QUEST, 96, 3, 72, 14, GuiUtil.translate("tile.megacorp:shipping_depot.new_quest"));
+    private GuiList questList = new GuiList(6, 19, 242, 61, this);
+    private GuiButton newQuestButton = new GuiButton(ContainerShippingDepot.GUI_NEW_QUEST, 176, 3, 72, 14, GuiUtil.translate("tile.megacorp:shipping_depot.new_quest"));
 
     private List<Quest> listOfQuests;
     private List<QuestListItem> listOfListItems;
@@ -69,10 +66,7 @@ public class GuiShippingDepot
 
     public GuiShippingDepot(ContainerShippingDepot container)
     {
-        super(container);
-
-        xSize = WIDTH;
-        ySize = HEIGHT;
+        super(container, 256, 166);
 
         this.container = container;
 

@@ -13,11 +13,27 @@ public class GuiTranslatedLabel
 
     public GuiTranslatedLabel(int x, int y, String stringKey, Object... placeholders)
     {
-        this(x, y, GuiUtil.FONT_COLOUR, stringKey, placeholders);
+        this(x, y, GuiUtil.FONT_COLOUR, Alignment.LEFT, VerticalAlignment.BOTTOM, stringKey, placeholders);
     }
+
+    public GuiTranslatedLabel(int x, int y, Alignment alignment, String stringKey, Object... placeholders)
+    {
+        this(x, y, GuiUtil.FONT_COLOUR, alignment, VerticalAlignment.BOTTOM, stringKey, placeholders);
+    }
+
     public GuiTranslatedLabel(int x, int y, Color color, String stringKey, Object... placeholders)
     {
-        super(x, y, color, "");
+        this(x, y, color, Alignment.LEFT, VerticalAlignment.BOTTOM, stringKey, placeholders);
+    }
+
+    public GuiTranslatedLabel(int x, int y, Alignment alignment, VerticalAlignment verticalAlignment, String stringKey, Object... placeholders)
+    {
+        this(x, y, GuiUtil.FONT_COLOUR, alignment, verticalAlignment, stringKey, placeholders);
+    }
+
+    public GuiTranslatedLabel(int x, int y, Color color, Alignment alignment, VerticalAlignment verticalAlignment, String stringKey, Object... placeholders)
+    {
+        super(x, y, color, "", alignment, verticalAlignment);
 
         this.stringKey = stringKey;
         this.placeholders = placeholders.clone();

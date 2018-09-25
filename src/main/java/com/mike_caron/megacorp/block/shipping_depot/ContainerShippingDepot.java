@@ -42,13 +42,13 @@ public class ContainerShippingDepot
     @Override
     protected int playerInventoryX()
     {
-        return 8;
+        return 48;
     }
 
     @Override
     protected void addOwnSlots()
     {
-        itemInputSlot = new SlotItemHandlerFixed(getTE().inventory, 0, 128, 33);
+        itemInputSlot = new SlotItemHandlerFixed(getTE().inventory, 0, 207, 33);
 
         this.addSlotToContainer(itemInputSlot);
     }

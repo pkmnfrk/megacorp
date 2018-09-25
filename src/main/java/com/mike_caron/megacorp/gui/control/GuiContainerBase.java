@@ -28,7 +28,7 @@ public abstract class GuiContainerBase
     private boolean leftDown = false, rightDown = false, middleDown = false;
     private List<List<GuiControl>> waitingForButton = new ArrayList<List<GuiControl>>();
 
-    public GuiContainerBase(ContainerBase inventorySlotsIn)
+    public GuiContainerBase(ContainerBase inventorySlotsIn, int width, int height)
     {
         super(inventorySlotsIn);
 
@@ -40,6 +40,10 @@ public abstract class GuiContainerBase
                 onContainerRefresh();
             }
         });
+
+        this.xSize = width;
+        this.ySize = height;
+
 
         waitingForButton.add(new ArrayList<>());
         waitingForButton.add(new ArrayList<>());
@@ -323,8 +327,10 @@ public abstract class GuiContainerBase
     protected void drawInsertCardBackground()
     {
         GlStateManager.color(1, 1, 1, 1);
-        mc.getTextureManager().bindTexture(GuiUtil.EMPTY_GUI);
-        drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+        mc.getTextureManager().bindTexture(GuiUtil.MISC_RESOURCES);
+        //drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+        GuiUtil.draw3x3Stretched(guiLeft, guiTop, xSize, ySize, 48, 16);
+        GuiUtil.drawTexturePart(guiLeft + xSize / 2 - 81, guiTop + ySize - 83, 162, 76, 0, 180, 256, 256);
     }
 
     protected String getTitleKey()
@@ -446,4 +452,6 @@ public abstract class GuiContainerBase
 
         return true;
     }
+
+
 }

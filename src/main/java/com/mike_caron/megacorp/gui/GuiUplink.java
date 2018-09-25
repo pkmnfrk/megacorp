@@ -39,10 +39,7 @@ public class GuiUplink
 
     public GuiUplink(ContainerUplink container)
     {
-        super(container);
-
-        xSize = WIDTH;
-        ySize = HEIGHT;
+        super(container, WIDTH, HEIGHT);
 
         this.container = container;
 

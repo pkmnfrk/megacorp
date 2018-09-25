@@ -11,17 +11,32 @@ public class GuiLabel
 
     protected Color color;
 
+    protected Alignment alignment;
+    protected VerticalAlignment verticalAlignment;
+
     public GuiLabel(int x, int y, String key)
     {
-        this(x,y, GuiUtil.FONT_COLOUR, key);
+        this(x,y, GuiUtil.FONT_COLOUR, key, Alignment.LEFT, VerticalAlignment.BOTTOM);
     }
 
     public GuiLabel(int x, int y, Color color, String key)
+    {
+        this(x, y, color, key, Alignment.LEFT, VerticalAlignment.BOTTOM);
+    }
+
+    public GuiLabel(int x, int y, Color color, String key, Alignment alignment)
+    {
+        this(x, y, color, key, alignment, VerticalAlignment.BOTTOM);
+    }
+
+    public GuiLabel(int x, int y, Color color, String key, Alignment alignment, VerticalAlignment verticalAlignment)
     {
         super(x, y);
 
         this.color = color;
         this.stringLabel = key;
+        this.alignment = alignment;
+        this.verticalAlignment = verticalAlignment;
     }
 
     @Override
@@ -46,7 +61,44 @@ public class GuiLabel
     {
         if(!this.visible) return;
 
-        this.parent.getFontRenderer().drawString(stringLabel, 0, 0, this.color.getRGB());
+        int dx = 0;
+        int dy = 0;
+        int sw = this.parent.getFontRenderer().getStringWidth(stringLabel);
+        int sh = this.parent.getFontRenderer().FONT_HEIGHT;
+
+        if(alignment == Alignment.CENTER)
+        {
+            dx = - (sw / 2);
+        }
+        else if(alignment == Alignment.RIGHT)
+        {
+            dx = -sw;
+        }
+
+        if(verticalAlignment == VerticalAlignment.TOP)
+        {
+            dy = -sh;
+        }
+        else if(verticalAlignment == VerticalAlignment.MIDDLE)
+        {
+            dy = -(sh / 2);
+        }
+
+
+        this.parent.getFontRenderer().drawString(stringLabel, dx, dy, this.color.getRGB());
     }
 
+    public enum Alignment
+    {
+        LEFT,
+        CENTER,
+        RIGHT
+    }
+
+    public enum VerticalAlignment
+    {
+        TOP,
+        MIDDLE,
+        BOTTOM
+    }
 }

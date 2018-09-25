@@ -164,7 +164,7 @@ public class GuiMultilineLabel
 
         FontRenderer renderer = parent.getFontRenderer();
 
-        int dh = getHeight();
+        int dh = lines.size() * renderer.FONT_HEIGHT;
         int dy = 0;
         if(!autoHeight)
         {

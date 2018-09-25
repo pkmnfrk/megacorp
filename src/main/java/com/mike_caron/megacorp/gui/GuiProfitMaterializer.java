@@ -71,10 +71,7 @@ public class GuiProfitMaterializer
 
     public GuiProfitMaterializer(ContainerProfitMaterializer container)
     {
-        super(container);
-
-        xSize = WIDTH;
-        ySize = HEIGHT;
+        super(container, WIDTH, HEIGHT);
 
         this.container = container;
 

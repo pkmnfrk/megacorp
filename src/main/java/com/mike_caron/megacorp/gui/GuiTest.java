@@ -30,7 +30,7 @@ public class GuiTest
 
     public GuiTest(ContainerUplink container)
     {
-        super(container);
+        super(container, WIDTH, HEIGHT);
 
         initControls();
 

@@ -139,7 +139,9 @@ public class GuiMultilineLabel
                 return 10;
             }
 
-            return lines.size() * 10;
+            FontRenderer renderer = parent.getFontRenderer();
+
+            return lines.size() * renderer.FONT_HEIGHT;
         }
 
         return super.getHeight();
@@ -157,23 +159,27 @@ public class GuiMultilineLabel
         if(lines == null)
             return;
 
-        //GuiUtil.drawDebugFlatRectangle(x, y, width, height, 255, 0, 0, 128);
+        //GuiUtil.setGLColor(Color.RED);
+        //GuiUtil.drawDebugFlatRectangle(0, 0, getWidth(), getHeight());
 
         FontRenderer renderer = parent.getFontRenderer();
 
-        int dh = renderer.FONT_HEIGHT * lines.size();
-        int dy = -1;
-        switch(valignment)
+        int dh = getHeight();
+        int dy = 0;
+        if(!autoHeight)
         {
-            case TOP:
-                dy = 0;
-                break;
-            case CENTER:
-                dy = this.height / 2 - dh / 2;
-                break;
-            case BOTTOM:
-                dy = this.height - dh;
-                break;
+            switch (valignment)
+            {
+                case TOP:
+                    dy = 0;
+                    break;
+                case CENTER:
+                    dy = this.height / 2 - dh / 2;
+                    break;
+                case BOTTOM:
+                    dy = this.height - dh;
+                    break;
+            }
         }
 
         GuiUtil.setGLColor(Color.WHITE);

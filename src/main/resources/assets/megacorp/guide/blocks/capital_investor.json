@@ -1,0 +1,25 @@
+{
+  "icon": {
+    "item": "megacorp:capital_investor"
+  },
+  "body": [
+    {
+      "template": "3x3",
+      "elements": {
+        "recipe": "megacorp:capital_investor"
+      }
+    },
+    "para1",
+    {
+      "link": "/liquids/money"
+    },
+    "para2",
+    {
+      "img": "textures/guide/investor.png",
+      "width": 176,
+      "height": 101
+    },
+    "para3",
+    "para4"
+  ]
+}

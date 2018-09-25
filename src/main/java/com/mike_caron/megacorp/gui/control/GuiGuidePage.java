@@ -119,7 +119,7 @@ public class GuiGuidePage
             setEnableScrollBar(true);
 
             //reflow everything
-
+            //MegaCorpMod.logger.info("Reflowing due to scroll bar");
             yPos = 4;
             for(GuiControl control : controls)
             {
@@ -134,6 +134,7 @@ public class GuiGuidePage
                     control.setX((this.width - marginRight) / 2 - control.getWidth() / 2);
                 }
                 control.setY(yPos);
+                //MegaCorpMod.logger.info("Setting yPos of " + control + " to " + yPos + " with height of " + control.getHeight());
 
                 yPos += control.getHeight();
 
@@ -396,6 +397,7 @@ public class GuiGuidePage
                 this.addControl(label);
 
                 label.extraData.put("spacing", 6);
+                //MegaCorpMod.logger.info("Setting yPos of " + label + " to " + yPos + " with height of " + label.getHeight());
 
                 yPos += label.getHeight() + 6;
             }
@@ -518,6 +520,8 @@ public class GuiGuidePage
                 this.addControl(control);
                 control.setY(yPos);
 
+                //MegaCorpMod.logger.info("Setting yPos of " + control + " to " + yPos + " with height of " + control.getHeight());
+
                 yPos += control.getHeight();
 
                 if (control.extraData.containsKey("spacing"))
@@ -559,7 +563,7 @@ public class GuiGuidePage
     private GuiSized insertLink(JsonElement ele)
     {
         String otherUri = null;
-        int spacing = 0;
+        int spacing = 4;
 
         if(ele.isJsonPrimitive())
         {
@@ -594,7 +598,7 @@ public class GuiGuidePage
             label = otherTranslation.get("title").getAsString();
         }
 
-        GuiButton button = new GuiButton(0, 0, 0, this.width - 4, Math.max(14, image != null ? image.getHeight() + 4 : 0), label, image);
+        GuiButton button = new GuiButton(0, 0, 0, this.width - 4, Math.max(14, image != null ? image.getHeight() + 4 : 0) + 4, label, image);
         button.addListener(this);
         //this.addControl(button);
 
@@ -731,6 +735,7 @@ public class GuiGuidePage
         //return new GuiImageItemStack(0, 0, new ItemStack(Items.EMERALD, 1));
         int x = 0;
         int y = 0;
+        int spacing = 4;
         String link = null;
 
         if(icon.has("x"))
@@ -744,6 +749,10 @@ public class GuiGuidePage
         if(icon.has("link"))
         {
             link = icon.get("link").getAsString();
+        }
+        if(icon.has("spacing"))
+        {
+            spacing = icon.get("spacing").getAsInt();
         }
 
         GuiImage ret = null;
@@ -795,7 +804,6 @@ public class GuiGuidePage
             int sourceHeight = height;
             int textureWidth = 256;
             int textureHeight = 256;
-            int spacing = 0;
 
             boolean sub = false;
 
@@ -829,10 +837,6 @@ public class GuiGuidePage
                 textureHeight = icon.get("th").getAsInt();
                 sub = true;
             }
-            if(icon.has("spacing"))
-            {
-                spacing = icon.get("spacing").getAsInt();
-            }
 
             if(!sub)
             {
@@ -849,11 +853,6 @@ public class GuiGuidePage
                 src,
                 textureWidth, textureHeight
             );
-
-            if(spacing > 0)
-            {
-                image.extraData.put("spacing", spacing);
-            }
 
             ret = image;
         }
@@ -874,6 +873,12 @@ public class GuiGuidePage
             ret.extraData.put("link", link);
             ret.addListener(this);
         }
+
+        if(spacing > 0)
+        {
+            ret.extraData.put("spacing", spacing);
+        }
+
 
         return ret;
     }

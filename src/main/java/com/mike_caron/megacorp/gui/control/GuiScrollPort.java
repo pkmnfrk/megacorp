@@ -349,6 +349,8 @@ public class GuiScrollPort
         {
             this.scrollY = maxScrollY;
         }
+
+        this.scrollBar.setProgress(((float)this.scrollY) / maxScrollY);
     }
 
     @Override

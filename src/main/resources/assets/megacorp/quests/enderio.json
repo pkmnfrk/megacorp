@@ -1,0 +1,20 @@
+{
+  "quests":[
+    {
+      "id": "contemplatingtheinfinite",
+      "item": "enderio:item_material:20",
+      "baseqty": 2,
+      "multqty": 1.25
+    },
+    {
+      "id": "vibraniumcrystal",
+      "item": "enderio:item_material:15",
+      "baseqty": 4,
+      "multqty": 1.15
+    }
+  ],
+  "factories": [
+    "com.mike_caron.megacorp.impl.QuestFactories$EnderioIngots",
+    "com.mike_caron.megacorp.impl.QuestFactories$EnderioBalls"
+  ]
+}

@@ -11,33 +11,13 @@ public final class QuestFactories
 {
     private QuestFactories(){}
 
-    public static class ThermalFoundationBase
+    public static abstract class ModMaterialBase
         implements IQuestFactory
     {
-        private static final Map<String, Integer> materials = new HashMap<>();
-        static {
-            materials.put("Iridium", 1);
-            materials.put("Platinum", 1);
-            materials.put("Enderium", 2);
-            //materials.put("Mana_infused", 3);
-            materials.put("Signalum", 4);
-            materials.put("Lumium", 4);
-            materials.put("Steel", 5);
-            materials.put("Gold", 5);
-            materials.put("Nickel", 6);
-            materials.put("Aluminum", 6);
-            materials.put("Constantan", 6);
-            materials.put("Electrum", 7);
-            materials.put("Silver", 7);
-            materials.put("Invar", 8);
-            materials.put("Bronze", 9);
-            materials.put("Lead", 9);
-            materials.put("Tin", 10);
-            materials.put("Iron", 11);
-            materials.put("Copper", 11);
-        }
+        protected final Map<String, Integer> materials = new HashMap<>();
 
-        protected String type;
+        protected String modprefix = "";
+        protected String type = "";
 
         private float randomFactor = 0.25f;
         private float levelScale = 0.9f;
@@ -52,21 +32,15 @@ public final class QuestFactories
             return 1.5f;
         }
 
-
-
         @Override
         public List<Quest> createQuests()
         {
-            //return null;
             List<Quest> ret = new ArrayList<>(materials.size());
 
             for(Map.Entry<String, Integer> kvp : materials.entrySet())
             {
-                //if(kvp.getKey().equals("Iron") || kvp.getKey().equals("Gold"))
-                //    continue;
-
                 Quest q = new Quest(
-                    "thermalfoundation:" + type + "_" + kvp.getKey(),
+                    modprefix + ":" + type + "_" + kvp.getKey(),
                     type + kvp.getKey(),
                     baseQty(kvp.getValue()),
                     multQty(kvp.getValue()),
@@ -86,12 +60,42 @@ public final class QuestFactories
         public QuestLocalization localize(String locale, Quest quest)
         {
             String material = (String)quest.extraData.get("material");
-            String id = "thermalfoundation:" + type + material;
+            String id = modprefix + ":" + type + material;
             if(!QuestManager.INSTANCE.localizationExists(locale, id))
-                id = "thermalfoundation:" + type + "Generic";
+                id = modprefix + ":" + type + "Generic";
 
             QuestLocalization localization = QuestManager.INSTANCE.getLocalizationFor(locale, id);
             return localization.withDescription(String.format(localization.description, material));
+        }
+    }
+
+    public static abstract class ThermalFoundationBase
+        extends ModMaterialBase
+    {
+
+        public ThermalFoundationBase()
+        {
+            modprefix = "thermalfoundation";
+
+            materials.put("Iridium", 1);
+            materials.put("Platinum", 1);
+            materials.put("Enderium", 2);
+            //materials.put("Mana_infused", 3);
+            materials.put("Signalum", 4);
+            materials.put("Lumium", 4);
+            materials.put("Steel", 5);
+            materials.put("Gold", 5);
+            materials.put("Nickel", 6);
+            materials.put("Aluminum", 6);
+            materials.put("Constantan", 6);
+            materials.put("Electrum", 7);
+            materials.put("Silver", 7);
+            materials.put("Invar", 8);
+            materials.put("Bronze", 9);
+            materials.put("Lead", 9);
+            materials.put("Tin", 10);
+            materials.put("Iron", 11);
+            materials.put("Copper", 11);
         }
     }
 
@@ -152,6 +156,44 @@ public final class QuestFactories
         protected float multQty(int value)
         {
             return Math.max(1.5f, value * 4f / 11f);
+        }
+    }
+
+    public static class EnderioBase
+        extends ModMaterialBase
+    {
+
+        public EnderioBase()
+        {
+            modprefix = "enderio";
+
+            materials.put("ElectricalSteel", 4);
+            materials.put("EnergeticAlloy", 3);
+            materials.put("VibrantAlloy", 2);
+            materials.put("RedstoneAlloy", 4);
+            materials.put("ConductiveIron", 4);
+            materials.put("PulsatingIron", 3);
+            materials.put("DarkSteel", 2);
+            materials.put("Soularium", 2);
+            materials.put("EndSteel", 1);
+        }
+    }
+
+    public static class EnderioIngots
+        extends EnderioBase
+    {
+        public EnderioIngots()
+        {
+            type = "ingot";
+        }
+    }
+
+    public static class EnderioBalls
+        extends EnderioBase
+    {
+        public EnderioBalls()
+        {
+            type = "ball";
         }
     }
 }

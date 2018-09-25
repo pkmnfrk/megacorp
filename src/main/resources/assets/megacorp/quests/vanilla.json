@@ -39,7 +39,7 @@
     },
     {
       "id": "blazingrods",
-      "oredict": "rodBlaze",
+      "oredict": "itemBlazeRod",
       "baseqty": 4,
       "rand": 0.25,
       "levelscale": 0.6
@@ -53,7 +53,7 @@
     },
     {
       "id": "cleancoal",
-      "oredict": "coal",
+      "oredict": "itemCoal",
       "baseqty": 8,
       "rand": 0.35,
       "levelscale": 0.8

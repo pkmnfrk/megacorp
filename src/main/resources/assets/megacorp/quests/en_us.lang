@@ -42,3 +42,12 @@ thermalfoundation:plateGeneric.desc=%s, when pressed into a dense plate, is exce
 
 thermalfoundation:coinGeneric.title=Trade Opportunities
 thermalfoundation:coinGeneric.desc=We wish to increase our trade with a nation that uses %s coins, and need some currency.
+
+contemplatingtheinfinite.title=Bits of the Infinite
+contemplatingtheinfinite.desc=Word has reached us that you have the capacity to shave bits of bedrock off. We would like to see that.
+
+vibranium.title=Vibranium
+vibranium.desc=A certain top-secret government agency is running low on Vibrant Alloy, and needs some reserves.
+
+vibraniumcrystal.title=Vibranium Crystal
+vibraniumcrystal.desc=Representatives from a poor African nation have made us promise never to crysalize Vibrant Alloy. Naturally, this has made us curious.

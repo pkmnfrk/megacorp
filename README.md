@@ -4,6 +4,12 @@ Ever wanted to run your own small business, and grow it into a massive corporati
 
 Too bad, someone already beat you to it, and now you owe them all your resources!
 
+## Suggestions
+
+If you want to suggest an item be added for quest purposes, please use this form: https://docs.google.com/forms/d/e/1FAIpQLSe92eiXUuksmwqUI7abEnOdBDW1A26LA9rxhws-qV2ZiYXYwg/viewform
+
+If you want to suggest a whole mod, then please open an issue as below.
+
 ## Issues
 
 Please report issues to this repository's issue tracker.

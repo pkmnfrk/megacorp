@@ -1,7 +1,10 @@
 package com.mike_caron.megacorp.block;
 
+import com.mike_caron.megacorp.impl.Corporation;
+import com.mike_caron.megacorp.impl.CorporationManager;
 import net.minecraft.nbt.NBTTagCompound;
 
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 public class TileEntityOwnedBase
@@ -46,6 +49,20 @@ public class TileEntityOwnedBase
     {
         this.owner = owner;
         this.markDirty();
+    }
+
+    @Nullable
+    protected Corporation getCorporation()
+    {
+        if(owner == null) return null;
+
+        if(!CorporationManager.get(world).ownerHasCorporation(owner))
+        {
+            owner = null;
+            return null;
+        }
+
+        return (Corporation)CorporationManager.get(world).getCorporationForOwner(owner);
     }
 
 }

@@ -2,7 +2,7 @@
   "type": "forge:ore_shaped",
   "pattern": [
     "ggg",
-    "gcg",
+    "ccc",
     "ggg"
   ],
   "key": {

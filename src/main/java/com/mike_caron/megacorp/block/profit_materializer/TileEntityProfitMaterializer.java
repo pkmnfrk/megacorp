@@ -4,7 +4,6 @@ import com.mike_caron.megacorp.api.ICorporation;
 import com.mike_caron.megacorp.api.events.CorporationRewardsChangedEvent;
 import com.mike_caron.megacorp.block.TileEntityOwnedBase;
 import com.mike_caron.megacorp.fluid.ModFluids;
-import com.mike_caron.megacorp.impl.CorporationManager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -90,9 +89,9 @@ public class TileEntityProfitMaterializer
 
     private Fraction calculateSpeed()
     {
-        if(owner == null) return Fraction.ONE_QUARTER;
+        ICorporation corp = getCorporation();
 
-        ICorporation corp = CorporationManager.get(world).getCorporationForOwner(owner);
+        if(corp == null) return Fraction.ONE_QUARTER;
 
         int rewardRank = corp.getRankInReward("faster_generation");
 
@@ -104,7 +103,9 @@ public class TileEntityProfitMaterializer
     {
         if(world == null || world.isRemote) return;
 
-        if(owner == null) return;
+        ICorporation corp = getCorporation();
+
+        if(corp == null) return;
 
         if(speed == null)
         {
@@ -118,8 +119,6 @@ public class TileEntityProfitMaterializer
         {
             if(timer > speed.getDenominator())
             {
-                ICorporation corp = CorporationManager.get(world).getCorporationForOwner(owner);
-
                 amount = corp.consumeProfit(amount);
 
                 if(amount > 0)
@@ -129,8 +128,6 @@ public class TileEntityProfitMaterializer
                 timer = 0;
             }
         }
-
-
 
     }
 

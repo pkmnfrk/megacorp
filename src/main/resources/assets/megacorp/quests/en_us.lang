@@ -74,8 +74,8 @@ harvestcraft:listAllveggieGeneric.title=Eating Your Veggies
 harvestcraft:listAllveggieGeneric.desc=Doctors are recommending that people eat more fresh %s, thanks to our lobbying efforts, and now you can reap the profit.
 
 harvestcraft:listAllnutGeneric.title=Well, Nuts
-harvestcraft:listAllnutGeneric.desc=Have you ever heard of %1s Butter? Well, turns out it is incredibly lucrative, so please ship some raw %1s for us to process.
+harvestcraft:listAllnutGeneric.desc=Have you ever heard of %1$s Butter? Well, turns out it is incredibly lucrative, so please ship some raw %1$s for us to process.
 
-harvestcraft:foodGeneric.title=Just Like Mom Made
+harvestcraft:foodGeneric.title=Just Like Mom Used To Make
 harvestcraft:foodGeneric.desc=People hardly have time to cook these days, so lets do it for them. Some %s should make people more nostalgic for home, and buying more product!
 

@@ -1,6 +1,6 @@
 package com.mike_caron.megacorp.command;
 
-import com.mike_caron.megacorp.api.CorporationManager;
+import com.mike_caron.megacorp.impl.CorporationManager;
 import com.mike_caron.megacorp.impl.Corporation;
 import com.mike_caron.megacorp.impl.QuestManager;
 import com.mike_caron.megacorp.impl.RewardManager;
@@ -32,6 +32,7 @@ public class MegaCorpCommand
         subCommands.put("setRewardLevel", MegaCorpCommand::setRewardLevel);
         subCommands.put("clearRewards", MegaCorpCommand::clearRewards);
         subCommands.put("reloadQuests", MegaCorpCommand::reloadQuests);
+        subCommands.put("removeCorporation", MegaCorpCommand::removeCorporation);
     }
 
     @Nonnull
@@ -129,7 +130,7 @@ public class MegaCorpCommand
 
             UUID id = ((EntityPlayerMP)sender).getUniqueID();
 
-            Corporation corp = (Corporation)CorporationManager.getInstance(((EntityPlayerMP) sender).getServerWorld()).getCorporationForOwner(id);
+            Corporation corp = (Corporation)CorporationManager.get(((EntityPlayerMP) sender).getServerWorld()).getCorporationForOwner(id);
 
             if(corp == null)
             {
@@ -166,7 +167,7 @@ public class MegaCorpCommand
     {
         UUID id = ((EntityPlayerMP)sender).getUniqueID();
 
-        Corporation corp = (Corporation)CorporationManager.getInstance(((EntityPlayerMP) sender).getServerWorld()).getCorporationForOwner(id);
+        Corporation corp = (Corporation)CorporationManager.get(((EntityPlayerMP) sender).getServerWorld()).getCorporationForOwner(id);
 
         if(corp == null)
         {
@@ -175,6 +176,24 @@ public class MegaCorpCommand
         }
 
         corp.clearRewards();
+
+        sender.sendMessage(new TextComponentString("Done"));
+    }
+
+    private static void removeCorporation(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args)
+        throws CommandException
+    {
+        UUID id = ((EntityPlayerMP)sender).getUniqueID();
+
+        Corporation corp = (Corporation)CorporationManager.get(((EntityPlayerMP) sender).getServerWorld()).getCorporationForOwner(id);
+
+        if(corp == null)
+        {
+            sender.sendMessage(new TextComponentString("You don't own a corporation."));
+            return;
+        }
+
+        CorporationManager.get(((EntityPlayerMP)sender).getServerWorld()).deleteCorporationForOwner(id);
 
         sender.sendMessage(new TextComponentString("Done"));
     }

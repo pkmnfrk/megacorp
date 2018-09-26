@@ -10,6 +10,7 @@ import com.mike_caron.megacorp.api.IQuestFactory;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.io.FilenameUtils;
@@ -17,6 +18,7 @@ import org.apache.commons.io.FilenameUtils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 public class QuestManager
@@ -33,49 +35,110 @@ public class QuestManager
     {
         quests.clear();
 
+        Loader.instance().getActiveModList().forEach(this::loadModQuests);
+
+        //CraftingHelper.findFiles(Loader.instance().getReversedModObjectList().get(MegaCorpMod.instance), "assets/" + MegaCorpMod.modId + "/quests", null, this::loadQuests, false, true);
+
+    }
+
+    private void loadModQuests(ModContainer mod)
+    {
+        CraftingHelper.findFiles(mod, "assets/" + MegaCorpMod.modId + "/quests", null, this::loadQuests, false, true);
+    }
+
+    private boolean loadQuests(Path root, Path url)
+    {
         JsonParser parser = new JsonParser();
 
-        CraftingHelper.findFiles(Loader.instance().getReversedModObjectList().get(MegaCorpMod.instance), "assets/" + MegaCorpMod.modId + "/quests", null, (root, url) ->
+        String extension = FilenameUtils.getExtension(url.toString());
+
+        if("json".equals(extension))
         {
-            String extension = FilenameUtils.getExtension(url.toString());
-
-            if("json".equals(extension))
+            JsonObject json;
+            try (BufferedReader stream = Files.newBufferedReader(url))
             {
-                JsonObject json;
-                try (BufferedReader stream = Files.newBufferedReader(url))
+                json = parser.parse(stream).getAsJsonObject();
+            }
+            catch(RuntimeException | IOException ex)
+            {
+                MegaCorpMod.logger.error("Encountered error while reading " + url, ex);
+                return true;
+            }
+
+            String mod = "minecraft";
+
+            if(json.has("mod"))
+                mod = json.get("mod").getAsString();
+
+            if(!Loader.isModLoaded(mod))
+            {
+                MegaCorpMod.logger.info("Skipping " + mod + " quests, because it's not loaded");
+            }
+
+            if(json.has("quests"))
+            {
+                JsonArray qs = json.getAsJsonArray("quests");
+
+                for (JsonElement obj : qs)
                 {
-                    json = parser.parse(stream).getAsJsonObject();
-                }
-                catch(RuntimeException | IOException ex)
-                {
-                    MegaCorpMod.logger.error("Encountered error while reading " + url, ex);
-                    return true;
-                }
-
-                String mod = "minecraft";
-
-                if(json.has("mod"))
-                    mod = json.get("mod").getAsString();
-
-                if(!Loader.isModLoaded(mod))
-                {
-                    MegaCorpMod.logger.info("Skipping " + mod + " quests, because it's not loaded");
-                }
-
-                if(json.has("quests"))
-                {
-                    JsonArray qs = json.getAsJsonArray("quests");
-
-                    for (JsonElement obj : qs)
+                    try
                     {
-                        try
+                        JsonObject quest = (JsonObject) obj;
+
+                        Quest q = Quest.fromJson(quest);
+
+                        if(q == null) continue;
+
+                        if(q.possibleItems().isEmpty())
                         {
-                            JsonObject quest = (JsonObject) obj;
+                            MegaCorpMod.logger.info("Skipping quest " + q.id + " because no items exist");
+                            continue;
+                        }
 
-                            Quest q = Quest.fromJson(quest);
+                        if(quests.containsKey(q.id))
+                        {
+                            MegaCorpMod.logger.warn("Overwriting quest " + q.id);
+                        }
 
-                            if(q == null) continue;
+                        quests.put(q.id, q);
 
+                        MegaCorpMod.logger.info("Loaded quest " + q.id);
+                    }
+                    catch (Exception ex)
+                    {
+                        MegaCorpMod.logger.error("Error loading quests from " + url, ex);
+                    }
+                }
+            }
+
+            if(json.has("factories"))
+            {
+                JsonArray factories = json.get("factories").getAsJsonArray();
+
+                for(JsonElement factory : factories)
+                {
+                    String className;
+                    if(factory.isJsonPrimitive())
+                    {
+                        className = factory.getAsString();
+                    }
+                    else
+                    {
+                        JsonObject ob = factory.getAsJsonObject();
+                        className = ob.get("class").getAsString();
+                    }
+
+                    try
+                    {
+                        Class clazz = Class.forName(className);
+                        IQuestFactory fact = (IQuestFactory)clazz.newInstance();
+
+                        List<Quest> qs = fact.createQuests();
+
+                        MegaCorpMod.logger.info("Loading " + qs.size() + " from " + className);
+
+                        for(Quest q : qs)
+                        {
                             if(q.possibleItems().isEmpty())
                             {
                                 MegaCorpMod.logger.info("Skipping quest " + q.id + " because no items exist");
@@ -88,92 +151,40 @@ public class QuestManager
                             }
 
                             quests.put(q.id, q);
+                            questFactories.put(q, fact);
 
-                            MegaCorpMod.logger.info("Loaded quest " + q.id);
-                        }
-                        catch (Exception ex)
-                        {
-                            MegaCorpMod.logger.error("Error loading quests from " + url, ex);
+                            MegaCorpMod.logger.info("Loaded quest " + q.id + " from " + className);
                         }
                     }
-                }
-
-                if(json.has("factories"))
-                {
-                    JsonArray factories = json.get("factories").getAsJsonArray();
-
-                    for(JsonElement factory : factories)
+                    catch(Exception ex)
                     {
-                        String className;
-                        if(factory.isJsonPrimitive())
-                        {
-                            className = factory.getAsString();
-                        }
-                        else
-                        {
-                            JsonObject ob = factory.getAsJsonObject();
-                            className = ob.get("class").getAsString();
-                        }
-
-                        try
-                        {
-                            Class clazz = Class.forName(className);
-                            IQuestFactory fact = (IQuestFactory)clazz.newInstance();
-
-                            List<Quest> qs = fact.createQuests();
-
-                            MegaCorpMod.logger.info("Loading " + qs.size() + " from " + className);
-
-                            for(Quest q : qs)
-                            {
-                                if(q.possibleItems().isEmpty())
-                                {
-                                    MegaCorpMod.logger.info("Skipping quest " + q.id + " because no items exist");
-                                    continue;
-                                }
-
-                                if(quests.containsKey(q.id))
-                                {
-                                    MegaCorpMod.logger.warn("Overwriting quest " + q.id);
-                                }
-
-                                quests.put(q.id, q);
-                                questFactories.put(q, fact);
-
-                                MegaCorpMod.logger.info("Loaded quest " + q.id + " from " + className);
-                            }
-                        }
-                        catch(Exception ex)
-                        {
-                            MegaCorpMod.logger.error("Error loading quests from " + url, ex);
-                        }
-
-
+                        MegaCorpMod.logger.error("Error loading quests from " + url, ex);
                     }
 
+
                 }
+
             }
-            else if("lang".equals(extension))
+        }
+        else if("lang".equals(extension))
+        {
+            String locale = FilenameUtils.getBaseName(url.toString()).toLowerCase();
+            if(!localizations.containsKey(locale))
             {
-                String locale = FilenameUtils.getBaseName(url.toString()).toLowerCase();
-                if(!localizations.containsKey(locale))
-                {
-                    localizations.put(locale, new HashMap<>());
-                }
-
-                try
-                {
-                    List<String> lines = Files.readAllLines(url);
-                    loadLocalization(locale, lines);
-                }
-                catch(Exception ex)
-                {
-                    MegaCorpMod.logger.error("Error loading localization from " + url, ex);
-                }
+                localizations.put(locale, new HashMap<>());
             }
-            return true;
-        }, false, true);
 
+            try
+            {
+                List<String> lines = Files.readAllLines(url);
+                loadLocalization(locale, lines);
+            }
+            catch(Exception ex)
+            {
+                MegaCorpMod.logger.error("Error loading localization from " + url, ex);
+            }
+        }
+        return true;
     }
 
     private void loadLocalization(String locale, List<String> lines)

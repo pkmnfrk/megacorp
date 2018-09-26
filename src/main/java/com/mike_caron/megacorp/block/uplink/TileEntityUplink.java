@@ -62,15 +62,15 @@ public class TileEntityUplink
     @Override
     public void handleGuiString(EntityPlayerMP player, int element, String string)
     {
+        Corporation corp = getCorporation();
+
+        if(corp == null) return;
+
         if(element == 2)
         {
             if(owner.equals(player.getPersistentID()))
             {
-                CorporationManager manager = CorporationManager.get(player.getEntityWorld());
-                Corporation corp = manager.getCorporationForOwnerInternal(player.getPersistentID());
-
                 corp.setName(string);
-
             }
         }
     }

@@ -3,7 +3,6 @@ package com.mike_caron.megacorp.block.shipping_depot;
 import com.mike_caron.megacorp.api.ICorporation;
 import com.mike_caron.megacorp.block.TileEntityOwnedBase;
 import com.mike_caron.megacorp.impl.Corporation;
-import com.mike_caron.megacorp.impl.CorporationManager;
 import com.mike_caron.megacorp.impl.WorkOrder;
 import com.mike_caron.megacorp.storage.TweakedItemStackHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -169,7 +168,9 @@ public class TileEntityShippingDepot
 
     private void rollNewWorkOrder(@Nullable String id)
     {
-        Corporation corp = (Corporation)CorporationManager.get(world).getCorporationForOwner(owner);
+        Corporation corp = getCorporation();
+
+        if(corp == null) return;
 
         if(id == null)
         {
@@ -195,6 +196,10 @@ public class TileEntityShippingDepot
     private void tryConsumeItem()
     {
         if(world.isRemote) return;
+
+        ICorporation corp = getCorporation();
+
+        if(corp == null) return;
         
         if(getWorkOrder() == null) return;
 
@@ -210,7 +215,7 @@ public class TileEntityShippingDepot
                 stack.shrink(consumed);
                 inventory.notifySlotChanged(0);
 
-                ICorporation corp = CorporationManager.get(world).getCorporationForOwner(owner);
+
                 if (corp.completeWorkOrder(workOrder))
                 {
                     if(allowChoosing)

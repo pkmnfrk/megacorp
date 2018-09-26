@@ -4,7 +4,6 @@ import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.block.TileEntityOwnedBase;
 import com.mike_caron.megacorp.fluid.ModFluids;
 import com.mike_caron.megacorp.impl.Corporation;
-import com.mike_caron.megacorp.impl.CorporationManager;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -26,7 +25,7 @@ public class TileEntityCapitalInvestor
         @Override
         public boolean canFillFluidType(FluidStack fluid)
         {
-            if(fluid.getFluid() != ModFluids.MONEY)
+            if(fluid == null || fluid.getFluid() != ModFluids.MONEY)
                 return false;
 
             return super.canFillFluidType(fluid);
@@ -95,7 +94,9 @@ public class TileEntityCapitalInvestor
         if(button == ContainerCapitalInvestor.GUI_BUY_REWARD)
         {
             //IReward reward = RewardManager.INSTANCE.getRewardWithId(extraData);
-            Corporation corp = (Corporation)CorporationManager.get(world).getCorporationForOwner(owner);
+            Corporation corp = getCorporation();
+
+            if(corp == null) return;
 
             Optional<Integer> cost = Optional.empty();
             try

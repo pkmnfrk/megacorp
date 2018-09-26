@@ -63,6 +63,16 @@ public class CorporationManager extends WorldSavedData implements ICorporationMa
         return corporations.get(owner);
     }
 
+    public void deleteCorporationForOwner(UUID owner)
+    {
+        if(!corporations.containsKey(owner))
+            throw new IllegalArgumentException("owner");
+
+        corporations.remove(owner);
+
+        markDirty();
+    }
+
     @Override
     public void readFromNBT(NBTTagCompound tag)
     {

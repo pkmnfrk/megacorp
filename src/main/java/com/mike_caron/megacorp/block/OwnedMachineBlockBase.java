@@ -1,7 +1,6 @@
 package com.mike_caron.megacorp.block;
 
-import com.mike_caron.megacorp.api.CorporationManager;
-import com.mike_caron.megacorp.api.ICorporation;
+import com.mike_caron.megacorp.impl.Corporation;
 import com.mike_caron.megacorp.item.CorporateCard;
 import com.mike_caron.megacorp.item.ModItems;
 import mcjty.theoneprobe.api.ElementAlignment;
@@ -71,11 +70,12 @@ public class OwnedMachineBlockBase
         super.addMegaCorpProbeInfo(mode, info, player, world, blockState, data);
 
         TileEntityOwnedBase teb = getTE(world, data.getPos());
+        Corporation corp = null;
 
-        if(teb != null && teb.getOwner() != null)
+        if(teb != null) corp = teb.getCorporation();
+
+        if(corp != null)
         {
-            ICorporation corp = CorporationManager.getInstance(world).getCorporationForOwner(teb.getOwner());
-
             info.horizontal(info.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER))
                 .item(new ItemStack(ModItems.corporateCard))
                 .vertical()

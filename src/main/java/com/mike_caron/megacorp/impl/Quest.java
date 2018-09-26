@@ -53,6 +53,8 @@ public class Quest
 
         if(obj.has("item")){
             item = getStackFromTag(obj.get("item").getAsString());
+            if(item == null)
+                return null;
         }
         else if(obj.has("oredict"))
         {
@@ -139,7 +141,8 @@ public class Quest
             throw new RuntimeException("Can't locate the item " + tag, ex);
         }
 
-        throw new RuntimeException("I don't understand the item " + tag);
+        return null;
+        //throw new RuntimeException("I don't understand the item " + tag);
     }
 
     public int getCountForLevel(int level)

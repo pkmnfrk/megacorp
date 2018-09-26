@@ -73,10 +73,17 @@ public class QuestManager
 
                             Quest q = Quest.fromJson(quest);
 
+                            if(q == null) continue;
+
                             if(q.possibleItems().isEmpty())
                             {
                                 MegaCorpMod.logger.info("Skipping quest " + q.id + " because no items exist");
                                 continue;
+                            }
+
+                            if(quests.containsKey(q.id))
+                            {
+                                MegaCorpMod.logger.warn("Overwriting quest " + q.id);
                             }
 
                             quests.put(q.id, q);
@@ -114,12 +121,19 @@ public class QuestManager
 
                             List<Quest> qs = fact.createQuests();
 
+                            MegaCorpMod.logger.info("Loading " + qs.size() + " from " + className);
+
                             for(Quest q : qs)
                             {
                                 if(q.possibleItems().isEmpty())
                                 {
                                     MegaCorpMod.logger.info("Skipping quest " + q.id + " because no items exist");
                                     continue;
+                                }
+
+                                if(quests.containsKey(q.id))
+                                {
+                                    MegaCorpMod.logger.warn("Overwriting quest " + q.id);
                                 }
 
                                 quests.put(q.id, q);

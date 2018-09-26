@@ -134,7 +134,9 @@ public class GuiShippingDepot
 
                 profitLabel.setPlaceholder(0, NumberFormat.getIntegerInstance().format(container.workOrder.getProfit()));
 
+                automaticQuestButton.setVisible(container.allowChoice);
                 automaticQuestButton.setPressed(container.automaticallyGenerate);
+
 
             }
             else

@@ -164,7 +164,42 @@ public class Corporation
     public WorkOrder createNewWorkOrder()
     {
         //first, select a quest
-        Quest quest = QuestManager.INSTANCE.getRandomQuest();
+        Random rng = new Random();
+
+        boolean lowestLevel;
+
+        if(questLog.size() < 5)
+        {
+            //if you have less than 5 unique quests completed, you have a 100% chance to get a level 0 quest
+            lowestLevel = true;
+        }
+        else
+        {
+            //otherwise, you have a 90% chance to get a low level quest
+            lowestLevel = rng.nextInt(10) != 0;
+        }
+        List<Quest> suitableQuests = QuestManager.INSTANCE.getQuests();
+
+        int level = questLog.values().stream().sorted().findFirst().orElse(0);
+
+        if(lowestLevel)
+        {
+            suitableQuests.removeIf(q -> questLog.containsKey(q.id) && questLog.get(q.id) >= level);
+            if(suitableQuests.isEmpty())
+            {
+                //they've completed all quests to the same level... improbable, but whatever
+                suitableQuests = QuestManager.INSTANCE.getQuests();
+            }
+        }
+        else
+        {
+            suitableQuests.removeIf(q -> !questLog.containsKey(q.id) || questLog.get(q.id) < level);
+        }
+
+        int chosenQuest = rng.nextInt(suitableQuests.size());
+
+        Quest quest = suitableQuests.get(chosenQuest);
+
         return createNewWorkOrder(quest);
     }
 

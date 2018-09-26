@@ -18,6 +18,7 @@ public class ContainerShippingDepot
     private int workOrderHash = 0;
     public boolean questLocked;
     public boolean automaticallyGenerate;
+    public boolean allowChoice;
 
     Slot itemInputSlot;
 
@@ -93,6 +94,12 @@ public class ContainerShippingDepot
             changed = true;
         }
 
+        if(allowChoice != te.getAllowChoice())
+        {
+            allowChoice = te.getAllowChoice();
+            changed = true;
+        }
+
         if(changed)
         {
             triggerUpdate();
@@ -116,6 +123,7 @@ public class ContainerShippingDepot
         }
         automaticallyGenerate = tag.getBoolean("AutoGen");
         questLocked = tag.getBoolean("QuestLocked");
+        allowChoice = tag.getBoolean("AllowChoice");
     }
 
     @Override
@@ -131,6 +139,7 @@ public class ContainerShippingDepot
         }
         tag.setBoolean("AutoGen", automaticallyGenerate);
         tag.setBoolean("QuestLocked", questLocked);
+        tag.setBoolean("AllowChoice", allowChoice);
 
     }
 

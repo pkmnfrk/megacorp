@@ -1,5 +1,6 @@
 package com.mike_caron.megacorp.impl;
 
+import com.google.common.base.Preconditions;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -292,6 +293,13 @@ public class QuestManager
     public int getNumQuests()
     {
         return quests.size();
+    }
+
+    public Quest getQuestByNum(int num)
+    {
+        Preconditions.checkArgument(num >= 0 && num < quests.size());
+
+        return quests.values().stream().skip(num).findFirst().get();
     }
 
     public List<Quest> getQuests()

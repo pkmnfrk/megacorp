@@ -16,6 +16,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.UUID;
 
 public class TileEntityShippingDepot
     extends TileEntityOwnedBase
@@ -23,7 +24,8 @@ public class TileEntityShippingDepot
 {
 
     private WorkOrder workOrder;
-    private boolean automaticallyGenerate;
+    private boolean automaticallyGenerate = true;
+    private boolean allowChoosing = false;
 
     public final TweakedItemStackHandler inventory = new TweakedItemStackHandler(1)
     {
@@ -107,6 +109,11 @@ public class TileEntityShippingDepot
         {
             automaticallyGenerate = true;
         }
+
+        if(compound.hasKey("AllowChoice"))
+        {
+            allowChoosing = true;
+        }
     }
 
     @Override
@@ -122,6 +129,10 @@ public class TileEntityShippingDepot
         if(automaticallyGenerate)
         {
             ret.setBoolean("AutoGen", true);
+        }
+        if(allowChoosing)
+        {
+            ret.setBoolean("AllowChoice", true);
         }
 
         return ret;
@@ -142,18 +153,32 @@ public class TileEntityShippingDepot
         }
         else if(button == ContainerShippingDepot.GUI_REROLL_QUEST)
         {
-            if(owner != null && workOrder != null)
+            if(allowChoosing)
             {
-                workOrder = null;
+                if (owner != null && workOrder != null)
+                {
+                    workOrder = null;
+                }
+            }
+            else
+            {
+                rollNewWorkOrder(null);
             }
         }
     }
 
-    private void rollNewWorkOrder(String id)
+    private void rollNewWorkOrder(@Nullable String id)
     {
         Corporation corp = (Corporation)CorporationManager.get(world).getCorporationForOwner(owner);
 
-        workOrder = corp.createNewWorkOrder(id);
+        if(id == null)
+        {
+            workOrder = corp.createNewWorkOrder();
+        }
+        else
+        {
+            workOrder = corp.createNewWorkOrder(id);
+        }
     }
 
     @Override
@@ -188,13 +213,20 @@ public class TileEntityShippingDepot
                 ICorporation corp = CorporationManager.get(world).getCorporationForOwner(owner);
                 if (corp.completeWorkOrder(workOrder))
                 {
-                    if(automaticallyGenerate)
+                    if(allowChoosing)
                     {
-                        rollNewWorkOrder(workOrder.getQuestId());
+                        if (automaticallyGenerate)
+                        {
+                            rollNewWorkOrder(workOrder.getQuestId());
+                        }
+                        else
+                        {
+                            workOrder = null;
+                        }
                     }
                     else
                     {
-                        workOrder = null;
+                        rollNewWorkOrder(null);
                     }
                 }
 
@@ -220,6 +252,22 @@ public class TileEntityShippingDepot
 
     public boolean getAutomaticallyGenerate()
     {
-        return automaticallyGenerate;
+        return allowChoosing && automaticallyGenerate;
+    }
+
+    @Override
+    public void setOwner(UUID owner)
+    {
+        super.setOwner(owner);
+
+        if(owner != null && !allowChoosing)
+        {
+            rollNewWorkOrder(null);
+        }
+    }
+
+    public boolean getAllowChoice()
+    {
+        return allowChoosing;
     }
 }

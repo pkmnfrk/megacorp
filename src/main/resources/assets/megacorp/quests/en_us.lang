@@ -66,3 +66,16 @@ enderio:ingotGeneric.desc=The latest research into %s has yielded... interesting
 
 enderio:ballGeneric.title=Maceration is for Suckers
 enderio:ballGeneric.desc=Our clients have a ton of SAG Mills, and need grinding balls to put in them.
+
+harvestcraft:listAllfruitGeneric.title=Fruits of Your Labour
+harvestcraft:listAllfruitGeneric.desc=Fresh-off-the-farm fruit is all the rage these days, and your %s will turn you a tidy profit.
+
+harvestcraft:listAllveggieGeneric.title=Eating Your Veggies
+harvestcraft:listAllveggieGeneric.desc=Doctors are recommending that people eat more fresh %s, thanks to our lobbying efforts, and now you can reap the profit.
+
+harvestcraft:listAllnutGeneric.title=Well, Nuts
+harvestcraft:listAllnutGeneric.desc=Have you ever heard of %1s Butter? Well, turns out it is incredibly lucrative, so please ship some raw %1s for us to process.
+
+harvestcraft:foodGeneric.title=Just Like Mom Made
+harvestcraft:foodGeneric.desc=People hardly have time to cook these days, so lets do it for them. Some %s should make people more nostalgic for home, and buying more product!
+

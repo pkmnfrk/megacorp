@@ -8,8 +8,9 @@ Too bad, someone already beat you to it, and now you owe them all your resources
 
 This mod is almost completely defined by its mod support. Out of the box, it supports many popular mods, and we intend to expand this list as time goes on:
 
-* Thermal Foundation (eg, the Thermal Expansion/COFH series)
+* Pam's HarvestCraft
 * EnderIO
+* Thermal Foundation (eg, the Thermal Expansion/COFH series)
 
 Is your favourite mod missing from that list? See below!
 

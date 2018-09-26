@@ -1,0 +1,8 @@
+{
+  "factories": [
+    "com.mike_caron.megacorp.impl.QuestFactories$PamsHarvestcraftFruit",
+    "com.mike_caron.megacorp.impl.QuestFactories$PamsHarvestcraftVeggies",
+    "com.mike_caron.megacorp.impl.QuestFactories$PamsHarvestcraftNuts",
+    "com.mike_caron.megacorp.impl.QuestFactories$PamsHarvestcraftFood"
+  ]
+}

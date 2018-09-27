@@ -22,36 +22,40 @@ public abstract class ContainerBase
 
     protected boolean changed = false;
     private NonNullList<ItemStack> knownSlots;
-
-    protected boolean useDefaultDetectBehaviour()
-    {
-        return true;
-    }
+    private boolean invChanged = false;
 
     @Override
     public void detectAndSendChanges()
     {
-        if(useDefaultDetectBehaviour())
+        super.detectAndSendChanges();
+
+        if(invChanged)
         {
-            super.detectAndSendChanges();
+            for(int i = 0; i < this.inventorySlots.size(); ++i)
+            {
+                ItemStack itemstack1 = this.inventorySlots.get(i).getStack();
+                for (int j = 0; j < this.listeners.size(); ++j)
+                {
+                    this.listeners.get(j).sendSlotContents(this, i, itemstack1);
+                }
+            }
+            invChanged = false;
         }
 
         changed = false;
 
-        if(!useDefaultDetectBehaviour())
+        for (int i = 0; i < inventorySlots.size(); i++)
         {
-            for (int i = 0; i < inventorySlots.size(); i++)
-            {
-                ItemStack invStack = inventorySlots.get(i).getStack();
-                ItemStack knownStack = knownSlots.get(i);
+            ItemStack invStack = inventorySlots.get(i).getStack();
+            ItemStack knownStack = knownSlots.get(i);
 
-                if(!ItemStack.areItemStacksEqual(invStack, knownStack))
-                {
-                    this.knownSlots.set(i, invStack);
-                    changed = true;
-                }
+            if(!ItemStack.areItemStacksEqual(invStack, knownStack))
+            {
+                this.knownSlots.set(i, invStack);
+                invChanged = true;
             }
         }
+
     }
 
     public ContainerBase(IInventory player)
@@ -174,10 +178,6 @@ public abstract class ContainerBase
 
     protected void onWriteNBT(NBTTagCompound tag)
     {
-        if(!useDefaultDetectBehaviour())
-        {
-            tag.setTag("Slots", ItemStackHelper.saveAllItems(new NBTTagCompound(), knownSlots, true));
-        }
     }
 
 
@@ -205,17 +205,7 @@ public abstract class ContainerBase
 
     protected void onReadNBT(NBTTagCompound tag)
     {
-        if(!useDefaultDetectBehaviour())
-        {
-            ItemStackHelper.loadAllItems(tag.getCompoundTag("Slots"), knownSlots);
 
-            for(int i = 0; i < knownSlots.size(); i++)
-            {
-                ItemStack stack = knownSlots.get(i);
-
-                inventorySlots.get(i).putStack(stack);
-            }
-        }
     }
 
     protected void triggerUpdate()

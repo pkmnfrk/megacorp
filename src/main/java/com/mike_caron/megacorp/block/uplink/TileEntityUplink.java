@@ -32,6 +32,7 @@ public class TileEntityUplink
             }
 
             markDirty();
+            //markAndNotify();
         }
     };
 

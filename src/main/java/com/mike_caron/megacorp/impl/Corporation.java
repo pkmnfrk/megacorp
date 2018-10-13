@@ -175,8 +175,8 @@ public class Corporation
         }
         else
         {
-            //otherwise, you have a 90% chance to get a low level quest
-            lowestLevel = rng.nextInt(10) != 0;
+            //otherwise, you have a 50% chance to get a low level quest
+            lowestLevel = rng.nextInt(2) != 0;
         }
         List<Quest> suitableQuests = QuestManager.INSTANCE.getQuests();
 
@@ -215,6 +215,8 @@ public class Corporation
         int level = getCompletedCountFor(quest.id);
         int qty = quest.getCountForLevel(level);
 
+        int profit = quest.getProfit(qty, level);
+
         int lower_quest_req = getRankInReward("lower_quest_requirements");
 
         float reduction = 1f - (lower_quest_req * 0.05f);
@@ -226,8 +228,6 @@ public class Corporation
             MegaCorpMod.logger.warn("Not returning quest, because it is bogus");
             return null;
         }
-
-        int profit = quest.getProfit(qty, level);
 
         int extra_profit = getRankInReward("extra_profits");
 

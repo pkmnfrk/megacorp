@@ -53,6 +53,7 @@ public abstract class ContainerBase
             {
                 this.knownSlots.set(i, invStack);
                 invChanged = true;
+                break;
             }
         }
 

@@ -21,9 +21,10 @@ public class Quest
     public final float multQty;
     public final float randomFactor;
     public final float levelScale;
+    public final float baseProfit;
     public final Map<String, Object> extraData = new HashMap<>();
 
-    public Quest(String id, ItemStack item, float baseQty, float multQty, float randomFactor, float levelScale)
+    public Quest(String id, ItemStack item, float baseQty, float multQty, float randomFactor, float levelScale, float baseProfit)
     {
         this.id = id;
         this.item = item;
@@ -32,9 +33,10 @@ public class Quest
         this.multQty = multQty;
         this.randomFactor = randomFactor;
         this.levelScale = levelScale;
+        this.baseProfit = baseProfit;
     }
 
-    public Quest(String id, String oreDict, float baseQty, float multQty, float randomFactor, float levelScale)
+    public Quest(String id, String oreDict, float baseQty, float multQty, float randomFactor, float levelScale, float baseProfit)
     {
         this.id = id;
         this.item = null;
@@ -43,6 +45,7 @@ public class Quest
         this.multQty = multQty;
         this.randomFactor = randomFactor;
         this.levelScale = levelScale;
+        this.baseProfit = baseProfit;
     }
 
     public static Quest fromJson(JsonObject obj)
@@ -70,6 +73,8 @@ public class Quest
 
         float randomFactor = 0;
         float levelScale = 1;
+        float baseProfit = 1;
+
         if(obj.has("rand"))
         {
             randomFactor = obj.get("rand").getAsFloat();
@@ -78,14 +83,18 @@ public class Quest
         {
             levelScale = obj.get("levelscale").getAsFloat();
         }
+        if(obj.has("baseprofit"))
+        {
+            baseProfit = obj.get("baseprofit").getAsFloat();
+        }
 
         if(item != null)
         {
-            return new Quest(id, item, baseQty, multQty, randomFactor, levelScale);
+            return new Quest(id, item, baseQty, multQty, randomFactor, levelScale, baseProfit);
         }
         else
         {
-            return new Quest(id, oreDict, baseQty, multQty, randomFactor, levelScale);
+            return new Quest(id, oreDict, baseQty, multQty, randomFactor, levelScale, baseProfit);
         }
     }
 
@@ -169,11 +178,9 @@ public class Quest
 
     public int getProfit(int totalQty, int level)
     {
-        double basePow = Math.log10(baseQty) - 1;
-        double totalPow = Math.log10(totalQty * (1 + level));
+        float actualProfit = totalQty * baseProfit * (float)Math.pow(1.1, level);
 
-        return (int)((totalPow - basePow) * 100);
-
+        return (int)actualProfit;
     }
 
     public NonNullList<ItemStack> possibleItems()

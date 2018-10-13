@@ -37,6 +37,8 @@ public final class QuestFactories
             return 1.5f;
         }
 
+        protected float baseProfit(int value) { return 1f; }
+
         @Override
         public List<Quest> createQuests()
         {
@@ -50,7 +52,8 @@ public final class QuestFactories
                     baseQty(kvp.getValue()),
                     multQty(kvp.getValue()),
                     randomFactor,
-                    levelScale
+                    levelScale,
+                    baseProfit(kvp.getValue())
                 );
 
                 q.extraData.put("material", kvp.getKey());
@@ -77,6 +80,12 @@ public final class QuestFactories
     public static abstract class ThermalFoundationBase
         extends ModMaterialBase
     {
+
+        @Override
+        protected float baseProfit(int value)
+        {
+            return 20f * 11f / value;
+        }
 
         public ThermalFoundationBase()
         {
@@ -168,6 +177,12 @@ public final class QuestFactories
         extends ModMaterialBase
     {
 
+        @Override
+        protected float baseProfit(int value)
+        {
+            return 20f * 4f / value;
+        }
+
         public EnderioBase()
         {
             modprefix = "enderio";
@@ -247,6 +262,25 @@ public final class QuestFactories
             return 1.8f;
         }
 
+        protected float baseProfit(ItemStack is)
+        {
+            // this stuff can vary wildly in value, so we'll base it off of its quality
+
+            if(is.getItem() instanceof ItemFood)
+            {
+                //Let's say the max theoretical is 30
+                ItemFood food = (ItemFood)is.getItem();
+
+                float amount = food.getHealAmount(is);
+                if(amount > 0)
+                {
+                    return (amount + 1) / 3f;
+                }
+            }
+
+            return 1.8f;
+        }
+
         @Override
         public List<Quest> createQuests()
         {
@@ -269,7 +303,8 @@ public final class QuestFactories
                     baseQty(is), //4f
                     multQty(is), //1.8f
                     0.5f,
-                    0.9f
+                    0.9f,
+                    baseProfit(is)
                 );
 
                 q.extraData.put("Name", is.getDisplayName());
@@ -326,6 +361,12 @@ public final class QuestFactories
         public PamsHarvestcraftFood()
         {
             dictPrefix = "food";
+        }
+
+        @Override
+        protected float baseProfit(ItemStack is)
+        {
+            return super.baseProfit(is) * 2;
         }
     }
 }

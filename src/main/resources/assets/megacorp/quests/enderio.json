@@ -4,37 +4,43 @@
       "id": "contemplatingtheinfinite",
       "item": "enderio:item_material:20",
       "baseqty": 2,
-      "multqty": 1.25
+      "multqty": 1.25,
+      "baseprofit": 5
     },
     {
       "id": "vibraniumcrystal",
       "item": "enderio:item_material:15",
       "baseqty": 3,
-      "multqty": 1.15
+      "multqty": 1.15,
+      "baseprofit": 7
     },
     {
       "id": "pulsingcrystal",
       "item": "enderio:item_material:14",
       "baseqty": 4,
-      "multqty": 1.15
+      "multqty": 1.15,
+      "baseprofit": 6
     },
     {
       "id": "endercrystal",
       "item": "enderio:item_material:16",
       "baseqty": 2,
-      "multqty": 1.15
+      "multqty": 1.15,
+      "baseprofit": 13
     },
     {
       "id": "enticingcrystal",
       "item": "enderio:item_material:17",
       "baseqty": 2,
-      "multqty": 1.15
+      "multqty": 1.15,
+      "baseprofit": 14
     },
     {
       "id": "weathercrystal",
       "item": "enderio:item_material:18",
       "baseqty": 1,
-      "multqty": 1.15
+      "multqty": 1.15,
+      "baseprofit": 17
     }
   ],
   "factories": [

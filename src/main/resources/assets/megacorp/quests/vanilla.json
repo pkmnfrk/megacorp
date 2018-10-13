@@ -13,14 +13,16 @@
       "baseqty": 4,
       "multqty": 1.45,
       "rand": 0.25,
-      "levelscale": 0.5
+      "levelscale": 0.5,
+      "baseprofit": 15
     },
     {
       "id": "egginc",
       "oredict": "egg",
       "baseqty": 16,
       "multqty": 1.5,
-      "rand": 0.25
+      "rand": 0.25,
+      "baseprofit": 0.5
     },
     {
       "id": "cowtippers",
@@ -28,49 +30,56 @@
       "baseqty": 8,
       "multqty": 1.5,
       "rand": 0.25,
-      "levelscale": 0.75
+      "levelscale": 0.75,
+      "baseprofit": 2
     },
     {
       "id": "bonepicking",
       "oredict": "bone",
       "baseqty": 12,
       "multqty": 1.4,
-      "rand": 0.25
+      "rand": 0.25,
+      "baseprofit": 1
     },
     {
       "id": "blazingrods",
       "oredict": "itemBlazeRod",
       "baseqty": 4,
       "rand": 0.25,
-      "levelscale": 0.6
+      "levelscale": 0.6,
+      "baseprofit": 4
     },
     {
       "id": "balancedapproach",
       "item": "minecraft:clay_ball",
       "baseqty": 5,
       "rand": 0.25,
-      "levelscale": 1
+      "levelscale": 1,
+      "baseprofit": 2
     },
     {
       "id": "cleancoal",
       "oredict": "itemCoal",
       "baseqty": 8,
       "rand": 0.35,
-      "levelscale": 0.8
+      "levelscale": 0.8,
+      "baseprofit": 1
     },
     {
       "id": "pretties",
       "oredict": "gemDiamond",
       "baseqty": 4,
       "rand": 0.5,
-      "levelscale": 1
+      "levelscale": 1,
+      "baseprofit": 10
     },
     {
       "id": "breath",
       "item": "minecraft:dragon_breath",
       "baseqty": 1,
       "rand": 0.1,
-      "levelscale": 0.5
+      "levelscale": 0.5,
+      "baseprofit": 20
     }
 
 

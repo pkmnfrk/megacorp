@@ -5,11 +5,13 @@ import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.api.ICorporation;
 import com.mike_caron.megacorp.api.IReward;
 import com.mike_caron.megacorp.api.events.CorporationRewardsChangedEvent;
+import com.mike_caron.megacorp.reward.BaseReward;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.INBTSerializable;
+import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -347,7 +349,7 @@ public class Corporation
         return 0;
     }
 
-    public Optional<Integer> getCostForReward(String id)
+    public Optional<Pair<Integer, BaseReward.CurrencyType>> getCostForReward(String id)
     {
         IReward reward = RewardManager.INSTANCE.getRewardWithId(id);
         if(reward == null)
@@ -360,7 +362,7 @@ public class Corporation
             return Optional.empty();
         }
 
-        return Optional.of(reward.costForRank(currentRank + 1));
+        return Optional.of(Pair.of(reward.costForRank(currentRank + 1), reward.getCurrency()));
     }
 
     public boolean purchaseReward(String id)

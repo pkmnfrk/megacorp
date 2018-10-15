@@ -11,6 +11,7 @@ public abstract class BaseReward implements IReward
     CostScale costScale;
     float costScaleFactor;
     int firstCost;
+    CurrencyType currencyType = CurrencyType.MONEY;
 
     protected BaseReward(String id)
     {
@@ -50,10 +51,9 @@ public abstract class BaseReward implements IReward
         return this.id;
     }
 
-    public enum CostScale
+    public CurrencyType getCurrency()
     {
-        MULT,
-        ADD
+        return this.currencyType;
     }
 
     protected void loadFromJson(JsonObject json)
@@ -62,5 +62,21 @@ public abstract class BaseReward implements IReward
         this.firstCost = json.get("firstCost").getAsInt();
         this.costScale = CostScale.valueOf(json.get("costScale").getAsString().toUpperCase());
         this.costScaleFactor = json.get("costScaleFactor").getAsFloat();
+        if(json.has("currency"))
+        {
+            this.currencyType = CurrencyType.valueOf(json.get("currency").getAsString().toUpperCase());
+        }
+    }
+
+    public enum CostScale
+    {
+        MULT,
+        ADD
+    }
+
+    public enum CurrencyType
+    {
+        MONEY,
+        DENSE_MONEY
     }
 }

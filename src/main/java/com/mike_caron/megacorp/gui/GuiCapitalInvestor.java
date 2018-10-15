@@ -13,6 +13,8 @@ import com.mike_caron.megacorp.network.CtoSMessage;
 import com.mike_caron.megacorp.util.StringUtil;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
 import java.awt.Color;
@@ -62,6 +64,21 @@ public class GuiCapitalInvestor
         //update fluid
         if(container.owner != null)
         {
+
+            if(selectedReward != null)
+            {
+                String curReward = selectedReward.id;
+
+                for(ContainerCapitalInvestor.RewardData r : container.rewardList)
+                {
+                    if(r.id.equals(curReward))
+                    {
+                        selectedReward = r;
+                        break;
+                    }
+                }
+            }
+
             ownedGroup.setVisible(true);
             insertCardLabel.setVisible(false);
 
@@ -169,8 +186,29 @@ public class GuiCapitalInvestor
             suffix = " " + StringUtil.toRoman(this.reward.nextRank);
 
             toolTip = new ArrayList<>();
-            toolTip.add(GuiUtil.i18n("tile.megacorp:capital_investor.rank", StringUtil.toRoman(reward.nextRank)));
-            toolTip.add(GuiUtil.i18n("tile.megacorp:capital_investor.cost", NumberFormat.getIntegerInstance().format(reward.nextRankCost)));
+            String tmp = GuiUtil.i18n("tile.megacorp:capital_investor.rank", StringUtil.toRoman(reward.nextRank));
+            toolTip.add(tmp);
+
+            tmp = NumberFormat.getIntegerInstance().format(reward.nextRankCost) + "mB";
+            if(reward.nextRankCost > container.fluidAmount)
+            {
+                tmp = TextFormatting.RED + tmp;
+            }
+
+            tmp = GuiUtil.i18n("tile.megacorp:capital_investor.cost", tmp);
+
+            toolTip.add(tmp);
+
+            Fluid fluid = FluidRegistry.getFluid(reward.currencyType.name().toLowerCase());
+            tmp = fluid.getLocalizedName(null);
+            if(!fluid.getName().equals(container.fluid))
+            {
+                tmp = TextFormatting.RED + tmp;
+            }
+            tmp = GuiUtil.i18n("tile.megacorp:capital_investor.currency", tmp);
+
+            toolTip.add(tmp);
+
             toolTip.add(String.format(rewardLocalization.description, (Object[])reward.nextRankVariables));
         }
 
@@ -187,22 +225,29 @@ public class GuiCapitalInvestor
         @Override
         public void draw(int width, int height, GuiList.ListItemState state)
         {
-            Color color = Color.BLACK;
+            Color backColor = Color.BLACK;
+            Color foreColor = Color.WHITE;
 
             if(state.isOver())
             {
-                color = Color.GRAY;
+                backColor = Color.GRAY;
             }
             else if(selectedReward == reward)
             {
-                color = Color.DARK_GRAY;
+                backColor = Color.DARK_GRAY;
             }
 
-            drawGradientRect(0, 0, width, height, color.getRGB(), color.getRGB());
+            if(!reward.available)
+            {
+                foreColor = Color.RED;
+            }
+
+            drawGradientRect(0, 0, width, height, backColor.getRGB(), backColor.getRGB());
 
             //drawItemStack(reward.item, 1, 1, "");
-            fontRenderer.drawString(rewardLocalization.title + suffix, 20, 5, Color.WHITE.getRGB());
+            fontRenderer.drawString(rewardLocalization.title + suffix, 20, 5, foreColor.getRGB());
 
+            GuiUtil.setGLColor(Color.WHITE);
             GuiUtil.bindTexture(GuiUtil.MISC_RESOURCES);
             GuiUtil.drawTexturePart(width - 14, 4, 10, 10, 80, 0, 256, 256);
         }

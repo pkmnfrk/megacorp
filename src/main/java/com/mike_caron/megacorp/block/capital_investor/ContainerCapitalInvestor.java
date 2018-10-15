@@ -6,6 +6,7 @@ import com.mike_caron.megacorp.api.IReward;
 import com.mike_caron.megacorp.api.events.CorporationRewardsChangedEvent;
 import com.mike_caron.megacorp.block.TEOwnedContainerBase;
 import com.mike_caron.megacorp.impl.RewardManager;
+import com.mike_caron.megacorp.reward.BaseReward;
 import com.mike_caron.megacorp.util.DataUtils;
 import com.mike_caron.megacorp.util.StringUtil;
 import net.minecraft.inventory.IInventory;
@@ -183,6 +184,9 @@ public class ContainerCapitalInvestor
             rd.nextRank = rd.currentRank + 1;
             rd.nextRankCost = reward.costForRank(rd.nextRank);
             rd.nextRankVariables = DataUtils.box(reward.getValuesForRank(rd.nextRank));
+            rd.currencyType = reward.getCurrency();
+            rd.available = reward.getCurrency().name().toLowerCase().equals(fluid) && rd.nextRankCost < fluidAmount;
+
             rewardList.add(rd);
         }
     }
@@ -204,21 +208,24 @@ public class ContainerCapitalInvestor
 
     public static class RewardData
     {
+        public static final int DATA_SIZE = 3;
         public String id;
         public int currentRank;
         public int nextRank;
         public int nextRankCost;
         public Integer[] nextRankVariables;
+        public BaseReward.CurrencyType currencyType;
+        public boolean available;
 
         public NBTTagCompound serialize()
         {
             NBTTagCompound ret = new NBTTagCompound();
 
-            int[] data = new int[nextRankVariables.length + 3];
-            data[0] = currentRank;
-            data[1] = nextRank;
-            data[2] = nextRankCost;
-            System.arraycopy(DataUtils.unbox(nextRankVariables), 0, data, 3, nextRankVariables.length);
+            int[] data = new int[nextRankVariables.length + DATA_SIZE];
+            data[0] = currentRank | (nextRank << 16);
+            data[1] = nextRankCost;
+            data[2] = currencyType.ordinal() | ((available ? 1 : 0) << 16);
+            System.arraycopy(DataUtils.unbox(nextRankVariables), 0, data, DATA_SIZE, nextRankVariables.length);
 
             ret.setString("id", id);
             ret.setIntArray("d", data);
@@ -232,11 +239,13 @@ public class ContainerCapitalInvestor
             int[] data = tag.getIntArray("d");
 
             ret.id = tag.getString("id");
-            ret.currentRank = data[0];
-            ret.nextRank = data[1];
-            ret.nextRankCost = data[2];
-            ret.nextRankVariables = new Integer[data.length - 3];
-            System.arraycopy(DataUtils.box(data), 3, ret.nextRankVariables, 0, ret.nextRankVariables.length);
+            ret.currentRank = data[0] & 0xffff;
+            ret.nextRank = data[0] >> 16;
+            ret.nextRankCost = data[1];
+            ret.currencyType = BaseReward.CurrencyType.values()[data[2] & 0xffff];
+            ret.available = (data[2] >> 16) != 0;
+            ret.nextRankVariables = new Integer[data.length - DATA_SIZE];
+            System.arraycopy(DataUtils.box(data), DATA_SIZE, ret.nextRankVariables, 0, ret.nextRankVariables.length);
 
             return ret;
         }

@@ -4,6 +4,7 @@ import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.block.TileEntityOwnedBase;
 import com.mike_caron.megacorp.fluid.ModFluids;
 import com.mike_caron.megacorp.impl.Corporation;
+import com.mike_caron.megacorp.reward.BaseReward;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -11,6 +12,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -25,7 +27,7 @@ public class TileEntityCapitalInvestor
         @Override
         public boolean canFillFluidType(FluidStack fluid)
         {
-            if(fluid == null || fluid.getFluid() != ModFluids.MONEY)
+            if(fluid == null || (fluid.getFluid() != ModFluids.MONEY && fluid.getFluid() != ModFluids.DENSE_MONEY))
                 return false;
 
             return super.canFillFluidType(fluid);
@@ -98,7 +100,7 @@ public class TileEntityCapitalInvestor
 
             if(corp == null) return;
 
-            Optional<Integer> cost = Optional.empty();
+            Optional<Pair<Integer, BaseReward.CurrencyType>> cost = Optional.empty();
             try
             {
                 cost = corp.getCostForReward(extraData);
@@ -110,7 +112,10 @@ public class TileEntityCapitalInvestor
 
             if(cost.isPresent())
             {
-                int c = cost.get();
+                int c = cost.get().getLeft();
+                BaseReward.CurrencyType m = cost.get().getRight();
+
+                if(!validateCurrency(m)) return;
 
                 FluidStack drained = fluidTank.drainInternal(c, false);
 
@@ -123,5 +128,18 @@ public class TileEntityCapitalInvestor
             }
 
         }
+    }
+
+    private boolean validateCurrency(BaseReward.CurrencyType currency)
+    {
+        if(fluidTank.getFluid() == null) return false;
+
+        switch (currency)
+        {
+            case MONEY: return fluidTank.getFluid().getFluid() == ModFluids.MONEY;
+            case DENSE_MONEY: return fluidTank.getFluid().getFluid() == ModFluids.DENSE_MONEY;
+        }
+
+        return false;
     }
 }

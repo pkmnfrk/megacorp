@@ -7,3 +7,5 @@ extra_profits.desc=Generate an extra %s%% profit for work order completion.
 faster_generation.title=Faster Generation
 faster_generation.desc=Allow the Profit Materializer to generate %smB every %s ticks.
 
+hunger_restoration.title=Hunger Restore
+hunger_restoration.desc=Restores 1 unit of hunger every %s seconds.

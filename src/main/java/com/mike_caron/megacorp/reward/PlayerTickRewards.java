@@ -28,6 +28,7 @@ public class PlayerTickRewards
                 }
 
                 handleHunger(player, corp, rewards);
+                handleHealth(player, corp, rewards);
             }
         }
 
@@ -39,7 +40,7 @@ public class PlayerTickRewards
 
         if(rank == 0) return;
 
-        int ticks = (int)(20 * 32 * Math.pow(0.5, rank));
+        int ticks = (int)(20 * 32 * Math.pow(0.5, rank - 1));
 
         int hungerTicks = rewards.getHungerRestore();
 
@@ -52,6 +53,8 @@ public class PlayerTickRewards
         {
             hungerTicks = 0;
 
+            //MegaCorpMod.logger.info("Feeding after {} ticks", ticks);
+
             FoodStats food = player.getFoodStats();
             if(food.needFood()){
                 food.setFoodLevel(food.getFoodLevel() + 1);
@@ -63,6 +66,33 @@ public class PlayerTickRewards
         }
 
         rewards.setHungerRestore(hungerTicks);
+    }
+
+    private static void handleHealth(EntityPlayer player, Corporation corp, IPlayerRewards rewards)
+    {
+        int rank = corp.getRankInReward("health_restoration");
+
+        if(rank == 0) return;
+
+        int ticks = (int)(20 * 32 * Math.pow(0.5, rank - 1));
+
+        int healthTicks = rewards.getHealthRestore();
+
+        healthTicks += 1;
+
+        if(healthTicks >= ticks)
+        {
+            healthTicks = 0;
+
+            //MegaCorpMod.logger.info("Healing after {} ticks", ticks);
+
+            if(player.getHealth() < player.getMaxHealth())
+            {
+                player.setHealth(player.getHealth() + 1);
+            }
+        }
+
+        rewards.setHealthRestore(healthTicks);
     }
 
 }

@@ -7,6 +7,6 @@ public interface IReward
     String getId();
     int numRanks();
     int costForRank(int rank);
-    int[] getValuesForRank(int rank);
+    float[] getValuesForRank(int rank);
     BaseReward.CurrencyType getCurrency();
 }

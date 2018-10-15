@@ -11,6 +11,7 @@ import com.mike_caron.megacorp.util.DataUtils;
 import com.mike_caron.megacorp.util.StringUtil;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagFloat;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -185,7 +186,7 @@ public class ContainerCapitalInvestor
             rd.nextRankCost = reward.costForRank(rd.nextRank);
             rd.nextRankVariables = DataUtils.box(reward.getValuesForRank(rd.nextRank));
             rd.currencyType = reward.getCurrency();
-            rd.available = reward.getCurrency().name().toLowerCase().equals(fluid) && rd.nextRankCost < fluidAmount;
+            rd.available = reward.getCurrency().name().toLowerCase().equals(fluid) && rd.nextRankCost <= fluidAmount;
 
             rewardList.add(rd);
         }
@@ -213,7 +214,7 @@ public class ContainerCapitalInvestor
         public int currentRank;
         public int nextRank;
         public int nextRankCost;
-        public Integer[] nextRankVariables;
+        public Float[] nextRankVariables;
         public BaseReward.CurrencyType currencyType;
         public boolean available;
 
@@ -221,14 +222,21 @@ public class ContainerCapitalInvestor
         {
             NBTTagCompound ret = new NBTTagCompound();
 
-            int[] data = new int[nextRankVariables.length + DATA_SIZE];
+            int[] data = new int[DATA_SIZE];
             data[0] = currentRank | (nextRank << 16);
             data[1] = nextRankCost;
             data[2] = currencyType.ordinal() | ((available ? 1 : 0) << 16);
-            System.arraycopy(DataUtils.unbox(nextRankVariables), 0, data, DATA_SIZE, nextRankVariables.length);
+
+            NBTTagList vars = new NBTTagList();
+            for (Float nextRankVariable : nextRankVariables)
+            {
+                vars.appendTag(new NBTTagFloat(nextRankVariable));
+            }
+            //System.arraycopy(DataUtils.unbox(nextRankVariables), 0, data, DATA_SIZE, nextRankVariables.length);
 
             ret.setString("id", id);
             ret.setIntArray("d", data);
+            ret.setTag("f", vars);
 
             return ret;
         }
@@ -244,8 +252,13 @@ public class ContainerCapitalInvestor
             ret.nextRankCost = data[1];
             ret.currencyType = BaseReward.CurrencyType.values()[data[2] & 0xffff];
             ret.available = (data[2] >> 16) != 0;
-            ret.nextRankVariables = new Integer[data.length - DATA_SIZE];
-            System.arraycopy(DataUtils.box(data), DATA_SIZE, ret.nextRankVariables, 0, ret.nextRankVariables.length);
+
+            NBTTagList vars = tag.getTagList("f", Constants.NBT.TAG_FLOAT);
+            ret.nextRankVariables = new Float[vars.tagCount()];
+            for(int i = 0; i < vars.tagCount(); i++)
+            {
+                ret.nextRankVariables[i] = vars.getFloatAt(i);
+            }
 
             return ret;
         }

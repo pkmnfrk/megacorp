@@ -208,8 +208,21 @@ public class GuiCapitalInvestor
             tmp = GuiUtil.i18n("tile.megacorp:capital_investor.currency", tmp);
 
             toolTip.add(tmp);
-
-            toolTip.add(String.format(rewardLocalization.description, (Object[])reward.nextRankVariables));
+            String[] vars = new String[reward.nextRankVariables.length];
+            NumberFormat floatFormat = NumberFormat.getNumberInstance();
+            NumberFormat intFormat = NumberFormat.getIntegerInstance();
+            for(int i = 0; i < vars.length; i++)
+            {
+                //if(reward.nextRankVariables[i] != (int)reward.nextRankVariables[i].floatValue())
+                //{
+                    vars[i] = floatFormat.format(reward.nextRankVariables[i]);
+                //}
+                //else
+                //{
+                //    vars[i] = intFormat.format(reward.nextRankVariables[i]);
+                //}
+            }
+            toolTip.add(String.format(rewardLocalization.description, (Object[])vars));
         }
 
         @Override

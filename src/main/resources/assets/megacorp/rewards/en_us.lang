@@ -8,4 +8,7 @@ faster_generation.title=Faster Generation
 faster_generation.desc=Allow the Profit Materializer to generate %smB every %s ticks.
 
 hunger_restoration.title=Hunger Restore
-hunger_restoration.desc=Restores 1 unit of hunger every %s seconds.
+hunger_restoration.desc=Restores 1 unit of hunger every %s seconds
+
+health_restoration.title=Health Restore
+health_restoration.desc=Restores 1/2 heart every %s seconds.

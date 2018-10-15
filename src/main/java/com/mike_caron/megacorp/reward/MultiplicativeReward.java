@@ -16,11 +16,11 @@ public class MultiplicativeReward
     }
 
     @Override
-    public int[] getValuesForRank(int rank)
+    public float[] getValuesForRank(int rank)
     {
-        int value = (int)(baseValue * (float)Math.pow(multiplier, rank - 1));
+        float value = baseValue * (float)Math.pow(multiplier, rank - 1);
 
-        return new int[] { value };
+        return new float[] { value };
     }
 
     public static class Factory

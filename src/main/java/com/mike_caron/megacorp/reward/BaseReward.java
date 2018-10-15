@@ -44,7 +44,7 @@ public abstract class BaseReward implements IReward
     }
 
     @Override
-    public abstract int[] getValuesForRank(int rank);
+    public abstract float[] getValuesForRank(int rank);
 
     public String getId()
     {

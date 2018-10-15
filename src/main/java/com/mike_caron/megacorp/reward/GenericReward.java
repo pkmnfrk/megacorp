@@ -14,9 +14,9 @@ public class GenericReward extends BaseReward
     }
 
     @Override
-    public int[] getValuesForRank(int rank)
+    public float[] getValuesForRank(int rank)
     {
-        return new int[] { rankValue * rank };
+        return new float[] { rankValue * rank };
     }
 
     public static class Factory

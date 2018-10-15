@@ -26,9 +26,31 @@ public class DataUtils
     }
 
     @Nonnull
+    public static Float[] box(@Nonnull float[] array)
+    {
+        Float[] ret = new Float[array.length];
+        for(int i = 0; i < array.length; i++)
+        {
+            ret[i] = array[i];
+        }
+        return ret;
+    }
+
+    @Nonnull
     public static int[] unbox(@Nonnull Integer[] array)
     {
         return Stream.of(array).mapToInt(Integer::intValue).toArray();
+    }
+
+    @Nonnull
+    public static float[] unbox(@Nonnull Float[] array)
+    {
+        float[] ret = new float[array.length];
+        for(int i = 0; i < array.length; i++)
+        {
+            ret[i] = array[i];
+        }
+        return ret;
     }
 
     public static NBTBase toNBT(Fraction fraction)

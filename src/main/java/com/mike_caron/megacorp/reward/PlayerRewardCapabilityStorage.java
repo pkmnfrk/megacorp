@@ -18,6 +18,7 @@ public class PlayerRewardCapabilityStorage
 
         ret.setInteger("hungerRestore", iPlayerRewards.getHungerRestore());
         ret.setInteger("damageTimer", iPlayerRewards.getDamageTimer());
+        ret.setInteger("healthRestore", iPlayerRewards.getHealthRestore());
 
         return ret;
     }
@@ -43,6 +44,15 @@ public class PlayerRewardCapabilityStorage
         else
         {
             iPlayerRewards.setDamageTimer(0);
+        }
+
+        if(tag.hasKey("healthRestore"))
+        {
+            iPlayerRewards.setHealthRestore(tag.getInteger("healthRestore"));
+        }
+        else
+        {
+            iPlayerRewards.setHealthRestore(0);
         }
     }
 }

@@ -17,11 +17,11 @@ public class FractionalReward
     }
 
     @Override
-    public int[] getValuesForRank(int rank)
+    public float[] getValuesForRank(int rank)
     {
         Fraction frac = baseValue.add(valuePerRank.multiplyBy(Fraction.getFraction(rank)));
 
-        return new int[] { frac.getNumerator(), frac.getDenominator() };
+        return new float[] { frac.getNumerator(), frac.getDenominator() };
     }
 
     public static class Factory

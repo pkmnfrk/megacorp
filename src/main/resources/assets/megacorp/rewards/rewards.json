@@ -28,8 +28,19 @@
   {
     "id": "hunger_restoration",
     "class": "com.mike_caron.megacorp.reward.MultiplicativeReward$Factory",
-    "ranks": 6,
+    "ranks": 8,
     "firstCost": 100,
+    "costScale": "mult",
+    "costScaleFactor": 2,
+    "currency": "dense_money",
+    "baseValue": 32,
+    "multiplier": 0.5
+  },
+  {
+    "id": "health_restoration",
+    "class": "com.mike_caron.megacorp.reward.MultiplicativeReward$Factory",
+    "ranks": 8,
+    "firstCost": 200,
     "costScale": "mult",
     "costScaleFactor": 2,
     "currency": "dense_money",

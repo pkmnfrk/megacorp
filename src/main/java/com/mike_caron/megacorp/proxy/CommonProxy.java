@@ -50,8 +50,10 @@ public class CommonProxy
     @SubscribeEvent
     public static void playerTick(TickEvent.PlayerTickEvent event)
     {
-        PlayerTickRewards.handle(event.player);
-
+        if(event.phase == TickEvent.Phase.START)
+        {
+            PlayerTickRewards.handle(event.player);
+        }
     }
 
     @SubscribeEvent

@@ -5,6 +5,7 @@ public class PlayerRewards
 {
     private int hungerRestore;
     private int damageTimer;
+    private int healthRestore;
 
     public int getDamageTimer()
     {
@@ -26,5 +27,17 @@ public class PlayerRewards
     public void setHungerRestore(int ticks)
     {
         hungerRestore = ticks;
+    }
+
+    @Override
+    public int getHealthRestore()
+    {
+        return healthRestore;
+    }
+
+    @Override
+    public void setHealthRestore(int ticks)
+    {
+        healthRestore = ticks;
     }
 }

@@ -150,6 +150,12 @@ public final class QuestFactories
         {
             return Math.max(1, value * 8f / 11);
         }
+
+        @Override
+        protected float baseProfit(int value)
+        {
+            return super.baseProfit(value) * 0.5f;
+        }
     }
 
     public static class ThermalFoundationCoins
@@ -170,6 +176,12 @@ public final class QuestFactories
         protected float multQty(int value)
         {
             return Math.max(1.5f, value * 4f / 11f);
+        }
+
+        @Override
+        protected float baseProfit(int value)
+        {
+            return super.baseProfit(value) * 0.5f;
         }
     }
 

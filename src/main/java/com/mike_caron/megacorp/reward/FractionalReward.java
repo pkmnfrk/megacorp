@@ -9,8 +9,7 @@ public class FractionalReward
     extends BaseReward
 {
     Fraction baseValue;
-    int numeratorPerRank;
-    int denominatorPerRank;
+    Fraction valuePerRank;
 
     protected FractionalReward(String id)
     {
@@ -20,7 +19,7 @@ public class FractionalReward
     @Override
     public int[] getValuesForRank(int rank)
     {
-        Fraction frac = Fraction.getReducedFraction(rank + 2, 8);
+        Fraction frac = baseValue.add(valuePerRank.multiplyBy(Fraction.getFraction(rank)));
 
         return new int[] { frac.getNumerator(), frac.getDenominator() };
     }
@@ -40,15 +39,28 @@ public class FractionalReward
                 ret.baseValue = Fraction.getFraction(json.get("baseValue").getAsString());
             }
 
-            if(json.has("numPerRank"))
+            if(json.has("valuePerRank"))
             {
-                ret.numeratorPerRank = json.get("numPerRank").getAsInt();
+                ret.valuePerRank = Fraction.getFraction(json.get("valuePerRank").getAsString());
+            }
+            else
+            {
+                int num = 1, den = 1;
+
+                if(json.has("numPerRank"))
+                {
+                    num = json.get("numPerRank").getAsInt();
+                }
+
+                if(json.has("denomPerRank"))
+                {
+                    den = json.get("denomPerRank").getAsInt();
+                }
+
+                ret.valuePerRank = Fraction.getFraction(num, den);
             }
 
-            if(json.has("denomPerRank"))
-            {
-                ret.denominatorPerRank = json.get("denomPerRank").getAsInt();
-            }
+
 
             return ret;
         }

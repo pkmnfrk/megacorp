@@ -23,7 +23,7 @@
     "costScale": "add",
     "costScaleFactor": 500,
     "baseValue": "2/8",
-    "numPerRank": 1
+    "valuePerRank": "1/8"
   }
 ]
 

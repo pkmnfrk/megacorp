@@ -187,15 +187,16 @@ public class Corporation
         if(lowestLevel)
         {
             suitableQuests.removeIf(q -> questLog.containsKey(q.id) && questLog.get(q.id) >= level);
-            if(suitableQuests.isEmpty())
-            {
-                //they've completed all quests to the same level... improbable, but whatever
-                suitableQuests = QuestManager.INSTANCE.getQuests();
-            }
         }
         else
         {
             suitableQuests.removeIf(q -> !questLog.containsKey(q.id) || questLog.get(q.id) < level);
+        }
+
+        if(suitableQuests.isEmpty())
+        {
+            //they've completed all quests to the same level... improbable, but whatever
+            suitableQuests = QuestManager.INSTANCE.getQuests();
         }
 
         int chosenQuest = rng.nextInt(suitableQuests.size());

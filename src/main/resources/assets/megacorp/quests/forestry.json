@@ -14,7 +14,7 @@
     },
     {
       "id": "honeydrop",
-      "item": "forestry:honeydrop",
+      "item": "forestry:honey_drop",
       "baseqty": 8,
       "rand": 0.25,
       "levelscale": 0.5,

@@ -19,6 +19,7 @@
     {
       "id": "egginc",
       "oredict": "egg",
+      "fallback": "minecraft:egg",
       "baseqty": 16,
       "multqty": 1.5,
       "rand": 0.25,
@@ -27,6 +28,7 @@
     {
       "id": "cowtippers",
       "oredict": "leather",
+      "fallback": "minecraft:leather",
       "baseqty": 8,
       "multqty": 1.5,
       "rand": 0.25,
@@ -44,6 +46,7 @@
     {
       "id": "blazingrods",
       "oredict": "itemBlazeRod",
+      "fallback": "minecraft:blaze_rod",
       "baseqty": 4,
       "rand": 0.25,
       "levelscale": 0.6,
@@ -60,6 +63,7 @@
     {
       "id": "cleancoal",
       "oredict": "itemCoal",
+      "fallback": "minecraft:coal",
       "baseqty": 8,
       "rand": 0.35,
       "levelscale": 0.8,
@@ -68,10 +72,11 @@
     {
       "id": "pretties",
       "oredict": "gemDiamond",
+      "fallback": "minecraft:diamond",
       "baseqty": 4,
       "rand": 0.5,
       "levelscale": 1,
-      "baseprofit": 10
+      "baseprofit": 12
     },
     {
       "id": "breath",

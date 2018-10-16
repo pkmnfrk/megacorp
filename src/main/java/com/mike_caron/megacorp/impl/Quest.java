@@ -65,6 +65,7 @@ public class Quest
         String id = obj.get("id").getAsString();
         List<ItemStack> item = new ArrayList<>();
         String oreDict = null;
+        String oreDictFallback = null;
 
         if(obj.has("item")){
             ItemStack is = getStackFromTag(obj.get("item").getAsString());
@@ -75,6 +76,10 @@ public class Quest
         else if(obj.has("oredict"))
         {
             oreDict = obj.get("oredict").getAsString();
+            if(obj.has("fallback"))
+            {
+                oreDictFallback = obj.get("fallback").getAsString();
+            }
         }
         else if(obj.has("items"))
         {
@@ -111,7 +116,13 @@ public class Quest
             baseProfit = obj.get("baseprofit").getAsFloat();
         }
 
-        if(item != null)
+        if(oreDictFallback != null && !OreDictionary.doesOreNameExist(oreDict))
+        {
+            oreDict = null;
+            item.add(getStackFromTag(oreDictFallback));
+        }
+
+        if(!item.isEmpty())
         {
             return new Quest(id, item, baseQty, multQty, randomFactor, levelScale, baseProfit);
         }

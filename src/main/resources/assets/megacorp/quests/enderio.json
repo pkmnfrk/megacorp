@@ -44,7 +44,7 @@
     }
   ],
   "factories": [
-    "com.mike_caron.megacorp.impl.suest.Enderio$Ingots",
-    "com.mike_caron.megacorp.impl.suest.Enderio$Balls"
+    "com.mike_caron.megacorp.impl.quests.Enderio$Ingots",
+    "com.mike_caron.megacorp.impl.quests.Enderio$Balls"
   ]
 }

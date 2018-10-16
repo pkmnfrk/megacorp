@@ -79,3 +79,8 @@ harvestcraft:listAllnutGeneric.desc=Have you ever heard of %1$s Butter? Well, tu
 harvestcraft:foodGeneric.title=Just Like Mom Used To Make
 harvestcraft:foodGeneric.desc=People hardly have time to cook these days, so lets do it for them. Some %s should make people more nostalgic for home, and buying more product!
 
+forestry:bee_drone_geGeneric.title=Droning On
+forestry:bee_drone_geGeneric.desc=In the pursuit of novel genetic improvements, we require sources of genetic diversity. In practical terms, we need some bee samples. Only drones are required, and they may be of any species.
+
+forestry:thermionic_tubesGeneric.title=Modern Tech
+forestry:thermionic_tubesGeneric.desc=A certain high-tech customer has asked for the latest in cutting edge %s technology. Can you look into this?

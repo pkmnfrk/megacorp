@@ -1,6 +1,7 @@
 package com.mike_caron.megacorp.impl;
 
 import com.google.common.base.Preconditions;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mike_caron.megacorp.MegaCorpMod;
 import net.minecraft.item.Item;
@@ -8,14 +9,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class Quest
 {
     public final String id;
-    private final ItemStack item;
+    private final List<ItemStack> item;
     private final String oreDict;
     public final float baseQty;
     public final float multQty;
@@ -27,7 +26,20 @@ public class Quest
     public Quest(String id, ItemStack item, float baseQty, float multQty, float randomFactor, float levelScale, float baseProfit)
     {
         this.id = id;
-        this.item = item;
+        this.item = new ArrayList<>();
+        this.item.add(item);
+        this.oreDict = null;
+        this.baseQty = baseQty;
+        this.multQty = multQty;
+        this.randomFactor = randomFactor;
+        this.levelScale = levelScale;
+        this.baseProfit = baseProfit;
+    }
+
+    public Quest(String id, Collection<ItemStack> item, float baseQty, float multQty, float randomFactor, float levelScale, float baseProfit)
+    {
+        this.id = id;
+        this.item = new ArrayList<>(item);
         this.oreDict = null;
         this.baseQty = baseQty;
         this.multQty = multQty;
@@ -51,17 +63,28 @@ public class Quest
     public static Quest fromJson(JsonObject obj)
     {
         String id = obj.get("id").getAsString();
-        ItemStack item = null;
+        List<ItemStack> item = new ArrayList<>();
         String oreDict = null;
 
         if(obj.has("item")){
-            item = getStackFromTag(obj.get("item").getAsString());
-            if(item == null)
+            ItemStack is = getStackFromTag(obj.get("item").getAsString());
+            if(is == null)
                 return null;
+            item.add(is);
         }
         else if(obj.has("oredict"))
         {
             oreDict = obj.get("oredict").getAsString();
+        }
+        else if(obj.has("items"))
+        {
+            for(JsonElement i : obj.get("items").getAsJsonArray())
+            {
+                ItemStack is = getStackFromTag(i.getAsString());
+                if(is == null)
+                    continue;
+                item.add(is);
+            }
         }
 
         float baseQty = obj.get("baseqty").getAsFloat();
@@ -188,6 +211,8 @@ public class Quest
         if(this.oreDict != null)
             return OreDictionary.getOres(this.oreDict);
 
-        return NonNullList.from(ItemStack.EMPTY, this.item);
+        NonNullList<ItemStack> ret = NonNullList.create();
+        ret.addAll(this.item);
+        return ret;
     }
 }

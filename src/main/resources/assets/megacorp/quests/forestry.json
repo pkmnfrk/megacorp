@@ -1,0 +1,32 @@
+{
+  "factories": [
+    "com.mike_caron.megacorp.impl.quests.Forestry$Tubes",
+    "com.mike_caron.megacorp.impl.quests.Forestry$Bees"
+  ],
+  "quests": [
+    {
+      "id": "mind_your_beeswax",
+      "item": "forestry:beeswax",
+      "baseqty": 8,
+      "rand": 0.25,
+      "levelscale": 0.5,
+      "baseprofit": 2
+    },
+    {
+      "id": "honeydrop",
+      "item": "forestry:honeydrop",
+      "baseqty": 8,
+      "rand": 0.25,
+      "levelscale": 0.5,
+      "baseprofit": 2
+    },
+    {
+      "id": "honeydew",
+      "item": "forestry:honeydew",
+      "baseqty": 8,
+      "rand": 0.25,
+      "levelscale": 0.5,
+      "baseprofit": 2
+    }
+  ]
+}

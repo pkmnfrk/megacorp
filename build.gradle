@@ -47,10 +47,14 @@ repositories {
         name = "Progwml6 maven"
         url = "http://dvs1.progwml6.com/files/maven"
     }
+    //maven {
+    //    // location of a maven mirror for JEI files, as a fallback
+    //    name = "ModMaven"
+    //    url = "modmaven.k-4u.nl"
+    //}
     maven {
-        // location of a maven mirror for JEI files, as a fallback
-        name = "ModMaven"
-        url = "modmaven.k-4u.nl"
+        name = "Forestry"
+        url = "http://maven.ic2.player.to"
     }
 }
 
@@ -64,6 +68,9 @@ dependencies {
     deobfProvided "mezz.jei:jei_${mcversion}:${jei_version}:api"
     // at runtime, use the full JEI jar
     runtime "mezz.jei:jei_${mcversion}:${jei_version}"
+
+    // compile against the Forestry API but do not include it at runtime
+    provided "net.sengir.forestry:forestry_${mcversion}:${forestry_version}:api"
 
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..

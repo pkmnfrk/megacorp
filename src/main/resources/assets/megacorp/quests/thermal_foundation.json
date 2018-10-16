@@ -1,8 +1,8 @@
 {
   "factories": [
-    "com.mike_caron.megacorp.impl.QuestFactories$ThermalFoundationIngots",
-    "com.mike_caron.megacorp.impl.QuestFactories$ThermalFoundationGears",
-    "com.mike_caron.megacorp.impl.QuestFactories$ThermalFoundationPlates",
-    "com.mike_caron.megacorp.impl.QuestFactories$ThermalFoundationCoins"
+    "com.mike_caron.megacorp.impl.quests.ThermalFoundation$Ingots",
+    "com.mike_caron.megacorp.impl.quests.ThermalFoundation$Gears",
+    "com.mike_caron.megacorp.impl.quests.ThermalFoundation$Plates",
+    "com.mike_caron.megacorp.impl.quests.ThermalFoundation$Coins"
   ]
 }

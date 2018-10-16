@@ -230,7 +230,7 @@ public class QuestManager
         }
     }
 
-    QuestLocalization getLocalizationFor(String locale, String questId)
+    public QuestLocalization getLocalizationFor(String locale, String questId)
     {
         if(!localizations.containsKey(locale))
             locale = "en_us";
@@ -251,7 +251,7 @@ public class QuestManager
      * @param questId the string to look up
      */
 
-    boolean localizationExists(String locale, String questId)
+    public boolean localizationExists(String locale, String questId)
     {
         if(!localizations.containsKey(locale))
             locale = "en_us";

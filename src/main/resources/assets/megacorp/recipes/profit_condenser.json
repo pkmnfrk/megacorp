@@ -1,0 +1,22 @@
+{
+  "type": "megacorp:fluid",
+  "pattern": [
+    "mpm",
+    "mom",
+    "mpm"
+  ],
+  "key": {
+    "o": {
+      "item": "megacorp:profit_materializer"
+    },
+    "m": {
+      "item": "#FLUID_MONEY"
+    },
+    "p": {
+      "item": "minecraft:piston"
+    }
+  },
+  "result": {
+    "item": "megacorp:profit_condenser"
+  }
+}

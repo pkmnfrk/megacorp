@@ -28,7 +28,7 @@ public final class QuestFactories
         protected String type = "";
 
         private float randomFactor = 0.25f;
-        private float levelScale = 0.9f;
+        protected float levelScale = 0.9f;
 
         protected float baseQty(int value)
         {

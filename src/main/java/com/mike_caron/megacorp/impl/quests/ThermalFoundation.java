@@ -7,12 +7,16 @@ public abstract class ThermalFoundation
     @Override
     protected float baseProfit(int value)
     {
-        return 20f * 11f / value;
+        return 20f * 11f / value / 9;
     }
+
+
 
     public ThermalFoundation()
     {
         modprefix = "thermalfoundation";
+
+        levelScale = 0.75f;
 
         materials.put("Iridium", 1);
         materials.put("Platinum", 1);
@@ -55,7 +59,7 @@ public abstract class ThermalFoundation
         @Override
         protected float baseQty(int value)
         {
-            return 2f;
+            return super.baseQty(value) * 4;
         }
     }
 
@@ -91,13 +95,7 @@ public abstract class ThermalFoundation
         @Override
         protected float baseQty(int value)
         {
-            return 3;
-        }
-
-        @Override
-        protected float multQty(int value)
-        {
-            return 1.5f;
+            return super.baseQty(value) * 3;
         }
 
         @Override

@@ -2,14 +2,27 @@
 
 Ever wanted to run your own small business, and grow it into a massive corporation?
 
-Too bad, someone already beat you to it, and now you owe them all your resources!
+This is your chance! Take our exclusive* offer now and set up your own franchise, with all the profits** and benefits*** we have to offer!
+
+ \* - Not exclusive
+ 
+ ** - Profits are set at head office discretion
+ 
+ *** - All benefits must be purchased by the franchisee 
+
+Join our discord!
+
+
+[![Discord](https://img.shields.io/discord/501821606062981121.svg?style=plastic&logo=discord)](https://discord.gg/S254Nuh)
+
 
 ## Mod Support
 
 This mod is almost completely defined by its mod support. Out of the box, it supports many popular mods, and we intend to expand this list as time goes on:
 
-* Pam's HarvestCraft
 * EnderIO
+* Forestry
+* Pam's HarvestCraft
 * Thermal Foundation (eg, the Thermal Expansion/COFH series)
 
 Is your favourite mod missing from that list? See below!

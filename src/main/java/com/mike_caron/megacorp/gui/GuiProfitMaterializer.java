@@ -55,11 +55,7 @@ public class GuiProfitMaterializer
             fluid.setFluid(FluidRegistry.getFluid(container.fluid));
 
             profitRemainingLabel.setPlaceholder(0, NumberFormat.getIntegerInstance().format(container.profitRemaining));
-            if(container.speed != null)
-            {
-                speedLabel.setPlaceholder(0, NumberFormat.getIntegerInstance().format(container.speed.getNumerator()));
-                speedLabel.setPlaceholder(1, NumberFormat.getIntegerInstance().format(container.speed.getDenominator()));
-            }
+            speedLabel.setPlaceholder(0, NumberFormat.getNumberInstance().format(container.speed));
         }
     }
 

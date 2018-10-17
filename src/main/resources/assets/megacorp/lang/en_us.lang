@@ -45,11 +45,11 @@ item.megacorp:black_card.name=Black Card
 item.megacorp:black_card.description=This mystical card is capable of producing profit at will.\n\nUse on the MegaCorp Uplink.
 
 tile.megacorp:profit_materializer.name=Profit Materializer
-item.megacorp:profit_materializer.description=The Profit Materializer is responsible for extracting collected profit from the MegaCorp and producing liquid assets in the form of Money. It is capable of producing about 5mb of Money per second.
+item.megacorp:profit_materializer.description=The Profit Materializer is responsible for extracting collected profit from the MegaCorp and producing liquid assets in the form of Money. It is capable of producing about 10mB of Money per second.
 tile.megacorp:profit_materializer.remaining=Profit Remaining:
 tile.megacorp:profit_materializer.remainingval=$%s
 tile.megacorp:profit_materializer.speed=Speed:
-tile.megacorp:profit_materializer.speedval=%s per %s tick(s)
+tile.megacorp:profit_materializer.speedval=%smB per tick
 
 
 tile.megacorp:misc.empty=Empty
@@ -59,7 +59,7 @@ tile.megacorp:misc.insertcard=Please activate this machine with a Corporate Card
 
 
 item.megacorp:bottle.empty=Empty Bottle
-item.megacorp:bottle.filled=Bottle of %s (%smb)
+item.megacorp:bottle.filled=Bottle of %s (%smB)
 item.megacorp:bottle.description=A small, highly-disposable plastic bottle used to hold liquid. Vanishes when emptied. Primarily used by machines to salvage liquid that might be destroyed when they are picked up.
 
 tile.megacorp:shipping_depot.name=Shipping Depot
@@ -76,7 +76,7 @@ tile.megacorp:shipping_depot.reroll=Discard work order and get new one
 tile.megacorp:liquid_shipping_depot.name=Liquid Shipping Depot
 tile.megacorp:liquid_shipping_depot.description=The Liquid Shipping Depot is the place where work orders for liquids are fulfilled. Simply deposit the desired liquids, and watch the progress bar fill up. Profit is generated upon completion of a work order.
 tile.megacorp:liquid_shipping_depot.liquid=Liquid: %s
-tile.megacorp:liquid_shipping_depot.quantity=Quantity: %smb
+tile.megacorp:liquid_shipping_depot.quantity=Quantity: %smB
 
 item.megacorp:work_voucher.name=Work Voucher
 item.megacorp:work_voucher.tooltip_blank=Blank?

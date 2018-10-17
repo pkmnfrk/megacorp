@@ -1,9 +1,10 @@
 package com.mike_caron.megacorp.block.profit_materializer;
 
 import com.mike_caron.megacorp.api.ICorporation;
-import com.mike_caron.megacorp.api.events.CorporationRewardsChangedEvent;
+import com.mike_caron.megacorp.api.IReward;
 import com.mike_caron.megacorp.block.TileEntityOwnedBase;
 import com.mike_caron.megacorp.fluid.ModFluids;
+import com.mike_caron.megacorp.impl.RewardManager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -11,8 +12,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.apache.commons.lang3.math.Fraction;
 
 import javax.annotation.Nullable;
 
@@ -31,7 +30,9 @@ public class TileEntityProfitMaterializer
     };
 
     private int timer = 0;
-    private Fraction speed = null;
+    private float moneyPerTick = 0f;
+
+    private float accumulation = 0f;
 
     public TileEntityProfitMaterializer()
     {
@@ -53,6 +54,11 @@ public class TileEntityProfitMaterializer
         {
             timer = compound.getInteger("timer");
         }
+
+        if(compound.hasKey("accumulation"))
+        {
+            accumulation = compound.getFloat("accumulation");
+        }
     }
 
     @Override
@@ -62,6 +68,7 @@ public class TileEntityProfitMaterializer
 
         ret.setTag("tank", fluidTank.writeToNBT(new NBTTagCompound()));
         ret.setInteger("timer", timer);
+        ret.setFloat("accumulation", accumulation);
 
         return ret;
     }
@@ -87,15 +94,25 @@ public class TileEntityProfitMaterializer
         return super.getCapability(capability, facing);
     }
 
-    private Fraction calculateSpeed()
+    private float calculateSpeed()
     {
         ICorporation corp = getCorporation();
 
-        if(corp == null) return Fraction.ONE_QUARTER;
+        if(corp != null)
+        {
+            int rewardRank = corp.getRankInReward("faster_generation");
 
-        int rewardRank = corp.getRankInReward("faster_generation");
+            IReward reward = RewardManager.INSTANCE.getRewardWithId("faster_generation");
 
-        return Fraction.getReducedFraction(rewardRank + 2, 8);
+            if (reward != null)
+            {
+                float[] vals = reward.getValuesForRank(rewardRank);
+
+                return vals[0];
+            }
+        }
+
+        return 0.25f;
     }
 
     @Override
@@ -107,30 +124,32 @@ public class TileEntityProfitMaterializer
 
         if(corp == null) return;
 
-        if(speed == null)
-        {
-            speed = calculateSpeed();
-        }
+        moneyPerTick = calculateSpeed();
 
-        timer += 1;
+        //timer += 1;
 
-        int amount = Math.min(fluidTank.getCapacity() - fluidTank.getFluidAmount(), speed.getNumerator());
+        //basically, in the case of fractions, we want to hang on to the fraction
+        //so that next tick we can try and generate an extra mb or whatever
+        accumulation += moneyPerTick;
+        int amount = (int)accumulation;
+        accumulation -= amount;
+
+        amount = Math.min(fluidTank.getCapacity() - fluidTank.getFluidAmount(), amount);
+
         if(amount > 0)
         {
-            if(timer > speed.getDenominator())
+            amount = corp.consumeProfit(amount);
+
+            if(amount > 0)
             {
-                amount = corp.consumeProfit(amount);
-
-                if(amount > 0)
-                {
-                    this.fluidTank.fillInternal(new FluidStack(ModFluids.MONEY, amount), true);
-                }
-                timer = 0;
+                this.fluidTank.fillInternal(new FluidStack(ModFluids.MONEY, amount), true);
             }
-        }
 
+            markDirty();
+        }
     }
 
+    /*
     @SubscribeEvent
     public void onRewardsChanged(CorporationRewardsChangedEvent event)
     {
@@ -138,12 +157,13 @@ public class TileEntityProfitMaterializer
 
         if(event.owner.equals(owner) && event.rewardId.equals("faster_generation"))
         {
-            speed = calculateSpeed();
+            moneyPerTick = calculateSpeed();
         }
     }
+    */
 
-    public Fraction getSpeed()
+    public float getMoneyPerTick()
     {
-        return speed;
+        return moneyPerTick;
     }
 }

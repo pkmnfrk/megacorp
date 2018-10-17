@@ -6,7 +6,8 @@ import com.mike_caron.megacorp.api.IRewardFactory;
 
 public class GenericReward extends BaseReward
 {
-    int rankValue;
+    float startValue = 0;
+    float rankValue;
 
     protected GenericReward(String id)
     {
@@ -16,7 +17,7 @@ public class GenericReward extends BaseReward
     @Override
     public float[] getValuesForRank(int rank)
     {
-        return new float[] { rankValue * rank };
+        return new float[] { startValue + rankValue * rank };
     }
 
     public static class Factory
@@ -29,8 +30,11 @@ public class GenericReward extends BaseReward
 
             ret.loadFromJson(json);
 
-            ret.rankValue = json.get("rankValue").getAsInt();
-
+            ret.rankValue = json.get("rankValue").getAsFloat();
+            if(json.has("startValue"))
+            {
+                ret.startValue = json.get("startValue").getAsFloat();
+            }
             return ret;
         }
     }

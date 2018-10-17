@@ -2,12 +2,10 @@ package com.mike_caron.megacorp.block.profit_materializer;
 
 import com.mike_caron.megacorp.api.CorporationManager;
 import com.mike_caron.megacorp.block.TEOwnedContainerBase;
-import com.mike_caron.megacorp.util.DataUtils;
 import com.mike_caron.megacorp.util.StringUtil;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidRegistry;
-import org.apache.commons.lang3.math.Fraction;
 
 public class ContainerProfitMaterializer
     extends TEOwnedContainerBase
@@ -16,7 +14,7 @@ public class ContainerProfitMaterializer
     public int fluidCapacity = 1;
     public String fluid = null;
     public long profitRemaining;
-    public Fraction speed = null;
+    public float speed = 0f;
 
     public ContainerProfitMaterializer(IInventory playerInventory, TileEntityProfitMaterializer te)
     {
@@ -74,9 +72,9 @@ public class ContainerProfitMaterializer
             changed = true;
         }
 
-        if(!DataUtils.areEqual(speed, te.getSpeed()))
+        if(speed != te.getMoneyPerTick())
         {
-            speed = te.getSpeed();
+            speed = te.getMoneyPerTick();
             changed = true;
         }
 
@@ -126,7 +124,7 @@ public class ContainerProfitMaterializer
         }
         if(tag.hasKey("Speed"))
         {
-            this.speed = DataUtils.fraction(tag.getTag("Speed"));
+            this.speed = tag.getFloat("Speed");
         }
     }
 
@@ -142,10 +140,8 @@ public class ContainerProfitMaterializer
             tag.setString("Fluid", this.fluid);
         }
         tag.setLong("ProfitRemaining", this.profitRemaining);
-        if(speed != null)
-        {
-            tag.setTag("Speed", DataUtils.toNBT(speed));
-        }
+        tag.setFloat("Speed", speed);
+
     }
 
     @Override

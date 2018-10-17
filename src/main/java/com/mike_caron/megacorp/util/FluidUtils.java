@@ -14,7 +14,18 @@ public class FluidUtils
 {
     public static boolean fillPlayerHandWithFluid(World world, BlockPos pos, EntityPlayer player, IFluidHandler fluidHandler)
     {
-        ItemStack inHand = player.inventory.getCurrentItem();
+        ItemStack inHand = player.inventory.getCurrentItem().copy();
+        ItemStack theRest = null;
+
+        if(inHand.getCount() > 1)
+        {
+            //first, check to see if there's more room for this stack
+            if(player.inventory.getFirstEmptyStack() != -1)
+            {
+                theRest = inHand.splitStack(inHand.getCount() - 1);
+            }
+            // else, if we can't split, then hope we can fill a whole stack!
+        }
 
         if(inHand.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null))
         {
@@ -47,7 +58,17 @@ public class FluidUtils
                 drained = fluidHandler.drain(drained.amount, true);
                 filled = container.fill(drained, true);
 
-                player.inventory.setInventorySlotContents(player.inventory.currentItem, container.getContainer());
+
+                if(theRest != null)
+                {
+                    //the stack stays in your hand, while the new container goes elsewhere.
+                    player.inventory.setInventorySlotContents(player.inventory.currentItem, theRest);
+                    player.inventory.addItemStackToInventory(container.getContainer());
+                }
+                else
+                {
+                    player.inventory.setInventorySlotContents(player.inventory.currentItem, container.getContainer());
+                }
                 return true;
             }
         }

@@ -96,7 +96,10 @@ public class GuiBase
 
         Stream<GuiControl> allWaiting = waitingForButton.stream().map(Collection::stream).reduce(Stream.empty(), Stream::concat).distinct();
 
-        allWaiting.forEach(c -> c.onMouseMove(c.parent.translateFromScreenX(mouseX), c.parent.translateFromScreenY(mouseY)));
+        allWaiting.forEach(c -> c.onMouseMove(
+            c.parent.translateFromScreenX(mouseX) - c.getX(),
+            c.parent.translateFromScreenY(mouseY) - c.getY()
+        ));
 
 
         int button = Mouse.getEventButton();

@@ -21,6 +21,11 @@ public class GuiScrollPort
     int maxScrollX = 100000;
     int maxScrollY = 100000;
 
+    boolean mouseIsDownOnScrollbar = false;
+
+    int mouseDownMouseY = 0;
+    int mouseDownScrollY = 0;
+    boolean mouseIsDown = false;
 
     public GuiScrollPort(int x, int y, int width, int height)
     {
@@ -195,7 +200,7 @@ public class GuiScrollPort
     @Override
     public int translateToScreenY(int y)
     {
-        return parent.translateFromScreenY(this.y + y) - scrollY;
+        return parent.translateToScreenY(this.y + y) - scrollY;
     }
 
     @Override
@@ -266,26 +271,49 @@ public class GuiScrollPort
         {
             if(GuiUtil.inBounds(mouseX, mouseY, scrollBar))
             {
+                mouseIsDownOnScrollbar = true;
                 scrollBar.onMouseDown(mouseX - scrollBar.getX(), mouseY - scrollBar.getY(), button);
+                return;
             }
         }
+
+        mouseIsDown = true;
+        mouseDownMouseY = translateToScreenY(mouseY);
+        mouseDownScrollY = scrollY;
     }
 
     @Override
     public void onMouseUp(int mouseX, int mouseY, int button)
     {
-        if(enableScrollBar)
+        if(mouseIsDownOnScrollbar)
         {
-            scrollBar.onMouseUp(mouseX - scrollBar.getX(), mouseY - scrollBar.getY(), button);
+            mouseIsDownOnScrollbar = false;
+            if (enableScrollBar)
+            {
+                scrollBar.onMouseUp(mouseX - scrollBar.getX(), mouseY - scrollBar.getY(), button);
+            }
+            return;
+        }
+
+        if(mouseIsDown)
+        {
+            mouseIsDown = false;
         }
     }
 
     @Override
     public void onMouseMove(int mouseX, int mouseY)
     {
-        if(enableScrollBar)
+        if(enableScrollBar && mouseIsDownOnScrollbar)
         {
             scrollBar.onMouseMove(mouseX - scrollBar.getX(), mouseY - scrollBar.getY());
+        }
+
+        if(mouseIsDown)
+        {
+            int realMouseY = translateToScreenY(mouseY);
+            int mouseDelta = realMouseY - mouseDownMouseY;
+            setScrollY(mouseDownScrollY - mouseDelta);
         }
     }
 

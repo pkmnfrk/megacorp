@@ -194,25 +194,25 @@ public class GuiScrollPort
     @Override
     public int translateToScreenX(int x)
     {
-        return parent.translateToScreenX(this.x + x) - scrollX;
+        return parent.translateToScreenX(x - scrollX + this.x);
     }
 
     @Override
     public int translateToScreenY(int y)
     {
-        return parent.translateToScreenY(this.y + y) - scrollY;
+        return parent.translateToScreenY(y - scrollY + this.y);
     }
 
     @Override
     public int translateFromScreenX(int x)
     {
-        return parent.translateFromScreenX(x + scrollX) - this.x;
+        return parent.translateFromScreenX(x + scrollX - this.x);
     }
 
     @Override
     public int translateFromScreenY(int y)
     {
-        return parent.translateFromScreenY(y + scrollY) - this.y;
+        return parent.translateFromScreenY(y + scrollY - this.y);
     }
 
     @Override

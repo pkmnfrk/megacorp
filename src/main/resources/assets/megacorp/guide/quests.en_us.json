@@ -1,0 +1,8 @@
+{
+	"title":"Work Orders",
+	"para1":"The primary way you will be interacting with your MegaCorp is through the fulfillment of Work Orders, delivered via the Shipping Bin. A Work Order is a request for a certain number of a particular type of item. For example, you may be asked to deliver 100 eggs, or 50 pieces of coal.",
+	"para2":"In exchange for delivering the items, you will be credited a certain amount of Money, to represent the profit your MegaCorp will gain by using or selling those items. The amount of Money you earn is determined at the time the Work Order is created, and so if you purchase rewards that change your profit, you won't see that until you start a new Work Order.",
+	"para3":"Each Work Order has a level, which represents the number of times you have completed that particular Work Order. Each Work Order is tracked separately, usually based on the item, so even if two Work Orders have the same title, if they request different items, they are different Work Orders with different levels.",
+	"para4": "The level of a Work Order determines a few factors. It determines the size of the Work Order (number of items requested), as well as the profit per item. Higher levels are more profitable than lower levels, but require more resources to complete.",
+	"para5": "If a Work Order is undesirable for some reason, you are always welcome to dismiss it by clicking the X button. However, note that any items you already shipped will not be returned!"
+}

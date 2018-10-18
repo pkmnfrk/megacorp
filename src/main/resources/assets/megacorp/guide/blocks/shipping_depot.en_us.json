@@ -1,0 +1,12 @@
+{
+  "title": "Shipping Depot",
+  "para1": "The Shipping Depot is likely to be the block you interact with the most while dealing with your MegaCorp, as it is the place you receive and fulfil Work Orders.",
+  "para2": "From top to bottom, the elements in the Shipping Depot screen are:",
+  "para3": "Job: The name of the Work Order. Mouse over to see a description.",
+  "para4": "Item: The item being requested by the Work Order. If multiple items are accepted, this field will change periodically.",
+  "para5": "Quantity: The number of items being requested.",
+  "para6": "Profit: The amount of Money you will be credited upon fulfilling the Work Order.",
+  "para7": "Progress: The progress bar will fill as you ship items.",
+  "para8": "X button: Cancels the current Work Order, and produces a new one. Note: Items already shipped will be lost!",
+  "para9": "For more information on Work Orders, see:"
+}

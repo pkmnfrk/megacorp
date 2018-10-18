@@ -1,0 +1,5 @@
+{
+  "title": "Profit Condenser",
+  "para1": "The Profit Condenser is an advanced block used to create a special liquid, Dense Money. For more information, see the page on Dense Money:",
+  "para2": "Unlike other blocks that handle liquids, when using automation to insert Money or extract Dense Money, it must be done on specific sides. The blue side is the input side, while the orange side is the output."
+}

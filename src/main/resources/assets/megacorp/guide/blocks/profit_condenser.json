@@ -1,0 +1,27 @@
+{
+  "icon": {
+    "item": "megacorp:profit_condenser"
+  },
+  "body": [
+    {
+      "template": "3x3",
+      "elements": {
+        "recipe": "megacorp:profit_condenser"
+      }
+    },
+    "para1",
+    {
+      "link": "/liquids/dense_money"
+    },
+    "para2",
+    {
+      "img":"textures/guide/input_output_condenser.png",
+      "sw": 462,
+      "sh": 231,
+      "tw": 462,
+      "th": 231,
+      "width": 200,
+      "height": 100
+    }
+  ]
+}

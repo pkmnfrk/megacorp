@@ -1,0 +1,30 @@
+{
+  "icon": {
+    "item": "megacorp:shipping_depot"
+  },
+  "body": [
+    {
+      "template": "3x3",
+      "elements": {
+        "recipe": "megacorp:shipping_depot"
+      }
+    },
+    "para1",
+    "para2",
+    {
+      "img":"textures/guide/quest.png",
+      "width": 206,
+      "height": 83
+    },
+    "para3",
+    "para4",
+    "para5",
+    "para6",
+    "para7",
+    "para8",
+    "para9",
+    {
+      "link": "/quests"
+    }
+  ]
+}

@@ -1,7 +1,10 @@
 {
   "index":[
     "capital_investor",
+    "profit_condenser",
+    "profit_materializer",
     "sbs",
+    "shipping_depot",
     "uplink"
   ]
 }

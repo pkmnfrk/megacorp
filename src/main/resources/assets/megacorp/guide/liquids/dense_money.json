@@ -1,0 +1,20 @@
+{
+  "icon": {
+    "bucket": "dense_money"
+  },
+  "body": [
+    "para1",
+    {
+      "link": "/blocks/profit_condenser",
+      "spacing": 4
+    },
+    "para2",
+    {
+      "template": "1",
+      "elements": [
+        { "item": "megacorp:money", qty: 1000 },
+        { "item": "megacorp:dense_money", "qty": 1.1 },
+      ]
+    }
+  ]
+}

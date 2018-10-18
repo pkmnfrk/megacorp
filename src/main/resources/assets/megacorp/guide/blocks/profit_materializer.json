@@ -1,0 +1,18 @@
+{
+  "icon": {
+    "item": "megacorp:profit_condenser"
+  },
+  "body": [
+    {
+      "template": "3x3",
+      "elements": {
+        "recipe": "megacorp:profit_condenser"
+      }
+    },
+    "para1",
+    "para2",
+    {
+      "link":"/blocks/capital_investor"
+    }
+  ]
+}

@@ -38,6 +38,12 @@ If you want to suggest a whole mod, then please open an issue as below.
 Please report issues to this repository's issue tracker.
 
 If there is a crash involved, please include the crash log via a Gist or Pastebin or something.
+
+## Credits
+
+ * Mod created and supported by Mike Caron (`pkmnfrk`, [@Mike_Caron](https://twitter.com/Mike_Caron))
+ * Idea from `/u/16x16Iron` on Reddit
+ * Idea from `/u/kingcody77` on Reddit
  
 ## License
 

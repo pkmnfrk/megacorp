@@ -1,4 +1,5 @@
 {
+  "mod": "forestry",
   "factories": [
     "com.mike_caron.megacorp.impl.quests.Forestry$Tubes",
     "com.mike_caron.megacorp.impl.quests.Forestry$Bees"

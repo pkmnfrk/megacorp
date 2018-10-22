@@ -70,11 +70,11 @@ public class QuestManager
             if(json.has("mod"))
                 mod = json.get("mod").getAsString();
 
-            //if(!Loader.isModLoaded(mod))
-            //{
-            //    MegaCorpMod.logger.info("Skipping " + mod + " quests, because it's not loaded");
-            //
-            //}
+            if(!Loader.isModLoaded(mod))
+            {
+                MegaCorpMod.logger.debug("Skipping " + mod + " quests, because it's not loaded");
+                return true;
+            }
 
             if(json.has("quests"))
             {

@@ -1,3 +1,5 @@
 {
-	"title":"Important: Beta Testing"
+	"title":"Important: Beta Testing",
+	"para1": "This mod is in beta. That means that while it is feature complete, it still might have bugs lurking hither and yon. These bugs might be trivial, or they might eat your world. While extensive testing was done to prevent the latter, no testing is ever as thorough as hundreds of people playing with it, so player beware!",
+	"para2": "In the unfortunate event that you find a bug, please report it so that it can be fixed. All bug reports should go to GitHub:"
 }

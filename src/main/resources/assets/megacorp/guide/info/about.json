@@ -1,7 +1,7 @@
 {
 	"body": [
-		"Hi, my name is Mike (aka pkmnfrk in many places), and I'd like to thank you for trying out my mod. It has been a wild few months while I learn the detailed ins and outs of Minecraft modding, and at the end of it all is a thing that I'm happy to put out into the world for people to see.",
-		"However, I'm not perfect, and neither is MegaCorp. I'm sure there are bugs, and certainly the list of other mods that it could support will never be complete. If you find a bug, or want to see a mod supported, or anything like that, please let me know at one of these places:",
+		"para1",
+		"para2",
 		{
 			"extLink": "https://github.com/pkmnfrk/megacorp",
 			"label": "GitHub",

@@ -9,13 +9,13 @@
         "recipe": "megacorp:sbs"
       }
     },
-    "The Small Business Simulator is intended to fill a small gap in the budding industrialist's workflow: How do you get the Money you need to found a MegaCorp if you don't have a MegaCorp to generate it?",
-    "The Small Business Simulator accepts seed funding in the form of Gold and Emerald, and uses it to generate Money. See recipes and details on the Money page:",
+    "para1",
+    "para2",
     {
       "link": "/liquids/money",
       "spacing": 10
     },
-    "Note: Producing Money this way is much more expensive than using a MegaCorp, so you should switch to that as soon as possible."
+    "para3"
 
   ]
 }

@@ -1,5 +1,6 @@
 package com.mike_caron.megacorp.gui.control;
 
+import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.gui.GuiUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -12,6 +13,7 @@ import org.lwjgl.input.Mouse;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -452,4 +454,15 @@ public class GuiBase
         return true;
     }
 
+    protected void openWebLink(URI url)
+    {
+        try {
+            Class<?> oclass = Class.forName("java.awt.Desktop");
+            Object object = oclass.getMethod("getDesktop").invoke((Object)null);
+            oclass.getMethod("browse", URI.class).invoke(object, url);
+        } catch (Throwable var4) {
+            Throwable throwable = var4.getCause();
+            MegaCorpMod.logger.error("Couldn't open link: {}", throwable == null ? "<UNKNOWN>" : throwable.getMessage());
+        }
+    }
 }

@@ -83,7 +83,7 @@ public class GuiGuidePage
 
                 if (body.has("index"))
                 {
-                    addButtonsForList(body, "index");
+                    addButtonsForList(body, "index", translation);
                 }
 
                 if (body.has("body"))
@@ -96,7 +96,7 @@ public class GuiGuidePage
                     GuiLabel seealso = GuiUtil.staticLabelFromTranslationKey(2, yPos, "gui.megacorp:guide.seealso");
                     yPos += 10;
 
-                    addButtonsForList(body, "seealso");
+                    addButtonsForList(body, "seealso", translation);
                 }
             }
 
@@ -422,9 +422,9 @@ public class GuiGuidePage
             {
                 control.setX((this.width - marginRight) / 2 - control.getWidth() / 2);
             }
-            else if(obj.has("link"))
+            else if(obj.has("link") || obj.has("extLink"))
             {
-                control = insertLink(obj);
+                control = insertLink(obj, translation);
                 control.setX(2);
                 ((GuiSized)control).setWidth(this.width - 4);
             }
@@ -532,13 +532,13 @@ public class GuiGuidePage
         }
     }
 
-    private void addButtonsForList(JsonObject body, String seealso2)
+    private void addButtonsForList(JsonObject body, String seealso2, JsonObject translation)
     {
         JsonArray index = body.get(seealso2).getAsJsonArray();
 
         for (int i = 0; i < index.size(); i++)
         {
-            GuiSized control = insertLink(index.get(i));
+            GuiSized control = insertLink(index.get(i), translation);
 
             control.setY(yPos);
             control.setX(2);
@@ -560,10 +560,14 @@ public class GuiGuidePage
         return imageForIcon(img);
     }
 
-    private GuiSized insertLink(JsonElement ele)
+    private GuiSized insertLink(JsonElement ele, JsonObject translation)
     {
         String otherUri = null;
+        String extUri = null;
+
         int spacing = 4;
+        GuiImage image = null;
+        String label = null;
 
         if(ele.isJsonPrimitive())
         {
@@ -572,37 +576,70 @@ public class GuiGuidePage
         else
         {
             JsonObject obj = ele.getAsJsonObject();
-            otherUri = resolveUri(currentUri, obj.get("link").getAsString());
+            if(obj.has("link"))
+            {
+                otherUri = resolveUri(currentUri, obj.get("link").getAsString());
+            }
+            else if(obj.has("extLink"))
+            {
+                extUri = obj.get("extLink").getAsString();
+            }
+
             if(obj.has("spacing"))
             {
                 spacing = obj.get("spacing").getAsInt();
             }
-        }
-
-        GuiImage image = null;
-
-        JsonObject otherPage = loadResourceAsJson(new ResourceLocation(MegaCorpMod.modId, baseFile(otherUri)));
-        JsonObject otherTranslation = loadLocalizedResourceAsJson(otherUri);
-
-        if(otherPage != null)
-        {
-            if(otherPage.has("icon"))
+            if(obj.has("icon"))
             {
-                image = imageForIcon(otherPage.get("icon").getAsJsonObject());
+                image = imageForIcon(obj.get("icon").getAsJsonObject());
+            }
+
+            if(obj.has("label"))
+            {
+                label = obj.get("label").getAsString();
+
+                if(translation.has(label))
+                {
+                    label = translation.get(label).getAsString();
+                }
             }
         }
 
-        String label = otherUri;
-        if (otherTranslation != null)
+        if(otherUri != null)
         {
-            label = otherTranslation.get("title").getAsString();
+            JsonObject otherPage = loadResourceAsJson(new ResourceLocation(MegaCorpMod.modId, baseFile(otherUri)));
+            JsonObject otherTranslation = loadLocalizedResourceAsJson(otherUri);
+
+            if (image == null && otherPage != null)
+            {
+                if (otherPage.has("icon"))
+                {
+                    image = imageForIcon(otherPage.get("icon").getAsJsonObject());
+                }
+            }
+
+            if(label == null)
+            {
+                label = otherUri;
+                if (otherTranslation != null)
+                {
+                    label = otherTranslation.get("title").getAsString();
+                }
+            }
         }
 
         GuiButton button = new GuiButton(0, 0, 0, this.width - 4, Math.max(14, image != null ? image.getHeight() + 4 : 0) + 4, label, image);
         button.addListener(this);
         //this.addControl(button);
 
-        button.extraData.put("link", otherUri);
+        if(otherUri != null)
+        {
+            button.extraData.put("link", otherUri);
+        }
+        else if(extUri != null)
+        {
+            button.extraData.put("extLink", extUri);
+        }
 
         if(spacing > 0)
         {
@@ -718,16 +755,40 @@ public class GuiGuidePage
         }
     }
 
+    private void triggerNavigatedExternal(String newUri)
+    {
+        if(!this.enabled)
+            return;
+
+        for(EventListener listener : listeners)
+        {
+            if(listener instanceof NavigationListener)
+            {
+                ((NavigationListener) listener).navigatedExternal(newUri);
+            }
+        }
+    }
+
     @Override
     public void clicked(GuiButton.ClickedEvent event)
     {
-        triggerNavigated((String)event.control.extraData.get("link"));
+        if(event.control.extraData.containsKey("link"))
+        {
+            triggerNavigated((String) event.control.extraData.get("link"));
+        }
+        else if(event.control.extraData.containsKey("extLink"))
+        {
+            String uri = (String) event.control.extraData.get("extLink");
+            triggerNavigatedExternal(uri);
+        }
+
     }
 
     public interface NavigationListener
         extends EventListener
     {
         void navigated(String newUri);
+        void navigatedExternal(String uri);
     }
 
     private GuiImage imageForIcon(JsonObject icon)

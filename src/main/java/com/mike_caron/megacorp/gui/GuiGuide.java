@@ -6,6 +6,8 @@ import com.mike_caron.megacorp.gui.control.GuiButton;
 import com.mike_caron.megacorp.gui.control.GuiGuidePage;
 import net.minecraft.util.ResourceLocation;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Stack;
 
 public class GuiGuide
@@ -93,5 +95,22 @@ public class GuiGuide
         currentPage = newUri;
         backButton.setEnabled(true);
         loadPage();
+    }
+
+    @Override
+    public void navigatedExternal(String uri)
+    {
+        try
+        {
+            URI url = new URI(uri);
+
+            openWebLink(url);
+        }
+        catch(URISyntaxException ex)
+        {
+            MegaCorpMod.logger.error("Unable to parse Uri", ex);
+        }
+
+
     }
 }

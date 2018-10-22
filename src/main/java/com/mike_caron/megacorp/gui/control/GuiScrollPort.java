@@ -21,6 +21,8 @@ public class GuiScrollPort
     int maxScrollX = 100000;
     int maxScrollY = 100000;
 
+    boolean mouseDragEnabled = false;
+
     boolean mouseIsDownOnScrollbar = false;
 
     int mouseDownMouseY = 0;
@@ -277,9 +279,12 @@ public class GuiScrollPort
             }
         }
 
-        mouseIsDown = true;
-        mouseDownMouseY = translateToScreenY(mouseY);
-        mouseDownScrollY = scrollY;
+        if(mouseDragEnabled)
+        {
+            mouseIsDown = true;
+            mouseDownMouseY = translateToScreenY(mouseY);
+            mouseDownScrollY = scrollY;
+        }
     }
 
     @Override

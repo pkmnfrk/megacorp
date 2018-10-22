@@ -87,7 +87,7 @@ public class RewardManager
 
                         rewards.put(id, instance);
 
-                        MegaCorpMod.logger.info("Loaded reward " + id);
+                        MegaCorpMod.logger.debug("Loaded reward " + id);
                     }
                     catch (Exception ex)
                     {
@@ -156,7 +156,7 @@ public class RewardManager
 
             quests.put(keyParts[0], ql);
 
-            MegaCorpMod.logger.info("Loaded localization " + keyParts[1] + " for " + keyParts[0]);
+            MegaCorpMod.logger.debug("Loaded localization " + keyParts[1] + " for " + keyParts[0]);
 
         }
     }

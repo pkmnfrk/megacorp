@@ -70,10 +70,11 @@ public class QuestManager
             if(json.has("mod"))
                 mod = json.get("mod").getAsString();
 
-            if(!Loader.isModLoaded(mod))
-            {
-                MegaCorpMod.logger.info("Skipping " + mod + " quests, because it's not loaded");
-            }
+            //if(!Loader.isModLoaded(mod))
+            //{
+            //    MegaCorpMod.logger.info("Skipping " + mod + " quests, because it's not loaded");
+            //
+            //}
 
             if(json.has("quests"))
             {
@@ -91,7 +92,7 @@ public class QuestManager
 
                         if(q.possibleItems().isEmpty())
                         {
-                            MegaCorpMod.logger.info("Skipping quest " + q.id + " because no items exist");
+                            MegaCorpMod.logger.debug("Skipping quest " + q.id + " because no items exist");
                             continue;
                         }
 
@@ -102,7 +103,7 @@ public class QuestManager
 
                         quests.put(q.id, q);
 
-                        MegaCorpMod.logger.info("Loaded quest " + q.id);
+                        MegaCorpMod.logger.debug("Loaded quest " + q.id);
                     }
                     catch (Exception ex)
                     {
@@ -135,13 +136,13 @@ public class QuestManager
 
                         List<Quest> qs = fact.createQuests();
 
-                        MegaCorpMod.logger.info("Loading " + qs.size() + " from " + className);
+                        MegaCorpMod.logger.debug("Loading " + qs.size() + " from " + className);
 
                         for(Quest q : qs)
                         {
                             if(q.possibleItems().isEmpty())
                             {
-                                MegaCorpMod.logger.info("Skipping quest " + q.id + " because no items exist");
+                                MegaCorpMod.logger.debug("Skipping quest " + q.id + " because no items exist");
                                 continue;
                             }
 
@@ -225,7 +226,7 @@ public class QuestManager
 
             quests.put(keyParts[0], ql);
 
-            MegaCorpMod.logger.info("Loaded localization " + keyParts[1] + " for " + keyParts[0]);
+            MegaCorpMod.logger.debug("Loaded localization " + keyParts[1] + " for " + keyParts[0]);
 
         }
     }

@@ -106,13 +106,5 @@ public class SBSRecipeManager
             new ItemStack(emerald_block, 1),
             150
         );
-
-        addRecipe(
-            "debug",
-            new FluidStack(ModFluids.MONEY, 1000),
-            new ItemStack(Item.getByNameOrId("minecraft:dirt"), 1),
-            new ItemStack(Item.getByNameOrId("minecraft:cobblestone"), 1),
-            10
-        );
     }
 }

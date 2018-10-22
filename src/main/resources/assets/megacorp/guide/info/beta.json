@@ -1,0 +1,19 @@
+{
+	"body": [
+		"This mod is in beta. That means that while it is feature complete, it still might have bugs lurking hither and yon. These bugs might be trivial, or they might eat your world. While extensive testing was done to prevent the latter, no testing is ever as thorough as hundreds of people playing with it, so player beware!",
+		"In the unfortunate event that you find a bug, please report it so that it can be fixed. All bug reports should go to GitHub:",
+		{
+			"extLink": "https://github.com/pkmnfrk/megacorp/issues",
+			"label": "GitHub",
+			"icon": {
+				"img":"textures/guide/github.png",
+				"tw": 32,
+				"th": 32,
+				"sw": 32,
+				"sh": 32,
+				"width": 16,
+				"height": 16
+			}
+		}
+	]
+}

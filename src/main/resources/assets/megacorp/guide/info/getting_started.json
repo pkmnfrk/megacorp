@@ -15,6 +15,16 @@
 		{
 			"link":"/blocks/uplink",
 			"spacing": 10
-		}
+		},
+		"Next, you will want to craft a Shipping Depot and a Corporate Card.",
+		{
+			"link":"/blocks/shipping_depot",
+			"spacing": 10
+		},
+		{
+			"link":"/items/corporate_card",
+			"spacing": 10
+		},
+		"Finally, link the Corporate Card in the Uplink, and use it on the Shipping Depot. Now, you're off to the races!"
 	]
 }

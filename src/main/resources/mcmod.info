@@ -1,12 +1,12 @@
 [
 {
-  "modid": "mod_template",
-  "name": "Mod Template",
-  "description": "A template for a minecraft mod",
+  "modid": "megacorp",
+  "name": "MegaCorp",
+  "description": "Have a lot of items laying around? Want to get into extensive automation for more than automation's sake? Using ProjectE and have more EMC than you know what to do with? Turn your extra items into liquid gold with your very own MegaCorp!",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "logoFile": "assets/mod_template/logo.png",
-  "url": "",
+  "logoFile": "assets/megacorp/logo.png",
+  "url": "https://github.com/pkmnfrk/megacorp",
   "updateUrl": "",
   "authorList": [ "pkmnfrk" ],
   "parent": "",

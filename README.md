@@ -1,4 +1,4 @@
-# Mega Corp
+# MegaCorp
 
 Ever wanted to run your own small business, and grow it into a massive corporation?
 

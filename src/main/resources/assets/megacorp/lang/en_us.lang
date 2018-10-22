@@ -1,7 +1,7 @@
-itemGroup.megacorp=Mega Corp
+itemGroup.megacorp=MegaCorp
 
 fluid.money=Money
-fluid.money.description=Money is the primary currency used by Mega Corps. It is produced by completing work orders, and consumed by the Capital Investor to produce benefits.
+fluid.money.description=Money is the primary currency used by MegaCorps. It is produced by completing work orders, and consumed by the Capital Investor to produce benefits.
 fluid.dense_money=Dense Money
 fluid.dense_money.description=Dense Money is a rare, super condensed version of Money, worth approximately 1000x as much. It is used to purchase special upgrades at a Capital Investor.
 

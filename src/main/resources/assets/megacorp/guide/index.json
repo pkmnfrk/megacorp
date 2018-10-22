@@ -1,8 +1,7 @@
 {
 	"index": [
 		"introduction",
-		"getting_started",
-		"quests",
+		"info/index",
 		"blocks/index",
 		"items/index",
 		"liquids/index"

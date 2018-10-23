@@ -93,8 +93,15 @@ public abstract class PamsHarvestcraft
 
         for(ItemStack is : allItems)
         {
+            String id = is.getItem().getRegistryName().toString();
+
+            if(is.getMetadata() != 0)
+            {
+                id += "_" + is.getMetadata();
+            }
+
             Quest q = new Quest(
-                is.getItem().getRegistryName().toString(),
+                id,
                 is,
                 baseQty(is), //4f
                 multQty(is), //1.8f

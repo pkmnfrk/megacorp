@@ -8,6 +8,7 @@ import com.mike_caron.megacorp.impl.RewardManager;
 import com.mike_caron.megacorp.recipes.PCRecipeManager;
 import com.mike_caron.megacorp.recipes.SBSRecipeManager;
 import com.mike_caron.megacorp.reward.*;
+import com.mike_caron.megacorp.util.FileUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.crafting.IRecipe;
@@ -45,13 +46,22 @@ public class CommonProxy
         {
             MegaCorpMod.logger.error("Unable to create config directory");
         }
-        if (!questsDirectory.exists() && !questsDirectory.mkdir())
+        if (!questsDirectory.exists())
         {
-            MegaCorpMod.logger.error("Unable to create config directory");
+            if(!questsDirectory.mkdir())
+            {
+                MegaCorpMod.logger.error("Unable to create config directory");
+            }
         }
         if (!rewardsDirectory.exists() && !rewardsDirectory.mkdir())
         {
             MegaCorpMod.logger.error("Unable to create config directory");
+        }
+
+        File readme = new File(questsDirectory.getPath(), "readme.txt");
+        if(!readme.exists())
+        {
+            FileUtils.exportResource("/assets/megacorp/quests_readme.txt", readme);
         }
 
         config = new Configuration(new File(megacorpDirectory.getPath(), "megacorp.cfg"));

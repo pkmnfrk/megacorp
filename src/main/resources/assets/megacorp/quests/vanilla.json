@@ -1,4 +1,4 @@
-//        n = completed orders * levelscale
+//     n = completed orders * levelscale
 // qty 0 = baseqty
 // qty n = qty(n-1) * multqty
 // aka:

@@ -7,7 +7,9 @@ public class ModConfig
 {
     private static final String CATEGORY_GENERAL = "general";
 
+    public static String[] workorderFileBlacklist = null;
     public static String[] workorderBlacklist = null;
+    public static String[] rewardBlacklist = null;
 
     public static void readConfig()
     {
@@ -34,6 +36,10 @@ public class ModConfig
     private static void initGeneralConfig(Configuration cfg)
     {
         cfg.addCustomCategoryComment(CATEGORY_GENERAL, "General Configuration");
-        cfg.getStringList("workorderBlacklist", CATEGORY_GENERAL, new String[0], "Any files to exclude from the default list. Only specify the root name (eg, 'foo' instead of 'foo.json')");
+        workorderBlacklist = cfg.getStringList("workorderBlacklist", CATEGORY_GENERAL, new String[0], null, null, "megacorp.config.workorderBlacklist");
+
+        workorderFileBlacklist = cfg.getStringList("workorderFileBlacklist", CATEGORY_GENERAL, new String[0], null, null, "megacorp.config.workorderFileBlacklist");
+
+        rewardBlacklist = cfg.getStringList("rewardBlacklist", CATEGORY_GENERAL, new String[0], null, null, "megacorp.config.rewardBlacklist");
     }
 }

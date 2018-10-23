@@ -38,7 +38,7 @@ public class CommonProxy
         }
         config = new Configuration(new File(myDirectory.getPath(), "megacorp.cfg"));
         ModConfig.readConfig();
-        
+
         ModFluids.register();
     }
 

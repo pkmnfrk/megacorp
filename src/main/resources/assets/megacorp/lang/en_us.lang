@@ -90,3 +90,7 @@ gui.megacorp:guide.close=Close
 gui.megacorp:guide.index=Home
 gui.megacorp:guide.pagenotfound=The page "%s" could not be found.
 gui.megacorp:guide.seealso=See Also:
+
+megacorp.config.workorderBlacklist=Any work order IDs to exclude from the default list. See the rewards folder inside the jar for more details
+megacorp.config.workorderFileBlacklist=Any files to exclude from the default list. Only specify the root name (eg, 'foo' instead of 'foo.json')
+megacorp.config.rewardBlacklist=Any rewards to disable

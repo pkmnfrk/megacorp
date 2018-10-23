@@ -34,13 +34,23 @@ public class FluidIngredientFactory
             throw new JsonSyntaxException("Unknown fluid '" + fluidName + "'");
         }
 
-        final ItemStack filledBucket = FluidUtil.getFilledBucket(new FluidStack(fluid, 0));
-        final ItemStack filledBottle = Bottle.with(new FluidStack(fluid, amount));
+        ItemStack filledBottle = Bottle.with(new FluidStack(fluid, amount));
 
         if (filledBottle.isEmpty()) {
             throw new JsonSyntaxException("No bucket registered for fluid '" + fluidName + "'");
         }
 
-        return IngredientNBT.fromStacks(filledBottle, filledBucket);
+        //MegaCorpMod.logger.debug("Returning ingredient for fluid '" + fluidName + "'");
+
+        if(amount == 1000)
+        {
+            ItemStack filledBucket = FluidUtil.getFilledBucket(new FluidStack(fluid, 0));
+            return IngredientNBT.fromStacks(filledBottle, filledBucket);
+        }
+        else
+        {
+            return IngredientNBT.fromStacks(filledBottle);
+        }
+
     }
 }

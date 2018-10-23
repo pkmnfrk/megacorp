@@ -126,7 +126,6 @@ public class Bottle
         implements IFluidHandlerItem, ICapabilityProvider
     {
         private ItemStack container;
-        private FluidStack stored = null;
 
         public Handler(@Nonnull ItemStack container)
         {
@@ -138,9 +137,7 @@ public class Bottle
         @Override
         public ItemStack getContainer()
         {
-            FluidStack fluid = currentFluid();
-
-            return Bottle.with(fluid);
+            return this.container;
         }
 
         @Override
@@ -169,7 +166,8 @@ public class Bottle
 
             if(doit)
             {
-                stored = new FluidStack(current.getFluid(), current.amount - amt);
+                this.container = Bottle.with(new FluidStack(current.getFluid(), current.amount - amt));
+
             }
 
             return new FluidStack(current.getFluid(), amt);
@@ -213,9 +211,6 @@ public class Bottle
 
         private FluidStack currentFluid()
         {
-            if(stored != null)
-                return stored;
-
             return getFluid(container);
         }
     }

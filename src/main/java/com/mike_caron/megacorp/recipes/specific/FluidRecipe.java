@@ -17,6 +17,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
+import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStackSimple;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import javax.annotation.Nonnull;
@@ -29,7 +31,7 @@ public class FluidRecipe
     {
         super(group, result, primer);
 
-
+        //MegaCorpMod.logger.debug("Initializing fluid-based recipe to create " + result);
     }
 
     @Nullable
@@ -42,30 +44,73 @@ public class FluidRecipe
 
         IFluidHandlerItem fluidHandler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
 
-        for(IFluidTankProperties prop : fluidHandler.getTankProperties())
+        FluidStack ret = null;
+
+        if(fluidHandler instanceof FluidHandlerItemStack)
         {
-            if(prop.canDrain())
-                return prop.getContents();
+            ret = ((FluidHandlerItemStack) fluidHandler).getFluid();
+        }
+        if(fluidHandler instanceof FluidHandlerItemStackSimple)
+        {
+            ret = ((FluidHandlerItemStackSimple) fluidHandler).getFluid();
         }
 
-        return null;
+        if(ret == null)
+        {
+            for (IFluidTankProperties prop : fluidHandler.getTankProperties())
+            {
+                if (prop.canDrain())
+                {
+                    ret = prop.getContents();
+                }
+            }
+        }
+
+        if(ret != null)
+            ret = ret.copy();
+
+        return ret;
     }
 
     private boolean fluidMatches(@Nonnull FluidStack fluid, @Nonnull ItemStack stack)
     {
+        //MegaCorpMod.logger.debug("Does this fluid match? '" + fluid.getFluid().getName() + "x" + fluid.amount + "mB' vs '" + stack + "'");
+
         if(stack.isEmpty())
+        {
+            //MegaCorpMod.logger.debug("Nope, stack is empty");
             return false;
+        }
 
         if(!stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null))
+        {
+            //MegaCorpMod.logger.debug("Nope, stack doesn't have capability");
             return false;
+        }
 
         IFluidHandlerItem fluidHandler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
 
         FluidStack drained = fluidHandler.drain(fluid, false);
 
-        if(drained == null || drained.getFluid() != fluid.getFluid() || drained.amount != fluid.amount)
-            return false;
+        //NBTTagCompound nbt = stack.getTagCompound();
+        //MegaCorpMod.logger.debug("Table: {}", DataUtils.toJson(nbt).toString());
 
+        if(drained == null || drained.getFluid() != fluid.getFluid() || drained.amount != fluid.amount)
+        {
+            //String dbg = "";
+            //if(drained == null)
+            //{
+            //    dbg = "null";
+            //}
+            //else
+            //{
+            //    dbg += drained.getFluid().getName() + "x" + drained.amount + "mB";
+            //}
+            //MegaCorpMod.logger.debug("Nope, stack couldn't drain fluid: {}", dbg);
+            return false;
+        }
+
+        //MegaCorpMod.logger.debug("Yep");
         return true;
     }
 
@@ -77,25 +122,58 @@ public class FluidRecipe
         if(inventoryCrafting.getSizeInventory() != ingredients.size())
             return false;
 
+        //MegaCorpMod.logger.debug("Checking matching for recipe for " + this.getRecipeOutput());
+
         for(int i = 0; i < ingredients.size(); i++)
         {
             Ingredient ing = ingredients.get(i);
             ItemStack ingredientStack = ing.getMatchingStacks()[0];
             FluidStack desiredFluid = getFluidFromItem(ingredientStack);
+            ItemStack stack = inventoryCrafting.getStackInSlot(i);
 
             if(desiredFluid != null)
             {
-                if(!fluidMatches(desiredFluid, inventoryCrafting.getStackInSlot(i)))
+
+                //NBTTagCompound nbt = ingredientStack.getTagCompound();
+                //MegaCorpMod.logger.debug("Ingredient: {}", DataUtils.toJson(nbt).toString());
+
+                if(!fluidMatches(desiredFluid, stack))
+                {
+                    //MegaCorpMod.logger.debug("Recipe doesn't match because fluid doesn't match");
                     return false;
+                }
             }
             else
             {
-                if(!ing.apply(inventoryCrafting.getStackInSlot(i)))
+                if(!ing.apply(stack))
+                {
+                    //MegaCorpMod.logger.debug("Recipe doesn't match because {} doesn't match {}", stack, toString(ing));
                     return false;
+                }
             }
         }
 
+        //MegaCorpMod.logger.debug("Recipe matches!");
+
         return true;
+    }
+
+    private String toString(Ingredient ing)
+    {
+        StringBuilder ret = new StringBuilder();
+
+        boolean first = true;
+        for(ItemStack s : ing.getMatchingStacks())
+        {
+            if(first)
+                first = false;
+            else
+                ret.append(",");
+
+            ret.append(s);
+        }
+
+        return ret.toString();
     }
 
     @Override

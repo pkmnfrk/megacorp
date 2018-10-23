@@ -4,6 +4,7 @@ import com.mike_caron.megacorp.impl.CorporationManager;
 import com.mike_caron.megacorp.impl.Corporation;
 import com.mike_caron.megacorp.impl.QuestManager;
 import com.mike_caron.megacorp.impl.RewardManager;
+import com.mike_caron.megacorp.proxy.CommonProxy;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -110,7 +111,7 @@ public class MegaCorpCommand
         throws CommandException
     {
         //RewardManager.INSTANCE.loadRewards();
-        QuestManager.INSTANCE.loadQuests();
+        QuestManager.INSTANCE.loadQuests(CommonProxy.questsDirectory);
         sender.sendMessage(new TextComponentString("Done"));
     }
 

@@ -3,6 +3,10 @@ package com.mike_caron.megacorp.proxy;
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.ModConfig;
 import com.mike_caron.megacorp.fluid.ModFluids;
+import com.mike_caron.megacorp.impl.QuestManager;
+import com.mike_caron.megacorp.impl.RewardManager;
+import com.mike_caron.megacorp.recipes.PCRecipeManager;
+import com.mike_caron.megacorp.recipes.SBSRecipeManager;
 import com.mike_caron.megacorp.reward.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,16 +31,30 @@ public class CommonProxy
     implements IModProxy
 {
     public static Configuration config;
+    public static File megacorpDirectory;
+    public static File questsDirectory;
+    public static File rewardsDirectory;
 
     public void preInit(FMLPreInitializationEvent e)
     {
         File directory = e.getModConfigurationDirectory();
-        File myDirectory = new File(directory.getPath(), "megacorp");
-        if (!myDirectory.exists() && !myDirectory.mkdir())
+        megacorpDirectory = new File(directory.getPath(), "megacorp");
+        questsDirectory = new File(megacorpDirectory.getPath(), "quests");
+        rewardsDirectory = new File(megacorpDirectory.getPath(), "rewards");
+        if (!megacorpDirectory.exists() && !megacorpDirectory.mkdir())
         {
             MegaCorpMod.logger.error("Unable to create config directory");
         }
-        config = new Configuration(new File(myDirectory.getPath(), "megacorp.cfg"));
+        if (!questsDirectory.exists() && !questsDirectory.mkdir())
+        {
+            MegaCorpMod.logger.error("Unable to create config directory");
+        }
+        if (!rewardsDirectory.exists() && !rewardsDirectory.mkdir())
+        {
+            MegaCorpMod.logger.error("Unable to create config directory");
+        }
+
+        config = new Configuration(new File(megacorpDirectory.getPath(), "megacorp.cfg"));
         ModConfig.readConfig();
 
         ModFluids.register();
@@ -48,10 +66,12 @@ public class CommonProxy
         CapabilityManager.INSTANCE.register(IPlayerRewards.class, new PlayerRewardCapabilityStorage(), PlayerRewards::new);
     }
 
-    @SuppressWarnings("EmptyMethod")
     public void postInit(FMLPostInitializationEvent e)
     {
-
+        SBSRecipeManager.addDefaultRecipes();
+        PCRecipeManager.addDefaultRecipes();
+        QuestManager.INSTANCE.loadQuests(questsDirectory);
+        RewardManager.INSTANCE.loadRewards();
     }
 
     @SubscribeEvent

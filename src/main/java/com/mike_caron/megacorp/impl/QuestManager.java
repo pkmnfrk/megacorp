@@ -17,9 +17,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class QuestManager
@@ -32,22 +34,40 @@ public class QuestManager
 
     private QuestManager() {}
 
-    public void loadQuests()
+    public void loadQuests(File userDirectory)
     {
         quests.clear();
 
         Loader.instance().getActiveModList().forEach(this::loadModQuests);
 
-        //CraftingHelper.findFiles(Loader.instance().getReversedModObjectList().get(MegaCorpMod.instance), "assets/" + MegaCorpMod.modId + "/quests", null, this::loadQuests, false, true);
+        if(userDirectory != null)
+        {
+            File[] files = userDirectory.listFiles();
+            if(files != null)
+            {
+                for (File file : files)
+                {
+                    loadQuests(Paths.get(file.toURI()), false);
+                }
+            }
+        }
 
+    }
+
+    private void logNonError(String message, boolean userGenerated)
+    {
+        if(userGenerated)
+        {
+            MegaCorpMod.logger.info(message);
+        }
     }
 
     private void loadModQuests(ModContainer mod)
     {
-        CraftingHelper.findFiles(mod, "assets/" + MegaCorpMod.modId + "/quests", null, (root, url) -> this.loadQuests(root, url, true), false, true);
+        CraftingHelper.findFiles(mod, "assets/" + MegaCorpMod.modId + "/quests", null, (root, url) -> this.loadQuests(url, true), false, true);
     }
 
-    private boolean loadQuests(Path root, Path url, boolean applyBlacklists)
+    private boolean loadQuests(Path url, boolean applyBlacklists)
     {
         JsonParser parser = new JsonParser();
 
@@ -64,7 +84,7 @@ public class QuestManager
                     if(ModConfig.workorderFileBlacklist[i].equals(baseName))
                     {
                         //peace
-                        MegaCorpMod.logger.debug("Skipping quest file " + url.toString() + " because it is on the blacklist");
+                        logNonError("Skipping quest file " + url.toString() + " because it is on the blacklist", !applyBlacklists);
                         return true;
                     }
                 }
@@ -88,7 +108,7 @@ public class QuestManager
 
             if(!Loader.isModLoaded(mod))
             {
-                MegaCorpMod.logger.debug("Skipping " + mod + " quests, because it's not loaded");
+                logNonError("Skipping " + mod + " quests, because it's not loaded", !applyBlacklists);
                 return true;
             }
 
@@ -121,14 +141,14 @@ public class QuestManager
 
                             if(abort)
                             {
-                                MegaCorpMod.logger.debug("Skipping quest " + q.id + " because it is on the blacklist");
+                                logNonError("Skipping quest " + q.id + " because it is on the blacklist", !applyBlacklists);
                                 continue;
                             }
                         }
 
                         if(q.possibleItems().isEmpty())
                         {
-                            MegaCorpMod.logger.debug("Skipping quest " + q.id + " because no items exist");
+                            logNonError("Skipping quest " + q.id + " because no items exist", !applyBlacklists);
                             continue;
                         }
 
@@ -139,7 +159,7 @@ public class QuestManager
 
                         quests.put(q.id, q);
 
-                        MegaCorpMod.logger.debug("Loaded quest " + q.id);
+                        logNonError("Loaded quest " + q.id, !applyBlacklists);
                     }
                     catch (Exception ex)
                     {
@@ -172,7 +192,7 @@ public class QuestManager
 
                         List<Quest> qs = fact.createQuests();
 
-                        MegaCorpMod.logger.debug("Loading " + qs.size() + " from " + className);
+                        logNonError("Loading " + qs.size() + " from " + className, !applyBlacklists);
 
                         for(Quest q : qs)
                         {
@@ -191,14 +211,14 @@ public class QuestManager
 
                                 if(abort)
                                 {
-                                    MegaCorpMod.logger.debug("Skipping quest " + q.id + " because it is on the blacklist");
+                                    logNonError("Skipping quest " + q.id + " because it is on the blacklist", !applyBlacklists);
                                     continue;
                                 }
                             }
 
                             if(q.possibleItems().isEmpty())
                             {
-                                MegaCorpMod.logger.debug("Skipping quest " + q.id + " because no items exist");
+                                logNonError("Skipping quest " + q.id + " because no items exist", !applyBlacklists);
                                 continue;
                             }
 
@@ -210,7 +230,7 @@ public class QuestManager
                             quests.put(q.id, q);
                             questFactories.put(q, fact);
 
-                            MegaCorpMod.logger.debug("Loaded quest " + q.id + " from " + className);
+                            logNonError("Loaded quest " + q.id + " from " + className, !applyBlacklists);
                         }
                     }
                     catch(Exception ex)
@@ -282,7 +302,7 @@ public class QuestManager
 
             quests.put(keyParts[0], ql);
 
-            MegaCorpMod.logger.debug("Loaded localization " + keyParts[1] + " for " + keyParts[0]);
+            logNonError("Loaded localization " + keyParts[1] + " for " + keyParts[0], false);
 
         }
     }

@@ -64,6 +64,7 @@ public class QuestManager
                     if(ModConfig.workorderFileBlacklist[i].equals(baseName))
                     {
                         //peace
+                        MegaCorpMod.logger.debug("Skipping quest file " + url.toString() + " because it is on the blacklist");
                         return true;
                     }
                 }
@@ -120,7 +121,7 @@ public class QuestManager
 
                             if(abort)
                             {
-                                MegaCorpMod.logger.debug("Skipping quest " + q.id + " it is on the blacklist");
+                                MegaCorpMod.logger.debug("Skipping quest " + q.id + " because it is on the blacklist");
                                 continue;
                             }
                         }
@@ -190,7 +191,7 @@ public class QuestManager
 
                                 if(abort)
                                 {
-                                    MegaCorpMod.logger.debug("Skipping quest " + q.id + " it is on the blacklist");
+                                    MegaCorpMod.logger.debug("Skipping quest " + q.id + " because it is on the blacklist");
                                     continue;
                                 }
                             }
@@ -209,7 +210,7 @@ public class QuestManager
                             quests.put(q.id, q);
                             questFactories.put(q, fact);
 
-                            MegaCorpMod.logger.info("Loaded quest " + q.id + " from " + className);
+                            MegaCorpMod.logger.debug("Loaded quest " + q.id + " from " + className);
                         }
                     }
                     catch(Exception ex)

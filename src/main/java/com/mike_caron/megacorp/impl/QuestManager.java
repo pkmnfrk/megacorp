@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mike_caron.megacorp.MegaCorpMod;
+import com.mike_caron.megacorp.ModConfig;
 import com.mike_caron.megacorp.api.IQuestFactory;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.crafting.CraftingHelper;
@@ -43,17 +44,32 @@ public class QuestManager
 
     private void loadModQuests(ModContainer mod)
     {
-        CraftingHelper.findFiles(mod, "assets/" + MegaCorpMod.modId + "/quests", null, this::loadQuests, false, true);
+        CraftingHelper.findFiles(mod, "assets/" + MegaCorpMod.modId + "/quests", null, (root, url) -> this.loadQuests(root, url, true), false, true);
     }
 
-    private boolean loadQuests(Path root, Path url)
+    private boolean loadQuests(Path root, Path url, boolean applyBlacklists)
     {
         JsonParser parser = new JsonParser();
 
         String extension = FilenameUtils.getExtension(url.toString());
+        String baseName = FilenameUtils.getBaseName(url.toString());
 
         if("json".equals(extension))
         {
+            //first check the blacklist
+            if(applyBlacklists)
+            {
+                for(int i = 0; i < ModConfig.workorderBlacklist.length; i++)
+                {
+                    if(ModConfig.workorderFileBlacklist[i].equals(baseName))
+                    {
+                        //peace
+                        MegaCorpMod.logger.debug("Skipping quest file " + url.toString() + " because it is on the blacklist");
+                        return true;
+                    }
+                }
+            }
+
             JsonObject json;
             try (BufferedReader stream = Files.newBufferedReader(url))
             {
@@ -89,6 +105,26 @@ public class QuestManager
                         Quest q = Quest.fromJson(quest);
 
                         if(q == null) continue;
+
+                        if(applyBlacklists)
+                        {
+                            boolean abort = false;
+
+                            for(int i = 0; i < ModConfig.workorderBlacklist.length; i++)
+                            {
+                                if(ModConfig.workorderBlacklist[i].equals(q.id))
+                                {
+                                    abort = true;
+                                    break;
+                                }
+                            }
+
+                            if(abort)
+                            {
+                                MegaCorpMod.logger.debug("Skipping quest " + q.id + " because it is on the blacklist");
+                                continue;
+                            }
+                        }
 
                         if(q.possibleItems().isEmpty())
                         {
@@ -140,6 +176,26 @@ public class QuestManager
 
                         for(Quest q : qs)
                         {
+                            if(applyBlacklists)
+                            {
+                                boolean abort = false;
+
+                                for(int i = 0; i < ModConfig.workorderBlacklist.length; i++)
+                                {
+                                    if(ModConfig.workorderBlacklist[i].equals(q.id))
+                                    {
+                                        abort = true;
+                                        break;
+                                    }
+                                }
+
+                                if(abort)
+                                {
+                                    MegaCorpMod.logger.debug("Skipping quest " + q.id + " because it is on the blacklist");
+                                    continue;
+                                }
+                            }
+
                             if(q.possibleItems().isEmpty())
                             {
                                 MegaCorpMod.logger.debug("Skipping quest " + q.id + " because no items exist");
@@ -154,7 +210,7 @@ public class QuestManager
                             quests.put(q.id, q);
                             questFactories.put(q, fact);
 
-                            MegaCorpMod.logger.info("Loaded quest " + q.id + " from " + className);
+                            MegaCorpMod.logger.debug("Loaded quest " + q.id + " from " + className);
                         }
                     }
                     catch(Exception ex)

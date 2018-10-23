@@ -36,10 +36,10 @@ public class ModConfig
     private static void initGeneralConfig(Configuration cfg)
     {
         cfg.addCustomCategoryComment(CATEGORY_GENERAL, "General Configuration");
-        workorderBlacklist = cfg.getStringList("workorderBlacklist", CATEGORY_GENERAL, new String[0], null, null, "megacorp.config.workorderBlacklist");
+        workorderBlacklist = cfg.getStringList("workorderBlacklist", CATEGORY_GENERAL, new String[0], "Any work order IDs to exclude from the default list. See the rewards folder inside the jar for more details");
 
-        workorderFileBlacklist = cfg.getStringList("workorderFileBlacklist", CATEGORY_GENERAL, new String[0], null, null, "megacorp.config.workorderFileBlacklist");
+        workorderFileBlacklist = cfg.getStringList("workorderFileBlacklist", CATEGORY_GENERAL, new String[0], "Any files to exclude from the default list. Only specify the root name (eg, 'foo' instead of 'foo.json')");
 
-        rewardBlacklist = cfg.getStringList("rewardBlacklist", CATEGORY_GENERAL, new String[0], null, null, "megacorp.config.rewardBlacklist");
+        rewardBlacklist = cfg.getStringList("rewardBlacklist", CATEGORY_GENERAL, new String[0], "Any rewards to disable");
     }
 }

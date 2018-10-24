@@ -215,14 +215,20 @@ public abstract class ContainerBase
 
         for(IContainerListener listener : this.listeners)
         {
-            MegaCorpMod.networkWrapper.sendTo(message, (EntityPlayerMP)listener);
+            if(listener instanceof EntityPlayerMP)
+            {
+                MegaCorpMod.networkWrapper.sendTo(message, (EntityPlayerMP) listener);
+            }
         }
     }
 
     protected void triggerUpdate(IContainerListener listener)
     {
         MessageUpdateGui message = new MessageUpdateGui(this);
-        MegaCorpMod.networkWrapper.sendTo(message, (EntityPlayerMP)listener);
+        if(listener instanceof EntityPlayerMP)
+        {
+            MegaCorpMod.networkWrapper.sendTo(message, (EntityPlayerMP) listener);
+        }
 
     }
 }

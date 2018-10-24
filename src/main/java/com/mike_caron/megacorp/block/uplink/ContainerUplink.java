@@ -85,7 +85,7 @@ public class ContainerUplink
             changed = true;
         }
 
-        if(owner != null)
+        if(owner != null && manager.ownerHasCorporation(owner))
         {
             ICorporation corp = manager.getCorporationForOwner(owner);
             if (!corp.getName().equals(corpName))

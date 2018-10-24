@@ -1,6 +1,7 @@
 package com.mike_caron.megacorp.block.uplink;
 
 import com.mike_caron.megacorp.MegaCorpMod;
+import com.mike_caron.megacorp.api.ICorporationManager;
 import com.mike_caron.megacorp.block.OwnedMachineBlockBase;
 import com.mike_caron.megacorp.impl.Corporation;
 import com.mike_caron.megacorp.impl.CorporationManager;
@@ -70,8 +71,12 @@ public class BlockUplink
         ItemStack inHand = playerIn.inventory.getCurrentItem();
         if(inHand.getItem() == ModItems.blackCard)
         {
-            Corporation corp = (Corporation)CorporationManager.get(worldIn).getCorporationForOwner(te.getOwner());
-            corp.addProfit(1000);
+            ICorporationManager manager = CorporationManager.get(te.getWorld());
+            if(manager.ownerHasCorporation(te.getOwner()))
+            {
+                Corporation corp = (Corporation)manager.getCorporationForOwner(te.getOwner());
+                corp.addProfit(1000);
+            }
             return true;
         }
 

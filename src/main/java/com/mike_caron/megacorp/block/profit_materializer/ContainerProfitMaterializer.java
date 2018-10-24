@@ -1,6 +1,7 @@
 package com.mike_caron.megacorp.block.profit_materializer;
 
 import com.mike_caron.megacorp.api.CorporationManager;
+import com.mike_caron.megacorp.api.ICorporationManager;
 import com.mike_caron.megacorp.block.TEOwnedContainerBase;
 import com.mike_caron.megacorp.util.StringUtil;
 import net.minecraft.inventory.IInventory;
@@ -79,10 +80,11 @@ public class ContainerProfitMaterializer
         }
 
         long pr = 0;
+        ICorporationManager manager = CorporationManager.getInstance(te.getWorld());
 
-        if(owner != null)
+        if(owner != null && manager.ownerHasCorporation(owner))
         {
-            pr = CorporationManager.getInstance(te.getWorld()).getCorporationForOwner(owner).getAvailableProfit();
+            pr = manager.getCorporationForOwner(owner).getAvailableProfit();
         }
 
         if(profitRemaining != pr)

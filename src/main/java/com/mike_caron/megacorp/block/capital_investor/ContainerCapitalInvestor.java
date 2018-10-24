@@ -2,6 +2,7 @@ package com.mike_caron.megacorp.block.capital_investor;
 
 import com.mike_caron.megacorp.api.CorporationManager;
 import com.mike_caron.megacorp.api.ICorporation;
+import com.mike_caron.megacorp.api.ICorporationManager;
 import com.mike_caron.megacorp.api.IReward;
 import com.mike_caron.megacorp.api.events.CorporationRewardsChangedEvent;
 import com.mike_caron.megacorp.block.TEOwnedContainerBase;
@@ -142,9 +143,11 @@ public class ContainerCapitalInvestor
 
         TileEntityCapitalInvestor te = getTE();
 
-        if(te.getOwner() != null)
+        ICorporationManager manager = CorporationManager.getInstance(te.getWorld());
+
+        if(te.getOwner() != null && manager.ownerHasCorporation(te.getOwner()))
         {
-            ICorporation corp = CorporationManager.getInstance(te.getWorld()).getCorporationForOwner(te.getOwner());
+            ICorporation corp = manager.getCorporationForOwner(te.getOwner());
 
             NBTTagList rewards = new NBTTagList();
 

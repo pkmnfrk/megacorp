@@ -56,7 +56,7 @@ public class ContainerLiquidShippingDepot
         ICorporationManager manager = CorporationManager.get(te.getWorld());
 
 
-        if(owner != null)
+        if(owner != null && manager.ownerHasCorporation(owner))
         {
             ICorporation corp = manager.getCorporationForOwner(owner);
 

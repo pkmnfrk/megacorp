@@ -1,5 +1,6 @@
 package com.mike_caron.megacorp.command;
 
+import com.mike_caron.megacorp.api.ICorporationManager;
 import com.mike_caron.megacorp.impl.CorporationManager;
 import com.mike_caron.megacorp.impl.Corporation;
 import com.mike_caron.megacorp.impl.QuestManager;
@@ -131,7 +132,14 @@ public class MegaCorpCommand
 
             UUID id = ((EntityPlayerMP)sender).getUniqueID();
 
-            Corporation corp = (Corporation)CorporationManager.get(((EntityPlayerMP) sender).getServerWorld()).getCorporationForOwner(id);
+            ICorporationManager manager = CorporationManager.get(((EntityPlayerMP) sender).getServerWorld());
+
+            Corporation corp = null;
+
+            if(manager.ownerHasCorporation(id))
+            {
+                corp = (Corporation) manager.getCorporationForOwner(id);
+            }
 
             if(corp == null)
             {
@@ -168,7 +176,13 @@ public class MegaCorpCommand
     {
         UUID id = ((EntityPlayerMP)sender).getUniqueID();
 
-        Corporation corp = (Corporation)CorporationManager.get(((EntityPlayerMP) sender).getServerWorld()).getCorporationForOwner(id);
+        ICorporationManager manager = CorporationManager.get(((EntityPlayerMP) sender).getServerWorld());
+
+        Corporation corp = null;
+        if(manager.ownerHasCorporation(id))
+        {
+            corp = (Corporation) manager.getCorporationForOwner(id);
+        }
 
         if(corp == null)
         {
@@ -186,7 +200,13 @@ public class MegaCorpCommand
     {
         UUID id = ((EntityPlayerMP)sender).getUniqueID();
 
-        Corporation corp = (Corporation)CorporationManager.get(((EntityPlayerMP) sender).getServerWorld()).getCorporationForOwner(id);
+        ICorporationManager manager = CorporationManager.get(((EntityPlayerMP) sender).getServerWorld());
+
+        Corporation corp = null;
+        if(manager.ownerHasCorporation(id))
+        {
+            corp = (Corporation) manager.getCorporationForOwner(id);
+        }
 
         if(corp == null)
         {

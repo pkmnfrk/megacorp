@@ -59,10 +59,7 @@ public class CommonProxy
         }
 
         File readme = new File(questsDirectory.getPath(), "readme.txt");
-        if(!readme.exists())
-        {
-            FileUtils.exportResource("/assets/megacorp/quests_readme.txt", readme);
-        }
+        FileUtils.exportResource("/assets/megacorp/quests_readme.txt", readme);
 
         config = new Configuration(new File(megacorpDirectory.getPath(), "megacorp.cfg"));
         ModConfig.readConfig();

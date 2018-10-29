@@ -6,11 +6,15 @@ import com.mike_caron.megacorp.api.ICorporation;
 import com.mike_caron.megacorp.api.IReward;
 import com.mike_caron.megacorp.api.events.CorporationRewardsChangedEvent;
 import com.mike_caron.megacorp.reward.BaseReward;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.NonNullList;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
@@ -114,6 +118,26 @@ public class Corporation
                 int completed = questLog.getOrDefault(workOrder.getQuestId(), 0);
                 completed = Math.incrementExact(completed);
                 questLog.put(workOrder.getQuestId(), completed);
+
+                Quest quest = QuestManager.INSTANCE.getSpecificQuest(workOrder.getQuestId());
+
+                if(quest.completionCommand != null && !quest.completionCommand.isEmpty())
+                {
+                    MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+                    EntityPlayer player = server.getEntityWorld().getPlayerEntityByUUID(owner);
+
+                    if(player != null)
+                    {
+                        String command = replaceCommandString(quest.completionCommand, server.getEntityWorld());
+
+                        if(command != null)
+                        {
+                            server.commandManager.executeCommand(server, command);
+                        }
+                    }
+                }
+
+                this.manager.markDirty();
 
                 return true;
             }
@@ -422,5 +446,23 @@ public class Corporation
         {
             MinecraftForge.EVENT_BUS.post(event);
         }
+    }
+
+    private String replaceCommandString(String command, World world)
+    {
+        if(command.contains("$player"))
+        {
+            EntityPlayer player = world.getPlayerEntityByUUID(owner);
+            if(player == null)
+            {
+                return null;
+            }
+            else
+            {
+                command = command.replace("$player", player.getName());
+            }
+        }
+
+        return command;
     }
 }

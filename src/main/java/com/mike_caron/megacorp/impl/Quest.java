@@ -21,9 +21,15 @@ public class Quest
     public final float randomFactor;
     public final float levelScale;
     public final float baseProfit;
+    public final String completionCommand;
     public final Map<String, Object> extraData = new HashMap<>();
 
     public Quest(String id, ItemStack item, float baseQty, float multQty, float randomFactor, float levelScale, float baseProfit)
+    {
+        this(id, item, baseQty, multQty, randomFactor, levelScale, baseProfit, null);
+    }
+
+    public Quest(String id, ItemStack item, float baseQty, float multQty, float randomFactor, float levelScale, float baseProfit, String completionCommand)
     {
         this.id = id;
         this.item = new ArrayList<>();
@@ -34,9 +40,15 @@ public class Quest
         this.randomFactor = randomFactor;
         this.levelScale = levelScale;
         this.baseProfit = baseProfit;
+        this.completionCommand = completionCommand;
     }
 
     public Quest(String id, Collection<ItemStack> item, float baseQty, float multQty, float randomFactor, float levelScale, float baseProfit)
+    {
+        this(id, item, baseQty, multQty, randomFactor, levelScale, baseProfit, null);
+    }
+
+    public Quest(String id, Collection<ItemStack> item, float baseQty, float multQty, float randomFactor, float levelScale, float baseProfit, String completionCommand)
     {
         this.id = id;
         this.item = new ArrayList<>(item);
@@ -46,9 +58,15 @@ public class Quest
         this.randomFactor = randomFactor;
         this.levelScale = levelScale;
         this.baseProfit = baseProfit;
+        this.completionCommand = completionCommand;
     }
 
     public Quest(String id, String oreDict, float baseQty, float multQty, float randomFactor, float levelScale, float baseProfit)
+    {
+        this(id, oreDict, baseQty, multQty, randomFactor, levelScale, baseProfit, null);
+    }
+
+    public Quest(String id, String oreDict, float baseQty, float multQty, float randomFactor, float levelScale, float baseProfit, String completionCommand)
     {
         this.id = id;
         this.item = null;
@@ -58,6 +76,7 @@ public class Quest
         this.randomFactor = randomFactor;
         this.levelScale = levelScale;
         this.baseProfit = baseProfit;
+        this.completionCommand = completionCommand;
     }
 
     public static Quest fromJson(JsonObject obj)
@@ -102,6 +121,7 @@ public class Quest
         float randomFactor = 0;
         float levelScale = 1;
         float baseProfit = 1;
+        String completionCommand = null;
 
         if(obj.has("rand"))
         {
@@ -115,6 +135,10 @@ public class Quest
         {
             baseProfit = obj.get("baseprofit").getAsFloat();
         }
+        if(obj.has("command"))
+        {
+            completionCommand = obj.get("command").getAsString();
+        }
 
         if(oreDictFallback != null && !OreDictionary.doesOreNameExist(oreDict))
         {
@@ -124,11 +148,11 @@ public class Quest
 
         if(!item.isEmpty())
         {
-            return new Quest(id, item, baseQty, multQty, randomFactor, levelScale, baseProfit);
+            return new Quest(id, item, baseQty, multQty, randomFactor, levelScale, baseProfit, completionCommand);
         }
         else
         {
-            return new Quest(id, oreDict, baseQty, multQty, randomFactor, levelScale, baseProfit);
+            return new Quest(id, oreDict, baseQty, multQty, randomFactor, levelScale, baseProfit, completionCommand);
         }
     }
 

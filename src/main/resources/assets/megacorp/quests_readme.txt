@@ -23,7 +23,8 @@ An individual quest looks like this:
   "multqty": 1.45,
   "rand": 0.25,
   "levelscale": 0.5,
-  "baseprofit": 15
+  "baseprofit": 15,
+  "command": "/give $player minecraft:diamond"
 }
 
 This is a lot, but again, some careful reading will prove useful. Here's what each line means:
@@ -49,6 +50,12 @@ rand - This specifies how much randomness to apply to the final work order value
 
 baseprofit - The amount of money that a single item is worth in this work order at level 0. This value grows by 10% for
              each completed level.
+
+command - If you want to execute some custom behaviour when a work order is completed, put the command here and it will
+          automatically run. If you need to reference the player, put $player in, and it will be replaced with the
+          owner's username (@p and the like will not work correctly, since commands run in the context of the server
+          itself. This is to ensure commands can have the permissions they need). Finally, note that commands can only
+          be run if the player is online at the time.
 
 Now that you have your quest, it's time to plop it in to the JSON file we saw above.
 

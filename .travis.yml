@@ -29,3 +29,5 @@ deploy:
     skip_cleanup: true
     local_dir: build/libs
     upload-dir: "megacorp/$TRAVIS_BRANCH"
+    on:
+      branch: 1.12.2

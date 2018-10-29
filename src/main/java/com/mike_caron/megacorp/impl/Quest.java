@@ -1,10 +1,9 @@
 package com.mike_caron.megacorp.impl;
 
-import com.google.common.base.Preconditions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mike_caron.megacorp.MegaCorpMod;
-import net.minecraft.item.Item;
+import com.mike_caron.megacorp.util.ItemUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
@@ -87,7 +86,7 @@ public class Quest
         String oreDictFallback = null;
 
         if(obj.has("item")){
-            ItemStack is = getStackFromTag(obj.get("item").getAsString());
+            ItemStack is = ItemUtils.getStackFromTag(obj.get("item").getAsString());
             if(is == null)
                 return null;
             item.add(is);
@@ -104,7 +103,7 @@ public class Quest
         {
             for(JsonElement i : obj.get("items").getAsJsonArray())
             {
-                ItemStack is = getStackFromTag(i.getAsString());
+                ItemStack is = ItemUtils.getStackFromTag(i.getAsString());
                 if(is == null)
                     continue;
                 item.add(is);
@@ -143,7 +142,7 @@ public class Quest
         if(oreDictFallback != null && !OreDictionary.doesOreNameExist(oreDict))
         {
             oreDict = null;
-            item.add(getStackFromTag(oreDictFallback));
+            item.add(ItemUtils.getStackFromTag(oreDictFallback));
         }
 
         if(!item.isEmpty())
@@ -154,62 +153,6 @@ public class Quest
         {
             return new Quest(id, oreDict, baseQty, multQty, randomFactor, levelScale, baseProfit, completionCommand);
         }
-    }
-
-    private static ItemStack getStackFromTag(String tag)
-    {
-        try
-        {
-            String[] parts = tag.split(":");
-            if (parts.length == 1)
-            {
-                //assume minecraft:item:0
-                Item item = Item.getByNameOrId(parts[0]);
-                Preconditions.checkNotNull(item);
-                return new ItemStack(item, 1);
-            }
-            else if (parts.length == 2)
-            {
-                // this can either be mod:item:0 or minecraft:item:meta
-
-                Item item = Item.getByNameOrId(tag);
-
-                if (item != null)
-                {
-                    return new ItemStack(item, 1);
-                }
-
-                // try minecraft:item:meta
-                int meta = Integer.parseInt(parts[1]);
-                item = Item.getByNameOrId("minecraft:" + parts[0]);
-
-                Preconditions.checkNotNull(item);
-
-                return new ItemStack(item, 1, meta);
-
-            }
-            else if (parts.length == 3)
-            {
-                //this has to be mod:item:meta
-                int meta = Integer.parseInt(parts[2]);
-                Item item = Item.getByNameOrId(parts[0] + ":" + parts[1]);
-
-                Preconditions.checkNotNull(item, "Can't locate the item " + tag);
-                return new ItemStack(item, 1, meta);
-
-            }
-        }
-        catch (NullPointerException ex)
-        {
-            //handled below
-        }
-        catch (NumberFormatException ex)
-        {
-            throw new RuntimeException("Can't locate the item " + tag, ex);
-        }
-
-        return null;
-        //throw new RuntimeException("I don't understand the item " + tag);
     }
 
     public int getCountForLevel(int level)

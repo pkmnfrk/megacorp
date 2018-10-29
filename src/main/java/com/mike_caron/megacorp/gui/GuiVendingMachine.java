@@ -4,10 +4,7 @@ import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.block.capital_investor.ContainerCapitalInvestor;
 import com.mike_caron.megacorp.block.vending_machine.ContainerVendingMachine;
 import com.mike_caron.megacorp.gui.control.*;
-import com.mike_caron.megacorp.impl.QuestLocalization;
-import com.mike_caron.megacorp.impl.RewardManager;
 import com.mike_caron.megacorp.network.CtoSMessage;
-import com.mike_caron.megacorp.util.StringUtil;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
@@ -36,7 +33,8 @@ public class GuiVendingMachine
     private GuiButton buyRewardButton = new GuiButton(ContainerVendingMachine.GUI_BUY_REWARD,  124, 135, 45, 14, GuiUtil.translate("tile.megacorp:capital_investor.buy"));
     private GuiFluid fluidGauge = new GuiFluid(7, 136, 113, 12, GuiFluid.Orientation.HORIZONTAL);
 
-    private ContainerVendingMachine.RewardData selectedReward = null;
+    private ContainerVendingMachine.VendingData selectedReward = null;
+    private int selectedIndex = -1;
 
     public GuiVendingMachine(ContainerVendingMachine container)
     {
@@ -52,7 +50,7 @@ public class GuiVendingMachine
     {
         super.updateScreen();
 
-        buyRewardButton.setEnabled(selectedReward != null && container.fluidAmount >= selectedReward.nextRankCost);
+        buyRewardButton.setEnabled(selectedReward != null && selectedReward.available);
     }
 
     @Override
@@ -61,16 +59,7 @@ public class GuiVendingMachine
         //update fluid
         if(selectedReward != null)
         {
-            String curReward = selectedReward.id;
-
-            for(ContainerVendingMachine.RewardData r : container.rewardList)
-            {
-                if(r.id.equals(curReward))
-                {
-                    selectedReward = r;
-                    break;
-                }
-            }
+            selectedReward = container.rewardList.get(selectedIndex);
         }
 
         ownedGroup.setVisible(true);
@@ -116,8 +105,8 @@ public class GuiVendingMachine
         {
             if (selectedReward != null)
             {
-                CtoSMessage packet = CtoSMessage.forGuiButton(container.getPos(), event.id, selectedReward.id);
-                MegaCorpMod.networkWrapper.sendToServer(packet);
+                //CtoSMessage packet = CtoSMessage.forGuiButton(container.getPos(), event.id, selectedReward.id);
+                //MegaCorpMod.networkWrapper.sendToServer(packet);
             }
         }
         else
@@ -149,28 +138,24 @@ public class GuiVendingMachine
     public void onClick(int i)
     {
         selectedReward = container.rewardList.get(i);
+        selectedIndex = i;
     }
 
     class RewardListItem
         implements GuiList.ListItem
     {
-        ContainerVendingMachine.RewardData reward;
-        QuestLocalization rewardLocalization;
-        String suffix;
-        List<String> toolTip;
+        ContainerVendingMachine.VendingData reward;
+        List<String> toolTip = new ArrayList<>();
 
-        public RewardListItem(ContainerVendingMachine.RewardData reward)
+        public RewardListItem(ContainerVendingMachine.VendingData reward)
         {
             this.reward = reward;
-            this.rewardLocalization = RewardManager.INSTANCE.getLocalizationForCurrent(this.reward.id);
-            suffix = " " + StringUtil.toRoman(this.reward.nextRank);
 
-            toolTip = new ArrayList<>();
-            String tmp = GuiUtil.i18n("tile.megacorp:capital_investor.rank", StringUtil.toRoman(reward.nextRank));
-            toolTip.add(tmp);
 
-            tmp = NumberFormat.getIntegerInstance().format(reward.nextRankCost) + "mB";
-            if(reward.nextRankCost > container.fluidAmount)
+            String tmp;
+
+            tmp = NumberFormat.getIntegerInstance().format(reward.cost) + "mB";
+            if(reward.cost > container.fluidAmount)
             {
                 tmp = TextFormatting.RED + tmp;
             }
@@ -188,22 +173,8 @@ public class GuiVendingMachine
             tmp = GuiUtil.i18n("tile.megacorp:capital_investor.currency", tmp);
 
             toolTip.add(tmp);
-            String[] vars = new String[reward.nextRankVariables.length];
-            NumberFormat floatFormat = NumberFormat.getNumberInstance();
-            NumberFormat intFormat = NumberFormat.getIntegerInstance();
-            for(int i = 0; i < vars.length; i++)
-            {
-                //if(reward.nextRankVariables[i] != (int)reward.nextRankVariables[i].floatValue())
-                //{
-                    vars[i] = floatFormat.format(reward.nextRankVariables[i]);
-                //}
-                //else
-                //{
-                //    vars[i] = intFormat.format(reward.nextRankVariables[i]);
-                //}
-            }
-            toolTip.add(String.format(rewardLocalization.description, (Object[])vars));
         }
+
 
         @Override
         public List<String> getTooltip(int mouseX, int mouseY, int width)
@@ -237,8 +208,9 @@ public class GuiVendingMachine
 
             drawGradientRect(0, 0, width, height, backColor.getRGB(), backColor.getRGB());
 
-            //drawItemStack(reward.item, 1, 1, "");
-            fontRenderer.drawString(rewardLocalization.title + suffix, 20, 5, foreColor.getRGB());
+
+            GuiUtil.drawItemStack(reward.itemStack, 1, 1, itemRender, getFontRenderer());
+            fontRenderer.drawString(reward.itemStack.getDisplayName(), 20, 5, foreColor.getRGB());
 
             GuiUtil.setGLColor(Color.WHITE);
             GuiUtil.bindTexture(GuiUtil.MISC_RESOURCES);

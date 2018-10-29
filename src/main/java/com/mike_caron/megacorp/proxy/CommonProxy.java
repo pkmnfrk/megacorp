@@ -5,6 +5,7 @@ import com.mike_caron.megacorp.ModConfig;
 import com.mike_caron.megacorp.fluid.ModFluids;
 import com.mike_caron.megacorp.impl.QuestManager;
 import com.mike_caron.megacorp.impl.RewardManager;
+import com.mike_caron.megacorp.impl.VendingManager;
 import com.mike_caron.megacorp.recipes.PCRecipeManager;
 import com.mike_caron.megacorp.recipes.SBSRecipeManager;
 import com.mike_caron.megacorp.reward.*;
@@ -79,6 +80,7 @@ public class CommonProxy
         PCRecipeManager.addDefaultRecipes();
         QuestManager.INSTANCE.loadQuests(questsDirectory);
         RewardManager.INSTANCE.loadRewards();
+        VendingManager.INSTANCE.loadVendingItems(megacorpDirectory);
     }
 
     @SubscribeEvent

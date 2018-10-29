@@ -3,11 +3,13 @@ package com.mike_caron.megacorp.block.vending_machine;
 import com.mike_caron.megacorp.api.CorporationManager;
 import com.mike_caron.megacorp.api.ICorporationManager;
 import com.mike_caron.megacorp.block.TEContainerBase;
+import com.mike_caron.megacorp.impl.VendingItem;
+import com.mike_caron.megacorp.impl.VendingManager;
 import com.mike_caron.megacorp.reward.BaseReward;
 import com.mike_caron.megacorp.util.StringUtil;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagFloat;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 
@@ -26,7 +28,7 @@ public class ContainerVendingMachine
     public int rewardsSerial = 0;
     public int lastRewardsSerial = -1;
 
-    public List<RewardData> rewardList = null;
+    public List<VendingData> rewardList = null;
 
     public ContainerVendingMachine(IInventory playerInventory, TileEntityVendingMachine te)
     {
@@ -112,7 +114,7 @@ public class ContainerVendingMachine
             {
                 NBTTagCompound reward = rewards.getCompoundTagAt(i);
 
-                RewardData data = RewardData.fromNbt(reward);
+                VendingData data = VendingData.fromNbt(reward);
 
                 rewardList.add(data);
             }
@@ -146,7 +148,7 @@ public class ContainerVendingMachine
             buildRewardList();
         }
 
-        for (RewardData reward : rewardList)
+        for (VendingData reward : rewardList)
         {
             rewards.appendTag(reward.serialize());
         }
@@ -167,24 +169,18 @@ public class ContainerVendingMachine
     {
         rewardList = new ArrayList<>();
 
-        /*
-        for(IReward reward : RewardManager.INSTANCE.getRewards())
-        {
-            RewardData rd = new RewardData();
-            rd.id = reward.getId();
-            rd.currentRank = corp.getRankInReward(reward.getId());
-            if(rd.currentRank >= reward.numRanks())
-                continue;
 
-            rd.nextRank = rd.currentRank + 1;
-            rd.nextRankCost = reward.costForRank(rd.nextRank);
-            rd.nextRankVariables = DataUtils.box(reward.getValuesForRank(rd.nextRank));
-            rd.currencyType = reward.getCurrency();
-            rd.available = reward.getCurrency().name().toLowerCase().equals(fluid) && rd.nextRankCost <= fluidAmount;
+        for(VendingItem reward : VendingManager.INSTANCE.getItems())
+        {
+            VendingData rd = new VendingData();
+            rd.itemStack = reward.itemStack;
+            rd.cost = reward.cost;
+            rd.currencyType = reward.currency;
+
+            rd.available = reward.currency.name().toLowerCase().equals(fluid) && rd.cost <= fluidAmount;
 
             rewardList.add(rd);
         }
-        */
     }
 
     @Override
@@ -193,14 +189,11 @@ public class ContainerVendingMachine
         return 4;
     }
 
-    public static class RewardData
+    public static class VendingData
     {
         public static final int DATA_SIZE = 3;
-        public String id;
-        public int currentRank;
-        public int nextRank;
-        public int nextRankCost;
-        public Float[] nextRankVariables;
+        public ItemStack itemStack;
+        public int cost;
         public BaseReward.CurrencyType currencyType;
         public boolean available;
 
@@ -208,43 +201,22 @@ public class ContainerVendingMachine
         {
             NBTTagCompound ret = new NBTTagCompound();
 
-            int[] data = new int[DATA_SIZE];
-            data[0] = currentRank | (nextRank << 16);
-            data[1] = nextRankCost;
-            data[2] = currencyType.ordinal() | ((available ? 1 : 0) << 16);
-
-            NBTTagList vars = new NBTTagList();
-            for (Float nextRankVariable : nextRankVariables)
-            {
-                vars.appendTag(new NBTTagFloat(nextRankVariable));
-            }
-            //System.arraycopy(DataUtils.unbox(nextRankVariables), 0, data, DATA_SIZE, nextRankVariables.length);
-
-            ret.setString("id", id);
-            ret.setIntArray("d", data);
-            ret.setTag("f", vars);
+            ret.setTag("item", itemStack.serializeNBT());
+            ret.setInteger("cost", cost);
+            ret.setString("cost_type", currencyType.name());
+            ret.setBoolean("available", available);
 
             return ret;
         }
 
-        public static RewardData fromNbt(NBTTagCompound tag)
+        public static VendingData fromNbt(NBTTagCompound tag)
         {
-            RewardData ret = new RewardData();
-            int[] data = tag.getIntArray("d");
+            VendingData ret = new VendingData();
 
-            ret.id = tag.getString("id");
-            ret.currentRank = data[0] & 0xffff;
-            ret.nextRank = data[0] >> 16;
-            ret.nextRankCost = data[1];
-            ret.currencyType = BaseReward.CurrencyType.values()[data[2] & 0xffff];
-            ret.available = (data[2] >> 16) != 0;
-
-            NBTTagList vars = tag.getTagList("f", Constants.NBT.TAG_FLOAT);
-            ret.nextRankVariables = new Float[vars.tagCount()];
-            for(int i = 0; i < vars.tagCount(); i++)
-            {
-                ret.nextRankVariables[i] = vars.getFloatAt(i);
-            }
+            ret.itemStack = new ItemStack(tag.getCompoundTag("item"));
+            ret.cost = tag.getInteger("cost");
+            ret.currencyType = BaseReward.CurrencyType.valueOf(tag.getString("cost_type"));
+            ret.available = tag.getBoolean("available");
 
             return ret;
         }

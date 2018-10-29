@@ -12,6 +12,8 @@ import com.mike_caron.megacorp.block.shipping_depot.ContainerShippingDepot;
 import com.mike_caron.megacorp.block.shipping_depot.TileEntityShippingDepot;
 import com.mike_caron.megacorp.block.uplink.ContainerUplink;
 import com.mike_caron.megacorp.block.uplink.TileEntityUplink;
+import com.mike_caron.megacorp.block.vending_machine.ContainerVendingMachine;
+import com.mike_caron.megacorp.block.vending_machine.TileEntityVendingMachine;
 import com.mike_caron.megacorp.gui.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -54,6 +56,10 @@ public class GuiProxy implements IGuiHandler
         else if(te instanceof TileEntityCapitalInvestor)
         {
             return new ContainerCapitalInvestor(player.inventory, (TileEntityCapitalInvestor)te);
+        }
+        else if(te instanceof TileEntityVendingMachine)
+        {
+            return new ContainerVendingMachine(player.inventory, (TileEntityVendingMachine)te);
         }
         /*
         else if(te instanceof TileEntityLiquidShippingDepot)
@@ -113,6 +119,11 @@ public class GuiProxy implements IGuiHandler
         {
             TileEntityCapitalInvestor teCI = (TileEntityCapitalInvestor)te;
             return new GuiCapitalInvestor(new ContainerCapitalInvestor(player.inventory, teCI));
+        }
+        else if(te instanceof TileEntityVendingMachine)
+        {
+            TileEntityVendingMachine teCI = (TileEntityVendingMachine)te;
+            return new GuiVendingMachine(new ContainerVendingMachine(player.inventory, teCI));
         }
 
         return null;

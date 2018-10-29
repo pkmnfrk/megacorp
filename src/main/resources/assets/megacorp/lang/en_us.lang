@@ -78,6 +78,8 @@ tile.megacorp:liquid_shipping_depot.description=The Liquid Shipping Depot is the
 tile.megacorp:liquid_shipping_depot.liquid=Liquid: %s
 tile.megacorp:liquid_shipping_depot.quantity=Quantity: %smB
 
+tile.megacorp:vending_machine.name=Vending Machine
+
 item.megacorp:work_voucher.name=Work Voucher
 item.megacorp:work_voucher.tooltip_blank=Blank?
 item.megacorp:work_voucher.tooltip=%s (%2s/%1s)

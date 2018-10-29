@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "megacorp:blocks/machine_top",
+    "front": "megacorp:blocks/vending_machine",
+    "side": "megacorp:blocks/machine_side"
+  }
+}

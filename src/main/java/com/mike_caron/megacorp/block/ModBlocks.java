@@ -15,6 +15,8 @@ import com.mike_caron.megacorp.block.shipping_depot.BlockShippingDepot;
 import com.mike_caron.megacorp.block.shipping_depot.TileEntityShippingDepot;
 import com.mike_caron.megacorp.block.uplink.BlockUplink;
 import com.mike_caron.megacorp.block.uplink.TileEntityUplink;
+import com.mike_caron.megacorp.block.vending_machine.BlockVendingMachine;
+import com.mike_caron.megacorp.block.vending_machine.TileEntityVendingMachine;
 import com.mike_caron.megacorp.fluid.ModFluids;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
@@ -69,6 +71,9 @@ public class ModBlocks
     @GameRegistry.ObjectHolder("liquid_shipping_depot")
     public static BlockLiquidShippingDepot liquid_shipping_depot;
 
+    @GameRegistry.ObjectHolder("vending_machine")
+    public static BlockVendingMachine vending_machine;
+
     //@GameRegistry.ObjectHolder("money_block")
     //public static BlockBase money_block;
 
@@ -89,6 +94,7 @@ public class ModBlocks
         registry.register(new BlockCapitalInvestor());
         registry.register(new BlockShippingDepot());
         registry.register(new BlockLiquidShippingDepot());
+        registry.register(new BlockVendingMachine());
 
         //registry.register(money_block = (BlockBase)new BlockBase(Material.IRON, "money_block").setHardness(10));
         //registry.register(dense_money_block = (BlockBase)new BlockBase(Material.IRON, "dense_money_block").setHardness(20));
@@ -103,6 +109,7 @@ public class ModBlocks
         GameRegistry.registerTileEntity(TileEntityShippingDepot.class, new ResourceLocation(MegaCorpMod.modId, "shipping_depot"));
         GameRegistry.registerTileEntity(TileEntityLiquidShippingDepot.class, new ResourceLocation(MegaCorpMod.modId, "liquid_shipping_depot"));
         GameRegistry.registerTileEntity(TileEntityCapitalInvestor.class, new ResourceLocation(MegaCorpMod.modId, "capital_investor"));
+        GameRegistry.registerTileEntity(TileEntityVendingMachine.class, new ResourceLocation(MegaCorpMod.modId, "vending_machine"));
     }
 
     @SuppressWarnings("ConstantConditions")

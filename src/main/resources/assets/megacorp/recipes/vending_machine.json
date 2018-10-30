@@ -1,0 +1,28 @@
+{
+  "type": "forge:ore_shaped",
+  "conditions": [
+    {
+      "type": "recipe_enabled",
+      "item": "vending_machine"
+    }
+  ],
+  "pattern": [
+    "ggg",
+    "ece",
+    "ggg"
+  ],
+  "key": {
+    "g": {
+      "item": "minecraft:gold_ingot"
+    },
+    "e": {
+      "item": "minecraft:emerald"
+    },
+    "c": {
+      "item": "minecraft:chest"
+    }
+  },
+  "result": {
+    "item": "megacorp:vending_machine"
+  }
+}

@@ -4,5 +4,8 @@
   },
   "recipes": {
     "fluid": "com.mike_caron.megacorp.recipes.specific.FluidRecipe$Factory"
+  },
+  "conditions": {
+    "recipe_enabled": "com.mike_caron.megacorp.recipes.ItemEnabledConditionFactory"
   }
 }

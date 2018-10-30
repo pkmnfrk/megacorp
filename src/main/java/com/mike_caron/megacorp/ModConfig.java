@@ -12,6 +12,7 @@ public class ModConfig
     public static String[] rewardBlacklist = null;
 
     public static boolean vendingMachineEnabled = false;
+    public static boolean vendingMachineRecipeEnabled = false;
 
     public static void readConfig()
     {
@@ -45,5 +46,7 @@ public class ModConfig
         rewardBlacklist = cfg.getStringList("rewardBlacklist", CATEGORY_GENERAL, new String[0], "Any rewards to disable");
 
         vendingMachineEnabled = cfg.getBoolean("vendingMachineEnabled", CATEGORY_GENERAL, false, "Enable the vending machine block (configure in vending.json)");
+
+        vendingMachineRecipeEnabled = cfg.getBoolean("vendingMachineRecipeEnabled", CATEGORY_GENERAL, true, "Enable the vending machine block recipe (otherwise it's creative only)");
     }
 }

@@ -1,6 +1,7 @@
 package com.mike_caron.megacorp.block;
 
 import com.mike_caron.megacorp.MegaCorpMod;
+import com.mike_caron.megacorp.ModConfig;
 import com.mike_caron.megacorp.block.capital_investor.BlockCapitalInvestor;
 import com.mike_caron.megacorp.block.capital_investor.TileEntityCapitalInvestor;
 import com.mike_caron.megacorp.block.liquid_shipping_depot.BlockLiquidShippingDepot;
@@ -94,7 +95,6 @@ public class ModBlocks
         registry.register(new BlockCapitalInvestor());
         registry.register(new BlockShippingDepot());
         registry.register(new BlockLiquidShippingDepot());
-        registry.register(new BlockVendingMachine());
 
         //registry.register(money_block = (BlockBase)new BlockBase(Material.IRON, "money_block").setHardness(10));
         //registry.register(dense_money_block = (BlockBase)new BlockBase(Material.IRON, "dense_money_block").setHardness(20));
@@ -109,7 +109,12 @@ public class ModBlocks
         GameRegistry.registerTileEntity(TileEntityShippingDepot.class, new ResourceLocation(MegaCorpMod.modId, "shipping_depot"));
         GameRegistry.registerTileEntity(TileEntityLiquidShippingDepot.class, new ResourceLocation(MegaCorpMod.modId, "liquid_shipping_depot"));
         GameRegistry.registerTileEntity(TileEntityCapitalInvestor.class, new ResourceLocation(MegaCorpMod.modId, "capital_investor"));
-        GameRegistry.registerTileEntity(TileEntityVendingMachine.class, new ResourceLocation(MegaCorpMod.modId, "vending_machine"));
+
+        if(ModConfig.vendingMachineEnabled)
+        {
+            registry.register(new BlockVendingMachine());
+            GameRegistry.registerTileEntity(TileEntityVendingMachine.class, new ResourceLocation(MegaCorpMod.modId, "vending_machine"));
+        }
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -118,10 +123,13 @@ public class ModBlocks
     {
         IForgeRegistry<Item> registry = event.getRegistry();
 
-        getAllBlocks().forEach(block -> registry.register(
-            new ItemBlock(block)
-                .setRegistryName(block.getRegistryName())
-        ));
+        getAllBlocks().forEach(block -> {
+            if (block != null)
+                registry.register(
+                    new ItemBlock(block)
+                        .setRegistryName(block.getRegistryName())
+                );
+        });
 
         //OreDictionary.registerOre("blockMoney", money_block);
         //OreDictionary.registerOre("blockDenseMoney", dense_money_block);
@@ -145,7 +153,8 @@ public class ModBlocks
 
                 if(ret == null)
                 {
-                    MegaCorpMod.logger.error("Block " + f.getName() + " is null");
+                    //MegaCorpMod.logger.error("Block " + f.getName() + " is null");
+                    return null;
                 }
                 return ret;
             }

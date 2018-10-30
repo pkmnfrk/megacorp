@@ -11,6 +11,8 @@ public class ModConfig
     public static String[] workorderBlacklist = null;
     public static String[] rewardBlacklist = null;
 
+    public static boolean vendingMachineEnabled = false;
+
     public static void readConfig()
     {
         Configuration cfg = CommonProxy.config;
@@ -41,5 +43,7 @@ public class ModConfig
         workorderFileBlacklist = cfg.getStringList("workorderFileBlacklist", CATEGORY_GENERAL, new String[0], "Any files to exclude from the default list. Only specify the root name (eg, 'foo' instead of 'foo.json')");
 
         rewardBlacklist = cfg.getStringList("rewardBlacklist", CATEGORY_GENERAL, new String[0], "Any rewards to disable");
+
+        vendingMachineEnabled = cfg.getBoolean("vendingMachineEnabled", CATEGORY_GENERAL, false, "Enable the vending machine block (configure in vending.json)");
     }
 }

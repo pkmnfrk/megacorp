@@ -20,14 +20,6 @@ deploy:
     on:
       tags: true
     draft: true
-  - provider: s3
-    access_key_id:
-      secure: "Lc4KyfILvDfk0KMPD5LtnraGGuoK1XgEPHAN1gGniQVvDc1BVhOxesGawXrZi+118SVOtD+F/yAkrakh2rU3PTz8hPDpkLIei+4UqMbzcgKx1LY78sLhdItq6hbzrzba29gWlmxBla1Inw3WzuiKcQ6EMIy9yPe7mvz+Nx6ysqm2BhJwN55+atoylsANOTwFs3FeXn0DEycmJl/b1PWaGmDMNJ87zHLb2EPQ/ThSgW078EGFmKmVbUQ1HoBKfa8sALknY3fp7imk/UudJyP+azbnjG44nqt0o1V3c4y9LVLrjT8JFBueELKlKHe+3p4z1fMcMb5O+eaSw6RJrCPZt6kyqaNJebCFWC7NKeTlQT+FAPHYpGLsyc2D6YNM/dA1TEa5P6K0/F32auhde1ZVeDzCNO3mtfYLrUUhYHdXt7qeme4auDYvGVg/tbqrtpfoQBlDniAFrWMe9ZZWEGvmw21VfVM6mMs/k5EfwGR3Ghx9MDvLyRvZ4P9gQCjcKNKSq+JvWcxF1yAQdAPoGKbkz8WWWcIl60UCLFsQibTHQcRWlK++GXhJZx2jsHeuIUl9amQ2Lkn3fsgHs9pxsraNKHb3IMUeroxvrexjsi7hGk/dxWTK6vrUZMphdM0DbFJ2rMkeixqzpjefVe3Xb27CDIcUZJYJK4/cGf6N76b4hSA="
-    secret_access_key:
-      secure: "ZmO/D7UracUTmCTwro0T0vgNqfnTyK3DYn580lkfgdmQup4cKZAZouTDL2+RRpQ/ayuSWHDwY8LEaVGLsqhXoNaJlWz+cQggVjxF9ovDgvZglO1COp6zO37OOSh+Gss9Ra0MsraWgACayeSK3ue2rbfzHR60af+veaEF76y/M3VXdAaltO/Zq4LkwgjvWRa8A8XjAIk/1b8hWKNh39Fldx5Vs0TmcfYIWqKiqzcuxTvIisNFyPlhu6abFBVzHmwLusm2ueFBF4OuQLv2lvZfBQC+OULSONWMlm8b4WTbHN0/OrmVeQAw401Pusx4sCAP9iHsrkw62XPbNF8a0eAPpgctpEhCqL1Cdta7QgKUTNySF4Ehn0CbKQNe4qqVTAicaUEuMMRo2RUECFRGHHTuiJwBB9qTISMB8B8qQLDQBwvxsEeYWL90S3KZXBIjoXLmVQ26GSSlRXj6QhOZRmZI7EDh0PKrlpHjGpyTHygrEtfHBFeWSQ4RKuHK2EjJoX3LWuzGzg6V6eQ+xnD7AIsQ+cv1D1zVHeVlByY+m1qEUdMr2fekHns88T3EDj26tKIC6kuG25/dvAoUE66wuhoemocKOacthpUg9ZIaurAvtolgXTF06at78H8/Bw2MwbzEaJzxwJdL0nJc0PJStS4phna4ld9PR3ZLKSX8FvTxmQU="
-    bucket: "pkmnfrk-minecraft-builds"
-    skip_cleanup: true
-    local_dir: build/libs
-    upload-dir: "megacorp/$TRAVIS_BRANCH"
-    on:
-      branch: 1.12.2
+addons:
+  artifacts:
+    working_dir: build/libs

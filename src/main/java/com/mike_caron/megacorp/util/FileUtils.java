@@ -40,4 +40,10 @@ public class FileUtils
     {
         copy(FileUtils.class.getResourceAsStream(resource),destination.getPath());
     }
+
+    public static void exportResourceOnce(String resource, File destination)
+    {
+        if(destination.exists()) return;
+        exportResource(resource, destination);
+    }
 }

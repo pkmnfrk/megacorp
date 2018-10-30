@@ -39,10 +39,27 @@ public class CommonProxy
 
     public void preInit(FMLPreInitializationEvent e)
     {
-        File directory = e.getModConfigurationDirectory();
+        setupDirectories(e.getModConfigurationDirectory());
+        createMissingDirectories();
+
+        FileUtils.exportResource("/assets/megacorp/quests_readme.txt", new File(questsDirectory.getPath(), "readme.txt"));
+        FileUtils.exportResourceOnce("/assets/megacorp/default_vending.json", new File(megacorpDirectory.getPath(), "vending.json"));
+
+        config = new Configuration(new File(megacorpDirectory.getPath(), "megacorp.cfg"));
+        ModConfig.readConfig();
+
+        ModFluids.register();
+    }
+
+    protected void setupDirectories(File directory)
+    {
         megacorpDirectory = new File(directory.getPath(), "megacorp");
         questsDirectory = new File(megacorpDirectory.getPath(), "quests");
         rewardsDirectory = new File(megacorpDirectory.getPath(), "rewards");
+    }
+
+    private void createMissingDirectories()
+    {
         if (!megacorpDirectory.exists() && !megacorpDirectory.mkdir())
         {
             MegaCorpMod.logger.error("Unable to create config directory");
@@ -58,14 +75,6 @@ public class CommonProxy
         {
             MegaCorpMod.logger.error("Unable to create config directory");
         }
-
-        File readme = new File(questsDirectory.getPath(), "readme.txt");
-        FileUtils.exportResource("/assets/megacorp/quests_readme.txt", readme);
-
-        config = new Configuration(new File(megacorpDirectory.getPath(), "megacorp.cfg"));
-        ModConfig.readConfig();
-
-        ModFluids.register();
     }
 
     public void init(FMLInitializationEvent e)

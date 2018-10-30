@@ -1,8 +1,7 @@
 package com.mike_caron.megacorp.block.vending_machine;
 
 import com.mike_caron.megacorp.MegaCorpMod;
-import com.mike_caron.megacorp.block.OwnedMachineBlockBase;
-import com.mike_caron.megacorp.block.capital_investor.TileEntityCapitalInvestor;
+import com.mike_caron.megacorp.block.MachineBlockBase;
 import com.mike_caron.megacorp.item.Bottle;
 import com.mike_caron.megacorp.util.FluidUtils;
 import com.mike_caron.megacorp.util.TOPUtils;
@@ -24,7 +23,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 
 public class BlockVendingMachine
-    extends OwnedMachineBlockBase
+    extends MachineBlockBase
 {
     public BlockVendingMachine()
     {
@@ -84,16 +83,22 @@ public class BlockVendingMachine
     }
 
     @Override
+    public boolean hasInfo(EntityPlayer player)
+    {
+        return player.isSneaking();
+    }
+
+    @Override
     protected void addMegaCorpProbeInfo(ProbeMode mode, IProbeInfo info, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data)
     {
-        super.addMegaCorpProbeInfo(mode, info, player, world, blockState, data);
-
         TileEntityVendingMachine te = getTE(world, data.getPos());
 
         if(te == null) return;
 
         if(player.isSneaking())
         {
+            super.addMegaCorpProbeInfo(mode, info, player, world, blockState, data);
+
             TOPUtils.addFluidTank(info, te.fluidTank);
         }
     }

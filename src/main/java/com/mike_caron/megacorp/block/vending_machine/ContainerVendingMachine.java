@@ -176,6 +176,7 @@ public class ContainerVendingMachine
             rd.itemStack = reward.itemStack;
             rd.cost = reward.cost;
             rd.currencyType = reward.currency;
+            rd.id = reward.id;
 
             rd.available = reward.currency.name().toLowerCase().equals(fluid) && rd.cost <= fluidAmount;
 
@@ -186,7 +187,7 @@ public class ContainerVendingMachine
     @Override
     public int getId()
     {
-        return 4;
+        return 5;
     }
 
     public static class VendingData
@@ -196,6 +197,7 @@ public class ContainerVendingMachine
         public int cost;
         public BaseReward.CurrencyType currencyType;
         public boolean available;
+        public String id;
 
         public NBTTagCompound serialize()
         {
@@ -205,6 +207,7 @@ public class ContainerVendingMachine
             ret.setInteger("cost", cost);
             ret.setString("cost_type", currencyType.name());
             ret.setBoolean("available", available);
+            ret.setString("id", id);
 
             return ret;
         }
@@ -217,6 +220,7 @@ public class ContainerVendingMachine
             ret.cost = tag.getInteger("cost");
             ret.currencyType = BaseReward.CurrencyType.valueOf(tag.getString("cost_type"));
             ret.available = tag.getBoolean("available");
+            ret.id = tag.getString("id");
 
             return ret;
         }

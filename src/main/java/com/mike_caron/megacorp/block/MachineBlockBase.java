@@ -37,15 +37,18 @@ public class MachineBlockBase extends FacingBlockBase implements ITOPInfoProvide
     @Override
     public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data)
     {
-        TileEntityBase teb = getTE(world, data.getPos());
+        if(hasInfo(player))
+        {
+            TileEntityBase teb = getTE(world, data.getPos());
 
-        if(teb == null) return;
+            if (teb == null)
+                return;
 
-        IProbeInfo box = probeInfo
-            .vertical(probeInfo.defaultLayoutStyle().borderColor(0xff008000));
+            IProbeInfo box = probeInfo
+                .vertical(probeInfo.defaultLayoutStyle().borderColor(0xff008000));
 
-        addMegaCorpProbeInfo(mode, box, player, world, blockState, data);
-
+            addMegaCorpProbeInfo(mode, box, player, world, blockState, data);
+        }
     }
 
     protected void addMegaCorpProbeInfo(ProbeMode mode, IProbeInfo info, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data)

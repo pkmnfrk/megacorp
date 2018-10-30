@@ -1,5 +1,6 @@
 package com.mike_caron.megacorp.util;
 
+import java.util.Random;
 import java.util.TreeMap;
 
 public final class StringUtil
@@ -42,6 +43,21 @@ public final class StringUtil
         if((a == null) != (b == null)) return false;
 
         return a.equals(b);
+    }
+
+    public static String randomString(int len)
+    {
+        Random r = new Random();
+        StringBuilder ret = new StringBuilder();
+
+        for(int i = 0; i < len; i++)
+        {
+            char c = (char)(((int)'a') + r.nextInt(26));
+
+            ret.append(c);
+        }
+
+        return ret.toString();
     }
 
 }

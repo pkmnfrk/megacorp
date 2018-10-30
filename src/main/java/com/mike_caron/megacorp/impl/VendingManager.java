@@ -71,6 +71,17 @@ public class VendingManager
         return items;
     }
 
+    public VendingItem getItem(String id)
+    {
+        for(VendingItem item : items)
+        {
+            if(item.id.equals(id))
+                return item;
+        }
+
+        return null;
+    }
+
     private void loadItem(JsonObject item)
     {
         ItemStack itemStack = ItemUtils.getStackFromTag(item.get("item").getAsString());

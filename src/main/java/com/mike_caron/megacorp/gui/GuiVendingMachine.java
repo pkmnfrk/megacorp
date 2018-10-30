@@ -1,7 +1,6 @@
 package com.mike_caron.megacorp.gui;
 
 import com.mike_caron.megacorp.MegaCorpMod;
-import com.mike_caron.megacorp.block.capital_investor.ContainerCapitalInvestor;
 import com.mike_caron.megacorp.block.vending_machine.ContainerVendingMachine;
 import com.mike_caron.megacorp.gui.control.*;
 import com.mike_caron.megacorp.network.CtoSMessage;
@@ -34,7 +33,6 @@ public class GuiVendingMachine
     private GuiFluid fluidGauge = new GuiFluid(7, 136, 113, 12, GuiFluid.Orientation.HORIZONTAL);
 
     private ContainerVendingMachine.VendingData selectedReward = null;
-    private int selectedIndex = -1;
 
     public GuiVendingMachine(ContainerVendingMachine container)
     {
@@ -59,7 +57,14 @@ public class GuiVendingMachine
         //update fluid
         if(selectedReward != null)
         {
-            selectedReward = container.rewardList.get(selectedIndex);
+            for(ContainerVendingMachine.VendingData v : container.rewardList)
+            {
+                if(v.id.equals(selectedReward.id))
+                {
+                    selectedReward = v;
+                    break;
+                }
+            }
         }
 
         ownedGroup.setVisible(true);
@@ -101,12 +106,12 @@ public class GuiVendingMachine
     @Override
     public void clicked(GuiButton.ClickedEvent event)
     {
-        if(event.id == ContainerCapitalInvestor.GUI_BUY_REWARD)
+        if(event.id == ContainerVendingMachine.GUI_BUY_REWARD)
         {
             if (selectedReward != null)
             {
-                //CtoSMessage packet = CtoSMessage.forGuiButton(container.getPos(), event.id, selectedReward.id);
-                //MegaCorpMod.networkWrapper.sendToServer(packet);
+                CtoSMessage packet = CtoSMessage.forGuiButton(container.getPos(), event.id, selectedReward.id);
+                MegaCorpMod.networkWrapper.sendToServer(packet);
             }
         }
         else
@@ -138,7 +143,6 @@ public class GuiVendingMachine
     public void onClick(int i)
     {
         selectedReward = container.rewardList.get(i);
-        selectedIndex = i;
     }
 
     class RewardListItem

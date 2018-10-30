@@ -1,7 +1,7 @@
 package com.mike_caron.megacorp.network;
 
 import com.mike_caron.megacorp.MegaCorpMod;
-import com.mike_caron.megacorp.block.TileEntityOwnedBase;
+import com.mike_caron.megacorp.block.TileEntityBase;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
@@ -177,18 +177,18 @@ public class CtoSMessage implements IMessage
                             {
                                 case GuiButton:
                                 {
-                                    TileEntityOwnedBase teb = (TileEntityOwnedBase) te;
+                                    TileEntityBase teb = (TileEntityBase) te;
                                     teb.handleGuiButton(player, message.getGuiElement(), message.getExtraData());
                                 }
                                 break;
                                 case GuiString:
                                 {
-                                    TileEntityOwnedBase teb = (TileEntityOwnedBase) te;
+                                    TileEntityBase teb = (TileEntityBase) te;
                                     teb.handleGuiString(player, message.getGuiElement(), message.getString());
                                 }
                                 case GuiToggle:
                                 {
-                                    TileEntityOwnedBase teb = (TileEntityOwnedBase) te;
+                                    TileEntityBase teb = (TileEntityBase) te;
                                     teb.handleGuiToggle(player, message.getGuiElement(), message.getBoolean());
                                 }
 

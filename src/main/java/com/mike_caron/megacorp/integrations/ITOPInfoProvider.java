@@ -10,4 +10,6 @@ import net.minecraft.world.World;
 public interface ITOPInfoProvider
 {
     void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data);
+
+    default boolean hasInfo(EntityPlayer player) { return true; }
 }

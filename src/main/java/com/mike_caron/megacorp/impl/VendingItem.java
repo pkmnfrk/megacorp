@@ -1,6 +1,7 @@
 package com.mike_caron.megacorp.impl;
 
 import com.mike_caron.megacorp.reward.BaseReward;
+import com.mike_caron.megacorp.util.StringUtil;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -10,12 +11,14 @@ public class VendingItem
     public final ItemStack itemStack;
     public final int cost;
     public final BaseReward.CurrencyType currency;
+    public final String id;
 
     public VendingItem(@Nonnull ItemStack itemStack, int cost, BaseReward.CurrencyType currency)
     {
         this.itemStack = itemStack;
         this.cost = cost;
         this.currency = currency;
+        this.id = StringUtil.randomString(8);
     }
 
     public static class Comparator

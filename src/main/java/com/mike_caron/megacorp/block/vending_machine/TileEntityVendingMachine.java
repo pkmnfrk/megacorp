@@ -1,10 +1,13 @@
 package com.mike_caron.megacorp.block.vending_machine;
 
 import com.mike_caron.megacorp.block.TileEntityBase;
-import com.mike_caron.megacorp.block.capital_investor.ContainerCapitalInvestor;
 import com.mike_caron.megacorp.fluid.ModFluids;
+import com.mike_caron.megacorp.impl.VendingItem;
+import com.mike_caron.megacorp.impl.VendingManager;
 import com.mike_caron.megacorp.reward.BaseReward;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
@@ -92,37 +95,32 @@ public class TileEntityVendingMachine
     @Override
     public void handleGuiButton(EntityPlayerMP player, int button, String extraData)
     {
-        if(button == ContainerCapitalInvestor.GUI_BUY_REWARD)
+        if(button == ContainerVendingMachine.GUI_BUY_REWARD)
         {
+            VendingItem vending = VendingManager.INSTANCE.getItem(extraData);
 
-            /*
-            Optional<Pair<Integer, BaseReward.CurrencyType>> cost = Optional.empty();
-            try
+            if(vending == null)
+                return;
+
+            if(!validateCurrency(vending.currency))
+                return;
+
+            FluidStack drained = fluidTank.drainInternal(vending.cost, false);
+
+            if(drained == null || drained.amount != vending.cost)
+                return;
+
+            drained = fluidTank.drainInternal(drained, true);
+
+            ItemStack newStack = vending.itemStack.copy();
+
+            if(!player.inventory.addItemStackToInventory(newStack))
             {
-                cost = corp.getCostForReward(extraData);
-            }
-            catch(IllegalArgumentException ex)
-            {
-                MegaCorpMod.logger.error("Tried to inquire about invalid reward " + extraData);
+                EntityItem item = new EntityItem(player.getEntityWorld(), player.posX, player.posY, player.posZ, newStack);
+                player.getEntityWorld().spawnEntity(item);
             }
 
-            if(cost.isPresent())
-            {
-                int c = cost.get().getLeft();
-                BaseReward.CurrencyType m = cost.get().getRight();
-
-                if(!validateCurrency(m)) return;
-
-                FluidStack drained = fluidTank.drainInternal(c, false);
-
-                if(drained != null && drained.amount == c)
-                {
-                    drained = fluidTank.drainInternal(drained, true);
-
-                    corp.purchaseReward(extraData);
-                }
-            }
-            */
+            markDirty();
         }
     }
 

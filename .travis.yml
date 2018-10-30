@@ -23,3 +23,5 @@ deploy:
 addons:
   artifacts:
     working_dir: build/libs
+    paths:
+      - $(ls build/libs/*.jar | tr "\n" ":")

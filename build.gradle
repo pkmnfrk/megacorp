@@ -10,8 +10,7 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
-
-//version = "0.1"
+version = getVersionString()
 group = "com.mike-caron.megacorp" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "MegaCorp"
 
@@ -112,4 +111,16 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+}
+
+def getVersionString()
+{
+    def ret = mod_version
+
+    if (!System.env.TRAVIS_TAG && System.env.TRAVIS_BUILD_NUMBER)
+    {
+        ret += "-" + System.env.TRAVIS_BUILD_NUMBER
+    }
+
+    return ret;
 }

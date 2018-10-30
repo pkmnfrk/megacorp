@@ -1,0 +1,16 @@
+{
+  "icon": {
+    "item": "megacorp:vending_machine"
+  },
+  "enabled": "megacorp:vending_machine",
+  "body": [
+    {
+      "template": "3x3",
+      "elements": {
+        "recipe": "megacorp:vending_machine"
+      }
+    },
+    "para1",
+    "para2"
+  ]
+}

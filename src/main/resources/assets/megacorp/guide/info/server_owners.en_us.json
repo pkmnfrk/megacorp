@@ -1,5 +1,6 @@
 {
 	"title":"For Server Owners",
 	"para1":"Did you know that you can create custom Work Orders that will show up in the usual rotation? You can even set custom commands to run on completion!",
-	"para2": "Check the custom quests folder in the config (config/megacorp/quests) for details!"
+	"para2": "Check the custom quests folder in the config (config/megacorp/quests) for details!",
+	"para3": "You may also be interested in the Vending Machine block which will allow you set up a Money shop. It must be enabled to show up, check the MegaCorp config for how."
 }

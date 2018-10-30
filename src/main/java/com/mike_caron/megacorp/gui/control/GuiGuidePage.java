@@ -4,6 +4,7 @@ import com.google.gson.*;
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.gui.GuiUtil;
 import com.mike_caron.megacorp.util.DataUtils;
+import com.mike_caron.megacorp.util.ItemUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.item.ItemStack;
@@ -425,8 +426,11 @@ public class GuiGuidePage
             else if(obj.has("link") || obj.has("extLink"))
             {
                 control = insertLink(obj, translation);
-                control.setX(2);
-                ((GuiSized)control).setWidth(this.width - 4);
+                if(control != null)
+                {
+                    control.setX(2);
+                    ((GuiSized) control).setWidth(this.width - 4);
+                }
             }
             else if(
                    obj.has("horiz")
@@ -540,6 +544,9 @@ public class GuiGuidePage
         {
             GuiSized control = insertLink(index.get(i), translation);
 
+            if(control == null)
+                continue;
+
             control.setY(yPos);
             control.setX(2);
             control.setWidth(this.width - 4);
@@ -609,6 +616,29 @@ public class GuiGuidePage
         {
             JsonObject otherPage = loadResourceAsJson(new ResourceLocation(MegaCorpMod.modId, baseFile(otherUri)));
             JsonObject otherTranslation = loadLocalizedResourceAsJson(otherUri);
+
+            if(otherPage != null && otherPage.has("enabled"))
+            {
+                JsonElement enabled = otherPage.get("enabled");
+                if(enabled.isJsonPrimitive())
+                {
+                    if(enabled.getAsJsonPrimitive().isBoolean() && !enabled.getAsBoolean())
+                        return null;
+
+                    if(enabled.getAsJsonPrimitive().isString())
+                    {
+                        try
+                        {
+                            ItemUtils.getStackFromTag(enabled.getAsString());
+                        }
+                        catch (Exception ex)
+                        {
+                            return null;
+                        }
+                    }
+                }
+
+            }
 
             if (image == null && otherPage != null)
             {

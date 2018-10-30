@@ -1,0 +1,5 @@
+{
+  "title": "Vending Machine",
+  "para1": "The Vending Machine represents an alternate way of spending Money. It is a shop intended to be customized by server owners and mod pack creators.",
+  "para2": "It can be customized by editing vending.json in the megacorp config folder (config/megacorp/vending.json)."
+}

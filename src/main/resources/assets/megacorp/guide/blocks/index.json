@@ -5,6 +5,7 @@
     "profit_materializer",
     "sbs",
     "shipping_depot",
-    "uplink"
+    "uplink",
+    "vending_machine"
   ]
 }

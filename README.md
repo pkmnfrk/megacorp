@@ -37,6 +37,8 @@ If you want to suggest a whole mod, then please open an issue as below.
 
 ![CI Status](https://api.travis-ci.org/pkmnfrk/megacorp.svg?branch=1.12.2)
 
+[Dev builds may be found here](https://pkmnfrk.github.io/megacorp-builds)
+
 Please report issues to this repository's issue tracker.
 
 If there is a crash involved, please include the crash log via a Gist or Pastebin or something.

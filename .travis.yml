@@ -3,6 +3,7 @@ install: ./gradlew setupDecompWorkspace
 script:
   - ./gradlew check
   - ./gradlew build
+after_script: ./publish_build.sh
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/

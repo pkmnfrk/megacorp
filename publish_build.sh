@@ -6,7 +6,7 @@ TEXT="Build #${TRAVIS_BUILD_NUMBER} - `date`"
 
 LINE="[${TEXT}](${NEWURL}) - [Commit](https://github.com/${TRAVIS_REPO_SLUG}/commit/${TRAVIS_COMMIT})"
 
-git clone --depth=10 --branch=master https://github.com/pkmnfrk/pkmnfrk.github.io.git site
+git clone --depth=10 --branch=master https://pkmnfrk:${GIT_TOKEN}@github.com/pkmnfrk/pkmnfrk.github.io.git site
 
 cd site
 

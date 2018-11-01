@@ -36,6 +36,7 @@ public class TileEntityManufactorySupplier
     private int itemsPerCycle = 0;
     private int ticksPerCycle = DEFAULT_TICKS_PER_CYCLE;
     private int progress;
+    private boolean autoLevel = false;
 
     public final TweakedItemStackHandler inventory = new TweakedItemStackHandler(1)
     {
@@ -177,6 +178,13 @@ public class TileEntityManufactorySupplier
         {
             itemsPerCycle = compound.getInteger("itemsPerCycle");
         }
+
+        autoLevel = false;
+        if(compound.hasKey("autoLevel"))
+        {
+            autoLevel = compound.getBoolean("autoLevel");
+        }
+
     }
 
     @Override
@@ -192,6 +200,7 @@ public class TileEntityManufactorySupplier
         ret.setInteger("reward", reward);
         ret.setInteger("progress", progress);
         ret.setInteger("itemsPerCycle", itemsPerCycle);
+        ret.setBoolean("autoLevel", autoLevel);
         if(desiredItems != null)
         {
             NBTTagList list = new NBTTagList();
@@ -224,13 +233,32 @@ public class TileEntityManufactorySupplier
         }
         else if(button == ContainerManufactorySupplier.GUI_LEVEL_UP)
         {
-            if(owner != null && progress >= getLevelUpThreshold())
+            if(owner != null)
             {
-                handleQuest(questId, level + 1);
+                levelUp();
             }
         }
 
         markDirty();
+    }
+
+    private void levelUp()
+    {
+        if(progress >= getLevelUpThreshold())
+        {
+            handleQuest(questId, level + 1);
+        }
+    }
+
+    @Override
+    public void handleGuiToggle(EntityPlayerMP player, int element, boolean bool)
+    {
+        switch(element)
+        {
+            case ContainerManufactorySupplier.GUI_AUTOLEVEL:
+                autoLevel = bool;
+                break;
+        }
     }
 
     private void handleQuest(@Nonnull String id, int level)
@@ -325,6 +353,8 @@ public class TileEntityManufactorySupplier
             progress += 1;
         }
 
+        levelUp();
+
         this.markDirty();
         this.markAndNotify();
 
@@ -339,7 +369,7 @@ public class TileEntityManufactorySupplier
 
         if(ticksRemaining > 0)
         {
-            ticksRemaining -= 7;
+            ticksRemaining -= 1;
         }
 
         if(ticksRemaining > 0) return;
@@ -400,4 +430,10 @@ public class TileEntityManufactorySupplier
     {
         return itemsPerCycle;
     }
+
+    public boolean getAutoLevel()
+    {
+        return autoLevel;
+    }
+
 }

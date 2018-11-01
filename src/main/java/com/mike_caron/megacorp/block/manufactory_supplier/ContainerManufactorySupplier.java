@@ -18,6 +18,7 @@ public class ContainerManufactorySupplier
     public static final int GUI_CHOOSE_QUEST = 1;
     public static final int GUI_STOP_QUEST = 2;
     public static final int GUI_LEVEL_UP = 3;
+    public static final int GUI_AUTOLEVEL = 4;
 
     private int workOrderHash = 0;
 
@@ -31,6 +32,7 @@ public class ContainerManufactorySupplier
     public int progress;
     public int levelUpThreshold = 1;
     public boolean canLevelUp = false;
+    public boolean autoLevel = false;
 
     Slot itemInputSlot;
 
@@ -136,6 +138,12 @@ public class ContainerManufactorySupplier
             changed = true;
         }
 
+        if(autoLevel != te.getAutoLevel())
+        {
+            autoLevel = te.getAutoLevel();
+            changed = true;
+        }
+
         if(changed)
         {
             canLevelUp = progress >= levelUpThreshold;
@@ -180,6 +188,7 @@ public class ContainerManufactorySupplier
         levelUpThreshold = compound.getInteger("levelUpThreshold");
         canLevelUp = compound.getBoolean("canLevelUp");
         itemsPerCycle = compound.getInteger("itemsPerCycle");
+        autoLevel = compound.getBoolean("autoLevel");
     }
 
     @Override
@@ -205,6 +214,7 @@ public class ContainerManufactorySupplier
         ret.setInteger("levelUpThreshold", levelUpThreshold);
         ret.setBoolean("canLevelUp", canLevelUp);
         ret.setInteger("itemsPerCycle", itemsPerCycle);
+        ret.setBoolean("autoLevel", autoLevel);
     }
 
     @Override

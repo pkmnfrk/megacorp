@@ -20,7 +20,7 @@ import java.util.List;
 
 public class GuiManufactorySupplier
     extends GuiContainerOwnedBase
-    implements GuiButton.ClickedListener, GuiList.Producer
+    implements GuiButton.ClickedListener, GuiList.Producer, GuiToggleButton.ChangedListener
 {
     private static final ResourceLocation background = new ResourceLocation(MegaCorpMod.modId, "textures/gui/manufactory_supplier.png");
 
@@ -53,6 +53,8 @@ public class GuiManufactorySupplier
     private GuiButton newQuestButton = new GuiButton(ContainerManufactorySupplier.GUI_CHOOSE_QUEST, 176, 3, 72, 14, GuiUtil.translate("tile.megacorp:manufactory_supplier.new_quest"));
 
     private GuiButton levelUpButton = new GuiButton(ContainerManufactorySupplier.GUI_LEVEL_UP, 172, 83, 75, 12, GuiUtil.translate("tile.megacorp:manufactory_supplier.level_up"));
+
+    private GuiToggleButton autoLevelButton = new GuiImageToggleButton(ContainerManufactorySupplier.GUI_AUTOLEVEL, 231, 45, 16, 16, new GuiImageTexture(0, 0, 8, 8, 25, 221, 8, 8, background) );
 
     private List<Quest> listOfQuests;
     private List<QuestListItem> listOfListItems;
@@ -137,6 +139,8 @@ public class GuiManufactorySupplier
 
                 levelUpButton.setEnabled(container.canLevelUp);
 
+                autoLevelButton.setPressed(container.autoLevel);
+
                 if(container.progress >= 0)
                 {
                     progressBar.setForeColor(Color.GREEN);
@@ -199,10 +203,12 @@ public class GuiManufactorySupplier
         workorderGroup.addControl(progressLabel);
         workorderGroup.addControl(profitLabel);
         workorderGroup.addControl(levelUpButton);
+        workorderGroup.addControl(autoLevelButton);
 
         newQuestButton.addListener(this);
         discardQuestButton.addListener(this);
         levelUpButton.addListener(this);
+        autoLevelButton.addListener(this);
 
         discardQuestButton.setTooltip(new TextComponentTranslation("tile.megacorp:shipping_depot.reroll").getUnformattedText());
     }
@@ -243,6 +249,18 @@ public class GuiManufactorySupplier
         {
             CtoSMessage packet = CtoSMessage.forGuiButton(container.getPos(), event.id);
             MegaCorpMod.networkWrapper.sendToServer(packet);
+        }
+    }
+
+    @Override
+    public void changed(GuiToggleButton.ChangedEvent event)
+    {
+        switch(event.id)
+        {
+            case ContainerManufactorySupplier.GUI_AUTOLEVEL:
+                CtoSMessage packet = CtoSMessage.forGuiToggle(container.getPos(), event.id, !container.autoLevel);
+                MegaCorpMod.networkWrapper.sendToServer(packet);
+                break;
         }
     }
 

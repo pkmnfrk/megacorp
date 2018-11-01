@@ -11,5 +11,6 @@
   "para9": "Timer: The timer bar will count down as your time runs out.",
   "para10": "XP Bar: The XP bar counts up your successful cycles. When its full, you may level up. If you are in danger of levelling down, it will turn red.",
   "para11": "Level Up Button: When you're eligible to level up, this button lets you do so.",
-  "para12": "X button: Cancels the current job, and lets you choose a new one."
+  "para12": "X button: Cancels the current job, and lets you choose a new one.",
+  "para13": "Auto Level button: Enables Auto Levelling. When you reach max XP, you will automatically level up. However, if you ever level down, it will be disabled."
 }

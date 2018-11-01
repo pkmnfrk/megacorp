@@ -14,8 +14,12 @@
     "para3",
     {
       "img":"textures/guide/manufactory_supplier.png",
-      "width": 256,
-      "height": 101
+      "width": 200,
+      "height": 79,
+      "tw": 256,
+      "th": 101,
+      "sw": 256,
+      "sh": 101
     },
     "para4",
     "para5",

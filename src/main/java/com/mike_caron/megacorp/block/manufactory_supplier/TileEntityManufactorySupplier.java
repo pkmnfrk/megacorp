@@ -193,7 +193,8 @@ public class TileEntityManufactorySupplier
         NBTTagCompound ret = super.writeToNBT(compound);
 
         ret.setTag("Inventory", inventory.serializeNBT());
-        ret.setString("questId", questId);
+        if(questId != null)
+            ret.setString("questId", questId);
         ret.setInteger("level", level);
         ret.setInteger("ticksRemaining", ticksRemaining);
         ret.setInteger("ticksPerCycle", ticksPerCycle);
@@ -230,6 +231,7 @@ public class TileEntityManufactorySupplier
         else if(button == ContainerManufactorySupplier.GUI_STOP_QUEST)
         {
             desiredItems = null;
+            questId = null;
         }
         else if(button == ContainerManufactorySupplier.GUI_LEVEL_UP)
         {

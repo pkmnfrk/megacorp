@@ -78,7 +78,7 @@ public class ModBlocks
     public static BlockVendingMachine vending_machine;
 
     @GameRegistry.ObjectHolder("manufactory_supplier")
-    public static BlockVendingMachine manufactory_supplier;
+    public static BlockManufactorySupplier manufactory_supplier;
 
     //@GameRegistry.ObjectHolder("money_block")
     //public static BlockBase money_block;

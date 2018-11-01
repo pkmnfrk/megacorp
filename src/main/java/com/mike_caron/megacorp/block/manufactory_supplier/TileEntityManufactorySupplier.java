@@ -175,7 +175,7 @@ public class TileEntityManufactorySupplier
         itemsPerCycle = 0;
         if(compound.hasKey("itemsPerCycle"))
         {
-            itemsPerCycle = 0;
+            itemsPerCycle = compound.getInteger("itemsPerCycle");
         }
     }
 

@@ -125,7 +125,6 @@ public class GuiManufactorySupplier
                 quantityLabel.setPlaceholder(1, NumberFormat.getIntegerInstance().format(container.ticksPerCycle / 20));
                 timerLabel.setPlaceholder(0, NumberFormat.getIntegerInstance().format(container.ticksRemaining / 20));
                 timerBar.setProgress(((float)container.ticksRemaining) / container.ticksPerCycle);
-                progressBar.setProgress(((float)container.progress) / container.levelUpThreshold);
 
                 QuestLocalization questLocalization = QuestManager.INSTANCE.getLocalizationForCurrent(container.questId);
                 questLabel.setPlaceholder(0, questLocalization.title);
@@ -136,8 +135,20 @@ public class GuiManufactorySupplier
 
                 levelUpButton.setEnabled(container.canLevelUp);
 
-                progressLabel.setPlaceholder(0, container.progress);
-                progressLabel.setPlaceholder(1, container.levelUpThreshold);
+                if(container.progress >= 0)
+                {
+                    progressBar.setForeColor(Color.GREEN);
+                    progressBar.setProgress(((float) container.progress) / container.levelUpThreshold);
+                    progressLabel.setPlaceholder(0, container.progress);
+                    progressLabel.setPlaceholder(1, container.levelUpThreshold);
+                }
+                else
+                {
+                    progressBar.setForeColor(Color.RED);
+                    progressBar.setProgress(container.progress / -10f);
+                    progressLabel.setPlaceholder(0, -container.progress);
+                    progressLabel.setPlaceholder(1, 10);
+                }
             }
             else
             {

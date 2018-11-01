@@ -1,0 +1,22 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "ggg",
+    "crc",
+    "ggg"
+  ],
+  "key": {
+    "g": {
+      "item": "minecraft:gold_ingot"
+    },
+    "c": {
+      "item": "minecraft:chest"
+    },
+    "r": {
+      "item": "minecraft:repeater"
+    }
+  },
+  "result": {
+    "item": "megacorp:manufactory_supplier"
+  }
+}

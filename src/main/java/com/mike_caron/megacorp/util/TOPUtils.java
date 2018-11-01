@@ -2,6 +2,7 @@ package com.mike_caron.megacorp.util;
 
 import mcjty.theoneprobe.api.ElementAlignment;
 import mcjty.theoneprobe.api.IProbeInfo;
+import mcjty.theoneprobe.api.IProgressStyle;
 import mcjty.theoneprobe.api.NumberFormat;
 import mcjty.theoneprobe.apiimpl.styles.ProgressStyle;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -9,6 +10,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.IFluidTank;
 
+import javax.annotation.Nullable;
 import java.awt.*;
 
 public class TOPUtils
@@ -63,5 +65,24 @@ public class TOPUtils
                 .progress((int) (progress * 100), 100, new ProgressStyle().suffix("%"))
             ;
         }
+    }
+
+    public static IProgressStyle progressStyle(@Nullable Color backgroundColor, @Nullable Color fillColor, @Nullable Color altFillColor, @Nullable String suffix)
+    {
+        IProgressStyle ret = new ProgressStyle();
+
+        if(backgroundColor != null)
+            ret = ret.backgroundColor(backgroundColor.getRGB());
+
+        if(fillColor != null)
+            ret = ret.filledColor(fillColor.getRGB());
+
+        if(altFillColor != null)
+            ret = ret.alternateFilledColor(altFillColor.getRGB());
+
+        if(suffix != null)
+            ret = ret.suffix(suffix);
+
+        return ret;
     }
 }

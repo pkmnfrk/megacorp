@@ -3,10 +3,10 @@ package com.mike_caron.megacorp.block.manufactory_supplier;
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.block.OwnedMachineBlockBase;
 import com.mike_caron.megacorp.util.ItemUtils;
+import com.mike_caron.megacorp.util.TOPUtils;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.ProbeMode;
-import mcjty.theoneprobe.apiimpl.styles.ProgressStyle;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -90,11 +90,7 @@ public class BlockManufactorySupplier
                 .horizontal()
                 .item(te.getDesiredItems().get(0))
                 .progress(te.getProgress(), te.getLevelUpThreshold(),
-                    new ProgressStyle()
-                        .backgroundColor(Color.black.getRGB())
-                        .filledColor(Color.yellow.getRGB())
-                        .alternateFilledColor(Color.orange.getRGB())
-                        .suffix("xp")
+                    TOPUtils.progressStyle(Color.black, Color.yellow, Color.orange, "xp")
                 );
         }
         if(player.isSneaking())

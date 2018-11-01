@@ -125,11 +125,12 @@ public class GuiManufactorySupplier
                 workorderGroup.setVisible(true);
                 itemLabel.setPlaceholder(0, currentItemStack.getDisplayName());
                 quantityLabel.setPlaceholder(0, NumberFormat.getIntegerInstance().format(container.itemsPerCycle));
-                quantityLabel.setPlaceholder(1, NumberFormat.getIntegerInstance().format(container.ticksPerCycle / 20));
+                quantityLabel.setPlaceholder(1, NumberFormat.getIntegerInstance().format(container.ticksPerCycle));
 
                 quantityLabel.setTooltip(GuiUtil.translate("tile.megacorp:manufactory_supplier.quantity_tooltip", container.ticksPerCycle * (container.desiredItems.get(0).getMaxStackSize()/container.itemsPerCycle)));
-                timerLabel.setPlaceholder(0, NumberFormat.getIntegerInstance().format(container.ticksRemaining / 20));
-                timerBar.setProgress(((float)container.ticksRemaining) / container.ticksPerCycle);
+                timerLabel.setPlaceholder(0, NumberFormat.getIntegerInstance().format(container.ticksRemaining));
+                int secsPerCycle = container.ticksPerCycle / 20;
+                timerBar.setProgress(((float)container.ticksRemaining) / secsPerCycle);
 
                 QuestLocalization questLocalization = QuestManager.INSTANCE.getLocalizationForCurrent(container.questId);
                 questLabel.setPlaceholder(0, questLocalization.title);
@@ -144,13 +145,12 @@ public class GuiManufactorySupplier
 
                 if(container.level >= 50)
                 {
-                    levelUpButton.setVisible(false);
-                    progressLabel.setVisible(true);
+                    progressLabel.setVisible(false);
                     maxProgressLabel.setVisible(true);
+                    progressBar.setProgress(1f);
                 }
                 else
                 {
-                    levelUpButton.setVisible(true);
                     progressLabel.setVisible(true);
                     maxProgressLabel.setVisible(false);
                     if (container.progress >= 0)
@@ -199,6 +199,8 @@ public class GuiManufactorySupplier
         timerLabel.setColor(Color.WHITE);
         progressLabel.setzIndex(100);
         progressLabel.setColor(Color.WHITE);
+        maxProgressLabel.setzIndex(101);
+        maxProgressLabel.setColor(Color.WHITE);
         timerBar.setProgress(0.5f);
         timerBar.setForeColor(Color.BLUE);
         progressBar.setForeColor(Color.GREEN);
@@ -214,6 +216,7 @@ public class GuiManufactorySupplier
         workorderGroup.addControl(discardQuestButton);
         workorderGroup.addControl(progressBar);
         workorderGroup.addControl(progressLabel);
+        workorderGroup.addControl(maxProgressLabel);
         workorderGroup.addControl(profitLabel);
         workorderGroup.addControl(levelUpButton);
         workorderGroup.addControl(autoLevelButton);

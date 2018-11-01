@@ -102,9 +102,9 @@ public class ContainerManufactorySupplier
             changed = true;
         }
 
-        if(ticksRemaining != te.getTicksRemaining())
+        if(ticksRemaining != te.getTicksRemaining() / 20)
         {
-            ticksRemaining = te.getTicksRemaining();
+            ticksRemaining = te.getTicksRemaining() / 20;
             changed = true;
         }
 

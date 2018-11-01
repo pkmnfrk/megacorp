@@ -125,7 +125,7 @@ public class GuiManufactorySupplier
                 workorderGroup.setVisible(true);
                 itemLabel.setPlaceholder(0, currentItemStack.getDisplayName());
                 quantityLabel.setPlaceholder(0, NumberFormat.getIntegerInstance().format(container.itemsPerCycle));
-                quantityLabel.setPlaceholder(1, NumberFormat.getIntegerInstance().format(container.ticksPerCycle));
+                quantityLabel.setPlaceholder(1, NumberFormat.getIntegerInstance().format(container.ticksPerCycle / 20));
 
                 quantityLabel.setTooltip(GuiUtil.translate("tile.megacorp:manufactory_supplier.quantity_tooltip", container.ticksPerCycle * (container.desiredItems.get(0).getMaxStackSize()/container.itemsPerCycle)));
                 timerLabel.setPlaceholder(0, NumberFormat.getIntegerInstance().format(container.ticksRemaining));
@@ -143,11 +143,12 @@ public class GuiManufactorySupplier
 
                 autoLevelButton.setPressed(container.autoLevel);
 
-                if(container.level >= 50)
+                if(container.level >= 50 && container.progress >= 0)
                 {
                     progressLabel.setVisible(false);
                     maxProgressLabel.setVisible(true);
                     progressBar.setProgress(1f);
+                    progressBar.setForeColor(Color.GREEN);
                 }
                 else
                 {

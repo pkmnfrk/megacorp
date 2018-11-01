@@ -18,25 +18,25 @@ public abstract class ThermalFoundation
 
         levelScale = 0.75f;
 
-        materials.put("Iridium", 1);
-        materials.put("Platinum", 1);
-        materials.put("Enderium", 2);
-        //materials.put("Mana_infused", 3);
-        materials.put("Signalum", 4);
-        materials.put("Lumium", 4);
-        materials.put("Steel", 5);
-        materials.put("Gold", 5);
-        materials.put("Nickel", 6);
-        materials.put("Aluminum", 6);
-        materials.put("Constantan", 6);
-        materials.put("Electrum", 7);
-        materials.put("Silver", 7);
-        materials.put("Invar", 8);
-        materials.put("Bronze", 9);
-        materials.put("Lead", 9);
-        materials.put("Tin", 10);
-        materials.put("Iron", 11);
-        materials.put("Copper", 11);
+        add("Iridium", 1);
+        add("Platinum", 1);
+        add("Enderium", 2);
+        add("Mana_infused", 3);
+        add("Signalum", 4);
+        add("Lumium", 4);
+        add("Steel", 5);
+        add("Gold", 5);
+        add("Nickel", 6);
+        add("Aluminum", 6);
+        add("Constantan", 6);
+        add("Electrum", 7);
+        add("Silver", 7);
+        add("Invar", 8);
+        add("Bronze", 9);
+        add("Lead", 9);
+        add("Tin", 10);
+        add("Iron", 11);
+        add("Copper", 11);
     }
 
     public static class Ingots

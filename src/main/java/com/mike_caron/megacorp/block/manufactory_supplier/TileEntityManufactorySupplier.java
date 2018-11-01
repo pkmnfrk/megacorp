@@ -1,5 +1,6 @@
 package com.mike_caron.megacorp.block.manufactory_supplier;
 
+import com.mike_caron.megacorp.ModConfig;
 import com.mike_caron.megacorp.api.ICorporation;
 import com.mike_caron.megacorp.block.TileEntityOwnedBase;
 import com.mike_caron.megacorp.impl.Corporation;
@@ -278,7 +279,8 @@ public class TileEntityManufactorySupplier
         desiredItems = quest.possibleItems();
         ItemStack sample = desiredItems.get(0);
 
-        if(level > 50) level = 50;
+        if(level < 0) level = 0;
+        else if(level > 50) level = 50;
 
         Fraction frac = Fraction.getFraction(desiredItems.get(0).getMaxStackSize(), 600 + 5400 * (50 - level) / 50).reduce();
 
@@ -347,9 +349,13 @@ public class TileEntityManufactorySupplier
 
         ((Corporation) corp).addProfit(reward);
 
-        if(level < 50 && progress < getLevelUpThreshold())
+        if(progress < 0 || (level < 50 && progress < getLevelUpThreshold()))
         {
             progress += 1;
+        }
+        else if(level == 50 && progress > 0)
+        {
+            progress = 0;
         }
 
         levelUp();
@@ -363,8 +369,13 @@ public class TileEntityManufactorySupplier
     {
         if (progress <= -10)
         {
-            handleQuest(questId, level - 1);
-            autoLevel = false;
+            if(ModConfig.manufactoryFailurePenalty == 0) return;
+
+            if(ModConfig.manufactoryFailurePenalty < 0)
+            {
+                handleQuest(questId, level + ModConfig.manufactoryFailurePenalty);
+                autoLevel = false;
+            }
         }
     }
 

@@ -246,16 +246,35 @@ public class TileEntityManufactorySupplier
     private void handleQuest(Quest quest, int level)
     {
         desiredItems = quest.possibleItems();
+        ItemStack sample = desiredItems.get(0);
 
         if(level > 50) level = 50;
 
         Fraction frac = Fraction.getFraction(desiredItems.get(0).getMaxStackSize(), 600 + 5400 * (50 - level) / 50).reduce();
 
+        int num = frac.getNumerator();
+        int den = frac.getDenominator();
+
+        while(den < 600) //30 seconds
+        {
+            num *= 2;
+            den *= 2;
+        }
+
+        if(num > sample.getMaxStackSize())
+        {
+            num = sample.getMaxStackSize();
+        }
+
+        int profit = (int)(quest.baseProfit * sample.getMaxStackSize() * Math.pow(1.15, level));
+
+        profit *= 2;
+
         this.questId = quest.id;
         this.level = level;
-        this.reward = (int)(quest.baseProfit * desiredItems.get(0).getMaxStackSize() * Math.pow(1.15, level));
-        this.itemsPerCycle = frac.getNumerator();
-        this.ticksPerCycle = frac.getDenominator();
+        this.reward = profit;
+        this.itemsPerCycle = num;
+        this.ticksPerCycle = den;
         this.ticksRemaining = this.ticksPerCycle;
         this.progress = 0;
     }

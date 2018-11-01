@@ -124,7 +124,7 @@ public class GuiManufactorySupplier
                 quantityLabel.setPlaceholder(0, NumberFormat.getIntegerInstance().format(container.itemsPerCycle));
                 quantityLabel.setPlaceholder(1, NumberFormat.getIntegerInstance().format(container.ticksPerCycle / 20));
 
-                quantityLabel.setTooltip(GuiUtil.translate("tile.megacorp:manufactory_supplier.quantity_tooltip", container.ticksPerCycle * (64/container.itemsPerCycle)));
+                quantityLabel.setTooltip(GuiUtil.translate("tile.megacorp:manufactory_supplier.quantity_tooltip", container.ticksPerCycle * (container.desiredItems.get(0).getMaxStackSize()/container.itemsPerCycle)));
                 timerLabel.setPlaceholder(0, NumberFormat.getIntegerInstance().format(container.ticksRemaining / 20));
                 timerBar.setProgress(((float)container.ticksRemaining) / container.ticksPerCycle);
 

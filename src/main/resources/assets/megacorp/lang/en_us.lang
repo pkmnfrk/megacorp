@@ -82,6 +82,7 @@ tile.megacorp:vending_machine.name=Vending Machine
 
 tile.megacorp:manufactory_supplier.name=Manufactory Supplier
 tile.megacorp:manufactory_supplier.timer=%d seconds
+tile.megacorp:manufactory_supplier.new_quest=Choose
 
 item.megacorp:work_voucher.name=Work Voucher
 item.megacorp:work_voucher.tooltip_blank=Blank?

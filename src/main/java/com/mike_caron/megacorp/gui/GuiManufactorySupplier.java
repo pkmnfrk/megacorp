@@ -49,7 +49,7 @@ public class GuiManufactorySupplier
         new GuiImageTexture(0, 0, 8, 8, 10, 221, background)
     );
 
-    private GuiList questList = new GuiList(6, 19, 242, 61, this);
+    private GuiList questList = new GuiList(6, 19, 242, 81, this);
     private GuiButton newQuestButton = new GuiButton(ContainerManufactorySupplier.GUI_CHOOSE_QUEST, 176, 3, 72, 14, GuiUtil.translate("tile.megacorp:manufactory_supplier.new_quest"));
 
     private GuiButton levelUpButton = new GuiButton(ContainerManufactorySupplier.GUI_LEVEL_UP, 172, 83, 75, 12, GuiUtil.translate("tile.megacorp:manufactory_supplier.level_up"));

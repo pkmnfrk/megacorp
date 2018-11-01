@@ -291,7 +291,7 @@ public class TileEntityManufactorySupplier
     {
         if(world.isRemote || owner == null) return;
 
-        if(desiredItems.isEmpty()) return;
+        if(desiredItems == null) return;
 
         if(ticksRemaining > 0)
         {

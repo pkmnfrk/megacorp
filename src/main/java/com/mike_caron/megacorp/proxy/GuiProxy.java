@@ -2,6 +2,8 @@ package com.mike_caron.megacorp.proxy;
 
 import com.mike_caron.megacorp.block.capital_investor.ContainerCapitalInvestor;
 import com.mike_caron.megacorp.block.capital_investor.TileEntityCapitalInvestor;
+import com.mike_caron.megacorp.block.manufactory_supplier.ContainerManufactorySupplier;
+import com.mike_caron.megacorp.block.manufactory_supplier.TileEntityManufactorySupplier;
 import com.mike_caron.megacorp.block.profit_condenser.ContainerProfitCondenser;
 import com.mike_caron.megacorp.block.profit_condenser.TileEntityProfitCondenser;
 import com.mike_caron.megacorp.block.profit_materializer.ContainerProfitMaterializer;
@@ -60,6 +62,10 @@ public class GuiProxy implements IGuiHandler
         else if(te instanceof TileEntityVendingMachine)
         {
             return new ContainerVendingMachine(player.inventory, (TileEntityVendingMachine)te);
+        }
+        else if(te instanceof TileEntityManufactorySupplier)
+        {
+            return new ContainerManufactorySupplier(player.inventory, (TileEntityManufactorySupplier)te);
         }
         /*
         else if(te instanceof TileEntityLiquidShippingDepot)
@@ -124,6 +130,11 @@ public class GuiProxy implements IGuiHandler
         {
             TileEntityVendingMachine teCI = (TileEntityVendingMachine)te;
             return new GuiVendingMachine(new ContainerVendingMachine(player.inventory, teCI));
+        }
+        else if(te instanceof TileEntityManufactorySupplier)
+        {
+            TileEntityManufactorySupplier teCI = (TileEntityManufactorySupplier)te;
+            return new GuiManufactorySupplier(new ContainerManufactorySupplier(player.inventory, teCI));
         }
 
         return null;

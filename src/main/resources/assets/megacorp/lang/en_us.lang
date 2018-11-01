@@ -80,6 +80,9 @@ tile.megacorp:liquid_shipping_depot.quantity=Quantity: %smB
 
 tile.megacorp:vending_machine.name=Vending Machine
 
+tile.megacorp:manufactory_supplier.name=Manufactory Supplier
+tile.megacorp:manufactory_supplier.timer=%d seconds
+
 item.megacorp:work_voucher.name=Work Voucher
 item.megacorp:work_voucher.tooltip_blank=Blank?
 item.megacorp:work_voucher.tooltip=%s (%2s/%1s)

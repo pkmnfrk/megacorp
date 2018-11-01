@@ -48,7 +48,7 @@ public class ContainerManufactorySupplier
     @Override
     protected int playerInventoryY()
     {
-        return 84;
+        return 104;
     }
 
     @Override

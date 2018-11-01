@@ -6,6 +6,7 @@ import com.mike_caron.megacorp.block.capital_investor.BlockCapitalInvestor;
 import com.mike_caron.megacorp.block.capital_investor.TileEntityCapitalInvestor;
 import com.mike_caron.megacorp.block.liquid_shipping_depot.BlockLiquidShippingDepot;
 import com.mike_caron.megacorp.block.liquid_shipping_depot.TileEntityLiquidShippingDepot;
+import com.mike_caron.megacorp.block.manufactory_supplier.TileEntityManufactorySupplier;
 import com.mike_caron.megacorp.block.profit_condenser.BlockProfitCondenser;
 import com.mike_caron.megacorp.block.profit_condenser.TileEntityProfitCondenser;
 import com.mike_caron.megacorp.block.profit_materializer.BlockProfitMaterializer;
@@ -75,6 +76,9 @@ public class ModBlocks
     @GameRegistry.ObjectHolder("vending_machine")
     public static BlockVendingMachine vending_machine;
 
+    @GameRegistry.ObjectHolder("manufactory_supplier")
+    public static BlockVendingMachine manufactory_supplier;
+
     //@GameRegistry.ObjectHolder("money_block")
     //public static BlockBase money_block;
 
@@ -109,6 +113,7 @@ public class ModBlocks
         GameRegistry.registerTileEntity(TileEntityShippingDepot.class, new ResourceLocation(MegaCorpMod.modId, "shipping_depot"));
         GameRegistry.registerTileEntity(TileEntityLiquidShippingDepot.class, new ResourceLocation(MegaCorpMod.modId, "liquid_shipping_depot"));
         GameRegistry.registerTileEntity(TileEntityCapitalInvestor.class, new ResourceLocation(MegaCorpMod.modId, "capital_investor"));
+        GameRegistry.registerTileEntity(TileEntityManufactorySupplier.class, new ResourceLocation(MegaCorpMod.modId, "manufactory_supplier"));
 
         if(ModConfig.vendingMachineEnabled)
         {

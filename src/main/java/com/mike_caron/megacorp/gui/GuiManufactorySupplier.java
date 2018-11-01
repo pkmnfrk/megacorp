@@ -32,14 +32,14 @@ public class GuiManufactorySupplier
 
     private GuiTranslatedLabel questLabel = new GuiTranslatedLabel(6, 20, "tile.megacorp:shipping_depot.quest", "", 0);
     private GuiTranslatedLabel itemLabel = new GuiTranslatedLabel(6, 31, "tile.megacorp:shipping_depot.item", "");
-    //private GuiTranslatedLabel quantityLabel = new GuiTranslatedLabel(6, 42, "tile.megacorp:shipping_depot.quantity", "");
-    private GuiTranslatedLabel profitLabel = new GuiTranslatedLabel(6, 42, "tile.megacorp:shipping_depot.profit", "");
+    private GuiTranslatedLabel quantityLabel = new GuiTranslatedLabel(6, 42, "tile.megacorp:manufactory_supplier.quantity", "", 0);
+    private GuiTranslatedLabel profitLabel = new GuiTranslatedLabel(6, 53, "tile.megacorp:shipping_depot.profit", "");
 
     private GuiProgressBar timerBar = new GuiProgressBar(8, 67, 239, 12);
     private GuiTranslatedLabel timerLabel = new GuiTranslatedLabel(127, 69, GuiLabel.Alignment.CENTER, "tile.megacorp:manufactory_supplier.timer", 0);
 
     private GuiProgressBar progressBar = new GuiProgressBar(8, 83, 161, 12);
-    private GuiTranslatedLabel progressLabel = new GuiTranslatedLabel(88, 69, GuiLabel.Alignment.CENTER, "tile.megacorp:shipping_depot.progress", 0, 0);
+    private GuiTranslatedLabel progressLabel = new GuiTranslatedLabel(88, 85, GuiLabel.Alignment.CENTER, "tile.megacorp:shipping_depot.progress", 0, 0);
 
     private GuiButton discardQuestButton = new GuiButton(
         ContainerManufactorySupplier.GUI_STOP_QUEST,
@@ -121,7 +121,8 @@ public class GuiManufactorySupplier
                 noQuestGroup.setVisible(false);
                 workorderGroup.setVisible(true);
                 itemLabel.setPlaceholder(0, currentItemStack.getDisplayName());
-                //quantityLabel.setPlaceholder(0, NumberFormat.getIntegerInstance().format());
+                quantityLabel.setPlaceholder(0, NumberFormat.getIntegerInstance().format(container.itemsPerCycle));
+                quantityLabel.setPlaceholder(1, NumberFormat.getIntegerInstance().format(container.ticksPerCycle / 20));
                 timerLabel.setPlaceholder(0, NumberFormat.getIntegerInstance().format(container.ticksRemaining / 20));
                 timerBar.setProgress(((float)container.ticksRemaining) / container.ticksPerCycle);
                 progressBar.setProgress(((float)container.progress) / container.levelUpThreshold);
@@ -133,8 +134,10 @@ public class GuiManufactorySupplier
 
                 profitLabel.setPlaceholder(0, NumberFormat.getIntegerInstance().format(container.reward));
 
+                levelUpButton.setEnabled(container.canLevelUp);
 
-
+                progressLabel.setPlaceholder(0, container.progress);
+                progressLabel.setPlaceholder(1, container.levelUpThreshold);
             }
             else
             {
@@ -175,15 +178,18 @@ public class GuiManufactorySupplier
 
         workorderGroup.addControl(itemLabel);
         workorderGroup.addControl(timerBar);
+        workorderGroup.addControl(quantityLabel);
         workorderGroup.addControl(timerLabel);
         workorderGroup.addControl(questLabel);
         workorderGroup.addControl(discardQuestButton);
         workorderGroup.addControl(progressBar);
+        workorderGroup.addControl(progressLabel);
         workorderGroup.addControl(profitLabel);
         workorderGroup.addControl(levelUpButton);
 
         newQuestButton.addListener(this);
         discardQuestButton.addListener(this);
+        levelUpButton.addListener(this);
 
         discardQuestButton.setTooltip(new TextComponentTranslation("tile.megacorp:shipping_depot.reroll").getUnformattedText());
     }

@@ -27,6 +27,7 @@ public class ContainerManufactorySupplier
     public int reward = 0;
     public int ticksRemaining = 0;
     public int ticksPerCycle = 0;
+    public int itemsPerCycle = 0;
     public int progress;
     public int levelUpThreshold = 1;
     public boolean canLevelUp = false;
@@ -129,6 +130,12 @@ public class ContainerManufactorySupplier
             changed = true;
         }
 
+        if(itemsPerCycle != te.getItemsPerCycle())
+        {
+            itemsPerCycle = te.getItemsPerCycle();
+            changed = true;
+        }
+
         if(changed)
         {
             canLevelUp = progress >= levelUpThreshold;
@@ -141,6 +148,9 @@ public class ContainerManufactorySupplier
     {
         super.onReadNBT(compound);
 
+        questId = null;
+        if(compound.hasKey("questId"))
+            questId = compound.getString("questId");
         level = compound.getInteger("level");
         desiredItems = null;
         if(compound.hasKey("desiredItems"))
@@ -169,12 +179,15 @@ public class ContainerManufactorySupplier
         progress = compound.getInteger("progress");
         levelUpThreshold = compound.getInteger("levelUpThreshold");
         canLevelUp = compound.getBoolean("canLevelUp");
+        itemsPerCycle = compound.getInteger("itemsPerCycle");
     }
 
     @Override
     protected void onWriteNBT(NBTTagCompound ret)
     {
         super.onWriteNBT(ret);
+        if(questId != null)
+            ret.setString("questId", questId);
         ret.setInteger("level", level);
         ret.setInteger("ticksRemaining", ticksRemaining);
         ret.setInteger("ticksPerCycle", ticksPerCycle);
@@ -191,7 +204,7 @@ public class ContainerManufactorySupplier
         }
         ret.setInteger("levelUpThreshold", levelUpThreshold);
         ret.setBoolean("canLevelUp", canLevelUp);
-
+        ret.setInteger("itemsPerCycle", itemsPerCycle);
     }
 
     @Override

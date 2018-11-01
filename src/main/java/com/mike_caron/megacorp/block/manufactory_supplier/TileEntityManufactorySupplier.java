@@ -16,6 +16,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.CapabilityItemHandler;
+import org.apache.commons.lang3.math.Fraction;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -32,6 +33,7 @@ public class TileEntityManufactorySupplier
     private int level = 0;
     private int reward = 0;
     private int ticksRemaining = 0;
+    private int itemsPerCycle = 0;
     private int ticksPerCycle = DEFAULT_TICKS_PER_CYCLE;
     private int progress;
 
@@ -115,6 +117,10 @@ public class TileEntityManufactorySupplier
             inventory.setStackInSlot(0, ItemStack.EMPTY);
         }
 
+        questId = null;
+        if(compound.hasKey("questId"))
+            questId = compound.getString("questId");
+
         level = 0;
         if(compound.hasKey("level"))
         {
@@ -165,6 +171,12 @@ public class TileEntityManufactorySupplier
         {
             progress = compound.getInteger("progress");
         }
+
+        itemsPerCycle = 0;
+        if(compound.hasKey("itemsPerCycle"))
+        {
+            itemsPerCycle = 0;
+        }
     }
 
     @Override
@@ -173,11 +185,13 @@ public class TileEntityManufactorySupplier
         NBTTagCompound ret = super.writeToNBT(compound);
 
         ret.setTag("Inventory", inventory.serializeNBT());
+        ret.setString("questId", questId);
         ret.setInteger("level", level);
         ret.setInteger("ticksRemaining", ticksRemaining);
         ret.setInteger("ticksPerCycle", ticksPerCycle);
         ret.setInteger("reward", reward);
         ret.setInteger("progress", progress);
+        ret.setInteger("itemsPerCycle", itemsPerCycle);
         if(desiredItems != null)
         {
             NBTTagList list = new NBTTagList();
@@ -210,7 +224,7 @@ public class TileEntityManufactorySupplier
         }
         else if(button == ContainerManufactorySupplier.GUI_LEVEL_UP)
         {
-            if(owner != null)
+            if(owner != null && progress >= getLevelUpThreshold())
             {
                 handleQuest(questId, level + 1);
             }
@@ -235,10 +249,13 @@ public class TileEntityManufactorySupplier
 
         if(level > 50) level = 50;
 
+        Fraction frac = Fraction.getFraction(64, 600 + 5400 * (50 - level) / 50).reduce();
+
         this.questId = quest.id;
         this.level = level;
-        this.reward = (int)(quest.baseProfit * Math.pow(1.15, level));
-        this.ticksPerCycle = 600 + 5400 * (50 - level) / 50;
+        this.reward = (int)(quest.baseProfit * 64 * Math.pow(1.15, level));
+        this.itemsPerCycle = frac.getNumerator();
+        this.ticksPerCycle = frac.getDenominator();
         this.ticksRemaining = this.ticksPerCycle;
         this.progress = 0;
     }
@@ -254,7 +271,7 @@ public class TileEntityManufactorySupplier
         if(desiredItems == null) return;
 
         ItemStack stack = inventory.getStackInSlot(0);
-        if(stack.getCount() < stack.getMaxStackSize())
+        if(stack.getCount() < itemsPerCycle)
         {
             //Failure :(
             if(progress > 0 || level > 0)
@@ -270,7 +287,7 @@ public class TileEntityManufactorySupplier
             return;
         }
 
-        stack.shrink(stack.getCount());
+        stack.shrink(itemsPerCycle);
 
         inventory.notifySlotChanged(0);
 
@@ -350,5 +367,10 @@ public class TileEntityManufactorySupplier
     public int getLevelUpThreshold()
     {
         return 10 + (level * 3);
+    }
+
+    public int getItemsPerCycle()
+    {
+        return itemsPerCycle;
     }
 }

@@ -3,7 +3,8 @@
 cd build/libs
 
 TZ='America/Toronto'
-NEWURL=https://s3.amazonaws.com/${ARTIFACTS_BUCKET}/${TRAVIS_REPO_SLUG}/${TRAVIS_BUILD_NUMBER}/${TRAVIS_JOB_NUMBER}/`ls *.jar`
+TRAVIS_PATH=${TRAVIS_REPO_SLUG}/${TRAVIS_BUILD_NUMBER}/${TRAVIS_JOB_NUMBER}
+NEWURL=https://s3.amazonaws.com/${ARTIFACTS_BUCKET}/${TRAVIS_PATH}/`ls *.jar`
 TEXT="Build #${TRAVIS_BUILD_NUMBER} - `date`"
 
 LINE="[${TEXT}](${NEWURL}) - [Commit](https://github.com/${TRAVIS_REPO_SLUG}/commit/${TRAVIS_COMMIT})"

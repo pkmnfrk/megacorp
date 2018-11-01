@@ -105,7 +105,7 @@ public class BlockManufactorySupplier
             vert
                 .horizontal()
                 .item(ItemUtils.CLOCK)
-                .progress(te.getTicksRemaining(), te.getTicksPerCycle());
+                .progress(te.getTicksRemaining() / 20, te.getTicksPerCycle() / 20);
         }
 
 

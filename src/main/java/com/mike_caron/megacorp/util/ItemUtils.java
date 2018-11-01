@@ -3,9 +3,11 @@ package com.mike_caron.megacorp.util;
 import com.google.common.base.Preconditions;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ItemUtils
 {
@@ -67,5 +69,31 @@ public class ItemUtils
 
         //return null;
         throw new RuntimeException("I don't understand the item " + tag);
+    }
+
+    public static boolean areEqual(@Nullable NonNullList<ItemStack> a, @Nullable NonNullList<ItemStack> b)
+    {
+        if(a == b)
+            return true;
+
+        if(a != null && b == null)
+            return false;
+
+        if(a == null) //b is implied not null here
+            return false;
+
+        if(a.size() != b.size())
+            return false;
+
+        for(int i = 0; i < a.size(); i++)
+        {
+            ItemStack ai = a.get(i);
+            ItemStack bi = b.get(i);
+
+            if(!ai.isItemEqual(bi))
+                return false;
+        }
+
+        return true;
     }
 }

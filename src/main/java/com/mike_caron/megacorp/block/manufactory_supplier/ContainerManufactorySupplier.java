@@ -1,12 +1,16 @@
 package com.mike_caron.megacorp.block.manufactory_supplier;
 
 import com.mike_caron.megacorp.block.TEOwnedContainerBase;
-import com.mike_caron.megacorp.block.shipping_depot.TileEntityShippingDepot;
-import com.mike_caron.megacorp.impl.WorkOrder;
 import com.mike_caron.megacorp.storage.SlotItemHandlerFixed;
+import com.mike_caron.megacorp.util.ItemUtils;
+import com.mike_caron.megacorp.util.StringUtil;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.NonNullList;
+import net.minecraftforge.common.util.Constants;
 
 public class ContainerManufactorySupplier
     extends TEOwnedContainerBase
@@ -15,24 +19,30 @@ public class ContainerManufactorySupplier
     public static final int GUI_STOP_QUEST = 2;
     public static final int GUI_LEVEL_UP = 3;
 
-    public WorkOrder workOrder;
     private int workOrderHash = 0;
-    public boolean questLocked;
-    public boolean automaticallyGenerate;
-    public boolean allowChoice;
+
+    public String questId = null;
+    public NonNullList<ItemStack> desiredItems = null;
+    public int level = 0;
+    public int reward = 0;
+    public int ticksRemaining = 0;
+    public int ticksPerCycle = 0;
+    public int progress;
+    public int levelUpThreshold = 1;
+    public boolean canLevelUp = false;
 
     Slot itemInputSlot;
 
-    public ContainerManufactorySupplier(IInventory playerInventory, TileEntityShippingDepot te)
+    public ContainerManufactorySupplier(IInventory playerInventory, TileEntityManufactorySupplier te)
     {
         super(playerInventory, te);
 
         init();
     }
 
-    private TileEntityShippingDepot getTE()
+    private TileEntityManufactorySupplier getTE()
     {
-        return (TileEntityShippingDepot)this.te;
+        return (TileEntityManufactorySupplier)this.te;
     }
 
     @Override
@@ -67,86 +77,126 @@ public class ContainerManufactorySupplier
     {
         super.detectAndSendChanges();
 
-        TileEntityShippingDepot te = getTE();
+        TileEntityManufactorySupplier te = getTE();
 
         if(te.getWorld().isRemote) return;
 
-        if(workOrder != te.getWorkOrder())
+        if(!StringUtil.areEqual(questId, te.getQuestId()))
         {
-            this.workOrder = te.getWorkOrder();
-            changed = true;
-            //if(this.workOrder != null)
-            //{
-            //    MegaCorpMod.logger.warn("Detected quest: " + this.workOrder.getDesiredItem());
-            //}
-        }
-        else
-        {
-            if(workOrder != null && workOrder.hashCode() != workOrderHash)
-            {
-                this.workOrderHash = workOrder.hashCode();
-                changed = true;
-            }
-        }
-
-        if(automaticallyGenerate != te.getAutomaticallyGenerate())
-        {
-            automaticallyGenerate = te.getAutomaticallyGenerate();
+            this.questId = te.getQuestId();
             changed = true;
         }
 
-        if(allowChoice != te.getAllowChoice())
+        if(level != te.getLevel())
         {
-            allowChoice = te.getAllowChoice();
+            level = te.getLevel();
+            changed = true;
+        }
+
+        if(reward != te.getReward())
+        {
+            reward = te.getReward();
+            changed = true;
+        }
+
+        if(ticksRemaining != te.getTicksRemaining())
+        {
+            ticksRemaining = te.getTicksRemaining();
+            changed = true;
+        }
+
+        if(progress != te.getProgress())
+        {
+            progress = te.getProgress();
+            changed = true;
+        }
+
+        if(ticksPerCycle != te.getTicksPerCycle())
+        {
+            ticksPerCycle = te.getTicksPerCycle();
+            changed = true;
+        }
+
+        if(!ItemUtils.areEqual(desiredItems, te.getDesiredItems()))
+        {
+            desiredItems = te.getDesiredItems();
+            changed = true;
+        }
+
+        if(levelUpThreshold != te.getLevelUpThreshold())
+        {
+            levelUpThreshold = te.getLevelUpThreshold();
             changed = true;
         }
 
         if(changed)
         {
+            canLevelUp = progress >= levelUpThreshold;
             triggerUpdate();
         }
     }
 
     @Override
-    protected void onReadNBT(NBTTagCompound tag)
+    protected void onReadNBT(NBTTagCompound compound)
     {
-        super.onReadNBT(tag);
+        super.onReadNBT(compound);
 
-        if(tag.hasKey("WorkOrder"))
+        level = compound.getInteger("level");
+        desiredItems = null;
+        if(compound.hasKey("desiredItems"))
         {
-            workOrder = WorkOrder.fromNBT(tag.getCompoundTag("WorkOrder"));
+            NBTTagList list = compound.getTagList("desiredItems", Constants.NBT.TAG_COMPOUND);
 
-            //MegaCorpMod.logger.warn("Deserialized workorder: " + workOrder.getDesiredItem());
+            desiredItems = NonNullList.create();
+            for(int i = 0; i < list.tagCount(); i++)
+            {
+                ItemStack tmp = new ItemStack(list.getCompoundTagAt(i));
+                if(!tmp.isEmpty())
+                {
+                    desiredItems.add(tmp);
+                }
+            }
+
+            if(desiredItems.isEmpty())
+            {
+                desiredItems = null;
+            }
         }
-        else
-        {
-            workOrder = null;
-        }
-        automaticallyGenerate = tag.getBoolean("AutoGen");
-        questLocked = tag.getBoolean("QuestLocked");
-        allowChoice = tag.getBoolean("AllowChoice");
+
+        reward = compound.getInteger("reward");
+        ticksRemaining = compound.getInteger("ticksRemaining");
+        ticksPerCycle = compound.getInteger("ticksPerCycle");
+        progress = compound.getInteger("progress");
+        levelUpThreshold = compound.getInteger("levelUpThreshold");
+        canLevelUp = compound.getBoolean("canLevelUp");
     }
 
     @Override
-    protected void onWriteNBT(NBTTagCompound tag)
+    protected void onWriteNBT(NBTTagCompound ret)
     {
-        super.onWriteNBT(tag);
-
-        if(workOrder != null)
+        super.onWriteNBT(ret);
+        ret.setInteger("level", level);
+        ret.setInteger("ticksRemaining", ticksRemaining);
+        ret.setInteger("ticksPerCycle", ticksPerCycle);
+        ret.setInteger("reward", reward);
+        ret.setInteger("progress", progress);
+        if(desiredItems != null)
         {
-            tag.setTag("WorkOrder", workOrder.serializeNBT());
-
-            //MegaCorpMod.logger.warn("serialized workorder: " + workOrder.getDesiredItem());
+            NBTTagList list = new NBTTagList();
+            for(ItemStack item : desiredItems)
+            {
+                list.appendTag(item.serializeNBT());
+            }
+            ret.setTag("desiredItems", list);
         }
-        tag.setBoolean("AutoGen", automaticallyGenerate);
-        tag.setBoolean("QuestLocked", questLocked);
-        tag.setBoolean("AllowChoice", allowChoice);
+        ret.setInteger("levelUpThreshold", levelUpThreshold);
+        ret.setBoolean("canLevelUp", canLevelUp);
 
     }
 
     @Override
     public int getId()
     {
-        return 4;
+        return 6;
     }
 }

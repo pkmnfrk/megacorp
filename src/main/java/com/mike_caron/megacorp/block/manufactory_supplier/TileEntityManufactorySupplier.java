@@ -276,7 +276,7 @@ public class TileEntityManufactorySupplier
 
         ((Corporation) corp).addProfit(reward);
 
-        if(progress < 10 + (level * 3))
+        if(progress < getLevelUpThreshold())
         {
             progress += 1;
         }
@@ -309,5 +309,46 @@ public class TileEntityManufactorySupplier
     public void setOwner(UUID owner)
     {
         super.setOwner(owner);
+    }
+
+    public String getQuestId()
+    {
+        return questId;
+    }
+
+    public int getLevel()
+    {
+        return level;
+    }
+
+    public int getReward()
+    {
+        return reward;
+    }
+
+    public int getTicksRemaining()
+    {
+        return ticksRemaining;
+    }
+
+    public int getTicksPerCycle()
+    {
+        return ticksPerCycle;
+    }
+
+    public int getProgress()
+    {
+        return progress;
+    }
+
+    @Nullable
+    public NonNullList<ItemStack> getDesiredItems()
+    {
+        return desiredItems;
+    }
+
+    public int getLevelUpThreshold()
+    {
+        return 10 + (level * 3);
     }
 }

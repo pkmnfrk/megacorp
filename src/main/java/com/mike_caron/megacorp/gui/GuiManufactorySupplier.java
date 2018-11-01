@@ -40,6 +40,7 @@ public class GuiManufactorySupplier
 
     private GuiProgressBar progressBar = new GuiProgressBar(8, 83, 161, 12);
     private GuiTranslatedLabel progressLabel = new GuiTranslatedLabel(88, 85, GuiLabel.Alignment.CENTER, "tile.megacorp:shipping_depot.progress", 0, 0);
+    private GuiTranslatedLabel maxProgressLabel = new GuiTranslatedLabel(88, 85, GuiLabel.Alignment.CENTER, "tile.megacorp:manufactory_supplier.max_progress");
 
     private GuiButton discardQuestButton = new GuiButton(
         ContainerManufactorySupplier.GUI_STOP_QUEST,
@@ -141,19 +142,31 @@ public class GuiManufactorySupplier
 
                 autoLevelButton.setPressed(container.autoLevel);
 
-                if(container.progress >= 0)
+                if(container.level >= 50)
                 {
-                    progressBar.setForeColor(Color.GREEN);
-                    progressBar.setProgress(((float) container.progress) / container.levelUpThreshold);
-                    progressLabel.setPlaceholder(0, container.progress);
-                    progressLabel.setPlaceholder(1, container.levelUpThreshold);
+                    levelUpButton.setVisible(false);
+                    progressLabel.setVisible(true);
+                    maxProgressLabel.setVisible(true);
                 }
                 else
                 {
-                    progressBar.setForeColor(Color.RED);
-                    progressBar.setProgress(container.progress / -10f);
-                    progressLabel.setPlaceholder(0, container.progress);
-                    progressLabel.setPlaceholder(1, 10);
+                    levelUpButton.setVisible(true);
+                    progressLabel.setVisible(true);
+                    maxProgressLabel.setVisible(false);
+                    if (container.progress >= 0)
+                    {
+                        progressBar.setForeColor(Color.GREEN);
+                        progressBar.setProgress(((float) container.progress) / container.levelUpThreshold);
+                        progressLabel.setPlaceholder(0, container.progress);
+                        progressLabel.setPlaceholder(1, container.levelUpThreshold);
+                    }
+                    else
+                    {
+                        progressBar.setForeColor(Color.RED);
+                        progressBar.setProgress(container.progress / -10f);
+                        progressLabel.setPlaceholder(0, container.progress);
+                        progressLabel.setPlaceholder(1, 10);
+                    }
                 }
             }
             else

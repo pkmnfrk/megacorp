@@ -61,9 +61,11 @@ public class GuiLabel
     {
         if(!this.visible) return;
 
+        String l = getLabel();
+
         int dx = 0;
         int dy = 0;
-        int sw = this.parent.getFontRenderer().getStringWidth(stringLabel);
+        int sw = this.parent.getFontRenderer().getStringWidth(l);
         int sh = this.parent.getFontRenderer().FONT_HEIGHT;
 
         if(alignment == Alignment.CENTER)
@@ -85,7 +87,12 @@ public class GuiLabel
         }
 
 
-        this.parent.getFontRenderer().drawString(stringLabel, dx, dy, this.color.getRGB());
+        this.parent.getFontRenderer().drawString(l, dx, dy, this.color.getRGB());
+    }
+
+    public String getLabel()
+    {
+        return stringLabel;
     }
 
     public enum Alignment

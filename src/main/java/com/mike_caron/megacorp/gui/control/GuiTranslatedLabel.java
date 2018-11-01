@@ -37,6 +37,8 @@ public class GuiTranslatedLabel
 
         this.stringKey = stringKey;
         this.placeholders = placeholders.clone();
+
+        this.stringLabel = new TextComponentTranslation(stringKey, this.placeholders).getFormattedText();
     }
 
     public void setPlaceholder(int i, Object value)
@@ -45,4 +47,5 @@ public class GuiTranslatedLabel
 
         stringLabel = new TextComponentTranslation(stringKey, placeholders).getFormattedText();
     }
+
 }

@@ -85,6 +85,7 @@ tile.megacorp:manufactory_supplier.timer=%d seconds
 tile.megacorp:manufactory_supplier.new_quest=Choose
 tile.megacorp:manufactory_supplier.level_up=Level Up
 tile.megacorp:manufactory_supplier.quantity=Quantity: %s every %ds
+tile.megacorp:manufactory_supplier.quantity_tooltip=Equivalent to a full stack every %d ticks
 
 item.megacorp:work_voucher.name=Work Voucher
 item.megacorp:work_voucher.tooltip_blank=Blank?

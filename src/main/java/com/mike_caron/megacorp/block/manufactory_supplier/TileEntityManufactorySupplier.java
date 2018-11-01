@@ -249,11 +249,11 @@ public class TileEntityManufactorySupplier
 
         if(level > 50) level = 50;
 
-        Fraction frac = Fraction.getFraction(64, 600 + 5400 * (50 - level) / 50).reduce();
+        Fraction frac = Fraction.getFraction(desiredItems.get(0).getMaxStackSize(), 600 + 5400 * (50 - level) / 50).reduce();
 
         this.questId = quest.id;
         this.level = level;
-        this.reward = (int)(quest.baseProfit * 64 * Math.pow(1.15, level));
+        this.reward = (int)(quest.baseProfit * desiredItems.get(0).getMaxStackSize() * Math.pow(1.15, level));
         this.itemsPerCycle = frac.getNumerator();
         this.ticksPerCycle = frac.getDenominator();
         this.ticksRemaining = this.ticksPerCycle;
@@ -312,7 +312,7 @@ public class TileEntityManufactorySupplier
 
         if(ticksRemaining > 0)
         {
-            ticksRemaining -= 1;
+            ticksRemaining -= 7;
         }
 
         if(ticksRemaining > 0) return;

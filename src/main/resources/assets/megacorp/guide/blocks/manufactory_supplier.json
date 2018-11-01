@@ -1,0 +1,30 @@
+{
+  "icon": {
+    "item": "megacorp:manufactory_supplier"
+  },
+  "body": [
+    {
+      "template": "3x3",
+      "elements": {
+        "recipe": "megacorp:manufactory_supplier"
+      }
+    },
+    "para1",
+    "para2",
+    "para3",
+    {
+      "img":"textures/guide/manufactory_supplier.png",
+      "width": 256,
+      "height": 101
+    },
+    "para4",
+    "para5",
+    "para6",
+    "para7",
+    "para8",
+    "para9",
+    "para10",
+    "para11",
+    "para12"
+  ]
+}

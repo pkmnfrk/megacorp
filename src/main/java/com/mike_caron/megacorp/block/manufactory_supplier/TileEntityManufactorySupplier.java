@@ -347,7 +347,7 @@ public class TileEntityManufactorySupplier
 
         ((Corporation) corp).addProfit(reward);
 
-        if(progress < getLevelUpThreshold())
+        if(level < 50 && progress < getLevelUpThreshold())
         {
             progress += 1;
         }
@@ -377,7 +377,7 @@ public class TileEntityManufactorySupplier
 
         if(ticksRemaining > 0)
         {
-            ticksRemaining -= 1;
+            ticksRemaining -= 7;
         }
 
         if(ticksRemaining > 0) return;

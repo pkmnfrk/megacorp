@@ -152,7 +152,7 @@ public class GuiManufactorySupplier
                 {
                     progressBar.setForeColor(Color.RED);
                     progressBar.setProgress(container.progress / -10f);
-                    progressLabel.setPlaceholder(0, -container.progress);
+                    progressLabel.setPlaceholder(0, container.progress);
                     progressLabel.setPlaceholder(1, 10);
                 }
             }

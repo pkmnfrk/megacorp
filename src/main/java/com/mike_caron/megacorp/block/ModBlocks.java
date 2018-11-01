@@ -6,6 +6,7 @@ import com.mike_caron.megacorp.block.capital_investor.BlockCapitalInvestor;
 import com.mike_caron.megacorp.block.capital_investor.TileEntityCapitalInvestor;
 import com.mike_caron.megacorp.block.liquid_shipping_depot.BlockLiquidShippingDepot;
 import com.mike_caron.megacorp.block.liquid_shipping_depot.TileEntityLiquidShippingDepot;
+import com.mike_caron.megacorp.block.manufactory_supplier.BlockManufactorySupplier;
 import com.mike_caron.megacorp.block.manufactory_supplier.TileEntityManufactorySupplier;
 import com.mike_caron.megacorp.block.profit_condenser.BlockProfitCondenser;
 import com.mike_caron.megacorp.block.profit_condenser.TileEntityProfitCondenser;
@@ -99,6 +100,7 @@ public class ModBlocks
         registry.register(new BlockCapitalInvestor());
         registry.register(new BlockShippingDepot());
         registry.register(new BlockLiquidShippingDepot());
+        registry.register(new BlockManufactorySupplier());
 
         //registry.register(money_block = (BlockBase)new BlockBase(Material.IRON, "money_block").setHardness(10));
         //registry.register(dense_money_block = (BlockBase)new BlockBase(Material.IRON, "dense_money_block").setHardness(20));

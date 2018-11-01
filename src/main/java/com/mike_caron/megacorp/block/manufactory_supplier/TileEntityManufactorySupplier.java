@@ -358,7 +358,7 @@ public class TileEntityManufactorySupplier
             progress = 0;
         }
 
-        levelUp();
+        if(autoLevel) levelUp();
 
         this.markDirty();
         this.markAndNotify();

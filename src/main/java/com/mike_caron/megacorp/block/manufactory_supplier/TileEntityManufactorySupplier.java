@@ -377,7 +377,7 @@ public class TileEntityManufactorySupplier
 
         if(ticksRemaining > 0)
         {
-            ticksRemaining -= 7;
+            ticksRemaining -= 1;
         }
 
         if(ticksRemaining > 0) return;

@@ -335,10 +335,7 @@ public class TileEntityManufactorySupplier
                     progress -= 1;
                 }
 
-                if (progress <= -10)
-                {
-                    handleQuest(questId, level - 1);
-                }
+                levelDown();
             }
 
             return;
@@ -360,6 +357,15 @@ public class TileEntityManufactorySupplier
         this.markDirty();
         this.markAndNotify();
 
+    }
+
+    private void levelDown()
+    {
+        if (progress <= -10)
+        {
+            handleQuest(questId, level - 1);
+            autoLevel = false;
+        }
     }
 
     @Override

@@ -225,7 +225,7 @@ public class TileEntityManufactorySupplier
         {
             if(owner != null)
             {
-                handleQuest(extraData, 0);
+                handleQuest(extraData, 0, false);
             }
         }
         else if(button == ContainerManufactorySupplier.GUI_STOP_QUEST)
@@ -248,7 +248,11 @@ public class TileEntityManufactorySupplier
     {
         if(progress >= getLevelUpThreshold())
         {
-            handleQuest(questId, level + 1);
+            handleQuest(questId, level + 1, false);
+        }
+        else
+        {
+            handleQuest(questId, level, true);
         }
     }
 
@@ -263,25 +267,24 @@ public class TileEntityManufactorySupplier
         }
     }
 
-    private void handleQuest(@Nonnull String id, int level)
+    private void handleQuest(@Nonnull String id, int level, boolean dontReset)
     {
         Quest quest = QuestManager.INSTANCE.getSpecificQuest(id);
 
         if(quest == null)
             return;
 
-        handleQuest(quest, level);
+        handleQuest(quest, level, dontReset);
     }
 
-    private void handleQuest(Quest quest, int level)
+    private void handleQuest(Quest quest, int level, boolean dontReset)
     {
         desiredItems = quest.possibleItems();
         ItemStack sample = desiredItems.get(0);
-
         if(level < 0) level = 0;
         else if(level > 50) level = 50;
 
-        int stackSize = desiredItems.get(0).getMaxStackSize();
+        int stackSize = sample.getMaxStackSize();
         int time = (int)(6000f * (stackSize / 16f) / quest.baseQty);
 
         time = 600 + (time - 600) * (50 - level) / 50;
@@ -295,23 +298,28 @@ public class TileEntityManufactorySupplier
         this.reward = profit;
         this.itemsPerCycle = stackSize;
         this.ticksPerCycle = time;
-        this.ticksRemaining = this.ticksPerCycle;
-        this.progress = 0;
+        if(!dontReset)
+        {
+            this.ticksRemaining = this.ticksPerCycle;
+            this.progress = 0;
+        }
     }
 
-    private void tryConsumeItem()
+    private boolean tryConsumeItem(boolean finale)
     {
-        if(world.isRemote) return;
+        if(world.isRemote) return false;
 
         ICorporation corp = getCorporation();
 
-        if(corp == null) return;
+        if(corp == null) return false;
         
-        if(desiredItems == null) return;
+        if(desiredItems == null) return false;
 
         ItemStack stack = inventory.getStackInSlot(0);
         if(stack.getCount() < itemsPerCycle)
         {
+            if(!finale) return false;
+
             //Failure :(
             if(progress > 0 || level > 0)
             {
@@ -328,7 +336,7 @@ public class TileEntityManufactorySupplier
                 levelDown();
             }
 
-            return;
+            return true;
         }
 
         stack.shrink(itemsPerCycle);
@@ -351,6 +359,7 @@ public class TileEntityManufactorySupplier
         this.markDirty();
         this.markAndNotify();
 
+        return true;
     }
 
     private void levelDown()
@@ -361,10 +370,13 @@ public class TileEntityManufactorySupplier
 
             if(ModConfig.manufactoryFailurePenalty < 0)
             {
-                handleQuest(questId, level + ModConfig.manufactoryFailurePenalty);
+                handleQuest(questId, level + ModConfig.manufactoryFailurePenalty, false);
                 autoLevel = false;
+                return;
             }
         }
+
+        handleQuest(questId, level, true);
     }
 
     @Override
@@ -379,11 +391,12 @@ public class TileEntityManufactorySupplier
             ticksRemaining -= 1;
         }
 
-        if(ticksRemaining > 0) return;
+        if(ticksRemaining > ticksPerCycle - 600) return;
 
-        tryConsumeItem();
-
-        ticksRemaining = ticksPerCycle;
+        if(tryConsumeItem(ticksRemaining <= 0))
+        {
+            ticksRemaining = ticksPerCycle;
+        }
     }
 
     @Override

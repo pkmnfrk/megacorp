@@ -208,6 +208,8 @@ public class ContainerManufactorySupplier
             for(ItemStack item : desiredItems)
             {
                 list.appendTag(item.serializeNBT());
+                if(list.tagCount() >= 20)
+                    break;
             }
             ret.setTag("desiredItems", list);
         }

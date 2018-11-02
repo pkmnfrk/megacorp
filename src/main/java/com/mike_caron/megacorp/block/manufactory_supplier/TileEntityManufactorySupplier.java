@@ -17,7 +17,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.CapabilityItemHandler;
-import org.apache.commons.lang3.math.Fraction;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -282,31 +281,20 @@ public class TileEntityManufactorySupplier
         if(level < 0) level = 0;
         else if(level > 50) level = 50;
 
-        Fraction frac = Fraction.getFraction(desiredItems.get(0).getMaxStackSize(), 600 + 5400 * (50 - level) / 50).reduce();
+        int stackSize = desiredItems.get(0).getMaxStackSize();
+        int time = (int)(6000f * (stackSize / 16f) / quest.baseQty);
 
-        int num = frac.getNumerator();
-        int den = frac.getDenominator();
+        time = 600 + (time - 600) * (50 - level) / 50;
 
-        while(den < 600) //30 seconds
-        {
-            num *= 2;
-            den *= 2;
-        }
-
-        if(num > sample.getMaxStackSize())
-        {
-            num = sample.getMaxStackSize();
-        }
-
-        int profit = (int)(quest.baseProfit * sample.getMaxStackSize() * Math.pow(1.15, level));
+        int profit = (int)(quest.baseProfit * stackSize * Math.pow(1.15, level));
 
         profit *= 2;
 
         this.questId = quest.id;
         this.level = level;
         this.reward = profit;
-        this.itemsPerCycle = num;
-        this.ticksPerCycle = den;
+        this.itemsPerCycle = stackSize;
+        this.ticksPerCycle = time;
         this.ticksRemaining = this.ticksPerCycle;
         this.progress = 0;
     }

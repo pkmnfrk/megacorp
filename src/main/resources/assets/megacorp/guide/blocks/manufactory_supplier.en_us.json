@@ -3,6 +3,7 @@
   "para1": "While the Shipping Depot is a good way to offload a large amount of resources, the Manufactory Supplier is a much more profitable way to make money if you have a decent automation setup.",
   "para2": "In essence, the Manufactory Supplier requests a small number of items at a constant rate. After a set amount of time, if you have provided the requested number, then those items are deducted and you get paid. If you don't, you don't.",
   "para3": "If you succeed enough times, then you will be able to level up. Levelling up causes the rate to increase, but also increases your profit. On the other hand, if you fail to provide the items enough times, then you will level down. Levels are not global, they only apply to the specific Manufactory Supplier.",
+  "para3.5": "Note that the time limit is just a limit. After 30 seconds, the order will become eligible for shipping early. Be careful not to accidentally level up past your actual production rate!",
   "para4": "From top to bottom, the elements in the Manufactory Supplier screen are:",
   "para5": "Job: The name of the Work Order. Mouse over to see a description.",
   "para6": "Item: The item being requested. If multiple items are accepted, this field will change periodically.",

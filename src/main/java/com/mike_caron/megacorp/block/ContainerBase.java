@@ -29,6 +29,7 @@ public abstract class ContainerBase
     {
         super.detectAndSendChanges();
 
+        /*
         if(invChanged)
         {
             for(int i = 0; i < this.inventorySlots.size(); ++i)
@@ -41,9 +42,10 @@ public abstract class ContainerBase
             }
             invChanged = false;
         }
-
+*/
         changed = false;
 
+        /*
         for (int i = 0; i < inventorySlots.size(); i++)
         {
             ItemStack invStack = inventorySlots.get(i).getStack();
@@ -56,7 +58,7 @@ public abstract class ContainerBase
                 break;
             }
         }
-
+*/
     }
 
     public ContainerBase(IInventory player)

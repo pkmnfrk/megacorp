@@ -87,6 +87,7 @@ tile.megacorp:manufactory_supplier.level_up=Level Up
 tile.megacorp:manufactory_supplier.quantity=Quantity: %s every %ds
 tile.megacorp:manufactory_supplier.quantity_tooltip=Equivalent to a full stack every %d ticks
 tile.megacorp:manufactory_supplier.max_progress=Max Level
+tile.megacorp:manufactory_supplier.auto_level=Automatically levels you up when you have enough progress
 
 item.megacorp:work_voucher.name=Work Voucher
 item.megacorp:work_voucher.tooltip_blank=Blank?

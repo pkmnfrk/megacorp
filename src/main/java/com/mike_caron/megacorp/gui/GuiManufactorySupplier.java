@@ -11,7 +11,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextComponentTranslation;
 
 import java.awt.Color;
 import java.text.NumberFormat;
@@ -227,7 +226,8 @@ public class GuiManufactorySupplier
         levelUpButton.addListener(this);
         autoLevelButton.addListener(this);
 
-        discardQuestButton.setTooltip(new TextComponentTranslation("tile.megacorp:shipping_depot.reroll").getUnformattedText());
+        discardQuestButton.setTooltip(GuiUtil.translate("tile.megacorp:shipping_depot.reroll"));
+        autoLevelButton.setTooltip(GuiUtil.translate("tile.megacorp:manufactory_supplier.auto_level"));
     }
 
     @Override

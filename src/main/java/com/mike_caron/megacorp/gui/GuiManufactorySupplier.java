@@ -339,6 +339,10 @@ public class GuiManufactorySupplier
                 ret.add(questLocalization.description);
                 return ret;
             }
+            if(GuiUtil.inBounds(mouseX, mouseY, 1, 1, 16, 16))
+            {
+                return possibleItems.get(currentItemStackIndex % possibleItems.size()).getTooltip(player, tooltipFlag);
+            }
             return null;
         }
 

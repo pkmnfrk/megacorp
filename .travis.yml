@@ -23,9 +23,12 @@ deploy:
     on:
       tags: true
     draft: true
+    tag_name: "$TRAVIS_TAG"
 addons:
   artifacts:
     working_dir: build/libs
     paths:
       - $(ls build/libs/*.jar | tr "\n" ":")
     permissions: public-read
+    on:
+      tags: false

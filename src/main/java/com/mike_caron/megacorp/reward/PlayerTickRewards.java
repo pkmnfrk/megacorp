@@ -56,13 +56,8 @@ public class PlayerTickRewards
             //MegaCorpMod.logger.info("Feeding after {} ticks", ticks);
 
             FoodStats food = player.getFoodStats();
-            if(food.needFood()){
-                food.setFoodLevel(food.getFoodLevel() + 1);
-            }
-            else if(food.getSaturationLevel() < 20)
-            {
-                food.setFoodSaturationLevel(food.getSaturationLevel() + 1);
-            }
+
+            food.addStats(1, 0.5f);
         }
 
         rewards.setHungerRestore(hungerTicks);

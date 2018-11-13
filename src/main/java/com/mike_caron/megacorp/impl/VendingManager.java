@@ -6,8 +6,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.reward.BaseReward;
+import com.mike_caron.megacorp.util.DataUtils;
 import com.mike_caron.megacorp.util.ItemUtils;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -108,6 +110,12 @@ public class VendingManager
         }
 
         itemStack.setCount(amount);
+
+        if(item.has("nbt"))
+        {
+            NBTTagCompound nbt = DataUtils.toNBT(item.get("nbt").getAsJsonObject());
+            itemStack.setTagCompound(nbt);
+        }
 
         items.add(new VendingItem(itemStack, cost, currency));
     }

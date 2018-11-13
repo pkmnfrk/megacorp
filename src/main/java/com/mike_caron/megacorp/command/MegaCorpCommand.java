@@ -10,6 +10,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -103,7 +104,7 @@ public class MegaCorpCommand
         throws CommandException
     {
         RewardManager.INSTANCE.loadRewards();
-        sender.sendMessage(new TextComponentString("Done"));
+        sender.sendMessage(new TextComponentTranslation("command.megacorp.done"));
     }
 
     private static void reloadQuests(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args)
@@ -111,14 +112,20 @@ public class MegaCorpCommand
     {
         //RewardManager.INSTANCE.loadRewards();
         QuestManager.INSTANCE.loadQuests(CommonProxy.questsDirectory);
-        sender.sendMessage(new TextComponentString("Done"));
+        sender.sendMessage(new TextComponentTranslation("command.megacorp.done"));
     }
 
     private static void reloadVending(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args)
         throws CommandException
     {
-        VendingManager.INSTANCE.loadVendingItems(CommonProxy.megacorpDirectory);
-        sender.sendMessage(new TextComponentString("Done"));
+        if(VendingManager.INSTANCE.loadVendingItems(CommonProxy.megacorpDirectory))
+        {
+            sender.sendMessage(new TextComponentTranslation("command.megacorp.done"));
+        }
+        else
+        {
+            sender.sendMessage(new TextComponentTranslation("command.megacorp.error"));
+        }
     }
 
     // /megacorp setRewardLevel <rewardid> <level>
@@ -127,7 +134,7 @@ public class MegaCorpCommand
     {
         if(args.length < 2)
         {
-            sender.sendMessage(new TextComponentString("Usage: megacorp setRewardLevel <reward_id> <level>"));
+            sender.sendMessage(new TextComponentTranslation("command.megacorp:setRewardLevel.usage"));
             return;
         }
 
@@ -148,13 +155,13 @@ public class MegaCorpCommand
 
             if(corp == null)
             {
-                sender.sendMessage(new TextComponentString("You don't own a corporation."));
+                sender.sendMessage(new TextComponentTranslation("command.megacorp.noCorp"));
                 return;
             }
 
             if(level < 0)
             {
-                sender.sendMessage(new TextComponentString("Level is invalid"));
+                sender.sendMessage(new TextComponentTranslation("command.megacorp:setRewardLevel.invalidLevel"));
                 return;
             }
 
@@ -162,17 +169,17 @@ public class MegaCorpCommand
         }
         catch(NumberFormatException ex)
         {
-            sender.sendMessage(new TextComponentString("Level is invalid"));
+            sender.sendMessage(new TextComponentTranslation("command.megacorp:setRewardLevel.invalidLevel"));
             return;
         }
         catch(IllegalArgumentException ex)
         {
-            sender.sendMessage(new TextComponentString("Reward does not exist"));
+            sender.sendMessage(new TextComponentTranslation("command.megacorp:setRewardLevel.invalidReward"));
             return;
         }
 
 
-        sender.sendMessage(new TextComponentString("Done"));
+        sender.sendMessage(new TextComponentTranslation("command.megacorp.done"));
     }
 
     // megacorp clearRewards
@@ -191,13 +198,13 @@ public class MegaCorpCommand
 
         if(corp == null)
         {
-            sender.sendMessage(new TextComponentString("You don't own a corporation."));
+            sender.sendMessage(new TextComponentTranslation("command.megacorp.noCorp"));
             return;
         }
 
         corp.clearRewards();
 
-        sender.sendMessage(new TextComponentString("Done"));
+        sender.sendMessage(new TextComponentTranslation("command.megacorp.done"));
     }
 
     private static void removeCorporation(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args)
@@ -215,13 +222,13 @@ public class MegaCorpCommand
 
         if(corp == null)
         {
-            sender.sendMessage(new TextComponentString("You don't own a corporation."));
+            sender.sendMessage(new TextComponentTranslation("command.megacorp.noCorp"));
             return;
         }
 
         CorporationManager.get(((EntityPlayerMP)sender).getServerWorld()).deleteCorporationForOwner(id);
 
-        sender.sendMessage(new TextComponentString("Done"));
+        sender.sendMessage(new TextComponentTranslation("command.megacorp.done"));
     }
 
     interface TriAction<X,Y,Z>

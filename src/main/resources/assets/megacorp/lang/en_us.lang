@@ -101,3 +101,10 @@ gui.megacorp:guide.close=Close
 gui.megacorp:guide.index=Home
 gui.megacorp:guide.pagenotfound=The page "%s" could not be found.
 gui.megacorp:guide.seealso=See Also:
+
+command.megacorp.error=There was an error executing the command. Check the logs for details
+command.megacorp.done=Done.
+command.megacorp.noCorp=You don't own a corporation.
+command.megacorp:setRewardLevel.usage=Usage: megacorp setRewardLevel <reward_id> <level>
+command.megacorp:setRewardLevel.invalidLevel=Level is invalid
+command.megacorp:setRewardLevel.invalidReward=Reward does not exist

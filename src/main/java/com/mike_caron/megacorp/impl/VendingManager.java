@@ -24,7 +24,7 @@ public class VendingManager
 
     private VendingManager(){}
 
-    public void loadVendingItems(File configDirectory)
+    public boolean loadVendingItems(File configDirectory)
     {
         items.clear();
 
@@ -32,7 +32,7 @@ public class VendingManager
 
         if(!vendingFile.exists())
         {
-            return;
+            return true;
         }
 
         JsonParser parser = new JsonParser();
@@ -45,7 +45,7 @@ public class VendingManager
         catch(RuntimeException | IOException ex)
         {
             MegaCorpMod.logger.error("Encountered error while reading " + vendingFile.getPath(), ex);
-            return;
+            return false;
         }
 
         try
@@ -63,7 +63,10 @@ public class VendingManager
         catch (IllegalStateException ex)
         {
             MegaCorpMod.logger.error("Encountered error while reading " + vendingFile.getPath(), ex);
+            return false;
         }
+
+        return true;
     }
 
     public SortedSet<VendingItem> getItems()

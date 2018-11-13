@@ -1,5 +1,6 @@
 package com.mike_caron.megacorp.item;
 
+import com.mike_caron.megacorp.MegaCorpMod;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
@@ -20,9 +21,7 @@ public class CorporateCard extends ItemBase
         setTranslationKey("megacorp:corporate_card");
         setMaxStackSize(1);
 
-        //intentionally not set:
-        //setCreativeTab(MegaCorpMod.creativeTab);
-
+        setCreativeTab(MegaCorpMod.creativeTab);
     }
 
     @Override

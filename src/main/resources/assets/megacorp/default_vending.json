@@ -3,9 +3,17 @@
     /*
     Examples:
     {
-      "item": "minecraft:diamond",
+      "item": "minecraft:diamond_sword",
       "cost": "100",
-      "cost_type": "money"
+      "cost_type": "money",
+      "nbt": {
+        "ench": [
+          {
+            id: 16,
+            lvl: 10
+          }
+        ]
+      }
     },
     {
       "item": "minecraft:emerald",

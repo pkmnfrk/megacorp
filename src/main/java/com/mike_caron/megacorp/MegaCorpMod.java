@@ -33,7 +33,7 @@ public class MegaCorpMod
 {
     public static final String modId = "megacorp";
     public static final String name = "MegaCorp";
-    public static final String version = "0.2.0";
+    public static final String version = "0.2.1";
 
     public static final Logger logger = LogManager.getLogger(modId);
 

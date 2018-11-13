@@ -1,10 +1,7 @@
 package com.mike_caron.megacorp.command;
 
 import com.mike_caron.megacorp.api.ICorporationManager;
-import com.mike_caron.megacorp.impl.CorporationManager;
-import com.mike_caron.megacorp.impl.Corporation;
-import com.mike_caron.megacorp.impl.QuestManager;
-import com.mike_caron.megacorp.impl.RewardManager;
+import com.mike_caron.megacorp.impl.*;
 import com.mike_caron.megacorp.proxy.CommonProxy;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -35,6 +32,7 @@ public class MegaCorpCommand
         subCommands.put("clearRewards", MegaCorpCommand::clearRewards);
         subCommands.put("reloadQuests", MegaCorpCommand::reloadQuests);
         subCommands.put("removeCorporation", MegaCorpCommand::removeCorporation);
+        subCommands.put("reloadVending", MegaCorpCommand::reloadVending);
     }
 
     @Nonnull
@@ -113,6 +111,13 @@ public class MegaCorpCommand
     {
         //RewardManager.INSTANCE.loadRewards();
         QuestManager.INSTANCE.loadQuests(CommonProxy.questsDirectory);
+        sender.sendMessage(new TextComponentString("Done"));
+    }
+
+    private static void reloadVending(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args)
+        throws CommandException
+    {
+        VendingManager.INSTANCE.loadVendingItems(CommonProxy.megacorpDirectory);
         sender.sendMessage(new TextComponentString("Done"));
     }
 

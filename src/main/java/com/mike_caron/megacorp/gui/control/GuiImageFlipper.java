@@ -1,6 +1,8 @@
 package com.mike_caron.megacorp.gui.control;
 
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.EntityPlayer;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -65,7 +67,7 @@ public class GuiImageFlipper
 
     @Nullable
     @Override
-    public List<String> getTooltip(int mouseX, int mouseY)
+    public List<String> getTooltip(EntityPlayer player, ITooltipFlag tooltipFlag, int mouseX, int mouseY)
     {
         if(subImages.size() == 0) return null;
 
@@ -74,7 +76,7 @@ public class GuiImageFlipper
             currentImage = 0;
         }
 
-        return subImages.get(currentImage).getTooltip(mouseX, mouseY);
+        return subImages.get(currentImage).getTooltip(player, tooltipFlag, mouseX, mouseY);
     }
 
     @Override

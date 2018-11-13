@@ -12,6 +12,8 @@ import com.mike_caron.megacorp.impl.RewardManager;
 import com.mike_caron.megacorp.network.CtoSMessage;
 import com.mike_caron.megacorp.util.StringUtil;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.Fluid;
@@ -226,7 +228,7 @@ public class GuiCapitalInvestor
         }
 
         @Override
-        public List<String> getTooltip(int mouseX, int mouseY, int width)
+        public List<String> getTooltip(EntityPlayer player, ITooltipFlag tooltipFlag, int mouseX, int mouseY, int width)
         {
             if(GuiUtil.inBounds(mouseX, mouseY, width - 14, 4, 10, 10))
             {

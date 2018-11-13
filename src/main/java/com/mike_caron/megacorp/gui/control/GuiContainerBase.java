@@ -6,6 +6,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.util.ITooltipFlag;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
@@ -388,7 +389,8 @@ public abstract class GuiContainerBase
             int goodX = mouseOverControl.parent.translateFromScreenX(mouseX - guiLeft - mouseOverControl.getX());
             int goodY = mouseOverControl.parent.translateFromScreenY(mouseY - guiTop - mouseOverControl.getY());
 
-            List<String> toolTip = mouseOverControl.getTooltip(goodX, goodY);
+            List<String> toolTip = mouseOverControl.getTooltip(this.mc.player, this.mc.gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL, goodX, goodY);
+
             if(toolTip != null)
             {
                 this.drawHoveringText(toolTip, mouseX, mouseY);

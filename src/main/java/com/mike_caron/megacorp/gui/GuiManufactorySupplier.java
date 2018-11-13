@@ -8,6 +8,8 @@ import com.mike_caron.megacorp.impl.QuestLocalization;
 import com.mike_caron.megacorp.impl.QuestManager;
 import com.mike_caron.megacorp.network.CtoSMessage;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -329,7 +331,7 @@ public class GuiManufactorySupplier
         }
 
         @Override
-        public List<String> getTooltip(int mouseX, int mouseY, int width)
+        public List<String> getTooltip(EntityPlayer player, ITooltipFlag tooltipFlag, int mouseX, int mouseY, int width)
         {
             if(GuiUtil.inBounds(mouseX, mouseY, width - 14, 4, 10, 10))
             {

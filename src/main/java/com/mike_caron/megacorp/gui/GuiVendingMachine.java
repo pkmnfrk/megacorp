@@ -5,6 +5,8 @@ import com.mike_caron.megacorp.block.vending_machine.ContainerVendingMachine;
 import com.mike_caron.megacorp.gui.control.*;
 import com.mike_caron.megacorp.network.CtoSMessage;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.Fluid;
@@ -181,11 +183,15 @@ public class GuiVendingMachine
 
 
         @Override
-        public List<String> getTooltip(int mouseX, int mouseY, int width)
+        public List<String> getTooltip(EntityPlayer player, ITooltipFlag tooltipFlag, int mouseX, int mouseY, int width)
         {
             if(GuiUtil.inBounds(mouseX, mouseY, width - 14, 4, 10, 10))
             {
                return toolTip;
+            }
+            if(GuiUtil.inBounds(mouseX, mouseY, 1, 1, 16, 16))
+            {
+                return reward.itemStack.getTooltip(player, tooltipFlag);
             }
             return null;
         }

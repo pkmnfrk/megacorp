@@ -7,6 +7,8 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -249,7 +251,7 @@ public class GuiBase
         drawGuiContainerBackgroundLayer(mouseX, mouseY);
         //super.drawScreen(mouseX, mouseY, partialTicks);
         drawGuiContainerForegroundLayer(mouseX, mouseY);
-        this.renderHoveredToolTip(mouseX, mouseY);
+        this.renderHoveredToolTip(this.mc.player, this.mc.gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL, mouseX, mouseY);
     }
 
     @Override
@@ -343,14 +345,14 @@ public class GuiBase
 
     }
 
-    protected void renderHoveredToolTip(int mouseX, int mouseY)
+    protected void renderHoveredToolTip(EntityPlayer player, ITooltipFlag tooltipFlag, int mouseX, int mouseY)
     {
         if(mouseOverControl != null)
         {
             int goodX = mouseOverControl.parent.translateFromScreenX(mouseX);
             int goodY = mouseOverControl.parent.translateFromScreenY(mouseY);
 
-            List<String> toolTip = mouseOverControl.getTooltip(goodX, goodY);
+            List<String> toolTip = mouseOverControl.getTooltip(player, tooltipFlag, goodX, goodY);
             if(toolTip != null)
             {
                 this.drawHoveringText(toolTip, mouseX, mouseY);

@@ -2,6 +2,8 @@ package com.mike_caron.megacorp.gui.control;
 
 import com.mike_caron.megacorp.gui.GuiUtil;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
@@ -222,7 +224,7 @@ public class GuiList
 
     @Nullable
     @Override
-    public List<String> getTooltip(int mouseX, int mouseY)
+    public List<String> getTooltip(EntityPlayer player, ITooltipFlag tooltipFlag, int mouseX, int mouseY)
     {
         if(this.producer != null)
         {
@@ -237,7 +239,7 @@ public class GuiList
 
                 int realY = adjustedY - (itemHeight * (adjustedY / itemHeight));
 
-                return this.producer.getItem(over).getTooltip(mouseX - 1, realY, iw);
+                return this.producer.getItem(over).getTooltip(player, tooltipFlag, mouseX - 1, realY, iw);
             }
         }
 
@@ -262,7 +264,7 @@ public class GuiList
     {
         //void draw(int y);
         void draw(int width, int height, ListItemState state);
-        default List<String> getTooltip(int mouseX, int mouseY, int width) { return null; };
+        default List<String> getTooltip(EntityPlayer player, ITooltipFlag tooltipFlag, int mouseX, int mouseY, int width) { return null; };
     }
 
     public enum ListItemState

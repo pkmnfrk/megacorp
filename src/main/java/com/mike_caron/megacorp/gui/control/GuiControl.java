@@ -2,6 +2,8 @@ package com.mike_caron.megacorp.gui.control;
 
 import com.mike_caron.megacorp.gui.GuiUtil;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.EntityPlayer;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -182,7 +184,7 @@ public abstract class GuiControl
     }
 
     @Nullable
-    public List<String> getTooltip(int mouseX, int mouseY)
+    public List<String> getTooltip(EntityPlayer player, ITooltipFlag tooltipFlag, int mouseX, int mouseY)
     {
         return this.tooltipText;
     }

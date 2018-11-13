@@ -2,6 +2,8 @@ package com.mike_caron.megacorp.gui.control;
 
 import com.mike_caron.megacorp.gui.GuiUtil;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -35,7 +37,7 @@ public class GuiFluid
 
     @Nullable
     @Override
-    public List<String> getTooltip(int mouseX, int mouseY)
+    public List<String> getTooltip(EntityPlayer player, ITooltipFlag tooltipFlag, int mouseX, int mouseY)
     {
         List<String> items = new ArrayList<>();
 

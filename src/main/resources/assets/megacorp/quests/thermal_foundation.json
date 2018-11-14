@@ -1,8 +1,52 @@
 {
   "factories": [
-    "com.mike_caron.megacorp.impl.quests.ThermalFoundation$Ingots",
-    "com.mike_caron.megacorp.impl.quests.ThermalFoundation$Gears",
-    "com.mike_caron.megacorp.impl.quests.ThermalFoundation$Plates",
-    "com.mike_caron.megacorp.impl.quests.ThermalFoundation$Coins"
-  ]
+    {
+      "class":"com.mike_caron.megacorp.impl.quests.ThermalFoundation$Ingots",
+      "materials": "#materials"
+    },
+    {
+      "class": "com.mike_caron.megacorp.impl.quests.ThermalFoundation$Gears",
+      "materials": "#materials"
+    },
+    {
+      "class": "com.mike_caron.megacorp.impl.quests.ThermalFoundation$Plates",
+      "materials": "#materials"
+    },
+    {
+      "class": "com.mike_caron.megacorp.impl.quests.ThermalFoundation$Coins",
+      "materials": "#materials"
+    }
+  ],
+  "constants": {
+    "materials": [
+      { "id": "Iridium",         "rarity": 1  },
+      { "id": "Platinum",        "rarity": 1  },
+      { "id": "Enderium",        "rarity": 2  },
+      { "id": "Mana_infused",    "rarity": 3  },
+      { "id": "EndSteel",        "rarity": 2  },
+      { "id": "DarkSteel",       "rarity": 3  },
+      { "id": "Soularium",       "rarity": 4  },
+      { "id": "Signalum",        "rarity": 4  },
+      { "id": "Lumium",          "rarity": 4  },
+      { "id": "VibrantAlloy",    "rarity": 4  },
+      { "id": "Steel",           "rarity": 5  },
+      { "id": "Gold",            "rarity": 5  },
+      { "id": "Nickel",          "rarity": 6  },
+      { "id": "Aluminum",        "rarity": 6  },
+      { "id": "Constantan",      "rarity": 6  },
+      { "id": "EnergeticAlloy",  "rarity": 6  },
+      { "id": "PulsatingIron",   "rarity": 6  },
+      { "id": "Electrum",        "rarity": 7  },
+      { "id": "Silver",          "rarity": 7  },
+      { "id": "Invar",           "rarity": 8  },
+      { "id": "ElectricalSteel", "rarity": 8  },
+      { "id": "RedstoneAlloy",   "rarity": 8  },
+      { "id": "ConductiveIron",  "rarity": 8  },
+      { "id": "Bronze",          "rarity": 9  },
+      { "id": "Lead",            "rarity": 9  },
+      { "id": "Tin",             "rarity": 10 },
+      { "id": "Iron",            "rarity": 11 },
+      { "id": "Copper",          "rarity": 11 },
+    ]
+  }
 }

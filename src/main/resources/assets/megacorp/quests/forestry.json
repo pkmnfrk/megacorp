@@ -1,9 +1,25 @@
 {
   "mod": "forestry",
   "factories": [
-    "com.mike_caron.megacorp.impl.quests.Forestry$Tubes",
+    {
+      "class": "com.mike_caron.megacorp.impl.quests.Forestry$Tubes",
+      "materials": [
+        { "id": "Copper",     "rarity": 1 , "meta": 0  },
+        { "id": "Tin",        "rarity": 1 , "meta": 1  },
+        { "id": "Bronze",     "rarity": 2 , "meta": 2  },
+        { "id": "Golden",     "rarity": 4 , "meta": 4  },
+        { "id": "Diamantine", "rarity": 8 , "meta": 5  },
+        { "id": "Obsidian",   "rarity": 5 , "meta": 6  },
+        { "id": "Blazing",    "rarity": 6 , "meta": 7  },
+        { "id": "Emerald",    "rarity": 10, "meta": 9  },
+        { "id": "Apatine",    "rarity": 3 , "meta": 10 },
+        { "id": "Lapis",      "rarity": 7 , "meta": 11 },
+        { "id": "Ender",      "rarity": 7 , "meta": 12 }
+      ]
+    },
     "com.mike_caron.megacorp.impl.quests.Forestry$Bees"
   ],
+
   "quests": [
     {
       "id": "mind_your_beeswax",

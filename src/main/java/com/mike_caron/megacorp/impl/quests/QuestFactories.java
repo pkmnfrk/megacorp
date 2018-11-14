@@ -1,5 +1,7 @@
 package com.mike_caron.megacorp.impl.quests;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.api.IQuestFactory;
@@ -12,9 +14,7 @@ import net.minecraft.item.ItemStack;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public final class QuestFactories
 {
@@ -23,38 +23,42 @@ public final class QuestFactories
     public static abstract class ModMaterialBase
         implements IQuestFactory
     {
-        protected final Map<String, Integer> materials = new HashMap<>();
-        protected final Map<String, String> names = new HashMap<>();
-        protected final Map<String, Integer> metas = new HashMap<>();
-
         protected String modprefix = "";
         protected String type = "";
 
         private float randomFactor = 0.25f;
         protected float levelScale = 0.9f;
 
-        protected float baseQty(int value)
+        protected float baseQty(JsonObject material)
         {
-            return (float)value;
+            return material.get("rarity").getAsFloat();
         }
 
-        protected float multQty(int value)
+        protected float multQty(JsonObject material)
         {
             return 1.5f;
         }
 
-        protected float baseProfit(int value) { return 1f; }
+        protected float baseProfit(JsonObject material) { return 1f; }
 
         @Override
         @Nonnull
         public List<Quest> createQuests(@Nullable JsonObject tag)
         {
+            if(tag == null)
+                return new ArrayList<>();
+
+            JsonArray materials = tag.getAsJsonArray("materials");
+
             List<Quest> ret = new ArrayList<>(materials.size());
 
-            for(Map.Entry<String, Integer> kvp : materials.entrySet())
+            for(JsonElement kvp : materials)
             {
+                JsonObject material = kvp.getAsJsonObject();
+
                 Quest q;
-                if(metas.containsKey(kvp.getKey()))
+
+                if(material.has("meta"))
                 {
                     Item item = Item.getByNameOrId(modprefix + ":" + type);
                     if(item == null)
@@ -63,30 +67,30 @@ public final class QuestFactories
                         continue;
                     }
 
-                    ItemStack is = new ItemStack(item, 1, metas.get(kvp.getKey()));
+                    ItemStack is = new ItemStack(item, 1, material.get("meta").getAsInt());
                     q = new Quest(
-                        modprefix + ":" + type + "_" + kvp.getKey(),
+                        modprefix + ":" + type + "_" + material.get("id").getAsString(),
                         is,
-                        baseQty(kvp.getValue()),
-                        multQty(kvp.getValue()),
+                        baseQty(material),
+                        multQty(material),
                         randomFactor,
                         levelScale,
-                        baseProfit(kvp.getValue())
+                        baseProfit(material)
                     );
                 }
                 else
                 {
                     q = new Quest(
-                        modprefix + ":" + type + "_" + kvp.getKey(),
-                        type + kvp.getKey(),
-                        baseQty(kvp.getValue()),
-                        multQty(kvp.getValue()),
+                        modprefix + ":" + type + "_" + material.get("id").getAsString(),
+                        type + material.get("id").getAsString(),
+                        baseQty(material),
+                        multQty(material),
                         randomFactor,
                         levelScale,
-                        baseProfit(kvp.getValue())
+                        baseProfit(material)
                     );
                 }
-                q.extraData.put("material", names.get(kvp.getKey()));
+                q.extraData.put("material", material.get("id").getAsString());
 
                 ret.add(q);
             }
@@ -104,29 +108,6 @@ public final class QuestFactories
 
             QuestLocalization localization = QuestManager.INSTANCE.getLocalizationFor(locale, id);
             return localization.withDescription(String.format(localization.description, material));
-        }
-
-        protected void add(String material, int value, String name, int meta)
-        {
-            materials.put(material, value);
-            names.put(material, name);
-            metas.put(material, meta);
-        }
-
-        protected void add(String material, int value)
-        {
-            add(material, value, material);
-        }
-
-        protected void add(String material, int value, String name)
-        {
-            materials.put(material, value);
-            names.put(material, name);
-        }
-
-        protected void add(String material, int value, int meta)
-        {
-            add(material, value, material, meta);
         }
     }
 

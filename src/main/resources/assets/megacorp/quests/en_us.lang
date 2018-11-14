@@ -26,22 +26,22 @@ breath.title=Breath of the Vile
 breath.desc=Dragon's Breath has all number of applications, from perfume to rocket fuel.
 
 thermalfoundation:ingotGeneric.title=New Materials
-thermalfoundation:ingotGeneric.desc=We wish to study the potential applications of %s.
+thermalfoundation:ingotGeneric.desc=We wish to study the potential applications of this material.
 
 thermalfoundation:ingotIron.title=Old Materials
-thermalfoundation:ingotIron.desc=We wish to study new potential applications of %s.
+thermalfoundation:ingotIron.desc=We wish to study new potential applications of this material.
 
 thermalfoundation:ingotGold.title=Old Materials
-thermalfoundation:ingotGold.desc=We wish to study new potential applications of %s.
+thermalfoundation:ingotGold.desc=We wish to study new potential applications of this material.
 
 thermalfoundation:gearGeneric.title=Metal Gear
-thermalfoundation:gearGeneric.desc=A customer has need of %s gears for potential military applications.
+thermalfoundation:gearGeneric.desc=A customer has need of specialized gears for potential military applications.
 
 thermalfoundation:plateGeneric.title=Metallurgical Armor
-thermalfoundation:plateGeneric.desc=%s, when pressed into a dense plate, is excellent for reinforcing vehicles and structures.
+thermalfoundation:plateGeneric.desc=This material, when pressed into a dense plate, is excellent for reinforcing vehicles and structures.
 
 thermalfoundation:coinGeneric.title=Trade Opportunities
-thermalfoundation:coinGeneric.desc=We wish to increase our trade with a nation that uses %s coins, and need some currency.
+thermalfoundation:coinGeneric.desc=We wish to increase our trade with a nation that uses peculiar coins, and need some currency.
 
 contemplatingtheinfinite.title=Bits of the Infinite
 contemplatingtheinfinite.desc=Word has reached us that you have the capacity to shave bits of bedrock off. We would like to see that.
@@ -68,22 +68,22 @@ enderio:ballGeneric.title=Maceration is for Suckers
 enderio:ballGeneric.desc=Our clients have a ton of SAG Mills, and need grinding balls to put in them.
 
 harvestcraft:listAllfruitGeneric.title=Fruits of Your Labour
-harvestcraft:listAllfruitGeneric.desc=Fresh-off-the-farm fruit is all the rage these days, and your %s will turn you a tidy profit.
+harvestcraft:listAllfruitGeneric.desc=Fresh-off-the-farm fruit is all the rage these days, and yours will turn you a tidy profit.
 
 harvestcraft:listAllveggieGeneric.title=Eating Your Veggies
-harvestcraft:listAllveggieGeneric.desc=Doctors are recommending that people eat more fresh %s, thanks to our lobbying efforts, and now you can reap the profit.
+harvestcraft:listAllveggieGeneric.desc=Doctors are recommending that people eat more fresh vegetables, thanks to our lobbying efforts, and now you can reap the profit.
 
 harvestcraft:listAllnutGeneric.title=Well, Nuts
 harvestcraft:listAllnutGeneric.desc=Have you ever heard of %1$s Butter? Well, turns out it is incredibly lucrative, so please ship some raw %1$s for us to process.
 
 harvestcraft:foodGeneric.title=Just Like Mom Used To Make
-harvestcraft:foodGeneric.desc=People hardly have time to cook these days, so lets do it for them. Some %s should make people more nostalgic for home, and buying more product!
+harvestcraft:foodGeneric.desc=People hardly have time to cook these days, so lets do it for them. Some pre-made food should make people more nostalgic for home, and buying more product!
 
 forestry:bee_drone_geGeneric.title=Droning On
 forestry:bee_drone_geGeneric.desc=In the pursuit of novel genetic improvements, we require sources of genetic diversity. In practical terms, we need some bee samples. Only drones are required, and they may be of any species.
 
 forestry:thermionic_tubesGeneric.title=Modern Tech
-forestry:thermionic_tubesGeneric.desc=A certain high-tech customer has asked for the latest in cutting edge %s technology. Can you look into this?
+forestry:thermionic_tubesGeneric.desc=A certain high-tech customer has asked for the latest in cutting edge electron tube technology. Can you look into this?
 
 mind_your_beeswax.title=Mind Your Beeswax
 mind_your_beeswax.desc=Wax is an in-demand product in the maker space, and we understand that it's easy to produce way too much of it. Why not send some our way?

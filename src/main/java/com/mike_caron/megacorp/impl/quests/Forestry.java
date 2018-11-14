@@ -22,27 +22,15 @@ public abstract class Forestry
         extends QuestFactories.ModMaterialBase
     {
         @Override
-        protected float baseProfit(int value)
+        protected float baseProfit(JsonObject material)
         {
-            return value * 2;
+            return material.get("rarity").getAsFloat() * 2;
         }
 
         public Tubes()
         {
             modprefix = "forestry";
             type = "thermionic_tubes";
-
-            add("Copper", 1, 0);
-            add("Tin", 1, 1);
-            add("Bronze", 2, 2);
-            add("Golden", 4, 4);
-            add("Diamantine", 8, 5);
-            add("Obsidian", 5, 6);
-            add("Blazing", 6, 7);
-            add("Emerald", 10, 9);
-            add("Apatine", 3, 10);
-            add("Lapis", 7, 11);
-            add("Ender", 7, 12);
         }
     }
 

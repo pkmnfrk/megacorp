@@ -1,5 +1,6 @@
 package com.mike_caron.megacorp.impl.quests;
 
+import com.google.gson.JsonObject;
 import com.mike_caron.megacorp.api.IQuestFactory;
 import com.mike_caron.megacorp.impl.Quest;
 import com.mike_caron.megacorp.impl.QuestLocalization;
@@ -9,6 +10,8 @@ import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBee;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +55,8 @@ public abstract class Forestry
         }
 
         @Override
-        public List<Quest> createQuests()
+        @Nonnull
+        public List<Quest> createQuests(@Nullable JsonObject tag)
         {
             List<Quest> ret = new ArrayList<>();
 

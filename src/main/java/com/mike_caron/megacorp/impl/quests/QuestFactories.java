@@ -1,5 +1,6 @@
 package com.mike_caron.megacorp.impl.quests;
 
+import com.google.gson.JsonObject;
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.api.IQuestFactory;
 import com.mike_caron.megacorp.impl.Quest;
@@ -8,6 +9,8 @@ import com.mike_caron.megacorp.impl.QuestManager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +46,8 @@ public final class QuestFactories
         protected float baseProfit(int value) { return 1f; }
 
         @Override
-        public List<Quest> createQuests()
+        @Nonnull
+        public List<Quest> createQuests(@Nullable JsonObject tag)
         {
             List<Quest> ret = new ArrayList<>(materials.size());
 

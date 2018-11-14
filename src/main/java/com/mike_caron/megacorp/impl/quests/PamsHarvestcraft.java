@@ -1,5 +1,6 @@
 package com.mike_caron.megacorp.impl.quests;
 
+import com.google.gson.JsonObject;
 import com.mike_caron.megacorp.api.IQuestFactory;
 import com.mike_caron.megacorp.impl.Quest;
 import com.mike_caron.megacorp.impl.QuestLocalization;
@@ -10,6 +11,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,7 +81,8 @@ public abstract class PamsHarvestcraft
     }
 
     @Override
-    public List<Quest> createQuests()
+    @Nonnull
+    public List<Quest> createQuests(@Nullable JsonObject tag)
     {
         List<String> dicts = OreDictUtil.getDictsWithWildcards(dictPrefix);
 

@@ -175,13 +175,14 @@ public class QuestManager
                 for(JsonElement factory : factories)
                 {
                     String className;
+                    JsonObject ob = null;
                     if(factory.isJsonPrimitive())
                     {
                         className = factory.getAsString();
                     }
                     else
                     {
-                        JsonObject ob = factory.getAsJsonObject();
+                        ob = factory.getAsJsonObject();
                         className = ob.get("class").getAsString();
                     }
 
@@ -190,7 +191,7 @@ public class QuestManager
                         Class clazz = Class.forName(className);
                         IQuestFactory fact = (IQuestFactory)clazz.newInstance();
 
-                        List<Quest> qs = fact.createQuests();
+                        List<Quest> qs = fact.createQuests(ob);
 
                         logNonError("Loading " + qs.size() + " from " + className, !applyBlacklists);
 

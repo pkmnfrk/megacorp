@@ -46,7 +46,7 @@
       { "id": "Lead",            "rarity": 9  },
       { "id": "Tin",             "rarity": 10 },
       { "id": "Iron",            "rarity": 11 },
-      { "id": "Copper",          "rarity": 11 },
+      { "id": "Copper",          "rarity": 11 }
     ]
   }
 }

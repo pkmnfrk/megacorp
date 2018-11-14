@@ -1,9 +1,6 @@
 package com.mike_caron.megacorp.util;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
+import com.google.gson.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
@@ -243,4 +240,153 @@ public class DataUtils
 
         return ret;
     }
+
+    @Nonnull
+    public static JsonElement resolveConstants(@Nonnull JsonElement value, @Nonnull Map<String, JsonElement> constants)
+    {
+        if(value.isJsonNull())
+            return value;
+
+        if(value.isJsonPrimitive())
+        {
+            JsonPrimitive prim = value.getAsJsonPrimitive();
+            if(prim.isString() && prim.getAsString().startsWith("#"))
+            {
+                String key = prim.getAsString().substring(1);
+                if(constants.containsKey(key))
+                {
+                    return resolveConstants(constants.get(key), constants);
+                }
+            }
+            return value;
+        }
+
+        if(value.isJsonArray())
+        {
+            JsonArray ret = new JsonArray();
+            boolean changed = false;
+
+            for(JsonElement el : value.getAsJsonArray())
+            {
+                JsonElement res = resolveConstants(el, constants);
+                if(res != el)
+                {
+                    changed = true;
+                }
+
+                ret.add(res);
+            }
+
+            if(!changed)
+            {
+                return value;
+            }
+
+            return ret;
+        }
+
+        if(value.isJsonObject())
+        {
+            JsonObject ret = new JsonObject();
+            boolean changed = false;
+
+            for(Map.Entry<String, JsonElement> kvp : value.getAsJsonObject().entrySet())
+            {
+                JsonElement res = resolveConstants(kvp.getValue(), constants);
+
+                if(res != kvp.getValue())
+                {
+                    changed = true;
+                }
+
+                ret.add(kvp.getKey(), res);
+            }
+
+            if(!changed)
+                return value;
+
+            return ret;
+        }
+
+        throw new Error("This can't happen");
+    }
+
+    public static JsonElement cloneJson(JsonElement obj)
+    {
+        if(obj.isJsonNull())
+            return obj;
+
+        if(obj.isJsonPrimitive())
+        {
+            JsonPrimitive prim = obj.getAsJsonPrimitive();
+            if(prim.isString())
+                return new JsonPrimitive(prim.getAsString());
+            else if(prim.isNumber())
+                return new JsonPrimitive(prim.getAsNumber());
+            else
+                return new JsonPrimitive(prim.getAsBoolean());
+        }
+
+        if(obj.isJsonArray())
+        {
+            JsonArray ret = new JsonArray();
+
+            for(JsonElement el : obj.getAsJsonArray())
+            {
+                ret.add(cloneJson(el));
+            }
+
+            return ret;
+        }
+
+        if(obj.isJsonObject())
+        {
+            JsonObject ret = new JsonObject();
+
+            for(Map.Entry<String, JsonElement> kvp : obj.getAsJsonObject().entrySet())
+            {
+                ret.add(kvp.getKey(), cloneJson(kvp.getValue()));
+            }
+
+            return ret;
+        }
+
+        throw new Error("This can't happen");
+    }
+
+    public static JsonElement mergeJson(JsonElement newElement, JsonElement existingElement)
+    {
+        if(existingElement.getClass() != newElement.getClass())
+            throw new JsonIOException("The element types do not match: " + existingElement.getClass() + " vs " + newElement.getClass());
+
+        if(existingElement.isJsonPrimitive() || existingElement.isJsonNull())
+            return newElement;
+
+        if(existingElement.isJsonObject())
+        {
+            JsonObject ret = cloneJson(existingElement).getAsJsonObject();
+
+            for(Map.Entry<String, JsonElement> kvp : newElement.getAsJsonObject().entrySet())
+            {
+                ret.add(kvp.getKey(), cloneJson(kvp.getValue()));
+            }
+
+            return ret;
+        }
+
+        if(existingElement.isJsonArray())
+        {
+            JsonArray ret = cloneJson(existingElement).getAsJsonArray();
+
+            for(JsonElement el : newElement.getAsJsonArray())
+            {
+                ret.add(cloneJson(el));
+            }
+
+            return ret;
+        }
+
+        throw new Error("This can't happen");
+    }
+
 }

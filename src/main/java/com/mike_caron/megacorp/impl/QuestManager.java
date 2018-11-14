@@ -171,44 +171,59 @@ public class QuestManager
                 {
                     JsonObject quest = (JsonObject) obj;
 
-                    Quest q = Quest.fromJson(quest);
+                    String id = quest.get("id").getAsString();
 
-                    if(q == null) continue;
-
-                    if(applyBlacklists)
+                    if(quests.containsKey(id))
                     {
-                        boolean abort = false;
+                        Quest q = quests.get(id);
 
-                        for(int i = 0; i < ModConfig.workorderBlacklist.length; i++)
+                        q.loadOverrides(quest);
+
+                        logNonError("Loaded quest overrides for " + q.id, !applyBlacklists);
+                    }
+                    else
+                    {
+
+                        Quest q = Quest.fromJson(quest);
+
+                        if (q == null)
+                            continue;
+
+                        if (applyBlacklists)
                         {
-                            if(ModConfig.workorderBlacklist[i].equals(q.id))
+                            boolean abort = false;
+
+                            for (int i = 0; i < ModConfig.workorderBlacklist.length; i++)
                             {
-                                abort = true;
-                                break;
+                                if (ModConfig.workorderBlacklist[i].equals(q.id))
+                                {
+                                    abort = true;
+                                    break;
+                                }
+                            }
+
+                            if (abort)
+                            {
+                                logNonError("Skipping quest " + q.id + " because it is on the blacklist", !applyBlacklists);
+                                continue;
                             }
                         }
 
-                        if(abort)
+                        if (q.possibleItems().isEmpty())
                         {
-                            logNonError("Skipping quest " + q.id + " because it is on the blacklist", !applyBlacklists);
+                            logNonError("Skipping quest " + q.id + " because no items exist", !applyBlacklists);
                             continue;
                         }
+
+                        if (quests.containsKey(q.id))
+                        {
+                            MegaCorpMod.logger.warn("Overwriting quest " + q.id);
+                        }
+
+                        quests.put(q.id, q);
+
+                        logNonError("Loaded quest " + q.id, !applyBlacklists);
                     }
-
-                    if(q.possibleItems().isEmpty())
-                    {
-                        logNonError("Skipping quest " + q.id + " because no items exist", !applyBlacklists);
-                        continue;
-                    }
-
-                    if(quests.containsKey(q.id))
-                    {
-                        MegaCorpMod.logger.warn("Overwriting quest " + q.id);
-                    }
-
-                    quests.put(q.id, q);
-
-                    logNonError("Loaded quest " + q.id, !applyBlacklists);
                 }
                 catch (Exception ex)
                 {

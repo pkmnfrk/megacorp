@@ -8,9 +8,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
-public class Quest
+public final class Quest
 {
     public final String id;
     private final List<ItemStack> item;
@@ -192,5 +193,10 @@ public class Quest
         NonNullList<ItemStack> ret = NonNullList.create();
         ret.addAll(this.item);
         return ret;
+    }
+
+    public void loadOverrides(@Nonnull JsonObject json)
+    {
+
     }
 }

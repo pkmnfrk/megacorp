@@ -106,17 +106,26 @@ public final class Quest
             this.id = obj.get("id").getAsString();
         }
 
-        List<ItemStack> item = new ArrayList<>();
-        String oreDict = null;
         String oreDictFallback = null;
 
         if(obj.has("item")){
-            ItemStack is = ItemUtils.getStackFromTag(obj.get("item").getAsString());
-            item.add(is);
+            try
+            {
+                ItemStack is = ItemUtils.getStackFromTag(obj.get("item").getAsString());
+
+                this.oreDict = null;
+                this.item = new ArrayList<>();
+                this.item.add(is);
+            }
+            catch(RuntimeException ex)
+            {
+                return false;
+            }
         }
         else if(obj.has("oredict"))
         {
-            oreDict = obj.get("oredict").getAsString();
+            this.oreDict = obj.get("oredict").getAsString();
+            this.item = null;
             if(obj.has("fallback"))
             {
                 oreDictFallback = obj.get("fallback").getAsString();
@@ -124,45 +133,43 @@ public final class Quest
         }
         else if(obj.has("items"))
         {
+            this.oreDict = null;
+            //this.item.clear();
+            List<ItemStack> oldItems = this.item;
+            this.item = new ArrayList<>();
+
             for(JsonElement i : obj.get("items").getAsJsonArray())
             {
                 try
                 {
                     ItemStack is = ItemUtils.getStackFromTag(i.getAsString());
-                    item.add(is);
+                    this.item.add(is);
                 }
                 catch(RuntimeException ignore)
                 {
 
                 }
             }
-        }
 
-        if(item.isEmpty() && oreDict == null && this.item == null && this.oreDict == null)
+            if(this.item.isEmpty())
+            {
+                this.item = oldItems;
+                return false;
+            }
+        }
+        else if(this.item == null && this.oreDict == null)
         {
             throw new RuntimeException("Missing property 'item' or 'oredict' or 'items'");
         }
 
         if(oreDictFallback != null && !OreDictionary.doesOreNameExist(oreDict))
         {
-            oreDict = null;
-            item.add(ItemUtils.getStackFromTag(oreDictFallback));
+            this.oreDict = null;
+            this.item = new ArrayList<>();
+            this.item.add(ItemUtils.getStackFromTag(oreDictFallback));
         }
 
-        if(oreDict == null)
-        {
-            this.oreDict = oreDict;
-        }
-        else if(!item.isEmpty())
-        {
-            this.item = item;
-        }
-        else
-        {
-            return false;
-        }
-
-        if(this.baseQty == 0 && !obj.has("multqty"))
+        if(this.baseQty == 0 && !obj.has("baseqty"))
         {
             throw new RuntimeException("Missing property 'baseqty'");
         }

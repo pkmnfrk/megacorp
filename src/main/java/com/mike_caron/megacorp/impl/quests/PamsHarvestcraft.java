@@ -126,7 +126,7 @@ public abstract class PamsHarvestcraft
     public QuestLocalization localize(String locale, Quest quest)
     {
         String material = (String)quest.extraData.get("Name");
-        String id = quest.id;
+        String id = quest.getId();
         if(!QuestManager.INSTANCE.localizationExists(locale, id))
             id = "harvestcraft:" + dictPrefix + "Generic";
 

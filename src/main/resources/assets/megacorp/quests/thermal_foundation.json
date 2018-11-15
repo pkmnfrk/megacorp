@@ -15,6 +15,10 @@
     {
       "class": "com.mike_caron.megacorp.impl.quests.ThermalFoundation$Coins",
       "materials": "#materials"
+    },
+    {
+      "class": "com.mike_caron.megacorp.impl.quests.ThermalFoundation$Balls",
+      "materials": "#materials"
     }
   ],
   "constants": {

@@ -177,9 +177,9 @@ public class QuestManager
                     {
                         Quest q = quests.get(id);
 
-                        q.loadOverrides(quest);
+                        q.loadFromJson(quest);
 
-                        logNonError("Loaded quest overrides for " + q.id, !applyBlacklists);
+                        logNonError("Loaded quest overrides for " + q.getId(), !applyBlacklists);
                     }
                     else
                     {
@@ -195,7 +195,7 @@ public class QuestManager
 
                             for (int i = 0; i < ModConfig.workorderBlacklist.length; i++)
                             {
-                                if (ModConfig.workorderBlacklist[i].equals(q.id))
+                                if (ModConfig.workorderBlacklist[i].equals(q.getId()))
                                 {
                                     abort = true;
                                     break;
@@ -204,25 +204,25 @@ public class QuestManager
 
                             if (abort)
                             {
-                                logNonError("Skipping quest " + q.id + " because it is on the blacklist", !applyBlacklists);
+                                logNonError("Skipping quest " + q.getId() + " because it is on the blacklist", !applyBlacklists);
                                 continue;
                             }
                         }
 
                         if (q.possibleItems().isEmpty())
                         {
-                            logNonError("Skipping quest " + q.id + " because no items exist", !applyBlacklists);
+                            logNonError("Skipping quest " + q.getId() + " because no items exist", !applyBlacklists);
                             continue;
                         }
 
-                        if (quests.containsKey(q.id))
+                        if (quests.containsKey(q.getId()))
                         {
-                            MegaCorpMod.logger.warn("Overwriting quest " + q.id);
+                            MegaCorpMod.logger.warn("Overwriting quest " + q.getId());
                         }
 
-                        quests.put(q.id, q);
+                        quests.put(q.getId(), q);
 
-                        logNonError("Loaded quest " + q.id, !applyBlacklists);
+                        logNonError("Loaded quest " + q.getId(), !applyBlacklists);
                     }
                 }
                 catch (Exception ex)
@@ -267,7 +267,7 @@ public class QuestManager
 
                             for(int i = 0; i < ModConfig.workorderBlacklist.length; i++)
                             {
-                                if(ModConfig.workorderBlacklist[i].equals(q.id))
+                                if(ModConfig.workorderBlacklist[i].equals(q.getId()))
                                 {
                                     abort = true;
                                     break;
@@ -276,26 +276,26 @@ public class QuestManager
 
                             if(abort)
                             {
-                                logNonError("Skipping quest " + q.id + " because it is on the blacklist", !applyBlacklists);
+                                logNonError("Skipping quest " + q.getId() + " because it is on the blacklist", !applyBlacklists);
                                 continue;
                             }
                         }
 
                         if(q.possibleItems().isEmpty())
                         {
-                            logNonError("Skipping quest " + q.id + " because no items exist", !applyBlacklists);
+                            logNonError("Skipping quest " + q.getId() + " because no items exist", !applyBlacklists);
                             continue;
                         }
 
-                        if(quests.containsKey(q.id))
+                        if(quests.containsKey(q.getId()))
                         {
-                            MegaCorpMod.logger.warn("Overwriting quest " + q.id);
+                            MegaCorpMod.logger.warn("Overwriting quest " + q.getId());
                         }
 
-                        quests.put(q.id, q);
+                        quests.put(q.getId(), q);
                         questFactories.put(q, fact);
 
-                        logNonError("Loaded quest " + q.id + " from " + className, !applyBlacklists);
+                        logNonError("Loaded quest " + q.getId() + " from " + className, !applyBlacklists);
                     }
                 }
                 catch(Exception ex)
@@ -416,7 +416,7 @@ public class QuestManager
             return questFactories.get(quest).localize(locale, quest);
         }
 
-        return getLocalizationFor(locale, quest.id);
+        return getLocalizationFor(locale, quest.getId());
     }
 
     @SideOnly(Side.CLIENT)

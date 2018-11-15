@@ -121,14 +121,14 @@ public class Corporation
 
                 Quest quest = QuestManager.INSTANCE.getSpecificQuest(workOrder.getQuestId());
 
-                if(quest.completionCommand != null && !quest.completionCommand.isEmpty())
+                if(quest.getCompletionCommand() != null && !quest.getCompletionCommand().isEmpty())
                 {
                     MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
                     EntityPlayer player = server.getEntityWorld().getPlayerEntityByUUID(owner);
 
                     if(player != null)
                     {
-                        String command = replaceCommandString(quest.completionCommand, server.getEntityWorld());
+                        String command = replaceCommandString(quest.getCompletionCommand(), server.getEntityWorld());
 
                         if(command != null)
                         {
@@ -210,11 +210,11 @@ public class Corporation
 
         if(lowestLevel)
         {
-            suitableQuests.removeIf(q -> questLog.containsKey(q.id) && questLog.get(q.id) >= level);
+            suitableQuests.removeIf(q -> questLog.containsKey(q.getId()) && questLog.get(q.getId()) >= level);
         }
         else
         {
-            suitableQuests.removeIf(q -> !questLog.containsKey(q.id) || questLog.get(q.id) < level);
+            suitableQuests.removeIf(q -> !questLog.containsKey(q.getId()) || questLog.get(q.getId()) < level);
         }
 
         if(suitableQuests.isEmpty())
@@ -239,7 +239,7 @@ public class Corporation
             MegaCorpMod.logger.error("Quest returned 0 possible items!");
         }
 
-        int level = getCompletedCountFor(quest.id);
+        int level = getCompletedCountFor(quest.getId());
         int qty = quest.getCountForLevel(level);
 
         int profit = quest.getProfit(qty, level);
@@ -262,7 +262,7 @@ public class Corporation
 
         profit = (int)Math.ceil(profit * profit_increase);
 
-        WorkOrder ret = new WorkOrder(this.owner, quest.id, item, qty, profit, level);
+        WorkOrder ret = new WorkOrder(this.owner, quest.getId(), item, qty, profit, level);
 
         return ret;
     }

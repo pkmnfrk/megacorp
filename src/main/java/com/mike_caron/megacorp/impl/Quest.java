@@ -9,19 +9,20 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 
 public final class Quest
 {
-    public final String id;
-    private final List<ItemStack> item;
-    private final String oreDict;
-    public final float baseQty;
-    public final float multQty;
-    public final float randomFactor;
-    public final float levelScale;
-    public final float baseProfit;
-    public final String completionCommand;
+    private String id;
+    private List<ItemStack> item;
+    private String oreDict;
+    private float baseQty;
+    private float multQty = 1.5f;
+    private float randomFactor;
+    private float levelScale;
+    private float baseProfit;
+    private String completionCommand;
     public final Map<String, Object> extraData = new HashMap<>();
 
     public Quest(String id, ItemStack item, float baseQty, float multQty, float randomFactor, float levelScale, float baseProfit)
@@ -79,17 +80,37 @@ public final class Quest
         this.completionCommand = completionCommand;
     }
 
-    public static Quest fromJson(JsonObject obj)
+    private Quest()
     {
-        String id = obj.get("id").getAsString();
+
+    }
+
+    @Nullable
+    public static Quest fromJson(@Nonnull JsonObject obj)
+    {
+        Quest q = new Quest();
+
+        if(!q.loadFromJson(obj))
+        {
+            return null;
+        }
+
+        return q;
+    }
+
+    public boolean loadFromJson(@Nonnull JsonObject obj)
+    {
+        if(this.id == null)
+        {
+            this.id = obj.get("id").getAsString();
+        }
+
         List<ItemStack> item = new ArrayList<>();
         String oreDict = null;
         String oreDictFallback = null;
 
         if(obj.has("item")){
             ItemStack is = ItemUtils.getStackFromTag(obj.get("item").getAsString());
-            if(is == null)
-                return null;
             item.add(is);
         }
         else if(obj.has("oredict"))
@@ -104,40 +125,21 @@ public final class Quest
         {
             for(JsonElement i : obj.get("items").getAsJsonArray())
             {
-                ItemStack is = ItemUtils.getStackFromTag(i.getAsString());
-                if(is == null)
-                    continue;
-                item.add(is);
+                try
+                {
+                    ItemStack is = ItemUtils.getStackFromTag(i.getAsString());
+                    item.add(is);
+                }
+                catch(RuntimeException ignore)
+                {
+
+                }
             }
         }
 
-        float baseQty = obj.get("baseqty").getAsFloat();
-        float multQty = 1.5f;
-        if(obj.has("multqty"))
+        if(item.isEmpty() && oreDict == null && this.item == null && this.oreDict == null)
         {
-            obj.get("multqty").getAsFloat();
-        }
-
-        float randomFactor = 0;
-        float levelScale = 1;
-        float baseProfit = 1;
-        String completionCommand = null;
-
-        if(obj.has("rand"))
-        {
-            randomFactor = obj.get("rand").getAsFloat();
-        }
-        if(obj.has("levelscale"))
-        {
-            levelScale = obj.get("levelscale").getAsFloat();
-        }
-        if(obj.has("baseprofit"))
-        {
-            baseProfit = obj.get("baseprofit").getAsFloat();
-        }
-        if(obj.has("command"))
-        {
-            completionCommand = obj.get("command").getAsString();
+            throw new RuntimeException("Missing property 'item' or 'oredict' or 'items'");
         }
 
         if(oreDictFallback != null && !OreDictionary.doesOreNameExist(oreDict))
@@ -146,14 +148,49 @@ public final class Quest
             item.add(ItemUtils.getStackFromTag(oreDictFallback));
         }
 
-        if(!item.isEmpty())
+        if(oreDict == null)
         {
-            return new Quest(id, item, baseQty, multQty, randomFactor, levelScale, baseProfit, completionCommand);
+            this.oreDict = oreDict;
+        }
+        else if(!item.isEmpty())
+        {
+            this.item = item;
         }
         else
         {
-            return new Quest(id, oreDict, baseQty, multQty, randomFactor, levelScale, baseProfit, completionCommand);
+            return false;
         }
+
+        if(this.baseQty == 0 && !obj.has("multqty"))
+        {
+            throw new RuntimeException("Missing property 'baseqty'");
+        }
+
+        this.baseQty = obj.get("baseqty").getAsFloat();
+
+        if(obj.has("multqty"))
+        {
+            this.multQty = obj.get("multqty").getAsFloat();
+        }
+
+        if(obj.has("rand"))
+        {
+            this.randomFactor = obj.get("rand").getAsFloat();
+        }
+        if(obj.has("levelscale"))
+        {
+            this.levelScale = obj.get("levelscale").getAsFloat();
+        }
+        if(obj.has("baseprofit"))
+        {
+            this.baseProfit = obj.get("baseprofit").getAsFloat();
+        }
+        if(obj.has("command"))
+        {
+            this.completionCommand = obj.get("command").getAsString();
+        }
+
+        return true;
     }
 
     public int getCountForLevel(int level)
@@ -195,8 +232,48 @@ public final class Quest
         return ret;
     }
 
-    public void loadOverrides(@Nonnull JsonObject json)
+    public String getId()
     {
+        return id;
+    }
 
+    public List<ItemStack> getItem()
+    {
+        return item;
+    }
+
+    public String getOreDict()
+    {
+        return oreDict;
+    }
+
+    public float getBaseQty()
+    {
+        return baseQty;
+    }
+
+    public float getMultQty()
+    {
+        return multQty;
+    }
+
+    public float getRandomFactor()
+    {
+        return randomFactor;
+    }
+
+    public float getLevelScale()
+    {
+        return levelScale;
+    }
+
+    public float getBaseProfit()
+    {
+        return baseProfit;
+    }
+
+    public String getCompletionCommand()
+    {
+        return completionCommand;
     }
 }

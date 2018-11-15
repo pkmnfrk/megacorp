@@ -285,15 +285,15 @@ public class TileEntityManufactorySupplier
         else if(level > 50) level = 50;
 
         int stackSize = sample.getMaxStackSize();
-        int time = (int)(6000f * (stackSize / 16f) / quest.baseQty);
+        int time = (int)(6000f * (stackSize / 16f) / quest.getBaseQty());
 
         time = 600 + (time - 600) * (50 - level) / 50;
 
-        int profit = (int)(quest.baseProfit * stackSize * Math.pow(1.15, level));
+        int profit = (int)(quest.getBaseProfit() * stackSize * Math.pow(1.15, level));
 
         profit *= 2;
 
-        this.questId = quest.id;
+        this.questId = quest.getId();
         this.level = level;
         this.reward = profit;
         this.itemsPerCycle = stackSize;

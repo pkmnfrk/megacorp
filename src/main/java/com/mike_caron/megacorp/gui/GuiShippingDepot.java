@@ -219,7 +219,7 @@ public class GuiShippingDepot
         {
             if (selectedQuest != null)
             {
-                CtoSMessage packet = CtoSMessage.forGuiButton(container.getPos(), event.id, selectedQuest.id);
+                CtoSMessage packet = CtoSMessage.forGuiButton(container.getPos(), event.id, selectedQuest.getId());
                 MegaCorpMod.networkWrapper.sendToServer(packet);
             }
         }
@@ -280,7 +280,7 @@ public class GuiShippingDepot
         public QuestListItem(Quest quest)
         {
             this.quest = quest;
-            this.questLocalization = QuestManager.INSTANCE.getLocalizationForCurrent(this.quest.id);
+            this.questLocalization = QuestManager.INSTANCE.getLocalizationForCurrent(this.quest.getId());
             this.possibleItems = this.quest.possibleItems();
         }
 

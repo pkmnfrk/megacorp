@@ -98,6 +98,18 @@ you make should go into the same language file on separate lines, even if you sp
 For bigger examples, check inside the MegaCorp .jar file (it's actually a ZIP file, so you can open it with 7-Zip or
 your favourite program), and look in the assets/megacorp/quests folder.
 
+One other thing: You can also use this to override existing quests if you want to tweak the properties. The biggest use
+of this might be to add a server command to a built in quest. In this case, you only need to specify the properties
+you want to change:
+
+{
+  "id": "letthemeatcake",
+  "command": "/do something"
+}
+
+You may find the /megacorp dumpQuests command useful, to find which quests exist (since many of them are automatically
+generated based on loaded mods).
+
 If you're having trouble, come swing by the Discord, where we can help you out!
 
 https://discord.gg/JvjaWtu

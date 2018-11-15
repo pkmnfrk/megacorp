@@ -55,6 +55,10 @@ repositories {
         name = "Forestry"
         url = "http://maven.ic2.player.to"
     }
+    maven {
+        name = "McModDev"
+        url = "https://maven.mcmoddev.com"
+    }
 }
 
 dependencies {
@@ -71,6 +75,7 @@ dependencies {
     // compile against the Forestry API but do not include it at runtime
     provided "net.sengir.forestry:forestry_${mcversion}:${forestry_version}:api"
 
+    deobfProvided "net.darkhax.gamestages:GameStages-${mcversion}:${gamestages_version}:deobf"
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"

@@ -71,6 +71,21 @@ public class ItemUtils
         throw new RuntimeException("I don't understand the item " + tag);
     }
 
+    public static String getTagFromStack(ItemStack stack)
+    {
+        StringBuilder ret = new StringBuilder();
+
+        ret.append(stack.getItem().getRegistryName().toString());
+
+        if(stack.getMetadata() != 0)
+        {
+            ret.append(":");
+            ret.append(stack.getMetadata());
+        }
+
+        return ret.toString();
+    }
+
     public static boolean areEqual(@Nullable NonNullList<ItemStack> a, @Nullable NonNullList<ItemStack> b)
     {
         if(a == b)

@@ -1,5 +1,6 @@
 package com.mike_caron.megacorp.impl;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mike_caron.megacorp.MegaCorpMod;
@@ -20,8 +21,8 @@ public final class Quest
     private float baseQty;
     private float multQty = 1.5f;
     private float randomFactor;
-    private float levelScale;
-    private float baseProfit;
+    private float levelScale = 1f;
+    private float baseProfit = 1f;
     private String completionCommand;
     public final Map<String, Object> extraData = new HashMap<>();
 
@@ -191,6 +192,43 @@ public final class Quest
         }
 
         return true;
+    }
+
+    public JsonObject toJson()
+    {
+        JsonObject ret = new JsonObject();
+
+        ret.addProperty("id", this.id);
+        if(this.oreDict != null)
+        {
+            ret.addProperty("oredict", this.oreDict);
+        }
+        else
+        {
+            if(this.item.size() == 1)
+            {
+                ret.addProperty("item", ItemUtils.getTagFromStack(this.item.get(0)));
+            }
+            else
+            {
+                JsonArray array = new JsonArray();
+
+                for(ItemStack itemStack : this.item)
+                {
+                    array.add(ItemUtils.getTagFromStack(itemStack));
+                }
+
+                ret.add("items", array);
+            }
+        }
+        ret.addProperty("baseqty", this.baseQty);
+        ret.addProperty("multqty", this.multQty);
+        ret.addProperty("rand", this.randomFactor);
+        ret.addProperty("levelscale", this.levelScale);
+        ret.addProperty("baseprofit", this.baseProfit);
+        ret.addProperty("command", this.completionCommand);
+
+        return ret;
     }
 
     public int getCountForLevel(int level)

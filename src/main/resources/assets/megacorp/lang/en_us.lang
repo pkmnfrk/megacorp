@@ -108,3 +108,4 @@ command.megacorp.noCorp=You don't own a corporation.
 command.megacorp:setRewardLevel.usage=Usage: megacorp setRewardLevel <reward_id> <level>
 command.megacorp:setRewardLevel.invalidLevel=Level is invalid
 command.megacorp:setRewardLevel.invalidReward=Reward does not exist
+command.megacorp:dumpQuests.done=Done. Quests dumped to config/megacorp/loaded_quests.json

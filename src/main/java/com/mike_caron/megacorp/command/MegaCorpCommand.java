@@ -1,5 +1,9 @@
 package com.mike_caron.megacorp.command;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.api.ICorporationManager;
 import com.mike_caron.megacorp.impl.*;
 import com.mike_caron.megacorp.proxy.CommonProxy;
@@ -14,6 +18,10 @@ import net.minecraft.util.text.TextComponentTranslation;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -34,6 +42,7 @@ public class MegaCorpCommand
         subCommands.put("reloadQuests", MegaCorpCommand::reloadQuests);
         subCommands.put("removeCorporation", MegaCorpCommand::removeCorporation);
         subCommands.put("reloadVending", MegaCorpCommand::reloadVending);
+        subCommands.put("dumpQuests", MegaCorpCommand::dumpQuests);
     }
 
     @Nonnull
@@ -229,6 +238,40 @@ public class MegaCorpCommand
         CorporationManager.get(((EntityPlayerMP)sender).getServerWorld()).deleteCorporationForOwner(id);
 
         sender.sendMessage(new TextComponentTranslation("command.megacorp.done"));
+    }
+
+    private static void dumpQuests(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args)
+        throws CommandException
+    {
+        try
+        {
+            JsonArray array = new JsonArray();
+
+            for(Quest quest : QuestManager.INSTANCE.getQuests())
+            {
+                array.add(quest.toJson());
+            }
+
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            String json = gson.toJson(array);
+
+            File dumpFile = new File(CommonProxy.megacorpDirectory.getPath(), "loaded_quests.json");
+
+            OutputStreamWriter osw = null;
+
+            osw = new OutputStreamWriter(new FileOutputStream(dumpFile));
+
+            osw.write(json);
+
+            osw.close();
+        }
+        catch(IOException ex)
+        {
+            MegaCorpMod.logger.error("Error while executing dumpQuests command", ex);
+            sender.sendMessage(new TextComponentTranslation("command.megacorp.error"));
+        }
+
+        sender.sendMessage(new TextComponentTranslation("command.megacorp:dumpQuests.done"));
     }
 
     interface TriAction<X,Y,Z>

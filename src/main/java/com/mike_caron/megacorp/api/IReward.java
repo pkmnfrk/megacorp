@@ -11,5 +11,6 @@ public interface IReward
     int costForRank(int rank);
     float[] getValuesForRank(int rank);
     BaseReward.CurrencyType getCurrency();
+    String[][] getGameStages();
 
 }

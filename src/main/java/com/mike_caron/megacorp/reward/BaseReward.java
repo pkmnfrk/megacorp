@@ -102,6 +102,11 @@ public abstract class BaseReward implements IReward
         this.factoryClass = clazz;
     }
 
+    public String[][] getGameStages()
+    {
+        return gameStages;
+    }
+
     public enum CostScale
     {
         MULT,

@@ -7,9 +7,12 @@ import com.mike_caron.megacorp.api.IReward;
 import com.mike_caron.megacorp.api.events.CorporationRewardsChangedEvent;
 import com.mike_caron.megacorp.block.TEOwnedContainerBase;
 import com.mike_caron.megacorp.impl.RewardManager;
+import com.mike_caron.megacorp.integrations.gamestages.GameStagesCompatability;
 import com.mike_caron.megacorp.reward.BaseReward;
 import com.mike_caron.megacorp.util.DataUtils;
+import com.mike_caron.megacorp.util.LastResortUtils;
 import com.mike_caron.megacorp.util.StringUtil;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagFloat;
@@ -177,8 +180,13 @@ public class ContainerCapitalInvestor
     {
         rewardList = new ArrayList<>();
 
+        EntityPlayer ownerPlayer = LastResortUtils.getPlayer(owner);
+
         for(IReward reward : RewardManager.INSTANCE.getRewards())
         {
+            if(!GameStagesCompatability.hasStagesUnlocked(ownerPlayer, reward.getGameStages()))
+                continue;
+
             RewardData rd = new RewardData();
             rd.id = reward.getId();
             rd.currentRank = corp.getRankInReward(reward.getId());

@@ -435,4 +435,15 @@ public class DataUtils
         return ret;
     }
 
+    public static JsonElement serializeJson(Object obj)
+    {
+        if(obj instanceof ItemStack)
+        {
+            return serializeJson(ItemUtils.getTagFromStack((ItemStack)obj));
+        }
+
+        Gson gson = new Gson();
+        return gson.toJsonTree(obj);
+    }
+
 }

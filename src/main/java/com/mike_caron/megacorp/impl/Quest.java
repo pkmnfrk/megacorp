@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mike_caron.megacorp.MegaCorpMod;
+import com.mike_caron.megacorp.util.DataUtils;
 import com.mike_caron.megacorp.util.ItemUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -24,6 +25,7 @@ public final class Quest
     private float levelScale = 1f;
     private float baseProfit = 1f;
     private String completionCommand;
+    private String[][] gameStages = null;
     public final Map<String, Object> extraData = new HashMap<>();
 
     public Quest(String id, ItemStack item, float baseQty, float multQty, float randomFactor, float levelScale, float baseProfit)
@@ -197,6 +199,10 @@ public final class Quest
         {
             this.completionCommand = obj.get("command").getAsString();
         }
+        if(obj.has("game_stages"))
+        {
+            this.gameStages = DataUtils.loadJsonNestedArray(obj.get("game_stages"));
+        }
 
         return true;
     }
@@ -234,6 +240,7 @@ public final class Quest
         ret.addProperty("levelscale", this.levelScale);
         ret.addProperty("baseprofit", this.baseProfit);
         ret.addProperty("command", this.completionCommand);
+        ret.add("game_stages", DataUtils.serializeJson(this.gameStages));
 
         return ret;
     }
@@ -320,5 +327,10 @@ public final class Quest
     public String getCompletionCommand()
     {
         return completionCommand;
+    }
+
+    public String[][] getGameStages()
+    {
+        return gameStages;
     }
 }

@@ -6,6 +6,7 @@ import com.mike_caron.megacorp.api.ICorporation;
 import com.mike_caron.megacorp.api.IReward;
 import com.mike_caron.megacorp.api.events.CorporationRewardsChangedEvent;
 import com.mike_caron.megacorp.reward.BaseReward;
+import com.mike_caron.megacorp.util.LastResortUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -204,7 +205,13 @@ public class Corporation
             //otherwise, you have a 50% chance to get a low level quest
             lowestLevel = rng.nextInt(2) != 0;
         }
-        List<Quest> suitableQuests = QuestManager.INSTANCE.getQuests();
+
+        EntityPlayer player = LastResortUtils.getPlayer(getOwner());
+
+        List<Quest> suitableQuests = QuestManager.INSTANCE.getQuests(player);
+
+        if(suitableQuests.isEmpty()) //need to have at least one quest available to start with
+            return null;
 
         int level = questLog.values().stream().sorted().findFirst().orElse(0);
 
@@ -220,7 +227,7 @@ public class Corporation
         if(suitableQuests.isEmpty())
         {
             //they've completed all quests to the same level... improbable, but whatever
-            suitableQuests = QuestManager.INSTANCE.getQuests();
+            suitableQuests = QuestManager.INSTANCE.getQuests(player);
         }
 
         int chosenQuest = rng.nextInt(suitableQuests.size());

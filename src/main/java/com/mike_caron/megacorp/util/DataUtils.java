@@ -421,6 +421,10 @@ public class DataUtils
                         ret[i][j] = array2.get(j).getAsJsonPrimitive().getAsString();
                     }
                 }
+                else if(el.isJsonNull())
+                {
+                    //bad!
+                }
                 else
                 {
                     throw new RuntimeException("This is not a string or array: " + el);

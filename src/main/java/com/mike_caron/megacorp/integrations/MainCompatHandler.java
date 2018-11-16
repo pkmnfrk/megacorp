@@ -1,6 +1,6 @@
 package com.mike_caron.megacorp.integrations;
 
-import com.mike_caron.megacorp.MegaCorpMod;
+import com.mike_caron.megacorp.integrations.gamestages.GameStagesCompatability;
 import net.minecraftforge.fml.common.Loader;
 
 public class MainCompatHandler
@@ -55,6 +55,14 @@ public class MainCompatHandler
         if(Loader.isModLoaded("enderio"))
         {
             EnderioCompatability.register();
+        }
+    }
+
+    public static void registerGameStages()
+    {
+        if(Loader.isModLoaded("gamestages"))
+        {
+            GameStagesCompatability.register();
         }
     }
 }

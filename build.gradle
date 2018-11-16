@@ -76,6 +76,8 @@ dependencies {
     provided "net.sengir.forestry:forestry_${mcversion}:${forestry_version}:api"
 
     deobfProvided "net.darkhax.gamestages:GameStages-${mcversion}:${gamestages_version}:deobf"
+    deobfProvided "net.darkhax.bookshelf:Bookshelf-${mcversion}:${bookshelf_version}:deobf"
+
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"

@@ -99,7 +99,7 @@ public class QuestManager
             //first check the blacklist
             if(applyBlacklists)
             {
-                for(int i = 0; i < ModConfig.workorderBlacklist.length; i++)
+                for(int i = 0; i < ModConfig.workorderFileBlacklist.length; i++)
                 {
                     if(ModConfig.workorderFileBlacklist[i].equals(baseName))
                     {

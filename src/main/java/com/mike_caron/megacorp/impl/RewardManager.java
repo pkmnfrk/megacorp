@@ -18,9 +18,11 @@ import org.apache.commons.io.FilenameUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +37,7 @@ public class RewardManager
 
     private RewardManager() {}
 
-    public void loadRewards()
+    public void loadRewards(File userDirectory)
     {
         rewards.clear();
 
@@ -43,6 +45,18 @@ public class RewardManager
 
         CraftingHelper.findFiles(Loader.instance().getReversedModObjectList().get(MegaCorpMod.instance), "assets/" + MegaCorpMod.modId + "/rewards", null, (root, url) -> loadRewards(parser, url, true)
         , false, true);
+
+        if(userDirectory != null)
+        {
+            File[] files = userDirectory.listFiles();
+            if(files != null)
+            {
+                for (File file : files)
+                {
+                    loadRewards(parser, Paths.get(file.toURI()), false);
+                }
+            }
+        }
 
     }
 

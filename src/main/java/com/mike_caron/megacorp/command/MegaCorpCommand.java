@@ -112,7 +112,7 @@ public class MegaCorpCommand
     private static void reloadRewards(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args)
         throws CommandException
     {
-        RewardManager.INSTANCE.loadRewards();
+        RewardManager.INSTANCE.loadRewards(CommonProxy.rewardsDirectory);
         sender.sendMessage(new TextComponentTranslation("command.megacorp.done"));
     }
 

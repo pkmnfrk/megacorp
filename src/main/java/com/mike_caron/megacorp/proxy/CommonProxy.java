@@ -88,7 +88,7 @@ public class CommonProxy
         SBSRecipeManager.addDefaultRecipes();
         PCRecipeManager.addDefaultRecipes();
         QuestManager.INSTANCE.loadQuests(questsDirectory);
-        RewardManager.INSTANCE.loadRewards();
+        RewardManager.INSTANCE.loadRewards(CommonProxy.rewardsDirectory);
         VendingManager.INSTANCE.loadVendingItems(megacorpDirectory);
     }
 

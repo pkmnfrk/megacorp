@@ -26,7 +26,7 @@ public class GameStagesCompatability
 
     public static boolean hasStagesUnlocked(EntityPlayer player, String[][] stages)
     {
-        if(!registered) return true;
+        if(!registered || stages == null) return true;
 
         for(String[] stagesList : stages)
         {

@@ -8,6 +8,9 @@ import com.mike_caron.megacorp.impl.Corporation;
 import com.mike_caron.megacorp.impl.Quest;
 import com.mike_caron.megacorp.impl.QuestManager;
 import com.mike_caron.megacorp.util.ItemUtils;
+import com.mike_caron.megacorp.integrations.gamestages.GameStagesCompatability;
+import com.mike_caron.megacorp.util.LastResortUtils;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -233,6 +236,8 @@ public class TileEntityManufactorySupplier
         {
             if(owner != null)
             {
+
+
                 handleQuest(extraData, 0, false);
             }
         }
@@ -285,14 +290,22 @@ public class TileEntityManufactorySupplier
     {
         Quest quest = QuestManager.INSTANCE.getSpecificQuest(id);
 
-        if(quest == null)
+        if(quest != null)
         {
             desiredItems = null;
             questId = null;
             return;
         }
 
-        handleQuest(quest, level, dontReset);
+        EntityPlayer ownerPlayer = LastResortUtils.getPlayer(getOwner());
+
+        if (GameStagesCompatability.hasStagesUnlocked(ownerPlayer, quest.getGameStages()))
+        {
+            handleQuest(quest, level, dontReset);
+            return;
+        }
+        
+        questId = null;
     }
 
     private void handleQuest(Quest quest, int level, boolean dontReset)

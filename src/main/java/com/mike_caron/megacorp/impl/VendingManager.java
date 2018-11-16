@@ -117,7 +117,44 @@ public class VendingManager
             itemStack.setTagCompound(nbt);
         }
 
-        items.add(new VendingItem(itemStack, cost, currency));
+        String[][] gameStages = null;
+
+        if(item.has("game_stages"))
+        {
+            JsonElement game_stages = item.get("game_stages");
+
+            if(game_stages.isJsonPrimitive())
+            {
+                gameStages = new String[][] { new String[] { game_stages.getAsJsonPrimitive().getAsString() }};
+            }
+            else
+            {
+                JsonArray array = game_stages.getAsJsonArray();
+                gameStages = new String[array.size()][];
+
+                for(int i = 0; i < array.size(); i++)
+                {
+                    JsonElement el = array.get(i);
+                    if(el.isJsonPrimitive())
+                    {
+                        gameStages[i] = new String[] { el.getAsJsonPrimitive().getAsString() };
+                    }
+                    else
+                    {
+                        JsonArray array2 = el.getAsJsonArray();
+
+                        gameStages[i] = new String[array2.size()];
+
+                        for(int j = 0; j < array2.size(); j++)
+                        {
+                            gameStages[i][j] = array2.get(j).getAsJsonPrimitive().getAsString();
+                        }
+                    }
+                }
+            }
+        }
+
+        items.add(new VendingItem(itemStack, cost, currency, gameStages));
     }
 
 

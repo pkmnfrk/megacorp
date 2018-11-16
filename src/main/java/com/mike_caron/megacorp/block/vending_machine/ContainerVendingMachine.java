@@ -5,8 +5,10 @@ import com.mike_caron.megacorp.api.ICorporationManager;
 import com.mike_caron.megacorp.block.TEContainerBase;
 import com.mike_caron.megacorp.impl.VendingItem;
 import com.mike_caron.megacorp.impl.VendingManager;
+import com.mike_caron.megacorp.integrations.gamestages.GameStagesCompatability;
 import com.mike_caron.megacorp.reward.BaseReward;
 import com.mike_caron.megacorp.util.StringUtil;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -30,9 +32,13 @@ public class ContainerVendingMachine
 
     public List<VendingData> rewardList = null;
 
-    public ContainerVendingMachine(IInventory playerInventory, TileEntityVendingMachine te)
+    EntityPlayer player;
+
+    public ContainerVendingMachine(IInventory playerInventory, TileEntityVendingMachine te, EntityPlayer player)
     {
         super(playerInventory, te);
+
+        this.player = player;
 
         init();
     }
@@ -145,7 +151,7 @@ public class ContainerVendingMachine
 
         if (rewardList == null)
         {
-            buildRewardList();
+            buildRewardList(player);
         }
 
         for (VendingData reward : rewardList)
@@ -165,13 +171,16 @@ public class ContainerVendingMachine
 
     }
 
-    private void buildRewardList()
+    private void buildRewardList(EntityPlayer player)
     {
         rewardList = new ArrayList<>();
 
 
         for(VendingItem reward : VendingManager.INSTANCE.getItems())
         {
+            if(!GameStagesCompatability.hasStagesUnlocked(player, reward.stagesRequired))
+                continue;
+
             VendingData rd = new VendingData();
             rd.itemStack = reward.itemStack;
             rd.cost = reward.cost;

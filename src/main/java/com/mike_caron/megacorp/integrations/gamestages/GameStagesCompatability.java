@@ -17,11 +17,24 @@ public class GameStagesCompatability
         // do stuff
     }
 
-    public boolean hasStageUnlocked(EntityPlayer player, String stage)
+    public static boolean hasStageUnlocked(EntityPlayer player, String stage)
     {
         if(!registered) return true;
 
         return GameStageHelper.hasStage(player, stage);
+    }
+
+    public static boolean hasStagesUnlocked(EntityPlayer player, String[][] stages)
+    {
+        if(!registered) return true;
+
+        for(String[] stagesList : stages)
+        {
+            if(GameStageHelper.hasAllOf(player, stagesList))
+                return true;
+        }
+
+        return false;
     }
 
 

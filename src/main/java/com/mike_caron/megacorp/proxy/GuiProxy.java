@@ -61,7 +61,7 @@ public class GuiProxy implements IGuiHandler
         }
         else if(te instanceof TileEntityVendingMachine)
         {
-            return new ContainerVendingMachine(player.inventory, (TileEntityVendingMachine)te);
+            return new ContainerVendingMachine(player.inventory, (TileEntityVendingMachine)te, player);
         }
         else if(te instanceof TileEntityManufactorySupplier)
         {
@@ -129,7 +129,7 @@ public class GuiProxy implements IGuiHandler
         else if(te instanceof TileEntityVendingMachine)
         {
             TileEntityVendingMachine teCI = (TileEntityVendingMachine)te;
-            return new GuiVendingMachine(new ContainerVendingMachine(player.inventory, teCI));
+            return new GuiVendingMachine(new ContainerVendingMachine(player.inventory, teCI, player));
         }
         else if(te instanceof TileEntityManufactorySupplier)
         {

@@ -4,8 +4,10 @@ import com.mike_caron.megacorp.block.TileEntityBase;
 import com.mike_caron.megacorp.fluid.ModFluids;
 import com.mike_caron.megacorp.impl.VendingItem;
 import com.mike_caron.megacorp.impl.VendingManager;
+import com.mike_caron.megacorp.integrations.gamestages.GameStagesCompatability;
 import com.mike_caron.megacorp.reward.BaseReward;
 import com.mike_caron.megacorp.util.ItemUtils;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -104,6 +106,9 @@ public class TileEntityVendingMachine
             if(!validateCurrency(vending.currency))
                 return;
 
+            if(!validateGameStages(player, vending.stagesRequired))
+                return;
+
             FluidStack drained = fluidTank.drainInternal(vending.cost, false);
 
             if(drained == null || drained.amount != vending.cost)
@@ -115,6 +120,14 @@ public class TileEntityVendingMachine
 
             markDirty();
         }
+    }
+
+    private boolean validateGameStages(EntityPlayer player, @Nullable String[][] stages)
+    {
+        if(stages == null)
+            return true;
+
+        return GameStagesCompatability.hasStagesUnlocked(player, stages);
     }
 
     private boolean validateCurrency(BaseReward.CurrencyType currency)

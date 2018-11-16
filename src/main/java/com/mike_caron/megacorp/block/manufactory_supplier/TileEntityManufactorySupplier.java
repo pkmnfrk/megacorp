@@ -1,12 +1,12 @@
 package com.mike_caron.megacorp.block.manufactory_supplier;
 
+import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.ModConfig;
 import com.mike_caron.megacorp.api.ICorporation;
 import com.mike_caron.megacorp.block.TileEntityOwnedBase;
 import com.mike_caron.megacorp.impl.Corporation;
 import com.mike_caron.megacorp.impl.Quest;
 import com.mike_caron.megacorp.impl.QuestManager;
-import com.mike_caron.megacorp.storage.TweakedItemStackHandler;
 import com.mike_caron.megacorp.util.ItemUtils;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -18,6 +18,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -39,7 +40,7 @@ public class TileEntityManufactorySupplier
     private int progress;
     private boolean autoLevel = false;
 
-    public final TweakedItemStackHandler inventory = new TweakedItemStackHandler(1)
+    public final ItemStackHandler inventory = new ItemStackHandler(1)
     {
         @Override
         protected void onContentsChanged(int slot)
@@ -186,6 +187,12 @@ public class TileEntityManufactorySupplier
             autoLevel = compound.getBoolean("autoLevel");
         }
 
+        if(desiredItems != null && questId == null)
+        {
+            MegaCorpMod.logger.warn("Cleared invalid Manufactory Supplier quest data");
+            desiredItems = null;
+        }
+
     }
 
     @Override
@@ -279,7 +286,11 @@ public class TileEntityManufactorySupplier
         Quest quest = QuestManager.INSTANCE.getSpecificQuest(id);
 
         if(quest == null)
+        {
+            desiredItems = null;
+            questId = null;
             return;
+        }
 
         handleQuest(quest, level, dontReset);
     }
@@ -348,7 +359,7 @@ public class TileEntityManufactorySupplier
 
         stack.shrink(itemsPerCycle);
 
-        inventory.notifySlotChanged(0);
+        //inventory.notifySlotChanged(0);
 
         ((Corporation) corp).addProfit(reward);
 

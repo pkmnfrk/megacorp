@@ -5,10 +5,12 @@ import com.mike_caron.megacorp.network.IGuiUpdater;
 import com.mike_caron.megacorp.network.MessageUpdateGui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.*;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IContainerListener;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nonnull;
@@ -21,44 +23,34 @@ public abstract class ContainerBase
     private IInventory playerInventory;
 
     protected boolean changed = false;
-    private NonNullList<ItemStack> knownSlots;
+    //private NonNullList<ItemStack> knownSlots;
     private boolean invChanged = false;
+
+    protected boolean ownSlotUpdates = true;
 
     @Override
     public void detectAndSendChanges()
     {
-        super.detectAndSendChanges();
-
-        /*
-        if(invChanged)
-        {
-            for(int i = 0; i < this.inventorySlots.size(); ++i)
-            {
-                ItemStack itemstack1 = this.inventorySlots.get(i).getStack();
-                for (int j = 0; j < this.listeners.size(); ++j)
-                {
-                    this.listeners.get(j).sendSlotContents(this, i, itemstack1);
-                }
-            }
-            invChanged = false;
-        }
-*/
         changed = false;
 
-        /*
-        for (int i = 0; i < inventorySlots.size(); i++)
+        if(ownSlotUpdates)
         {
-            ItemStack invStack = inventorySlots.get(i).getStack();
-            ItemStack knownStack = knownSlots.get(i);
-
-            if(!ItemStack.areItemStacksEqual(invStack, knownStack))
+            for (int i = 0; i < inventorySlots.size(); i++)
             {
-                this.knownSlots.set(i, invStack);
-                invChanged = true;
-                break;
+                ItemStack invStack = inventorySlots.get(i).getStack();
+                ItemStack knownStack = this.inventoryItemStacks.get(i);
+
+                if (!ItemStack.areItemStacksEqual(invStack, knownStack))
+                {
+                    this.inventoryItemStacks.set(i, invStack);
+                    changed = true;
+                }
             }
         }
-*/
+        else
+        {
+            super.detectAndSendChanges();
+        }
     }
 
     public ContainerBase(IInventory player)
@@ -80,8 +72,6 @@ public abstract class ContainerBase
     {
         addOwnSlots();
         addPlayerSlots(playerInventory);
-
-        knownSlots = NonNullList.withSize(inventorySlots.size(), ItemStack.EMPTY);
 
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -181,8 +171,51 @@ public abstract class ContainerBase
 
     protected void onWriteNBT(NBTTagCompound tag)
     {
+        if(ownSlotUpdates)
+        {
+            NBTTagCompound slots = new NBTTagCompound();
+
+            for (int i = 0; i < this.inventorySlots.size(); ++i)
+            {
+                ItemStack itemstack1 = this.inventorySlots.get(i).getStack();
+                if (!itemstack1.isEmpty())
+                {
+                    NBTTagCompound item = itemstack1.serializeNBT();
+                    slots.setTag(Integer.toString(i), item);
+                }
+            }
+
+            tag.setTag("Slots", slots);
+        }
+
     }
 
+
+    protected void onReadNBT(NBTTagCompound tag)
+    {
+        if(ownSlotUpdates && tag.hasKey("Slots"))
+        {
+            NBTTagCompound slots = tag.getCompoundTag("Slots");
+
+            for(int i = 0; i < inventorySlots.size(); i++)
+            {
+                String key = Integer.toString(i);
+
+                if(slots.hasKey(key))
+                {
+                    ItemStack stack = new ItemStack(slots.getCompoundTag(key));
+                    if(!ItemStack.areItemStacksEqual(stack, inventorySlots.get(i).getStack()))
+                    {
+                        inventorySlots.get(i).putStack(stack);
+                    }
+                }
+                else
+                {
+                    inventorySlots.get(i).putStack(ItemStack.EMPTY);
+                }
+            }
+        }
+    }
 
     @Override
     public final void deserializeNBT(NBTTagCompound nbtTagCompound)
@@ -204,11 +237,6 @@ public abstract class ContainerBase
         super.addListener(listener);
 
         triggerUpdate(listener);
-    }
-
-    protected void onReadNBT(NBTTagCompound tag)
-    {
-
     }
 
     protected void triggerUpdate()

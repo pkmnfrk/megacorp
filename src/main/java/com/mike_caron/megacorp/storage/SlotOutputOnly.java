@@ -1,11 +1,13 @@
 package com.mike_caron.megacorp.storage;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.SlotItemHandler;
 
 public class SlotOutputOnly
-    extends SlotItemHandlerFixed
+    extends SlotItemHandler
 {
-    public SlotOutputOnly(TweakedItemStackHandler inventoryIn, int index, int xPosition, int yPosition)
+    public SlotOutputOnly(ItemStackHandler inventoryIn, int index, int xPosition, int yPosition)
     {
         super(inventoryIn, index, xPosition, yPosition);
     }

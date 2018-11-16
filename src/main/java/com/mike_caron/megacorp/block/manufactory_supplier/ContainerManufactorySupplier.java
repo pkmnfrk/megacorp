@@ -1,7 +1,6 @@
 package com.mike_caron.megacorp.block.manufactory_supplier;
 
 import com.mike_caron.megacorp.block.TEOwnedContainerBase;
-import com.mike_caron.megacorp.storage.SlotItemHandlerFixed;
 import com.mike_caron.megacorp.util.ItemUtils;
 import com.mike_caron.megacorp.util.StringUtil;
 import net.minecraft.inventory.IInventory;
@@ -11,6 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerManufactorySupplier
     extends TEOwnedContainerBase
@@ -39,6 +39,8 @@ public class ContainerManufactorySupplier
     public ContainerManufactorySupplier(IInventory playerInventory, TileEntityManufactorySupplier te)
     {
         super(playerInventory, te);
+        
+        this.ownSlotUpdates = true;
 
         init();
     }
@@ -63,7 +65,7 @@ public class ContainerManufactorySupplier
     @Override
     protected void addOwnSlots()
     {
-        itemInputSlot = new SlotItemHandlerFixed(getTE().inventory, 0, 207, 33);
+        itemInputSlot = new SlotItemHandler(getTE().inventory, 0, 207, 33);
 
         this.addSlotToContainer(itemInputSlot);
     }

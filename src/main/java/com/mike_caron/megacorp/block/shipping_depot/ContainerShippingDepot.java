@@ -2,10 +2,10 @@ package com.mike_caron.megacorp.block.shipping_depot;
 
 import com.mike_caron.megacorp.block.TEOwnedContainerBase;
 import com.mike_caron.megacorp.impl.WorkOrder;
-import com.mike_caron.megacorp.storage.SlotItemHandlerFixed;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerShippingDepot
     extends TEOwnedContainerBase
@@ -49,7 +49,7 @@ public class ContainerShippingDepot
     @Override
     protected void addOwnSlots()
     {
-        itemInputSlot = new SlotItemHandlerFixed(getTE().inventory, 0, 207, 33);
+        itemInputSlot = new SlotItemHandler(getTE().inventory, 0, 207, 33);
 
         this.addSlotToContainer(itemInputSlot);
     }

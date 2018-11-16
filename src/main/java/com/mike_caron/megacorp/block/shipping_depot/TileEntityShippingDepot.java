@@ -4,7 +4,6 @@ import com.mike_caron.megacorp.api.ICorporation;
 import com.mike_caron.megacorp.block.TileEntityOwnedBase;
 import com.mike_caron.megacorp.impl.Corporation;
 import com.mike_caron.megacorp.impl.WorkOrder;
-import com.mike_caron.megacorp.storage.TweakedItemStackHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,6 +11,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -26,7 +26,7 @@ public class TileEntityShippingDepot
     private boolean automaticallyGenerate = true;
     private boolean allowChoosing = false;
 
-    public final TweakedItemStackHandler inventory = new TweakedItemStackHandler(1)
+    public final ItemStackHandler inventory = new ItemStackHandler(1)
     {
         @Override
         protected void onContentsChanged(int slot)
@@ -213,8 +213,6 @@ public class TileEntityShippingDepot
             if(consumed > 0)
             {
                 stack.shrink(consumed);
-                inventory.notifySlotChanged(0);
-
 
                 if (corp.completeWorkOrder(workOrder))
                 {

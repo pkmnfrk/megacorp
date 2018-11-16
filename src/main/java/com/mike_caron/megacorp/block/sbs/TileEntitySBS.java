@@ -3,7 +3,6 @@ package com.mike_caron.megacorp.block.sbs;
 import com.mike_caron.megacorp.block.TileEntityBase;
 import com.mike_caron.megacorp.recipes.SBSRecipe;
 import com.mike_caron.megacorp.recipes.SBSRecipeManager;
-import com.mike_caron.megacorp.storage.TweakedItemStackHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -12,6 +11,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -42,7 +42,7 @@ public class TileEntitySBS
         }
     };
 
-    public final TweakedItemStackHandler reagents = new TweakedItemStackHandler(2)
+    public final ItemStackHandler reagents = new ItemStackHandler(2)
     {
         @Override
         public void setStackInSlot(int slot, @Nonnull ItemStack stack)

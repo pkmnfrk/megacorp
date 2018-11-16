@@ -1,12 +1,12 @@
 package com.mike_caron.megacorp.block.sbs;
 
 import com.mike_caron.megacorp.block.TEContainerBase;
-import com.mike_caron.megacorp.storage.SlotItemHandlerFixed;
 import com.mike_caron.megacorp.util.StringUtil;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerSBS
     extends TEContainerBase
@@ -50,8 +50,8 @@ public class ContainerSBS
     @Override
     protected void addOwnSlots()
     {
-        goldSlot = new SlotItemHandlerFixed(getTE().reagents, 0, 34, 29);
-        emeraldSlot = new SlotItemHandlerFixed(getTE().reagents, 1, 34, 52);
+        goldSlot = new SlotItemHandler(getTE().reagents, 0, 34, 29);
+        emeraldSlot = new SlotItemHandler(getTE().reagents, 1, 34, 52);
 
         this.addSlotToContainer(goldSlot);
         this.addSlotToContainer(emeraldSlot);

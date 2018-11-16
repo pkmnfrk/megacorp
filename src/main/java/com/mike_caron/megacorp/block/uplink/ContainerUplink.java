@@ -4,13 +4,13 @@ import com.mike_caron.megacorp.api.ICorporation;
 import com.mike_caron.megacorp.api.ICorporationManager;
 import com.mike_caron.megacorp.block.TEOwnedContainerBase;
 import com.mike_caron.megacorp.impl.CorporationManager;
-import com.mike_caron.megacorp.storage.SlotItemHandlerFixed;
 import com.mike_caron.megacorp.storage.SlotOutputOnly;
 import com.mike_caron.megacorp.util.StringUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.items.SlotItemHandler;
 
 import java.util.UUID;
 
@@ -55,7 +55,7 @@ public class ContainerUplink
     @Override
     protected void addOwnSlots()
     {
-        cardSlotInput = new SlotItemHandlerFixed(getTE().cardInventory, 0, 62, 58);
+        cardSlotInput = new SlotItemHandler(getTE().cardInventory, 0, 62, 58);
         cardSlotOutput = new SlotOutputOnly(getTE().cardInventory, 1, 98, 58);
 
         this.addSlotToContainer(cardSlotInput);

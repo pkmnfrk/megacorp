@@ -11,6 +11,7 @@ public class MainCompatHandler
         registerWaila();
         registerTConstruct();
         //registerEnderio();
+        registerGameStages();
     }
 
     public static void registerAllInit()

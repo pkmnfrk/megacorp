@@ -389,4 +389,50 @@ public class DataUtils
         throw new Error("This can't happen");
     }
 
+    @Nonnull
+    public static String[][] loadJsonNestedArray(@Nonnull JsonElement element)
+    {
+        String[][] ret;
+
+        if(element.isJsonPrimitive())
+        {
+            ret = new String[][] { new String[] { element.getAsJsonPrimitive().getAsString() }};
+        }
+        else if(element.isJsonArray())
+        {
+            JsonArray array = element.getAsJsonArray();
+            ret = new String[array.size()][];
+
+            for(int i = 0; i < array.size(); i++)
+            {
+                JsonElement el = array.get(i);
+                if(el.isJsonPrimitive())
+                {
+                    ret[i] = new String[] { el.getAsJsonPrimitive().getAsString() };
+                }
+                else if(el.isJsonArray())
+                {
+                    JsonArray array2 = el.getAsJsonArray();
+
+                    ret[i] = new String[array2.size()];
+
+                    for(int j = 0; j < array2.size(); j++)
+                    {
+                        ret[i][j] = array2.get(j).getAsJsonPrimitive().getAsString();
+                    }
+                }
+                else
+                {
+                    throw new RuntimeException("This is not a string or array: " + el);
+                }
+            }
+        }
+        else
+        {
+            throw new RuntimeException("This is not a string or array: " + element);
+        }
+
+        return ret;
+    }
+
 }

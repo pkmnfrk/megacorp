@@ -8,7 +8,7 @@ import com.mike_caron.megacorp.util.DataUtils;
 public class CommandReward
     extends BaseReward
 {
-    public String[] commands;
+    public String[][] commands;
 
     protected CommandReward(String id)
     {
@@ -28,7 +28,7 @@ public class CommandReward
 
         if(json.has("commands"))
         {
-            commands = DataUtils.loadJsonArray(json.get("commands"));
+            commands = DataUtils.loadJsonNestedArray(json.get("commands"));
         }
     }
 

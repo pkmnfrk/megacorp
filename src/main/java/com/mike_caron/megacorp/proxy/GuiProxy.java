@@ -57,7 +57,7 @@ public class GuiProxy implements IGuiHandler
         }
         else if(te instanceof TileEntityCapitalInvestor)
         {
-            return new ContainerCapitalInvestor(player.inventory, (TileEntityCapitalInvestor)te);
+            return new ContainerCapitalInvestor(player.inventory, (TileEntityCapitalInvestor)te, player);
         }
         else if(te instanceof TileEntityVendingMachine)
         {
@@ -124,7 +124,7 @@ public class GuiProxy implements IGuiHandler
         else if(te instanceof TileEntityCapitalInvestor)
         {
             TileEntityCapitalInvestor teCI = (TileEntityCapitalInvestor)te;
-            return new GuiCapitalInvestor(new ContainerCapitalInvestor(player.inventory, teCI));
+            return new GuiCapitalInvestor(new ContainerCapitalInvestor(player.inventory, teCI, player));
         }
         else if(te instanceof TileEntityVendingMachine)
         {

@@ -12,5 +12,5 @@ public interface IReward
     float[] getValuesForRank(int rank);
     BaseReward.CurrencyType getCurrency();
     String[][] getGameStages();
-
+    boolean getOwnerOnly();
 }

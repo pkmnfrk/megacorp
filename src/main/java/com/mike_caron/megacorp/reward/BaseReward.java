@@ -15,6 +15,7 @@ public abstract class BaseReward implements IReward
     int firstCost;
     CurrencyType currencyType = CurrencyType.MONEY;
     String[][] gameStages;
+    boolean ownerOnly;
 
     protected BaseReward(String id)
     {
@@ -90,6 +91,11 @@ public abstract class BaseReward implements IReward
         {
             this.gameStages = DataUtils.loadJsonNestedArray(json.get("game_stages"));
         }
+
+        if(json.has("ownerOnly"))
+        {
+            this.ownerOnly = json.get("ownerOnly").getAsBoolean();
+        }
     }
 
     public String getFactoryClass()
@@ -105,6 +111,11 @@ public abstract class BaseReward implements IReward
     public String[][] getGameStages()
     {
         return gameStages;
+    }
+
+    public boolean getOwnerOnly()
+    {
+        return ownerOnly;
     }
 
     public enum CostScale

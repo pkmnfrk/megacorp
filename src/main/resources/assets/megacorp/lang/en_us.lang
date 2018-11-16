@@ -32,6 +32,7 @@ tile.megacorp:capital_investor.buy=Buy
 tile.megacorp:capital_investor.cost=Cost: %s
 tile.megacorp:capital_investor.rank=Rank: %s
 tile.megacorp:capital_investor.currency=Currency: %s
+tile.megacorp:capital_investor.ownerOnly=Restricted to Owner
 
 tile.megacorp:profit_condenser.name=Profit Condenser
 tile.megacorp:profit_condenser.description=The Profit Condenser takes liquid assets (in the form of Money) and condenses it into an incredibly valuable substance known as Dense Money. This liquid is 1000x as dense as regular Money.

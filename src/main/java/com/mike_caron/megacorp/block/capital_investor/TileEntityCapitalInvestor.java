@@ -110,6 +110,11 @@ public class TileEntityCapitalInvestor
             if(!GameStagesCompatability.hasStagesUnlocked(ownerPlayer, reward.getGameStages()))
                 return;
 
+            if(reward.getOwnerOnly() && !player.getUniqueID().equals(owner))
+            {
+                return;
+            }
+
             Optional<Pair<Integer, BaseReward.CurrencyType>> cost = Optional.empty();
             try
             {

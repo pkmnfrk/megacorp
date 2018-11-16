@@ -210,6 +210,10 @@ public class GuiCapitalInvestor
             tmp = GuiUtil.i18n("tile.megacorp:capital_investor.currency", tmp);
 
             toolTip.add(tmp);
+
+            tmp = GuiUtil.i18n("tile.megacorp:capital_investor.ownerOnly");
+            toolTip.add(tmp);
+
             String[] vars = new String[reward.nextRankVariables.length];
             NumberFormat floatFormat = NumberFormat.getNumberInstance();
             NumberFormat intFormat = NumberFormat.getIntegerInstance();

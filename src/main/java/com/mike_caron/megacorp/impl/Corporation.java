@@ -6,6 +6,7 @@ import com.mike_caron.megacorp.api.ICorporation;
 import com.mike_caron.megacorp.api.IReward;
 import com.mike_caron.megacorp.api.events.CorporationRewardsChangedEvent;
 import com.mike_caron.megacorp.reward.BaseReward;
+import com.mike_caron.megacorp.reward.CommandReward;
 import com.mike_caron.megacorp.util.LastResortUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -410,11 +411,36 @@ public class Corporation
             return false;
         }
 
-        rewardLog.put(id, currentRank + 1);
+        currentRank += 1;
+
+        rewardLog.put(id, currentRank);
 
         this.manager.markDirty();
 
         MinecraftForge.EVENT_BUS.post(new CorporationRewardsChangedEvent(owner, id, currentRank + 1));
+
+        if(reward instanceof CommandReward)
+        {
+            MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+            //EntityPlayer player = server.getEntityWorld().getPlayerEntityByUUID(owner);
+
+            String[][] commandsList = ((CommandReward) reward).commands;
+
+            if(commandsList != null && commandsList.length >= currentRank && commandsList[currentRank - 1] != null)
+            {
+                String[] commands = commandsList[currentRank - 1];
+
+                for(String command : commands)
+                {
+                    command = replaceCommandString(command, server.getEntityWorld());
+
+                    if(command != null)
+                    {
+                        server.commandManager.executeCommand(server, command);
+                    }
+                }
+            }
+        }
 
         return true;
     }

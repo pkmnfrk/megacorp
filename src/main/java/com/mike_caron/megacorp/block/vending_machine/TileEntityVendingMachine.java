@@ -5,9 +5,8 @@ import com.mike_caron.megacorp.fluid.ModFluids;
 import com.mike_caron.megacorp.impl.VendingItem;
 import com.mike_caron.megacorp.impl.VendingManager;
 import com.mike_caron.megacorp.reward.BaseReward;
-import net.minecraft.entity.item.EntityItem;
+import com.mike_caron.megacorp.util.ItemUtils;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
@@ -112,13 +111,7 @@ public class TileEntityVendingMachine
 
             drained = fluidTank.drainInternal(drained, true);
 
-            ItemStack newStack = vending.itemStack.copy();
-
-            if(!player.inventory.addItemStackToInventory(newStack))
-            {
-                EntityItem item = new EntityItem(player.getEntityWorld(), player.posX, player.posY, player.posZ, newStack);
-                player.getEntityWorld().spawnEntity(item);
-            }
+            ItemUtils.giveToPlayerOrDrop(vending.itemStack, player);
 
             markDirty();
         }

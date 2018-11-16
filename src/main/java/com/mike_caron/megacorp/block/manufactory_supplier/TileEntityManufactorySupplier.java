@@ -7,6 +7,7 @@ import com.mike_caron.megacorp.impl.Corporation;
 import com.mike_caron.megacorp.impl.Quest;
 import com.mike_caron.megacorp.impl.QuestManager;
 import com.mike_caron.megacorp.storage.TweakedItemStackHandler;
+import com.mike_caron.megacorp.util.ItemUtils;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -232,6 +233,12 @@ public class TileEntityManufactorySupplier
         {
             desiredItems = null;
             questId = null;
+
+            if(!inventory.getStackInSlot(0).isEmpty())
+            {
+                ItemUtils.giveToPlayerOrDrop(inventory.getStackInSlot(0), player);
+                inventory.setStackInSlot(0, ItemStack.EMPTY);
+            }
         }
         else if(button == ContainerManufactorySupplier.GUI_LEVEL_UP)
         {

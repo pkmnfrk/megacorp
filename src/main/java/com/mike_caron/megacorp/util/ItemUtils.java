@@ -1,6 +1,8 @@
 package com.mike_caron.megacorp.util;
 
 import com.google.common.base.Preconditions;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -110,5 +112,16 @@ public class ItemUtils
         }
 
         return true;
+    }
+
+    public static void giveToPlayerOrDrop(@Nonnull ItemStack itemStack, @Nonnull EntityPlayer player)
+    {
+        ItemStack newStack = itemStack.copy();
+
+        if(!player.inventory.addItemStackToInventory(newStack))
+        {
+            EntityItem item = new EntityItem(player.getEntityWorld(), player.posX, player.posY, player.posZ, newStack);
+            player.getEntityWorld().spawnEntity(item);
+        }
     }
 }

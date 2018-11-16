@@ -3,6 +3,7 @@ package com.mike_caron.megacorp.reward;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonObject;
 import com.mike_caron.megacorp.api.IReward;
+import com.mike_caron.megacorp.util.DataUtils;
 
 public abstract class BaseReward implements IReward
 {
@@ -12,6 +13,7 @@ public abstract class BaseReward implements IReward
     float costScaleFactor;
     int firstCost;
     CurrencyType currencyType = CurrencyType.MONEY;
+    String[][] gameStages;
 
     protected BaseReward(String id)
     {
@@ -65,6 +67,10 @@ public abstract class BaseReward implements IReward
         if(json.has("currency"))
         {
             this.currencyType = CurrencyType.valueOf(json.get("currency").getAsString().toUpperCase());
+        }
+        if(json.has("game_stages"))
+        {
+            this.gameStages = DataUtils.loadJsonNestedArray(json.get("game_stages"));
         }
     }
 

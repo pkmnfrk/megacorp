@@ -435,6 +435,34 @@ public class DataUtils
         return ret;
     }
 
+    @Nonnull
+    public static String[] loadJsonArray(@Nonnull JsonElement element)
+    {
+        String[] ret;
+
+        if(element.isJsonPrimitive())
+        {
+            ret = new String[] { element.getAsJsonPrimitive().getAsString() };
+        }
+        else if(element.isJsonArray())
+        {
+            JsonArray array = element.getAsJsonArray();
+            ret = new String[array.size()];
+
+            for(int i = 0; i < array.size(); i++)
+            {
+                JsonElement el = array.get(i);
+                ret[i] = el.getAsJsonPrimitive().getAsString();
+            }
+        }
+        else
+        {
+            throw new RuntimeException("This is not a string or array: " + element);
+        }
+
+        return ret;
+    }
+
     public static JsonElement serializeJson(Object obj)
     {
         if(obj instanceof ItemStack)

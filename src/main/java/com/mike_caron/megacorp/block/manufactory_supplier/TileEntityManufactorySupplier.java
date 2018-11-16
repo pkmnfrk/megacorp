@@ -304,7 +304,7 @@ public class TileEntityManufactorySupplier
             handleQuest(quest, level, dontReset);
             return;
         }
-        
+
         questId = null;
     }
 

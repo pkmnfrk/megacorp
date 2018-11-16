@@ -290,7 +290,7 @@ public class TileEntityManufactorySupplier
     {
         Quest quest = QuestManager.INSTANCE.getSpecificQuest(id);
 
-        if(quest != null)
+        if(quest == null)
         {
             desiredItems = null;
             questId = null;

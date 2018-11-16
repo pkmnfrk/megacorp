@@ -22,6 +22,7 @@ This mod is almost completely defined by its mod support. Out of the box, it sup
 
 * EnderIO
 * Forestry
+* Game Stages
 * Pam's HarvestCraft
 * Thermal Foundation (eg, the Thermal Expansion/COFH series)
 

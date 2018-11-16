@@ -23,8 +23,6 @@ public abstract class ContainerBase
     private IInventory playerInventory;
 
     protected boolean changed = false;
-    //private NonNullList<ItemStack> knownSlots;
-    private boolean invChanged = false;
 
     protected boolean ownSlotUpdates = true;
 

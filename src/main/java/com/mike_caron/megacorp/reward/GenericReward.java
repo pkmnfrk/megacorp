@@ -20,6 +20,22 @@ public class GenericReward extends BaseReward
         return new float[] { startValue + rankValue * rank };
     }
 
+    @Override
+    protected void loadFromJson(JsonObject json)
+    {
+        super.loadFromJson(json);
+
+        if(json.has("rankValue"))
+        {
+            rankValue = json.get("rankValue").getAsFloat();
+        }
+
+        if(json.has("startValue"))
+        {
+            startValue = json.get("startValue").getAsFloat();
+        }
+    }
+
     public static class Factory
         implements IRewardFactory
     {
@@ -30,12 +46,13 @@ public class GenericReward extends BaseReward
 
             ret.loadFromJson(json);
 
-            ret.rankValue = json.get("rankValue").getAsFloat();
-            if(json.has("startValue"))
-            {
-                ret.startValue = json.get("startValue").getAsFloat();
-            }
             return ret;
+        }
+
+        @Override
+        public void updateReward(IReward reward, JsonObject json)
+        {
+            ((GenericReward)reward).loadFromJson(json);
         }
     }
 }

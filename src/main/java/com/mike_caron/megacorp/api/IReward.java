@@ -4,6 +4,8 @@ import com.mike_caron.megacorp.reward.BaseReward;
 
 public interface IReward
 {
+    String getFactoryClass();
+    void setFactoryClass(String clazz);
     String getId();
     int numRanks();
     int costForRank(int rank);

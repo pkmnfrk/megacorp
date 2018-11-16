@@ -26,7 +26,10 @@ public class CommandReward
     {
         super.loadFromJson(json);
 
-        commands = DataUtils.loadJsonArray(json.get("commands"));
+        if(json.has("commands"))
+        {
+            commands = DataUtils.loadJsonArray(json.get("commands"));
+        }
     }
 
     public static class Factory
@@ -40,6 +43,14 @@ public class CommandReward
             ret.loadFromJson(json);
 
             return ret;
+        }
+
+
+
+        @Override
+        public void updateReward(IReward reward, JsonObject json)
+        {
+            ((CommandReward)reward).loadFromJson(json);
         }
     }
 }

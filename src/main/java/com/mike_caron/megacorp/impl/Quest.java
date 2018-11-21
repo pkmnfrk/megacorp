@@ -26,16 +26,19 @@ public final class Quest
     private float baseProfit = 1f;
     private String completionCommand;
     private String[][] gameStages = null;
+    private String langKey = null;
+
     public final Map<String, Object> extraData = new HashMap<>();
 
     public Quest(String id, ItemStack item, float baseQty, float multQty, float randomFactor, float levelScale, float baseProfit)
     {
-        this(id, item, baseQty, multQty, randomFactor, levelScale, baseProfit, null);
+        this(id, null, item, baseQty, multQty, randomFactor, levelScale, baseProfit, null);
     }
 
-    public Quest(String id, ItemStack item, float baseQty, float multQty, float randomFactor, float levelScale, float baseProfit, String completionCommand)
+    public Quest(@Nonnull String id, @Nullable String langKey, @Nonnull ItemStack item, float baseQty, float multQty, float randomFactor, float levelScale, float baseProfit, @Nullable String completionCommand)
     {
         this.id = id;
+        this.langKey = null;
         this.item = new ArrayList<>();
         this.item.add(item);
         this.oreDict = null;
@@ -47,14 +50,15 @@ public final class Quest
         this.completionCommand = completionCommand;
     }
 
-    public Quest(String id, Collection<ItemStack> item, float baseQty, float multQty, float randomFactor, float levelScale, float baseProfit)
+    public Quest(@Nonnull String id, @Nonnull Collection<ItemStack> item, float baseQty, float multQty, float randomFactor, float levelScale, float baseProfit)
     {
-        this(id, item, baseQty, multQty, randomFactor, levelScale, baseProfit, null);
+        this(id, null, item, baseQty, multQty, randomFactor, levelScale, baseProfit, null);
     }
 
-    public Quest(String id, Collection<ItemStack> item, float baseQty, float multQty, float randomFactor, float levelScale, float baseProfit, String completionCommand)
+    public Quest(@Nonnull String id, @Nullable String langKey, @Nonnull Collection<ItemStack> item, float baseQty, float multQty, float randomFactor, float levelScale, float baseProfit, @Nonnull String completionCommand)
     {
         this.id = id;
+        this.langKey = langKey;
         this.item = new ArrayList<>(item);
         this.oreDict = null;
         this.baseQty = baseQty;
@@ -65,14 +69,15 @@ public final class Quest
         this.completionCommand = completionCommand;
     }
 
-    public Quest(String id, String oreDict, float baseQty, float multQty, float randomFactor, float levelScale, float baseProfit)
+    public Quest(@Nonnull String id, @Nonnull String oreDict, float baseQty, float multQty, float randomFactor, float levelScale, float baseProfit)
     {
-        this(id, oreDict, baseQty, multQty, randomFactor, levelScale, baseProfit, null);
+        this(id, null, oreDict, baseQty, multQty, randomFactor, levelScale, baseProfit, null);
     }
 
-    public Quest(String id, String oreDict, float baseQty, float multQty, float randomFactor, float levelScale, float baseProfit, String completionCommand)
+    public Quest(@Nonnull String id, @Nullable String langKey, @Nonnull String oreDict, float baseQty, float multQty, float randomFactor, float levelScale, float baseProfit, @Nonnull String completionCommand)
     {
         this.id = id;
+        this.langKey = langKey;
         this.item = null;
         this.oreDict = oreDict;
         this.baseQty = baseQty;
@@ -203,6 +208,11 @@ public final class Quest
         {
             this.gameStages = DataUtils.loadJsonNestedArray(obj.get("game_stages"));
         }
+        if(obj.has("langkey"))
+        {
+            this.langKey = obj.get("langkey").getAsString();
+        }
+
 
         return true;
     }
@@ -240,6 +250,7 @@ public final class Quest
         ret.addProperty("levelscale", this.levelScale);
         ret.addProperty("baseprofit", this.baseProfit);
         ret.addProperty("command", this.completionCommand);
+        ret.addProperty("langkey", this.langKey);
         ret.add("game_stages", DataUtils.serializeJson(this.gameStages));
 
         return ret;
@@ -332,5 +343,13 @@ public final class Quest
     public String[][] getGameStages()
     {
         return gameStages;
+    }
+
+    public String getLangKey()
+    {
+        if(langKey != null)
+            return langKey;
+
+        return id;
     }
 }

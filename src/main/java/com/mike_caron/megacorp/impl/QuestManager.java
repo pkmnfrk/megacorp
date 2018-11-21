@@ -376,17 +376,17 @@ public class QuestManager
         }
     }
 
-    public QuestLocalization getLocalizationFor(String locale, String questId)
+    public QuestLocalization getLocalizationFor(String locale, String langKey)
     {
         if(!localizations.containsKey(locale))
             locale = "en_us";
 
-        if(!localizations.get(locale).containsKey(questId))
+        if(!localizations.get(locale).containsKey(langKey))
         {
-            localizations.get(locale).put(questId, new QuestLocalization(questId + ".title", questId + ".desc"));
+            localizations.get(locale).put(langKey, new QuestLocalization(langKey + ".title", langKey + ".desc"));
         }
 
-        return localizations.get(locale).get(questId);
+        return localizations.get(locale).get(langKey);
     }
 
     /**
@@ -394,15 +394,15 @@ public class QuestManager
      * it exists at all. Intended to be used by dynamic quests (eg, so you can have a generic localization that can be
      * overridden for specific instances)
      * @param locale the locale in question (eg, en_us)
-     * @param questId the string to look up
+     * @param langKey the string to look up
      */
 
-    public boolean localizationExists(String locale, String questId)
+    public boolean localizationExists(String locale, String langKey)
     {
         if(!localizations.containsKey(locale))
             locale = "en_us";
 
-        if(localizations.get(locale).containsKey(questId))
+        if(localizations.get(locale).containsKey(langKey))
             return true;
 
         if(!locale.equals("en_us"))
@@ -418,13 +418,18 @@ public class QuestManager
             return questFactories.get(quest).localize(locale, quest);
         }
 
+        if(localizationExists(locale, quest.getLangKey()))
+        {
+            return getLocalizationFor(locale, quest.getLangKey());
+        }
+
         return getLocalizationFor(locale, quest.getId());
     }
 
     @SideOnly(Side.CLIENT)
-    public QuestLocalization getLocalizationForCurrent(String questId)
+    public QuestLocalization getLocalizationForCurrent(String langKey)
     {
-        return getLocalizationForCurrent(quests.get(questId));
+        return getLocalizationForCurrent(quests.get(langKey));
     }
 
     @SideOnly(Side.CLIENT)

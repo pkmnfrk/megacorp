@@ -21,7 +21,7 @@ public final class Quest
     private String oreDict;
     private float baseQty;
     private float multQty = 1.5f;
-    private float randomFactor;
+    private float randomFactor = 0.25f;
     private float levelScale = 1f;
     private float baseProfit = 1f;
     private String completionCommand;

@@ -49,6 +49,14 @@
       "baseprofit": 10
     },
     {
+      "id": "aa_crystals_canola",
+      "langkey": "aa_crystals_base",
+      "item": "actuallyadditions:item_misc:23",
+      "baseqty": 6,
+      "multqty": 1.25,
+      "baseprofit": 4
+    },
+    {
       "id": "aa_crystals_empowered_restonia",
       "langkey": "aa_crystals_empowered",
       "item": "actuallyadditions:item_crystal_empowered:0",
@@ -95,6 +103,21 @@
       "baseqty": 1,
       "multqty": 1.25,
       "baseprofit": 10
+    },
+    {
+      "id": "aa_crystals_empowered_canola",
+      "langkey": "aa_crystals_empowered",
+      "item": "actuallyadditions:item_misc:24",
+      "baseqty": 1,
+      "multqty": 1.25,
+      "baseprofit": 4
+    },
+    {
+      "id":"aa_crafter_stick",
+      "item": "actuallyadditions:item_crafter_on_a_stick",
+      "baseqty": 8,
+      "multqty": 1.1,
+      "baseprofit": 2
     }
   ]
 }

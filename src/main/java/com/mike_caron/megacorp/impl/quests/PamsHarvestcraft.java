@@ -1,10 +1,13 @@
 package com.mike_caron.megacorp.impl.quests;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.api.IQuestFactory;
 import com.mike_caron.megacorp.impl.Quest;
 import com.mike_caron.megacorp.impl.QuestLocalization;
 import com.mike_caron.megacorp.impl.QuestManager;
+import com.mike_caron.megacorp.util.ItemUtils;
 import com.mike_caron.megacorp.util.OreDictUtil;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
@@ -91,6 +94,30 @@ public abstract class PamsHarvestcraft
         for(String dict : dicts)
         {
             allItems.addAll(OreDictionary.getOres(dict));
+        }
+
+        if(tag != null)
+        {
+            if(tag.has("items"))
+            {
+                for(JsonElement el : tag.get("items").getAsJsonArray())
+                {
+                    if(el.isJsonPrimitive())
+                    {
+                        String it = el.getAsString();
+                        try
+                        {
+                            ItemStack item = ItemUtils.getStackFromTag(it);
+
+                            allItems.add(item);
+                        }
+                        catch(Exception ex)
+                        {
+                            MegaCorpMod.logger.error(ex);
+                        }
+                    }
+                }
+            }
         }
 
         List<Quest> ret = new ArrayList<>(allItems.size());

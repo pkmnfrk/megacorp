@@ -3,6 +3,31 @@
     "com.mike_caron.megacorp.impl.quests.PamsHarvestcraft$Fruit",
     "com.mike_caron.megacorp.impl.quests.PamsHarvestcraft$Veggies",
     "com.mike_caron.megacorp.impl.quests.PamsHarvestcraft$Nuts",
-    "com.mike_caron.megacorp.impl.quests.PamsHarvestcraft$Food"
+    {
+      "class": "com.mike_caron.megacorp.impl.quests.PamsHarvestcraft$Food",
+      "items": [
+        "actuallyadditions:item_food:0",
+        "actuallyadditions:item_food:1",
+        "actuallyadditions:item_food:2",
+        "actuallyadditions:item_food:3",
+        "actuallyadditions:item_food:4",
+        "actuallyadditions:item_food:5",
+        "actuallyadditions:item_food:6",
+        "actuallyadditions:item_food:7",
+        "actuallyadditions:item_food:8",
+        "actuallyadditions:item_food:9",
+        "actuallyadditions:item_food:10",
+        "actuallyadditions:item_food:11",
+        "actuallyadditions:item_food:12",
+        "actuallyadditions:item_food:13",
+        "actuallyadditions:item_food:14",
+        "actuallyadditions:item_food:15",
+        "actuallyadditions:item_food:16",
+        // "actuallyadditions:item_food:17", this doesn't seem to have a recipe?
+        "actuallyadditions:item_food:18",
+        "actuallyadditions:item_food:19",
+        "actuallyadditions:item_food:20"
+      ]
+    }
   ]
 }

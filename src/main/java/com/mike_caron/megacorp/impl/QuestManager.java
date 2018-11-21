@@ -8,8 +8,10 @@ import com.google.gson.JsonParser;
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.ModConfig;
 import com.mike_caron.megacorp.api.IQuestFactory;
+import com.mike_caron.megacorp.integrations.gamestages.GameStagesCompatability;
 import com.mike_caron.megacorp.util.DataUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
@@ -97,7 +99,7 @@ public class QuestManager
             //first check the blacklist
             if(applyBlacklists)
             {
-                for(int i = 0; i < ModConfig.workorderBlacklist.length; i++)
+                for(int i = 0; i < ModConfig.workorderFileBlacklist.length; i++)
                 {
                     if(ModConfig.workorderFileBlacklist[i].equals(baseName))
                     {
@@ -460,5 +462,14 @@ public class QuestManager
     public List<Quest> getQuests()
     {
         return new ArrayList<>(quests.values());
+    }
+
+    public List<Quest> getQuests(EntityPlayer player)
+    {
+        List<Quest> ret = getQuests();
+
+        ret.removeIf(q -> !GameStagesCompatability.hasStagesUnlocked(player, q.getGameStages() ));
+
+        return ret;
     }
 }

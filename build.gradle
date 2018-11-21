@@ -28,7 +28,7 @@ minecraft {
     // stable_#            stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not always work.
     // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "snapshot_20180714"
+    mappings = "stable_39"
     makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
@@ -55,6 +55,10 @@ repositories {
         name = "Forestry"
         url = "http://maven.ic2.player.to"
     }
+    maven {
+        name = "McModDev"
+        url = "https://maven.mcmoddev.com"
+    }
 }
 
 dependencies {
@@ -70,6 +74,9 @@ dependencies {
 
     // compile against the Forestry API but do not include it at runtime
     provided "net.sengir.forestry:forestry_${mcversion}:${forestry_version}:api"
+
+    provided "net.darkhax.gamestages:GameStages-${mcversion}:${gamestages_version}"
+    provided "net.darkhax.bookshelf:Bookshelf-${mcversion}:${bookshelf_version}"
 
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..

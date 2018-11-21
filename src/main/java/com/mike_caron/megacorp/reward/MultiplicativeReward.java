@@ -23,6 +23,22 @@ public class MultiplicativeReward
         return new float[] { value };
     }
 
+    @Override
+    protected void loadFromJson(JsonObject json)
+    {
+        super.loadFromJson(json);
+
+        if(json.has("baseValue"))
+        {
+            baseValue = json.get("baseValue").getAsInt();
+        }
+
+        if(json.has("multiplier"))
+        {
+            multiplier = json.get("multiplier").getAsFloat();
+        }
+    }
+
     public static class Factory
         implements IRewardFactory
     {
@@ -33,17 +49,13 @@ public class MultiplicativeReward
 
             ret.loadFromJson(json);
 
-            if(json.has("baseValue"))
-            {
-                ret.baseValue = json.get("baseValue").getAsInt();
-            }
-
-            if(json.has("multiplier"))
-            {
-                ret.multiplier = json.get("multiplier").getAsFloat();
-            }
-
             return ret;
+        }
+
+        @Override
+        public void updateReward(IReward reward, JsonObject json)
+        {
+            ((MultiplicativeReward)reward).loadFromJson(json);
         }
     }
 }

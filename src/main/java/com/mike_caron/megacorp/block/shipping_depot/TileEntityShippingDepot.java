@@ -4,6 +4,7 @@ import com.mike_caron.megacorp.api.ICorporation;
 import com.mike_caron.megacorp.block.TileEntityOwnedBase;
 import com.mike_caron.megacorp.impl.Corporation;
 import com.mike_caron.megacorp.impl.WorkOrder;
+import com.mike_caron.megacorp.storage.LimitedItemStackHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -26,36 +27,21 @@ public class TileEntityShippingDepot
     private boolean automaticallyGenerate = true;
     private boolean allowChoosing = false;
 
-    public final ItemStackHandler inventory = new ItemStackHandler(1)
+    public final ItemStackHandler inventory = new LimitedItemStackHandler(this, 1)
     {
         @Override
-        protected void onContentsChanged(int slot)
-        {
-            super.onContentsChanged(slot);
-
-            markDirty();
-        }
-
-        @Nonnull
-        @Override
-        public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate)
+        public boolean isItemValid(int slot, @Nonnull ItemStack item)
         {
             if(getWorkOrder() == null)
-            {
-                return stack;
-            }
+                return false;
 
-            if(!getWorkOrder().isItemAcceptable(stack))
-                return stack;
-
-            return super.insertItem(slot, stack, simulate);
+            return getWorkOrder().isItemAcceptable(item);
         }
 
         @Override
         public int getSlotLimit(int slot)
         {
             if(getWorkOrder() == null) return 0;
-
 
             int remaining = workOrder.getDesiredCount() - workOrder.getProgress();
             //return Math.min(remaining, 64);

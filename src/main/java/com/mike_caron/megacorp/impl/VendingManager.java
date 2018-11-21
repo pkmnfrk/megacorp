@@ -117,7 +117,14 @@ public class VendingManager
             itemStack.setTagCompound(nbt);
         }
 
-        items.add(new VendingItem(itemStack, cost, currency));
+        String[][] gameStages = null;
+
+        if(item.has("game_stages"))
+        {
+            gameStages = DataUtils.loadJsonNestedArray(item.get("game_stages"));
+        }
+
+        items.add(new VendingItem(itemStack, cost, currency, gameStages));
     }
 
 

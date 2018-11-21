@@ -1,12 +1,11 @@
 package com.mike_caron.megacorp.command;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.api.ICorporationManager;
 import com.mike_caron.megacorp.impl.*;
 import com.mike_caron.megacorp.proxy.CommonProxy;
+import com.mike_caron.megacorp.util.StringUtil;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -112,7 +111,7 @@ public class MegaCorpCommand
     private static void reloadRewards(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args)
         throws CommandException
     {
-        RewardManager.INSTANCE.loadRewards();
+        RewardManager.INSTANCE.loadRewards(CommonProxy.rewardsDirectory);
         sender.sendMessage(new TextComponentTranslation("command.megacorp.done"));
     }
 
@@ -252,8 +251,7 @@ public class MegaCorpCommand
                 array.add(quest.toJson());
             }
 
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            String json = gson.toJson(array);
+            String json = StringUtil.prettyPrintJson(array);
 
             File dumpFile = new File(CommonProxy.megacorpDirectory.getPath(), "loaded_quests.json");
 

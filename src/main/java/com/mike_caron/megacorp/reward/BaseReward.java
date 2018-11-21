@@ -3,15 +3,19 @@ package com.mike_caron.megacorp.reward;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonObject;
 import com.mike_caron.megacorp.api.IReward;
+import com.mike_caron.megacorp.util.DataUtils;
 
 public abstract class BaseReward implements IReward
 {
+    String factoryClass;
     String id;
     int numRanks;
     CostScale costScale;
     float costScaleFactor;
     int firstCost;
     CurrencyType currencyType = CurrencyType.MONEY;
+    String[][] gameStages;
+    boolean ownerOnly;
 
     protected BaseReward(String id)
     {
@@ -58,14 +62,60 @@ public abstract class BaseReward implements IReward
 
     protected void loadFromJson(JsonObject json)
     {
-        this.numRanks = json.get("ranks").getAsInt();
-        this.firstCost = json.get("firstCost").getAsInt();
-        this.costScale = CostScale.valueOf(json.get("costScale").getAsString().toUpperCase());
-        this.costScaleFactor = json.get("costScaleFactor").getAsFloat();
+        if(json.has("ranks"))
+        {
+            this.numRanks = json.get("ranks").getAsInt();
+        }
+
+        if(json.has("firstCost"))
+        {
+            this.firstCost = json.get("firstCost").getAsInt();
+        }
+
+        if(json.has("costScale"))
+        {
+            this.costScale = CostScale.valueOf(json.get("costScale").getAsString().toUpperCase());
+        }
+
+        if(json.has("costScaleFactor"))
+        {
+            this.costScaleFactor = json.get("costScaleFactor").getAsFloat();
+        }
+
         if(json.has("currency"))
         {
             this.currencyType = CurrencyType.valueOf(json.get("currency").getAsString().toUpperCase());
         }
+
+        if(json.has("game_stages"))
+        {
+            this.gameStages = DataUtils.loadJsonNestedArray(json.get("game_stages"));
+        }
+
+        if(json.has("ownerOnly"))
+        {
+            this.ownerOnly = json.get("ownerOnly").getAsBoolean();
+        }
+    }
+
+    public String getFactoryClass()
+    {
+        return factoryClass;
+    }
+
+    public void setFactoryClass(String clazz)
+    {
+        this.factoryClass = clazz;
+    }
+
+    public String[][] getGameStages()
+    {
+        return gameStages;
+    }
+
+    public boolean getOwnerOnly()
+    {
+        return ownerOnly;
     }
 
     public enum CostScale

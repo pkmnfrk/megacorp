@@ -7,9 +7,12 @@ import com.mike_caron.megacorp.api.IReward;
 import com.mike_caron.megacorp.api.events.CorporationRewardsChangedEvent;
 import com.mike_caron.megacorp.block.TEOwnedContainerBase;
 import com.mike_caron.megacorp.impl.RewardManager;
+import com.mike_caron.megacorp.integrations.gamestages.GameStagesCompatability;
 import com.mike_caron.megacorp.reward.BaseReward;
 import com.mike_caron.megacorp.util.DataUtils;
+import com.mike_caron.megacorp.util.LastResortUtils;
 import com.mike_caron.megacorp.util.StringUtil;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagFloat;
@@ -34,9 +37,13 @@ public class ContainerCapitalInvestor
 
     public List<RewardData> rewardList = null;
 
-    public ContainerCapitalInvestor(IInventory playerInventory, TileEntityCapitalInvestor te)
+    public EntityPlayer player;
+
+    public ContainerCapitalInvestor(IInventory playerInventory, TileEntityCapitalInvestor te, EntityPlayer player)
     {
         super(playerInventory, te);
+
+        this.player = player;
 
         init();
     }
@@ -177,8 +184,13 @@ public class ContainerCapitalInvestor
     {
         rewardList = new ArrayList<>();
 
+        EntityPlayer ownerPlayer = LastResortUtils.getPlayer(owner);
+
         for(IReward reward : RewardManager.INSTANCE.getRewards())
         {
+            if(!GameStagesCompatability.hasStagesUnlocked(ownerPlayer, reward.getGameStages()))
+                continue;
+
             RewardData rd = new RewardData();
             rd.id = reward.getId();
             rd.currentRank = corp.getRankInReward(reward.getId());
@@ -189,7 +201,14 @@ public class ContainerCapitalInvestor
             rd.nextRankCost = reward.costForRank(rd.nextRank);
             rd.nextRankVariables = DataUtils.box(reward.getValuesForRank(rd.nextRank));
             rd.currencyType = reward.getCurrency();
+            rd.ownerOnly = reward.getOwnerOnly();
+
             rd.available = reward.getCurrency().name().toLowerCase().equals(fluid) && rd.nextRankCost <= fluidAmount;
+
+            if(reward.getOwnerOnly() && !owner.equals(player.getUniqueID()))
+            {
+                rd.available = false;
+            }
 
             rewardList.add(rd);
         }
@@ -220,6 +239,7 @@ public class ContainerCapitalInvestor
         public Float[] nextRankVariables;
         public BaseReward.CurrencyType currencyType;
         public boolean available;
+        public boolean ownerOnly;
 
         public NBTTagCompound serialize()
         {
@@ -228,7 +248,7 @@ public class ContainerCapitalInvestor
             int[] data = new int[DATA_SIZE];
             data[0] = currentRank | (nextRank << 16);
             data[1] = nextRankCost;
-            data[2] = currencyType.ordinal() | ((available ? 1 : 0) << 16);
+            data[2] = currencyType.ordinal() | ((available ? 1 : 0) << 16) | ((ownerOnly ? 1 : 0) << 17);
 
             NBTTagList vars = new NBTTagList();
             for (Float nextRankVariable : nextRankVariables)
@@ -254,7 +274,8 @@ public class ContainerCapitalInvestor
             ret.nextRank = data[0] >> 16;
             ret.nextRankCost = data[1];
             ret.currencyType = BaseReward.CurrencyType.values()[data[2] & 0xffff];
-            ret.available = (data[2] >> 16) != 0;
+            ret.available = ((data[2] >> 16) & 1) != 0;
+            ret.ownerOnly = ((data[2] >> 17) & 1) != 0;
 
             NBTTagList vars = tag.getTagList("f", Constants.NBT.TAG_FLOAT);
             ret.nextRankVariables = new Float[vars.tagCount()];

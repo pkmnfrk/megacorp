@@ -7,7 +7,11 @@ import com.mike_caron.megacorp.block.TileEntityOwnedBase;
 import com.mike_caron.megacorp.impl.Corporation;
 import com.mike_caron.megacorp.impl.Quest;
 import com.mike_caron.megacorp.impl.QuestManager;
+import com.mike_caron.megacorp.integrations.gamestages.GameStagesCompatability;
+import com.mike_caron.megacorp.storage.LimitedItemStackHandler;
 import com.mike_caron.megacorp.util.ItemUtils;
+import com.mike_caron.megacorp.util.LastResortUtils;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -40,43 +44,23 @@ public class TileEntityManufactorySupplier
     private int progress;
     private boolean autoLevel = false;
 
-    public final ItemStackHandler inventory = new ItemStackHandler(1)
+    public final ItemStackHandler inventory = new LimitedItemStackHandler(this, 1)
     {
         @Override
-        protected void onContentsChanged(int slot)
-        {
-            super.onContentsChanged(slot);
-
-            markDirty();
-        }
-
-        @Nonnull
-        @Override
-        public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate)
+        public boolean isItemValid(int slot, @Nonnull ItemStack stack)
         {
             if(desiredItems == null)
-                return stack;
+                return false;
 
-            boolean good = false;
-            for(ItemStack item : desiredItems)
+            for (ItemStack item : desiredItems)
             {
-                if(item.isItemEqual(stack))
+                if (item.isItemEqual(stack))
                 {
-                    good = true;
-                    break;
+                    return true;
                 }
             }
 
-            if(!good)
-                return stack;
-
-            return super.insertItem(slot, stack, simulate);
-        }
-
-        @Override
-        public int getSlotLimit(int slot)
-        {
-            return 64;
+            return false;
         }
     };
 
@@ -233,6 +217,8 @@ public class TileEntityManufactorySupplier
         {
             if(owner != null)
             {
+
+
                 handleQuest(extraData, 0, false);
             }
         }
@@ -292,7 +278,15 @@ public class TileEntityManufactorySupplier
             return;
         }
 
-        handleQuest(quest, level, dontReset);
+        EntityPlayer ownerPlayer = LastResortUtils.getPlayer(getOwner());
+
+        if (GameStagesCompatability.hasStagesUnlocked(ownerPlayer, quest.getGameStages()))
+        {
+            handleQuest(quest, level, dontReset);
+            return;
+        }
+
+        questId = null;
     }
 
     private void handleQuest(Quest quest, int level, boolean dontReset)

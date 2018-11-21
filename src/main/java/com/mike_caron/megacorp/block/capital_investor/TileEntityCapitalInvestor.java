@@ -1,10 +1,15 @@
 package com.mike_caron.megacorp.block.capital_investor;
 
 import com.mike_caron.megacorp.MegaCorpMod;
+import com.mike_caron.megacorp.api.IReward;
 import com.mike_caron.megacorp.block.TileEntityOwnedBase;
 import com.mike_caron.megacorp.fluid.ModFluids;
 import com.mike_caron.megacorp.impl.Corporation;
+import com.mike_caron.megacorp.impl.RewardManager;
+import com.mike_caron.megacorp.integrations.gamestages.GameStagesCompatability;
 import com.mike_caron.megacorp.reward.BaseReward;
+import com.mike_caron.megacorp.util.LastResortUtils;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -95,10 +100,20 @@ public class TileEntityCapitalInvestor
     {
         if(button == ContainerCapitalInvestor.GUI_BUY_REWARD)
         {
-            //IReward reward = RewardManager.INSTANCE.getRewardWithId(extraData);
+            IReward reward = RewardManager.INSTANCE.getRewardWithId(extraData);
             Corporation corp = getCorporation();
 
             if(corp == null) return;
+
+            EntityPlayer ownerPlayer = LastResortUtils.getPlayer(owner);
+
+            if(!GameStagesCompatability.hasStagesUnlocked(ownerPlayer, reward.getGameStages()))
+                return;
+
+            if(reward.getOwnerOnly() && !player.getUniqueID().equals(owner))
+            {
+                return;
+            }
 
             Optional<Pair<Integer, BaseReward.CurrencyType>> cost = Optional.empty();
             try

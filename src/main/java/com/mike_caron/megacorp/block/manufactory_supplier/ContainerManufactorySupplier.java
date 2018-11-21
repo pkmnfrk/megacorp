@@ -1,16 +1,24 @@
 package com.mike_caron.megacorp.block.manufactory_supplier;
 
 import com.mike_caron.megacorp.block.TEOwnedContainerBase;
+import com.mike_caron.megacorp.impl.Quest;
+import com.mike_caron.megacorp.impl.QuestManager;
 import com.mike_caron.megacorp.util.ItemUtils;
 import com.mike_caron.megacorp.util.StringUtil;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.SlotItemHandler;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ContainerManufactorySupplier
     extends TEOwnedContainerBase
@@ -34,13 +42,18 @@ public class ContainerManufactorySupplier
     public boolean canLevelUp = false;
     public boolean autoLevel = false;
 
+    public List<String> availableQuests;
+
+    private EntityPlayer player;
+
     Slot itemInputSlot;
 
-    public ContainerManufactorySupplier(IInventory playerInventory, TileEntityManufactorySupplier te)
+    public ContainerManufactorySupplier(IInventory playerInventory, TileEntityManufactorySupplier te, EntityPlayer player)
     {
         super(playerInventory, te);
         
         this.ownSlotUpdates = true;
+        this.player = player;
 
         init();
     }
@@ -84,7 +97,10 @@ public class ContainerManufactorySupplier
 
         TileEntityManufactorySupplier te = getTE();
 
-        if(te.getWorld().isRemote) return;
+        if(availableQuests == null)
+        {
+            buildQuestList();
+        }
 
         if(!StringUtil.areEqual(questId, te.getQuestId()))
         {
@@ -159,37 +175,51 @@ public class ContainerManufactorySupplier
         super.onReadNBT(compound);
 
         questId = null;
-        if(compound.hasKey("questId"))
-            questId = compound.getString("questId");
-        level = compound.getInteger("level");
         desiredItems = null;
-        if(compound.hasKey("desiredItems"))
-        {
-            NBTTagList list = compound.getTagList("desiredItems", Constants.NBT.TAG_COMPOUND);
+        availableQuests = null;
 
-            desiredItems = NonNullList.create();
-            for(int i = 0; i < list.tagCount(); i++)
+        if(compound.hasKey("questId"))
+        {
+            questId = compound.getString("questId");
+            level = compound.getInteger("level");
+
+            if (compound.hasKey("desiredItems"))
             {
-                ItemStack tmp = new ItemStack(list.getCompoundTagAt(i));
-                if(!tmp.isEmpty())
+                NBTTagList list = compound.getTagList("desiredItems", Constants.NBT.TAG_COMPOUND);
+
+                desiredItems = NonNullList.create();
+                for (int i = 0; i < list.tagCount(); i++)
                 {
-                    desiredItems.add(tmp);
+                    ItemStack tmp = new ItemStack(list.getCompoundTagAt(i));
+                    if (!tmp.isEmpty())
+                    {
+                        desiredItems.add(tmp);
+                    }
+                }
+
+                if (desiredItems.isEmpty())
+                {
+                    desiredItems = null;
                 }
             }
 
-            if(desiredItems.isEmpty())
+            reward = compound.getInteger("reward");
+            ticksRemaining = compound.getInteger("ticksRemaining");
+            ticksPerCycle = compound.getInteger("ticksPerCycle");
+            progress = compound.getInteger("progress");
+            levelUpThreshold = compound.getInteger("levelUpThreshold");
+            canLevelUp = compound.getBoolean("canLevelUp");
+            itemsPerCycle = compound.getInteger("itemsPerCycle");
+        }
+        else
+        {
+            NBTTagList listOfQuests = compound.getTagList("availableQuests", Constants.NBT.TAG_STRING);
+            availableQuests = new ArrayList<>();
+            for(int i = 0; i < listOfQuests.tagCount(); i++)
             {
-                desiredItems = null;
+                availableQuests.add(listOfQuests.getStringTagAt(i));
             }
         }
-
-        reward = compound.getInteger("reward");
-        ticksRemaining = compound.getInteger("ticksRemaining");
-        ticksPerCycle = compound.getInteger("ticksPerCycle");
-        progress = compound.getInteger("progress");
-        levelUpThreshold = compound.getInteger("levelUpThreshold");
-        canLevelUp = compound.getBoolean("canLevelUp");
-        itemsPerCycle = compound.getInteger("itemsPerCycle");
         autoLevel = compound.getBoolean("autoLevel");
     }
 
@@ -198,26 +228,37 @@ public class ContainerManufactorySupplier
     {
         super.onWriteNBT(ret);
         if(questId != null)
-            ret.setString("questId", questId);
-        ret.setInteger("level", level);
-        ret.setInteger("ticksRemaining", ticksRemaining);
-        ret.setInteger("ticksPerCycle", ticksPerCycle);
-        ret.setInteger("reward", reward);
-        ret.setInteger("progress", progress);
-        if(desiredItems != null)
         {
-            NBTTagList list = new NBTTagList();
-            for(ItemStack item : desiredItems)
+            ret.setString("questId", questId);
+            ret.setInteger("level", level);
+            ret.setInteger("ticksRemaining", ticksRemaining);
+            ret.setInteger("ticksPerCycle", ticksPerCycle);
+            ret.setInteger("reward", reward);
+            ret.setInteger("progress", progress);
+            if (desiredItems != null)
             {
-                list.appendTag(item.serializeNBT());
-                if(list.tagCount() >= 20)
-                    break;
+                NBTTagList list = new NBTTagList();
+                for (ItemStack item : desiredItems)
+                {
+                    list.appendTag(item.serializeNBT());
+                    if (list.tagCount() >= 20)
+                        break;
+                }
+                ret.setTag("desiredItems", list);
             }
-            ret.setTag("desiredItems", list);
+            ret.setInteger("levelUpThreshold", levelUpThreshold);
+            ret.setBoolean("canLevelUp", canLevelUp);
+            ret.setInteger("itemsPerCycle", itemsPerCycle);
         }
-        ret.setInteger("levelUpThreshold", levelUpThreshold);
-        ret.setBoolean("canLevelUp", canLevelUp);
-        ret.setInteger("itemsPerCycle", itemsPerCycle);
+        else
+        {
+            NBTTagList quests = new NBTTagList();
+            for(String q : availableQuests)
+            {
+                quests.appendTag(new NBTTagString(q));
+            }
+            ret.setTag("availableQuests", quests);
+        }
         ret.setBoolean("autoLevel", autoLevel);
     }
 
@@ -225,5 +266,12 @@ public class ContainerManufactorySupplier
     public int getId()
     {
         return 6;
+    }
+
+    private void buildQuestList()
+    {
+        List<Quest> quests = QuestManager.INSTANCE.getQuests(player);
+
+        availableQuests = quests.stream().map(Quest::getId).collect(Collectors.toList());
     }
 }

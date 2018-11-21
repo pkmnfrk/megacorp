@@ -18,9 +18,11 @@ import org.apache.commons.io.FilenameUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +37,7 @@ public class RewardManager
 
     private RewardManager() {}
 
-    public void loadRewards()
+    public void loadRewards(File userDirectory)
     {
         rewards.clear();
 
@@ -43,6 +45,18 @@ public class RewardManager
 
         CraftingHelper.findFiles(Loader.instance().getReversedModObjectList().get(MegaCorpMod.instance), "assets/" + MegaCorpMod.modId + "/rewards", null, (root, url) -> loadRewards(parser, url, true)
         , false, true);
+
+        if(userDirectory != null)
+        {
+            File[] files = userDirectory.listFiles();
+            if(files != null)
+            {
+                for (File file : files)
+                {
+                    loadRewards(parser, Paths.get(file.toURI()), false);
+                }
+            }
+        }
 
     }
 
@@ -52,10 +66,10 @@ public class RewardManager
 
         if("json".equals(extension))
         {
-            JsonArray json;
+            JsonArray file;
             try (BufferedReader stream = Files.newBufferedReader(url))
             {
-                json = parser.parse(stream).getAsJsonArray();
+                file = parser.parse(stream).getAsJsonArray();
             }
             catch(RuntimeException | IOException ex)
             {
@@ -72,13 +86,13 @@ public class RewardManager
             }
             */
 
-            for(JsonElement obj : json)
+            for(JsonElement obj : file)
             {
                 try
                 {
-                    JsonObject reward = (JsonObject)obj;
+                    JsonObject json = (JsonObject)obj;
 
-                    String id = reward.get("id").getAsString();
+                    String id = json.get("id").getAsString();
 
                     if(applyBlacklists)
                     {
@@ -100,22 +114,37 @@ public class RewardManager
                         }
                     }
 
-                    String factory = "com.mike_caron.megacorp.reward.GenericReward$Factory";
-
-                    if(reward.has("class"))
+                    if(rewards.containsKey(id))
                     {
-                        factory = reward.get("class").getAsString();
+                        IReward reward = rewards.get(id);
+                        Class factoryClass = Class.forName(reward.getFactoryClass());
+                        IRewardFactory factoryInstance = (IRewardFactory) factoryClass.newInstance();
+
+                        factoryInstance.updateReward(reward, json);
+
+                        MegaCorpMod.logger.debug("Loaded overrides for reward " + id);
                     }
+                    else
+                    {
+                        String factory = "com.mike_caron.megacorp.reward.GenericReward$Factory";
 
-                    Class factoryClass = Class.forName(factory);
+                        if (json.has("class"))
+                        {
+                            factory = json.get("class").getAsString();
+                        }
 
-                    IRewardFactory factoryInstance = (IRewardFactory)factoryClass.newInstance();
+                        Class factoryClass = Class.forName(factory);
 
-                    IReward instance = factoryInstance.createReward(id, reward);
+                        IRewardFactory factoryInstance = (IRewardFactory) factoryClass.newInstance();
 
-                    rewards.put(id, instance);
+                        IReward instance = factoryInstance.createReward(id, json);
 
-                    MegaCorpMod.logger.debug("Loaded reward " + id);
+                        instance.setFactoryClass(factory);
+
+                        rewards.put(id, instance);
+
+                        MegaCorpMod.logger.debug("Loaded reward " + id);
+                    }
                 }
                 catch (Exception ex)
                 {

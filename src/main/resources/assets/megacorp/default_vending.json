@@ -2,6 +2,8 @@
   "items": [
     /*
     Examples:
+    For more info: https://github.com/pkmnfrk/megacorp/wiki/Vending-Machine
+    
     {
       "item": "minecraft:diamond_sword",
       "cost": "100",
@@ -13,7 +15,8 @@
             lvl: 10
           }
         ]
-      }
+      },
+      "game_stages": [ "ae2" ]
     },
     {
       "item": "minecraft:emerald",

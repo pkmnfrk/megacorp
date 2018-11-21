@@ -24,6 +24,38 @@ public class FractionalReward
         return new float[] { frac.getNumerator(), frac.getDenominator() };
     }
 
+    @Override
+    protected void loadFromJson(JsonObject json)
+    {
+        super.loadFromJson(json);
+
+        if(json.has("baseValue"))
+        {
+            baseValue = Fraction.getFraction(json.get("baseValue").getAsString());
+        }
+
+        if(json.has("valuePerRank"))
+        {
+            valuePerRank = Fraction.getFraction(json.get("valuePerRank").getAsString());
+        }
+        else
+        {
+            int num = valuePerRank.getNumerator(), den = valuePerRank.getDenominator();
+
+            if(json.has("numPerRank"))
+            {
+                num = json.get("numPerRank").getAsInt();
+            }
+
+            if(json.has("denomPerRank"))
+            {
+                den = json.get("denomPerRank").getAsInt();
+            }
+
+            valuePerRank = Fraction.getFraction(num, den);
+        }
+    }
+
     public static class Factory
         implements IRewardFactory
     {
@@ -34,35 +66,13 @@ public class FractionalReward
 
             ret.loadFromJson(json);
 
-            if(json.has("baseValue"))
-            {
-                ret.baseValue = Fraction.getFraction(json.get("baseValue").getAsString());
-            }
-
-            if(json.has("valuePerRank"))
-            {
-                ret.valuePerRank = Fraction.getFraction(json.get("valuePerRank").getAsString());
-            }
-            else
-            {
-                int num = 1, den = 1;
-
-                if(json.has("numPerRank"))
-                {
-                    num = json.get("numPerRank").getAsInt();
-                }
-
-                if(json.has("denomPerRank"))
-                {
-                    den = json.get("denomPerRank").getAsInt();
-                }
-
-                ret.valuePerRank = Fraction.getFraction(num, den);
-            }
-
-
-
             return ret;
+        }
+
+        @Override
+        public void updateReward(IReward reward, JsonObject json)
+        {
+            ((FractionalReward)reward).loadFromJson(json);
         }
     }
 }

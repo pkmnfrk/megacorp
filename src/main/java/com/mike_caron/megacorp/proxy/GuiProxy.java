@@ -57,15 +57,15 @@ public class GuiProxy implements IGuiHandler
         }
         else if(te instanceof TileEntityCapitalInvestor)
         {
-            return new ContainerCapitalInvestor(player.inventory, (TileEntityCapitalInvestor)te);
+            return new ContainerCapitalInvestor(player.inventory, (TileEntityCapitalInvestor)te, player);
         }
         else if(te instanceof TileEntityVendingMachine)
         {
-            return new ContainerVendingMachine(player.inventory, (TileEntityVendingMachine)te);
+            return new ContainerVendingMachine(player.inventory, (TileEntityVendingMachine)te, player);
         }
         else if(te instanceof TileEntityManufactorySupplier)
         {
-            return new ContainerManufactorySupplier(player.inventory, (TileEntityManufactorySupplier)te);
+            return new ContainerManufactorySupplier(player.inventory, (TileEntityManufactorySupplier)te, player);
         }
         /*
         else if(te instanceof TileEntityLiquidShippingDepot)
@@ -124,17 +124,17 @@ public class GuiProxy implements IGuiHandler
         else if(te instanceof TileEntityCapitalInvestor)
         {
             TileEntityCapitalInvestor teCI = (TileEntityCapitalInvestor)te;
-            return new GuiCapitalInvestor(new ContainerCapitalInvestor(player.inventory, teCI));
+            return new GuiCapitalInvestor(new ContainerCapitalInvestor(player.inventory, teCI, player));
         }
         else if(te instanceof TileEntityVendingMachine)
         {
             TileEntityVendingMachine teCI = (TileEntityVendingMachine)te;
-            return new GuiVendingMachine(new ContainerVendingMachine(player.inventory, teCI));
+            return new GuiVendingMachine(new ContainerVendingMachine(player.inventory, teCI, player));
         }
         else if(te instanceof TileEntityManufactorySupplier)
         {
             TileEntityManufactorySupplier teCI = (TileEntityManufactorySupplier)te;
-            return new GuiManufactorySupplier(new ContainerManufactorySupplier(player.inventory, teCI));
+            return new GuiManufactorySupplier(new ContainerManufactorySupplier(player.inventory, teCI, player));
         }
 
         return null;

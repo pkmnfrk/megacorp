@@ -3,13 +3,14 @@ package com.mike_caron.megacorp.reward;
 import com.google.gson.JsonObject;
 import com.mike_caron.megacorp.api.IReward;
 import com.mike_caron.megacorp.api.IRewardFactory;
+import com.mike_caron.megacorp.util.DataUtils;
 
-public class GenericReward extends BaseReward
+public class CommandReward
+    extends BaseReward
 {
-    float startValue = 0;
-    float rankValue;
+    public String[][] commands;
 
-    protected GenericReward(String id)
+    protected CommandReward(String id)
     {
         super(id);
     }
@@ -17,7 +18,7 @@ public class GenericReward extends BaseReward
     @Override
     public float[] getValuesForRank(int rank)
     {
-        return new float[] { startValue + rankValue * rank };
+        return new float[0];
     }
 
     @Override
@@ -25,14 +26,9 @@ public class GenericReward extends BaseReward
     {
         super.loadFromJson(json);
 
-        if(json.has("rankValue"))
+        if(json.has("commands"))
         {
-            rankValue = json.get("rankValue").getAsFloat();
-        }
-
-        if(json.has("startValue"))
-        {
-            startValue = json.get("startValue").getAsFloat();
+            commands = DataUtils.loadJsonNestedArray(json.get("commands"));
         }
     }
 
@@ -42,17 +38,19 @@ public class GenericReward extends BaseReward
         @Override
         public IReward createReward(String id, JsonObject json)
         {
-            GenericReward ret = new GenericReward(id);
+            CommandReward ret = new CommandReward(id);
 
             ret.loadFromJson(json);
 
             return ret;
         }
 
+
+
         @Override
         public void updateReward(IReward reward, JsonObject json)
         {
-            ((GenericReward)reward).loadFromJson(json);
+            ((CommandReward)reward).loadFromJson(json);
         }
     }
 }

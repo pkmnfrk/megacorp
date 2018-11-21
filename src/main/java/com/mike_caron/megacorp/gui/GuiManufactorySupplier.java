@@ -73,13 +73,6 @@ public class GuiManufactorySupplier
 
         this.container = container;
 
-        listOfQuests = QuestManager.INSTANCE.getQuests();
-        listOfQuests.sort((o1, o2) -> {
-            QuestLocalization l1 = QuestManager.INSTANCE.getLocalizationForCurrent(o1);
-            QuestLocalization l2 = QuestManager.INSTANCE.getLocalizationForCurrent(o2);
-            return String.CASE_INSENSITIVE_ORDER.compare(l1.title, l2.title);
-        });
-
         initControls();
     }
 
@@ -173,6 +166,14 @@ public class GuiManufactorySupplier
             }
             else
             {
+                listOfQuests = QuestManager.INSTANCE.getQuests();
+                listOfQuests.removeIf(q -> !container.availableQuests.contains(q.getId()));
+                listOfQuests.sort((o1, o2) -> {
+                    QuestLocalization l1 = QuestManager.INSTANCE.getLocalizationForCurrent(o1);
+                    QuestLocalization l2 = QuestManager.INSTANCE.getLocalizationForCurrent(o2);
+                    return String.CASE_INSENSITIVE_ORDER.compare(l1.title, l2.title);
+                });
+
                 noQuestGroup.setVisible(true);
                 workorderGroup.setVisible(false);
             }

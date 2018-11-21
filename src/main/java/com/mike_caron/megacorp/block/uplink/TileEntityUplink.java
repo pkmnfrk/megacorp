@@ -6,21 +6,31 @@ import com.mike_caron.megacorp.impl.Corporation;
 import com.mike_caron.megacorp.impl.CorporationManager;
 import com.mike_caron.megacorp.item.CorporateCard;
 import com.mike_caron.megacorp.item.ModItems;
+import com.mike_caron.megacorp.storage.LimitedItemStackHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.items.ItemStackHandler;
 
+import javax.annotation.Nonnull;
+
 public class TileEntityUplink
     extends TileEntityOwnedBase
 {
-    public final ItemStackHandler cardInventory = new ItemStackHandler(2)
+    public final ItemStackHandler cardInventory = new LimitedItemStackHandler(this, 2)
     {
+        @Override
+        public boolean isItemValid(int slot, @Nonnull ItemStack item)
+        {
+            if(slot == 1)
+                return false;
+
+            return item.getItem() == ModItems.corporateCard;
+        }
+
         @Override
         protected void onContentsChanged(int slot)
         {
-            super.onContentsChanged(slot);
-
             if(this.getStackInSlot(0).getItem() == ModItems.corporateCard
                 && this.getStackInSlot(1).isEmpty()
                 && owner != null)
@@ -31,8 +41,7 @@ public class TileEntityUplink
                 this.setStackInSlot(1, newCard);
             }
 
-            markDirty();
-            //markAndNotify();
+            super.onContentsChanged(slot);
         }
     };
 

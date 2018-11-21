@@ -1,5 +1,9 @@
 package com.mike_caron.megacorp.util;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+
 import java.util.Random;
 import java.util.TreeMap;
 
@@ -58,6 +62,12 @@ public final class StringUtil
         }
 
         return ret.toString();
+    }
+
+    public static String prettyPrintJson(JsonElement element)
+    {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        return gson.toJson(element);
     }
 
 }

@@ -3,6 +3,7 @@ package com.mike_caron.megacorp.block.sbs;
 import com.mike_caron.megacorp.block.TileEntityBase;
 import com.mike_caron.megacorp.recipes.SBSRecipe;
 import com.mike_caron.megacorp.recipes.SBSRecipeManager;
+import com.mike_caron.megacorp.storage.LimitedItemStackHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -42,39 +43,21 @@ public class TileEntitySBS
         }
     };
 
-    public final ItemStackHandler reagents = new ItemStackHandler(2)
+    public final ItemStackHandler reagents = new LimitedItemStackHandler(this, 2)
     {
         @Override
-        public void setStackInSlot(int slot, @Nonnull ItemStack stack)
-        {
-            super.setStackInSlot(slot, stack);
-        }
-
-        @Override
-        protected void onContentsChanged(int slot)
-        {
-            //checkForRecipe();
-
-            super.onContentsChanged(slot);
-
-            TileEntitySBS.this.markDirty();
-        }
-
-        @Nonnull
-        @Override
-        public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate)
+        public boolean isItemValid(int slot, @Nonnull ItemStack item)
         {
             ItemStack currentStack = getStackInSlot(slot);
 
-            if(!currentStack.isItemEqual(stack))
+            if(!currentStack.isItemEqual(item))
             {
                 ItemStack otherStack = getOtherSlot(slot);
 
-                if(!SBSRecipeManager.hasRecipeWithIngredient(stack, otherStack))
-                    return stack;
+                return SBSRecipeManager.hasRecipeWithIngredient(item, otherStack);
             }
 
-            return super.insertItem(slot, stack, simulate);
+            return true;
         }
 
         private ItemStack getOtherSlot(int slot)

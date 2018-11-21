@@ -38,7 +38,7 @@ public abstract class ContainerBase
                 ItemStack invStack = inventorySlots.get(i).getStack();
                 ItemStack knownStack = this.inventoryItemStacks.get(i);
 
-                if (!ItemStack.areItemStacksEqual(invStack, knownStack))
+                if (!ItemStack.areItemStacksEqual(invStack, knownStack) || invStack.getCount() != knownStack.getCount())
                 {
                     this.inventoryItemStacks.set(i, invStack);
                     changed = true;
@@ -164,6 +164,9 @@ public abstract class ContainerBase
 
         onWriteNBT(tag);
 
+        //MegaCorpMod.logger.info("serializeNBT:");
+        //MegaCorpMod.logger.info(StringUtil.prettyPrintJson(DataUtils.toJson(tag)));
+
         return tag;
     }
 
@@ -201,7 +204,8 @@ public abstract class ContainerBase
 
                 if(slots.hasKey(key))
                 {
-                    ItemStack stack = new ItemStack(slots.getCompoundTag(key));
+                    NBTTagCompound nbt = slots.getCompoundTag(key);
+                    ItemStack stack = new ItemStack(nbt);
                     if(!ItemStack.areItemStacksEqual(stack, inventorySlots.get(i).getStack()))
                     {
                         inventorySlots.get(i).putStack(stack);
@@ -209,7 +213,10 @@ public abstract class ContainerBase
                 }
                 else
                 {
-                    inventorySlots.get(i).putStack(ItemStack.EMPTY);
+                    if(inventorySlots.get(i).getHasStack())
+                    {
+                        inventorySlots.get(i).putStack(ItemStack.EMPTY);
+                    }
                 }
             }
         }
@@ -259,4 +266,6 @@ public abstract class ContainerBase
         }
 
     }
+
+
 }

@@ -97,8 +97,6 @@ public class ContainerManufactorySupplier
 
         TileEntityManufactorySupplier te = getTE();
 
-        if(te.getWorld().isRemote) return;
-
         if(availableQuests == null)
         {
             buildQuestList();

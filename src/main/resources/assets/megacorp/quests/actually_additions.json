@@ -1,0 +1,100 @@
+{
+  "quests": [
+    {
+      "id": "aa_crystals_restonia",
+      "langkey": "aa_crystals_base",
+      "item": "actuallyadditions:item_crystal:0",
+      "baseqty": 6,
+      "multqty": 1.25,
+      "baseprofit": 5
+    },
+    {
+      "id": "aa_crystals_palis",
+      "langkey": "aa_crystals_base",
+      "item": "actuallyadditions:item_crystal:1",
+      "baseqty": 6,
+      "multqty": 1.25,
+      "baseprofit": 7
+    },
+    {
+      "id": "aa_crystals_diamatine",
+      "langkey": "aa_crystals_base",
+      "item": "actuallyadditions:item_crystal:2",
+      "baseqty": 6,
+      "multqty": 1.25,
+      "baseprofit": 15
+    },
+    {
+      "id": "aa_crystals_void",
+      "langkey": "aa_crystals_base",
+      "item": "actuallyadditions:item_crystal:3",
+      "baseqty": 6,
+      "multqty": 1.25,
+      "baseprofit": 5
+    },
+    {
+      "id": "aa_crystals_emeradic",
+      "langkey": "aa_crystals_base",
+      "item": "actuallyadditions:item_crystal:4",
+      "baseqty": 6,
+      "multqty": 1.25,
+      "baseprofit": 20
+    },
+    {
+      "id": "aa_crystals_enori",
+      "langkey": "aa_crystals_base",
+      "item": "actuallyadditions:item_crystal:5",
+      "baseqty": 6,
+      "multqty": 1.25,
+      "baseprofit": 10
+    },
+    {
+      "id": "aa_crystals_empowered_restonia",
+      "langkey": "aa_crystals_empowered",
+      "item": "actuallyadditions:item_crystal_empowered:0",
+      "baseqty": 1,
+      "multqty": 1.25,
+      "baseprofit": 5
+    },
+    {
+      "id": "aa_crystals_empowered_palis",
+      "langkey": "aa_crystals_empowered",
+      "item": "actuallyadditions:item_crystal_empowered:1",
+      "baseqty": 1,
+      "multqty": 1.25,
+      "baseprofit": 7
+    },
+    {
+      "id": "aa_crystals_empowered_diamatine",
+      "langkey": "aa_crystals_empowered",
+      "item": "actuallyadditions:item_crystal_empowered:2",
+      "baseqty": 1,
+      "multqty": 1.25,
+      "baseprofit": 15
+    },
+    {
+      "id": "aa_crystals_empowered_void",
+      "langkey": "aa_crystals_empowered",
+      "item": "actuallyadditions:item_crystal_empowered:3",
+      "baseqty": 1,
+      "multqty": 1.25,
+      "baseprofit": 5
+    },
+    {
+      "id": "aa_crystals_empowered_emeradic",
+      "langkey": "aa_crystals_empowered",
+      "item": "actuallyadditions:item_crystal_empowered:4",
+      "baseqty": 1,
+      "multqty": 1.25,
+      "baseprofit": 20
+    },
+    {
+      "id": "aa_crystals_empowered_enori",
+      "langkey": "aa_crystals_empowered",
+      "item": "actuallyadditions:item_crystal_empowered:5",
+      "baseqty": 1,
+      "multqty": 1.25,
+      "baseprofit": 10
+    }
+  ]
+}

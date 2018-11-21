@@ -118,6 +118,13 @@
       "baseqty": 8,
       "multqty": 1.1,
       "baseprofit": 2
+    },
+    {
+      "id":"aa_black_quartz",
+      "item": "actuallyadditions:item_misc:5",
+      "baseqty": 6,
+      "multqty": 1.1,
+      "baseprofit": 4
     }
   ]
 }

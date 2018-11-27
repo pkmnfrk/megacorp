@@ -5,6 +5,7 @@ import com.mike_caron.megacorp.network.IGuiUpdater;
 import com.mike_caron.megacorp.network.MessageUpdateGui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
@@ -267,5 +268,13 @@ public abstract class ContainerBase
 
     }
 
+    public ItemStack getDraggedItem()
+    {
+        if(playerInventory instanceof InventoryPlayer)
+        {
+            return ((InventoryPlayer) playerInventory).getItemStack();
+        }
+        return ItemStack.EMPTY;
+    }
 
 }

@@ -3,8 +3,13 @@ package com.mike_caron.megacorp.block.shipping_depot;
 import com.mike_caron.megacorp.api.ICorporation;
 import com.mike_caron.megacorp.block.TileEntityOwnedBase;
 import com.mike_caron.megacorp.impl.Corporation;
+import com.mike_caron.megacorp.impl.Quest;
+import com.mike_caron.megacorp.impl.QuestManager;
 import com.mike_caron.megacorp.impl.WorkOrder;
 import com.mike_caron.megacorp.storage.LimitedItemStackHandler;
+import com.mike_caron.megacorp.util.ItemUtils;
+import com.mike_caron.megacorp.util.LastResortUtils;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,6 +21,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.UUID;
 
 public class TileEntityShippingDepot
@@ -138,6 +144,12 @@ public class TileEntityShippingDepot
         }
         else if(button == ContainerShippingDepot.GUI_REROLL_QUEST)
         {
+            ItemStack desiredItem = ItemStack.EMPTY;
+            if(extraData != null)
+            {
+                desiredItem = ItemUtils.getStackFromTag(extraData);
+            }
+
             if(allowChoosing)
             {
                 if (owner != null && workOrder != null)
@@ -147,9 +159,32 @@ public class TileEntityShippingDepot
             }
             else
             {
-                rollNewWorkOrder(null);
+                String desiredQuest = null;
+                if(!desiredItem.isEmpty())
+                {
+                    desiredQuest = findQuestForItem(desiredItem);
+                }
+
+                rollNewWorkOrder(desiredQuest);
             }
         }
+    }
+
+    private String findQuestForItem(ItemStack desiredItem)
+    {
+        EntityPlayer player = LastResortUtils.getPlayer(owner);
+        List<Quest> quests = QuestManager.INSTANCE.getQuests(player);
+
+        for(Quest quest : quests)
+        {
+            for(ItemStack possibleItem : quest.possibleItems())
+            {
+                if(possibleItem.isItemEqual(desiredItem))
+                    return quest.getId();
+            }
+        }
+
+        return null;
     }
 
     private void rollNewWorkOrder(@Nullable String id)

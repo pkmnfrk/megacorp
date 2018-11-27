@@ -455,5 +455,4 @@ public abstract class GuiContainerBase
         return true;
     }
 
-
 }

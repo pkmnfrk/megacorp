@@ -7,6 +7,7 @@ import com.mike_caron.megacorp.impl.Quest;
 import com.mike_caron.megacorp.impl.QuestLocalization;
 import com.mike_caron.megacorp.impl.QuestManager;
 import com.mike_caron.megacorp.network.CtoSMessage;
+import com.mike_caron.megacorp.util.ItemUtils;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -215,13 +216,26 @@ public class GuiShippingDepot
     @Override
     public void clicked(GuiButton.ClickedEvent event)
     {
-        if(event.id == ContainerShippingDepot.GUI_NEW_QUEST)
+        if (event.id == ContainerShippingDepot.GUI_NEW_QUEST)
         {
             if (selectedQuest != null)
             {
                 CtoSMessage packet = CtoSMessage.forGuiButton(container.getPos(), event.id, selectedQuest.getId());
                 MegaCorpMod.networkWrapper.sendToServer(packet);
             }
+        }
+        else if(event.id == ContainerShippingDepot.GUI_REROLL_QUEST)
+        {
+            String desiredItem = null;
+
+            ItemStack dragged = container.getDraggedItem();
+            if(!dragged.isEmpty())
+            {
+                desiredItem = ItemUtils.getTagFromStack(dragged);
+            }
+
+            CtoSMessage packet = CtoSMessage.forGuiButton(container.getPos(), event.id, desiredItem);
+            MegaCorpMod.networkWrapper.sendToServer(packet);
         }
         else
         {

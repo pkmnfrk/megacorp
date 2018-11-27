@@ -25,9 +25,11 @@
     "materials": [
       { "id": "Iridium",         "rarity": 1  },
       { "id": "Platinum",        "rarity": 1  },
+      { "id": "DraconiumAwakened","rarity":1  },
       { "id": "Enderium",        "rarity": 2  },
-      { "id": "Mana_infused",    "rarity": 3  },
       { "id": "EndSteel",        "rarity": 2  },
+      { "id": "Mana_infused",    "rarity": 3  },
+      { "id": "Draconium",       "rarity": 3  },
       { "id": "DarkSteel",       "rarity": 3  },
       { "id": "Soularium",       "rarity": 4  },
       { "id": "Signalum",        "rarity": 4  },

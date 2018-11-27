@@ -1,0 +1,43 @@
+{
+  "quests": [
+    {
+      "id": "draconicevolution:draconic_core",
+      "langkey": "draconicevolution:core",
+      "item": "draconicevolution:draconic_core",
+      "baseqty": 2,
+      "multqty": 1.25,
+      "baseprofit": 12
+    },
+    {
+      "id": "draconicevolution:wyvern_core",
+      "langkey": "draconicevolution:core",
+      "item": "draconicevolution:wyvern_core",
+      "baseqty": 2,
+      "multqty": 1.25,
+      "baseprofit": 30
+    },
+    {
+      "id": "draconicevolution:awakened_core",
+      "langkey": "draconicevolution:core",
+      "item": "draconicevolution:awakened_core",
+      "baseqty": 2,
+      "multqty": 1.25,
+      "baseprofit": 60
+    },
+    {
+      "id": "draconicevolution:chaotic_core",
+      "langkey": "draconicevolution:core",
+      "item": "draconicevolution:chaotic_core",
+      "baseqty": 1,
+      "multqty": 1.25,
+      "baseprofit": 300
+    },
+    {
+      "id": "draconicevolution:dragon_heart",
+      "item": "draconicevolution:dragon_heart",
+      "baseqty": 1,
+      "multqty": 1.25,
+      "baseprofit": 80
+    }
+  ]
+}

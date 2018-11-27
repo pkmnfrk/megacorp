@@ -9,12 +9,28 @@
       "baseprofit": 12
     },
     {
+      "id": "draconicevolution:wyvern_energy_core",
+      "langkey": "draconicevolution:core",
+      "item": "draconicevolution:wyvern_energy_core",
+      "baseqty": 2,
+      "multqty": 1.25,
+      "baseprofit": 15
+    },
+    {
       "id": "draconicevolution:wyvern_core",
       "langkey": "draconicevolution:core",
       "item": "draconicevolution:wyvern_core",
       "baseqty": 2,
       "multqty": 1.25,
       "baseprofit": 30
+    },
+    {
+      "id": "draconicevolution:draconic_energy_core",
+      "langkey": "draconicevolution:core",
+      "item": "draconicevolution:draconic_energy_core",
+      "baseqty": 2,
+      "multqty": 1.25,
+      "baseprofit": 45
     },
     {
       "id": "draconicevolution:awakened_core",
@@ -38,6 +54,13 @@
       "baseqty": 1,
       "multqty": 1.25,
       "baseprofit": 80
+    },
+    {
+      "id": "draconicevolution:tool_upgrade",
+      "item": "draconicevolution:tool_upgrade:*",
+      "baseqty": 4,
+      "multqty": 1.25,
+      "baseprofit": 15
     }
   ]
 }

@@ -7,6 +7,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -41,18 +42,35 @@ public class ItemUtils
                 }
 
                 // try minecraft:item:meta
-                int meta = Integer.parseInt(parts[1]);
+                int meta;
+
+                if(parts[1].equals("*"))
+                {
+                    meta = OreDictionary.WILDCARD_VALUE;
+                }
+                else
+                {
+                    meta = Integer.parseInt(parts[1]);
+                }
+
                 item = Item.getByNameOrId("minecraft:" + parts[0]);
 
                 Preconditions.checkNotNull(item);
 
                 return new ItemStack(item, 1, meta);
-
             }
             else if (parts.length == 3)
             {
                 //this has to be mod:item:meta
-                int meta = Integer.parseInt(parts[2]);
+                int meta;
+                if(parts[2].equals("*"))
+                {
+                    meta = OreDictionary.WILDCARD_VALUE;
+                }
+                else
+                {
+                    meta = Integer.parseInt(parts[2]);
+                }
                 Item item = Item.getByNameOrId(parts[0] + ":" + parts[1]);
 
                 Preconditions.checkNotNull(item, "Can't locate the item " + tag);

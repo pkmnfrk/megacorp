@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.util.DataUtils;
 import com.mike_caron.megacorp.util.ItemUtils;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
@@ -122,7 +123,18 @@ public final class Quest
 
                 this.oreDict = null;
                 this.item = new ArrayList<>();
-                this.item.add(is);
+
+                if(is.getMetadata() == OreDictionary.WILDCARD_VALUE)
+                {
+                    NonNullList<ItemStack> items = NonNullList.create();
+                    Item item = is.getItem();
+                    item.getSubItems(item.getCreativeTab(), items);
+                    this.item.addAll(items);
+                }
+                else
+                {
+                    this.item.add(is);
+                }
             }
             catch(RuntimeException ex)
             {

@@ -16,6 +16,8 @@ public class ModConfig
     public static boolean vendingMachineEnabled = false;
     public static boolean vendingMachineRecipeEnabled = false;
 
+    public static boolean shippingDepotDebugSelect = false;
+
     public static void readConfig()
     {
         Configuration cfg = CommonProxy.config;
@@ -52,5 +54,7 @@ public class ModConfig
         vendingMachineRecipeEnabled = cfg.getBoolean("vendingMachineRecipeEnabled", CATEGORY_GENERAL, true, "Enable the vending machine block recipe (otherwise it's creative only)");
 
         manufactoryFailurePenalty = cfg.getInt("manufactoryFailurePenalty", CATEGORY_GENERAL, -1, -50, 0, "How badly to punish a player who lets a Manufactory Supplier level down. < 0 = deduct that many levels (level cannot go below 0); 0 = do nothing (no levelling down)");
+
+        shippingDepotDebugSelect = cfg.getBoolean("shippingDepotDebugSelect", CATEGORY_GENERAL, false, "If enabled, you can select a specific quest in the Shipping Depot by dragging an item and clicking on the X button.");
     }
 }

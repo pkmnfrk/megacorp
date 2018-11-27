@@ -1,5 +1,6 @@
 package com.mike_caron.megacorp.block.shipping_depot;
 
+import com.mike_caron.megacorp.ModConfig;
 import com.mike_caron.megacorp.api.ICorporation;
 import com.mike_caron.megacorp.block.TileEntityOwnedBase;
 import com.mike_caron.megacorp.impl.Corporation;
@@ -145,7 +146,7 @@ public class TileEntityShippingDepot
         else if(button == ContainerShippingDepot.GUI_REROLL_QUEST)
         {
             ItemStack desiredItem = ItemStack.EMPTY;
-            if(extraData != null)
+            if(ModConfig.shippingDepotDebugSelect && extraData != null)
             {
                 desiredItem = ItemUtils.getStackFromTag(extraData);
             }

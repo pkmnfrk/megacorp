@@ -1,0 +1,5 @@
+{
+  "factories": [
+    "com.mike_caron.megacorp.impl.quests.Thaumcraft"
+  ]
+}

@@ -114,3 +114,9 @@ draconicevolution:dragon_heart.desc=We've recently learned that we can fetch a d
 
 draconicevolution:tool_upgrade.title=An Upgrade A Day
 draconicevolution:tool_upgrade.desc=Our tools and armour are not as good as they could be, and we need some upgrade keys to fix that. Can you help out?
+
+thaumcraft:crystal_essence:generic.title=Take Vis
+thaumcraft:crystal_essence:generic.desc=Our R&D division has requested a sample of crystals imbued with magical essence. We don't know what that means, but we're confident you can figure it out.
+
+thaumcraft:phial:generic.title=Liquid Essence
+thaumcraft:phial:generic.desc=Please provide us with a sample of this magical essence.

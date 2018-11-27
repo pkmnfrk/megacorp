@@ -39,7 +39,7 @@ public final class Quest
     public Quest(@Nonnull String id, @Nullable String langKey, @Nonnull ItemStack item, float baseQty, float multQty, float randomFactor, float levelScale, float baseProfit, @Nullable String completionCommand)
     {
         this.id = id;
-        this.langKey = null;
+        this.langKey = langKey;
         this.item = new ArrayList<>();
         this.item.add(item);
         this.oreDict = null;

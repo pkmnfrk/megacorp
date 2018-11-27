@@ -59,6 +59,12 @@ repositories {
         name = "McModDev"
         url = "https://maven.mcmoddev.com"
     }
+    repositories {
+        maven {
+            name = "CurseForge"
+            url = "https://minecraft.curseforge.com/api/maven/"
+        }
+    }
 }
 
 dependencies {

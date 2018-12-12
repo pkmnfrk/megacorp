@@ -1,5 +1,6 @@
 package com.mike_caron.megacorp.block;
 
+import com.mike_caron.mikesmodslib.block.TEContainerBase;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 

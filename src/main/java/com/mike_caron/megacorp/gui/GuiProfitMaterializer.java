@@ -1,11 +1,12 @@
 package com.mike_caron.megacorp.gui;
 
+import com.mike_caron.mikesmodslib.gui.GuiUtil;
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.block.profit_materializer.ContainerProfitMaterializer;
-import com.mike_caron.megacorp.gui.control.GuiFluid;
-import com.mike_caron.megacorp.gui.control.GuiGroup;
-import com.mike_caron.megacorp.gui.control.GuiLabel;
-import com.mike_caron.megacorp.gui.control.GuiTranslatedLabel;
+import com.mike_caron.mikesmodslib.gui.GuiFluid;
+import com.mike_caron.mikesmodslib.gui.GuiGroup;
+import com.mike_caron.mikesmodslib.gui.GuiLabel;
+import com.mike_caron.mikesmodslib.gui.GuiTranslatedLabel;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidRegistry;

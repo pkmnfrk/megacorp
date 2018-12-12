@@ -4,11 +4,12 @@ import com.mike_caron.megacorp.block.ModBlocks;
 import com.mike_caron.megacorp.block.sbs.ContainerSBS;
 import com.mike_caron.megacorp.gui.GuiProfitCondenser;
 import com.mike_caron.megacorp.gui.GuiSBS;
-import com.mike_caron.megacorp.gui.control.GuiContainerBase;
+import com.mike_caron.mikesmodslib.gui.GuiContainerBase;
 import com.mike_caron.megacorp.recipes.PCRecipe;
 import com.mike_caron.megacorp.recipes.PCRecipeManager;
 import com.mike_caron.megacorp.recipes.SBSRecipe;
 import com.mike_caron.megacorp.recipes.SBSRecipeManager;
+import com.mike_caron.mikesmodslib.integrations.jei.GuiHandler;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IModPlugin;
@@ -51,7 +52,7 @@ public class JEIPlugin
         registry.addRecipeClickArea(GuiSBS.class, 53, 35, 38, 26, SBS_CATEGORY);
         registry.addRecipeClickArea(GuiProfitCondenser.class, 69, 25, 36, 46, PC_CATEGORY);
 
-        registry.addAdvancedGuiHandlers(new GuiHandler(GuiContainerBase.class));
+        registry.addAdvancedGuiHandlers(new GuiHandler<>(GuiContainerBase.class));
 
         IRecipeTransferRegistry transferRegistry = registry.getRecipeTransferRegistry();
 

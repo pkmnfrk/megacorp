@@ -2,11 +2,13 @@ package com.mike_caron.megacorp.gui;
 
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.block.manufactory_supplier.ContainerManufactorySupplier;
-import com.mike_caron.megacorp.gui.control.*;
 import com.mike_caron.megacorp.impl.Quest;
 import com.mike_caron.megacorp.impl.QuestLocalization;
 import com.mike_caron.megacorp.impl.QuestManager;
-import com.mike_caron.megacorp.network.CtoSMessage;
+import com.mike_caron.mikesmodslib.gui.GuiUtil;
+import com.mike_caron.mikesmodslib.gui.*;
+import com.mike_caron.mikesmodslib.network.CtoSMessage;
+import com.mike_caron.mikesmodslib.network.MessageHelper;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -261,14 +263,14 @@ public class GuiManufactorySupplier
         {
             if (selectedQuest != null)
             {
-                CtoSMessage packet = CtoSMessage.forGuiButton(container.getPos(), event.id, selectedQuest.getId());
-                MegaCorpMod.networkWrapper.sendToServer(packet);
+                CtoSMessage packet = CtoSMessage.forGuiButton(container.getDimension(), container.getPos(), event.id, selectedQuest.getId());
+                MessageHelper.send(packet);
             }
         }
         else
         {
-            CtoSMessage packet = CtoSMessage.forGuiButton(container.getPos(), event.id);
-            MegaCorpMod.networkWrapper.sendToServer(packet);
+            CtoSMessage packet = CtoSMessage.forGuiButton(container.getDimension(), container.getPos(), event.id);
+            MessageHelper.send(packet);
         }
     }
 
@@ -278,8 +280,8 @@ public class GuiManufactorySupplier
         switch(event.id)
         {
             case ContainerManufactorySupplier.GUI_AUTOLEVEL:
-                CtoSMessage packet = CtoSMessage.forGuiToggle(container.getPos(), event.id, !container.autoLevel);
-                MegaCorpMod.networkWrapper.sendToServer(packet);
+                CtoSMessage packet = CtoSMessage.forGuiToggle(container.getDimension(), container.getPos(), event.id, !container.autoLevel);
+                MessageHelper.send(packet);
                 break;
         }
     }
@@ -370,7 +372,7 @@ public class GuiManufactorySupplier
 
             fontRenderer.drawString(questLocalization.title, 20, 5, Color.WHITE.getRGB());
 
-            GuiUtil.bindTexture(GuiUtil.MISC_RESOURCES);
+            GuiUtil.bindTexture(Resources.MISC_RESOURCES);
             GuiUtil.drawTexturePart(width - 14, 4, 10, 10, 80, 0, 256, 256);
         }
     }

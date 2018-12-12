@@ -6,8 +6,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.reward.BaseReward;
-import com.mike_caron.megacorp.util.DataUtils;
-import com.mike_caron.megacorp.util.ItemUtils;
+import com.mike_caron.mikesmodslib.util.DataUtils;
+import com.mike_caron.mikesmodslib.util.ItemUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 

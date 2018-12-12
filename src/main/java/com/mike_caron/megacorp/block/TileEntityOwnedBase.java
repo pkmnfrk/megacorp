@@ -2,6 +2,7 @@ package com.mike_caron.megacorp.block;
 
 import com.mike_caron.megacorp.impl.Corporation;
 import com.mike_caron.megacorp.impl.CorporationManager;
+import com.mike_caron.mikesmodslib.block.TileEntityBase;
 import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nullable;

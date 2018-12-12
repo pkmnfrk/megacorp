@@ -7,7 +7,7 @@ import com.mike_caron.megacorp.api.IReward;
 import com.mike_caron.megacorp.api.events.CorporationRewardsChangedEvent;
 import com.mike_caron.megacorp.reward.BaseReward;
 import com.mike_caron.megacorp.reward.CommandReward;
-import com.mike_caron.megacorp.util.LastResortUtils;
+import com.mike_caron.mikesmodslib.util.LastResortUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

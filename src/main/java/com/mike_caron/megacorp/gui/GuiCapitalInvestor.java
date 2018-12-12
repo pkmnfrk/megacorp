@@ -1,16 +1,18 @@
 package com.mike_caron.megacorp.gui;
 
+import com.mike_caron.mikesmodslib.gui.GuiUtil;
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.block.capital_investor.ContainerCapitalInvestor;
 import com.mike_caron.megacorp.block.shipping_depot.ContainerShippingDepot;
-import com.mike_caron.megacorp.gui.control.GuiButton;
-import com.mike_caron.megacorp.gui.control.GuiFluid;
-import com.mike_caron.megacorp.gui.control.GuiGroup;
-import com.mike_caron.megacorp.gui.control.GuiList;
 import com.mike_caron.megacorp.impl.QuestLocalization;
 import com.mike_caron.megacorp.impl.RewardManager;
-import com.mike_caron.megacorp.network.CtoSMessage;
-import com.mike_caron.megacorp.util.StringUtil;
+import com.mike_caron.mikesmodslib.util.StringUtil;
+import com.mike_caron.mikesmodslib.gui.GuiButton;
+import com.mike_caron.mikesmodslib.gui.GuiFluid;
+import com.mike_caron.mikesmodslib.gui.GuiGroup;
+import com.mike_caron.mikesmodslib.gui.GuiList;
+import com.mike_caron.mikesmodslib.network.CtoSMessage;
+import com.mike_caron.mikesmodslib.network.MessageHelper;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -138,14 +140,14 @@ public class GuiCapitalInvestor
         {
             if (selectedReward != null)
             {
-                CtoSMessage packet = CtoSMessage.forGuiButton(container.getPos(), event.id, selectedReward.id);
-                MegaCorpMod.networkWrapper.sendToServer(packet);
+                CtoSMessage packet = CtoSMessage.forGuiButton(container.getDimension(), container.getPos(), event.id, selectedReward.id);
+                MessageHelper.send(packet);
             }
         }
         else
         {
-            CtoSMessage packet = CtoSMessage.forGuiButton(container.getPos(), event.id);
-            MegaCorpMod.networkWrapper.sendToServer(packet);
+            CtoSMessage packet = CtoSMessage.forGuiButton(container.getDimension(), container.getPos(), event.id);
+            MessageHelper.send(packet);
         }
     }
 
@@ -267,7 +269,7 @@ public class GuiCapitalInvestor
             fontRenderer.drawString(rewardLocalization.title + suffix, 20, 5, foreColor.getRGB());
 
             GuiUtil.setGLColor(Color.WHITE);
-            GuiUtil.bindTexture(GuiUtil.MISC_RESOURCES);
+            GuiUtil.bindTexture(Resources.MISC_RESOURCES);
             GuiUtil.drawTexturePart(width - 14, 4, 10, 10, 80, 0, 256, 256);
         }
     }

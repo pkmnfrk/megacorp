@@ -8,7 +8,7 @@ import com.mike_caron.megacorp.impl.Corporation;
 import com.mike_caron.megacorp.impl.RewardManager;
 import com.mike_caron.megacorp.integrations.gamestages.GameStagesCompatability;
 import com.mike_caron.megacorp.reward.BaseReward;
-import com.mike_caron.megacorp.util.LastResortUtils;
+import com.mike_caron.mikesmodslib.util.LastResortUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;

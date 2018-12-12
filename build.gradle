@@ -65,6 +65,13 @@ repositories {
             url = "https://minecraft.curseforge.com/api/maven/"
         }
     }
+    ivy {
+        name 'GitHub'
+        url "https://github.com"
+        layout 'pattern', {
+            artifact '/[organisation]/[module]/archive/[revision].[ext]'
+        }
+    }
 }
 
 dependencies {
@@ -83,6 +90,7 @@ dependencies {
 
     provided "net.darkhax.gamestages:GameStages-${mcversion}:${gamestages_version}"
     provided "net.darkhax.bookshelf:Bookshelf-${mcversion}:${bookshelf_version}"
+    // compile "pkmnfrk:mikesmodslib:${mikesmodslib_version}@jar"
 
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..

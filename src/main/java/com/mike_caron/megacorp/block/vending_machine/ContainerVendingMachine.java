@@ -2,12 +2,12 @@ package com.mike_caron.megacorp.block.vending_machine;
 
 import com.mike_caron.megacorp.api.CorporationManager;
 import com.mike_caron.megacorp.api.ICorporationManager;
-import com.mike_caron.megacorp.block.TEContainerBase;
 import com.mike_caron.megacorp.impl.VendingItem;
 import com.mike_caron.megacorp.impl.VendingManager;
 import com.mike_caron.megacorp.integrations.gamestages.GameStagesCompatability;
 import com.mike_caron.megacorp.reward.BaseReward;
-import com.mike_caron.megacorp.util.StringUtil;
+import com.mike_caron.mikesmodslib.util.StringUtil;
+import com.mike_caron.mikesmodslib.block.TEContainerBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;

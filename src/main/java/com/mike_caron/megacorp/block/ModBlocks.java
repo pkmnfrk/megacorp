@@ -21,6 +21,8 @@ import com.mike_caron.megacorp.block.uplink.TileEntityUplink;
 import com.mike_caron.megacorp.block.vending_machine.BlockVendingMachine;
 import com.mike_caron.megacorp.block.vending_machine.TileEntityVendingMachine;
 import com.mike_caron.megacorp.fluid.ModFluids;
+import com.mike_caron.mikesmodslib.block.BlockBase;
+import com.mike_caron.mikesmodslib.block.BlockFluidBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -91,16 +93,16 @@ public class ModBlocks
     {
         IForgeRegistry<Block> registry = event.getRegistry();
 
-        registry.register(new BlockFluidBase(ModFluids.MONEY, "money", MapColor.GREEN));
-        registry.register(new BlockFluidBase(ModFluids.DENSE_MONEY, "dense_money", MapColor.GREEN_STAINED_HARDENED_CLAY));
-        registry.register(new BlockSBS());
-        registry.register(new BlockUplink());
-        registry.register(new BlockProfitMaterializer());
-        registry.register(new BlockProfitCondenser());
-        registry.register(new BlockCapitalInvestor());
-        registry.register(new BlockShippingDepot());
+        registry.register(new BlockFluidBase(ModFluids.MONEY, "money", MapColor.GREEN).setCreativeTab(MegaCorpMod.creativeTab));
+        registry.register(new BlockFluidBase(ModFluids.DENSE_MONEY, "dense_money", MapColor.GREEN_STAINED_HARDENED_CLAY).setCreativeTab(MegaCorpMod.creativeTab));
+        registry.register(new BlockSBS().setCreativeTab(MegaCorpMod.creativeTab));
+        registry.register(new BlockUplink().setCreativeTab(MegaCorpMod.creativeTab));
+        registry.register(new BlockProfitMaterializer().setCreativeTab(MegaCorpMod.creativeTab));
+        registry.register(new BlockProfitCondenser().setCreativeTab(MegaCorpMod.creativeTab));
+        registry.register(new BlockCapitalInvestor().setCreativeTab(MegaCorpMod.creativeTab));
+        registry.register(new BlockShippingDepot().setCreativeTab(MegaCorpMod.creativeTab));
         registry.register(new BlockLiquidShippingDepot());
-        registry.register(new BlockManufactorySupplier());
+        registry.register(new BlockManufactorySupplier().setCreativeTab(MegaCorpMod.creativeTab));
 
         //registry.register(money_block = (BlockBase)new BlockBase(Material.IRON, "money_block").setHardness(10));
         //registry.register(dense_money_block = (BlockBase)new BlockBase(Material.IRON, "dense_money_block").setHardness(20));

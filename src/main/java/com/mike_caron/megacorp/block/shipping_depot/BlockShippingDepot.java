@@ -70,9 +70,9 @@ public class BlockShippingDepot
     }
 
     @Override
-    protected void addMegaCorpProbeInfo(ProbeMode mode, IProbeInfo info, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data)
+    protected void addBlockProbeInfo(ProbeMode mode, IProbeInfo info, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data)
     {
-        super.addMegaCorpProbeInfo(mode, info, player, world, blockState, data);
+        super.addBlockProbeInfo(mode, info, player, world, blockState, data);
 
         TileEntityShippingDepot te = getTE(world, data.getPos());
 

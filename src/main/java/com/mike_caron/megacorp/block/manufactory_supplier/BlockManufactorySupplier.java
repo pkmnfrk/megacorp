@@ -2,8 +2,8 @@ package com.mike_caron.megacorp.block.manufactory_supplier;
 
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.block.OwnedMachineBlockBase;
-import com.mike_caron.megacorp.util.ItemUtils;
-import com.mike_caron.megacorp.util.TOPUtils;
+import com.mike_caron.mikesmodslib.util.ItemUtils;
+import com.mike_caron.mikesmodslib.util.TOPUtils;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.ProbeMode;
@@ -73,9 +73,9 @@ public class BlockManufactorySupplier
     }
 
     @Override
-    protected void addMegaCorpProbeInfo(ProbeMode mode, IProbeInfo info, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data)
+    protected void addBlockProbeInfo(ProbeMode mode, IProbeInfo info, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data)
     {
-        super.addMegaCorpProbeInfo(mode, info, player, world, blockState, data);
+        super.addBlockProbeInfo(mode, info, player, world, blockState, data);
 
         TileEntityManufactorySupplier te = getTE(world, data.getPos());
 

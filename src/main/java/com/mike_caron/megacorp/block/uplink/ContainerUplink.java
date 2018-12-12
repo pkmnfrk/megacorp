@@ -5,7 +5,7 @@ import com.mike_caron.megacorp.api.ICorporationManager;
 import com.mike_caron.megacorp.block.TEOwnedContainerBase;
 import com.mike_caron.megacorp.impl.CorporationManager;
 import com.mike_caron.megacorp.storage.SlotOutputOnly;
-import com.mike_caron.megacorp.util.StringUtil;
+import com.mike_caron.mikesmodslib.util.StringUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;

@@ -4,7 +4,7 @@ import com.mike_caron.megacorp.api.ICorporation;
 import com.mike_caron.megacorp.api.ICorporationManager;
 import com.mike_caron.megacorp.block.TEOwnedContainerBase;
 import com.mike_caron.megacorp.impl.CorporationManager;
-import com.mike_caron.megacorp.util.TankTracker;
+import com.mike_caron.mikesmodslib.util.TankTracker;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 

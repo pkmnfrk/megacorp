@@ -5,14 +5,12 @@ import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.api.ICorporationManager;
 import com.mike_caron.megacorp.impl.*;
 import com.mike_caron.megacorp.proxy.CommonProxy;
-import com.mike_caron.megacorp.util.StringUtil;
+import com.mike_caron.mikesmodslib.command.CommandBase;
+import com.mike_caron.mikesmodslib.util.StringUtil;
 import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 
 import javax.annotation.Nonnull;
@@ -22,26 +20,25 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class MegaCorpCommand
-    implements ICommand
+    extends CommandBase
 {
     private static final List<String> aliases = new ArrayList<>();
     private static final Map<String, TriAction<MinecraftServer, ICommandSender, String[]>> subCommands = new HashMap<>();
 
-    static
+    public MegaCorpCommand()
     {
-        aliases.add("megacorp");
-        aliases.add("corp");
+        addAlias("megacorp");
+        addAlias("corp");
 
-        subCommands.put("reloadRewards", MegaCorpCommand::reloadRewards);
-        subCommands.put("setRewardLevel", MegaCorpCommand::setRewardLevel);
-        subCommands.put("clearRewards", MegaCorpCommand::clearRewards);
-        subCommands.put("reloadQuests", MegaCorpCommand::reloadQuests);
-        subCommands.put("removeCorporation", MegaCorpCommand::removeCorporation);
-        subCommands.put("reloadVending", MegaCorpCommand::reloadVending);
-        subCommands.put("dumpQuests", MegaCorpCommand::dumpQuests);
+        addSubCommand("reloadRewards", MegaCorpCommand::reloadRewards, true);
+        addSubCommand("setRewardLevel", MegaCorpCommand::setRewardLevel, true);
+        addSubCommand("clearRewards", MegaCorpCommand::clearRewards, true);
+        addSubCommand("reloadQuests", MegaCorpCommand::reloadQuests, true);
+        addSubCommand("removeCorporation", MegaCorpCommand::removeCorporation, true);
+        addSubCommand("reloadVending", MegaCorpCommand::reloadVending, true);
+        addSubCommand("dumpQuests", MegaCorpCommand::dumpQuests, false);
     }
 
     @Nonnull
@@ -51,71 +48,14 @@ public class MegaCorpCommand
         return "megacorp";
     }
 
-    @Nonnull
-    @Override
-    public List<String> getAliases()
-    {
-        return aliases;
-    }
-
-    @Override
-    public boolean checkPermission(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender)
-    {
-        return true;
-    }
-
-    @Nonnull
-    @Override
-    public List<String> getTabCompletions(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args, @Nullable BlockPos targetPos)
-    {
-        List<String> ret = new ArrayList<>();
-        if(args.length == 1)
-        {
-            ret = subCommands.keySet().stream().filter( s -> s.startsWith(args[0])).collect(Collectors.toList());
-        }
-        return ret;
-    }
-
-    @Override
-    public boolean isUsernameIndex(@Nonnull String[] args, int index)
-    {
-        return false;
-    }
-
-    @Override
-    public int compareTo(@Nonnull ICommand o)
-    {
-        return 0;
-    }
-
-    @Nonnull
-    @Override
-    public String getUsage(@Nonnull ICommandSender sender)
-    {
-        return "Usage: megacorp " + String.join(" | ", subCommands.keySet());
-    }
-
-    @Override
-    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException
-    {
-        if(args.length == 0 || !subCommands.containsKey(args[0]))
-        {
-            sender.sendMessage(new TextComponentString(getUsage(sender)));
-            return;
-        }
-
-        subCommands.get(args[0]).execute(server, sender, Arrays.stream(args).skip(1).toArray(String[]::new));
-
-    }
-
-    private static void reloadRewards(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args)
+    private static void reloadRewards(@Nullable MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args)
         throws CommandException
     {
         RewardManager.INSTANCE.loadRewards(CommonProxy.rewardsDirectory);
         sender.sendMessage(new TextComponentTranslation("command.megacorp.done"));
     }
 
-    private static void reloadQuests(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args)
+    private static void reloadQuests(@Nullable MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args)
         throws CommandException
     {
         //RewardManager.INSTANCE.loadRewards();
@@ -123,7 +63,7 @@ public class MegaCorpCommand
         sender.sendMessage(new TextComponentTranslation("command.megacorp.done"));
     }
 
-    private static void reloadVending(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args)
+    private static void reloadVending(@Nullable MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args)
         throws CommandException
     {
         if(VendingManager.INSTANCE.loadVendingItems(CommonProxy.megacorpDirectory))
@@ -137,7 +77,7 @@ public class MegaCorpCommand
     }
 
     // /megacorp setRewardLevel <rewardid> <level>
-    private static void setRewardLevel(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args)
+    private static void setRewardLevel(@Nullable MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args)
         throws CommandException
     {
         if(args.length < 2)
@@ -191,7 +131,7 @@ public class MegaCorpCommand
     }
 
     // megacorp clearRewards
-    private static void clearRewards(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args)
+    private static void clearRewards(@Nullable MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args)
         throws CommandException
     {
         UUID id = ((EntityPlayerMP)sender).getUniqueID();
@@ -215,7 +155,7 @@ public class MegaCorpCommand
         sender.sendMessage(new TextComponentTranslation("command.megacorp.done"));
     }
 
-    private static void removeCorporation(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args)
+    private static void removeCorporation(@Nullable MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args)
         throws CommandException
     {
         UUID id = ((EntityPlayerMP)sender).getUniqueID();
@@ -239,7 +179,7 @@ public class MegaCorpCommand
         sender.sendMessage(new TextComponentTranslation("command.megacorp.done"));
     }
 
-    private static void dumpQuests(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args)
+    private static void dumpQuests(@Nullable MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args)
         throws CommandException
     {
         try
@@ -270,11 +210,5 @@ public class MegaCorpCommand
         }
 
         sender.sendMessage(new TextComponentTranslation("command.megacorp:dumpQuests.done"));
-    }
-
-    interface TriAction<X,Y,Z>
-    {
-        void execute(@Nonnull X x, @Nonnull Y y, @Nonnull Z z)
-            throws CommandException;
     }
 }

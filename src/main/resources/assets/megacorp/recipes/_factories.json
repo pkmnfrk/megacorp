@@ -1,9 +1,9 @@
 {
   "ingredients": {
-    "fluid": "com.mike_caron.megacorp.recipes.ingredient.FluidIngredientFactory"
+    "fluid": "com.mike_caron.mikesmodslib.recipes.ingredient.FluidIngredientFactory"
   },
   "recipes": {
-    "fluid": "com.mike_caron.megacorp.recipes.specific.FluidRecipe$Factory"
+    "fluid": "com.mike_caron.mikesmodslib.recipes.specific.FluidRecipe$Factory"
   },
   "conditions": {
     "recipe_enabled": "com.mike_caron.megacorp.recipes.ItemEnabledConditionFactory"

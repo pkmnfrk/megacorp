@@ -1,7 +1,7 @@
 package com.mike_caron.megacorp.impl;
 
 import com.mike_caron.megacorp.reward.BaseReward;
-import com.mike_caron.megacorp.util.StringUtil;
+import com.mike_caron.mikesmodslib.util.StringUtil;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;

@@ -1,12 +1,12 @@
 package com.mike_caron.megacorp.block.vending_machine;
 
-import com.mike_caron.megacorp.block.TileEntityBase;
 import com.mike_caron.megacorp.fluid.ModFluids;
 import com.mike_caron.megacorp.impl.VendingItem;
 import com.mike_caron.megacorp.impl.VendingManager;
 import com.mike_caron.megacorp.integrations.gamestages.GameStagesCompatability;
 import com.mike_caron.megacorp.reward.BaseReward;
-import com.mike_caron.megacorp.util.ItemUtils;
+import com.mike_caron.mikesmodslib.util.ItemUtils;
+import com.mike_caron.mikesmodslib.block.TileEntityBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;

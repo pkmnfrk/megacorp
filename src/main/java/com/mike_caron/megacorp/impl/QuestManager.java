@@ -9,7 +9,7 @@ import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.ModConfig;
 import com.mike_caron.megacorp.api.IQuestFactory;
 import com.mike_caron.megacorp.integrations.gamestages.GameStagesCompatability;
-import com.mike_caron.megacorp.util.DataUtils;
+import com.mike_caron.mikesmodslib.util.DataUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.crafting.CraftingHelper;

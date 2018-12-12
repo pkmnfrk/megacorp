@@ -3,7 +3,7 @@ package com.mike_caron.megacorp.proxy;
 import com.mike_caron.megacorp.block.ModBlocks;
 import com.mike_caron.megacorp.client.models.ModelBottle;
 import com.mike_caron.megacorp.item.ModItems;
-import com.mike_caron.megacorp.util.OreDictUtil;
+import com.mike_caron.mikesmodslib.util.OreDictUtil;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoaderRegistry;

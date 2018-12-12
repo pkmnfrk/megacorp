@@ -1,16 +1,18 @@
 package com.mike_caron.megacorp.gui;
 
+import com.mike_caron.mikesmodslib.gui.GuiUtil;
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.block.uplink.ContainerUplink;
-import com.mike_caron.megacorp.gui.control.*;
-import com.mike_caron.megacorp.network.CtoSMessage;
+import com.mike_caron.mikesmodslib.gui.*;
+import com.mike_caron.mikesmodslib.network.CtoSMessage;
+import com.mike_caron.mikesmodslib.network.MessageHelper;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 
 import java.text.NumberFormat;
 
 public class GuiUplink
-    extends GuiContainerBase
+    extends GuiContainerOwnedBase
     implements GuiButton.ClickedListener, GuiTextBox.TextboxListener
 {
     public static final int WIDTH = 176;
@@ -129,8 +131,8 @@ public class GuiUplink
         switch (event.id)
         {
             case 1:
-                CtoSMessage packet = CtoSMessage.forGuiButton(container.getPos(), 1);
-                MegaCorpMod.networkWrapper.sendToServer(packet);
+                CtoSMessage packet = CtoSMessage.forGuiButton(container.getDimension(), container.getPos(), 1);
+                MessageHelper.send(packet);
                 event.control.setEnabled(false);
                 break;
         }
@@ -141,8 +143,8 @@ public class GuiUplink
     {
         if(event.control == corpNameField)
         {
-            CtoSMessage packet = CtoSMessage.forGuiString(container.getPos(), 2, corpNameField.getText());
-            MegaCorpMod.networkWrapper.sendToServer(packet);
+            CtoSMessage packet = CtoSMessage.forGuiString(container.getDimension(), container.getPos(), 2, corpNameField.getText());
+            MessageHelper.send(packet);
         }
     }
 }

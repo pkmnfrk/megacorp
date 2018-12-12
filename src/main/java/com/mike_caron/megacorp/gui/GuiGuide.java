@@ -1,9 +1,10 @@
 package com.mike_caron.megacorp.gui;
 
+import com.mike_caron.mikesmodslib.gui.GuiUtil;
 import com.mike_caron.megacorp.MegaCorpMod;
-import com.mike_caron.megacorp.gui.control.GuiBase;
-import com.mike_caron.megacorp.gui.control.GuiButton;
-import com.mike_caron.megacorp.gui.control.GuiGuidePage;
+import com.mike_caron.mikesmodslib.gui.GuiBase;
+import com.mike_caron.mikesmodslib.gui.GuiButton;
+import com.mike_caron.mikesmodslib.gui.GuiGuidePage;
 import net.minecraft.util.ResourceLocation;
 
 import java.net.URI;

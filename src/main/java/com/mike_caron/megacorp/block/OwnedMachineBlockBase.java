@@ -3,6 +3,7 @@ package com.mike_caron.megacorp.block;
 import com.mike_caron.megacorp.impl.Corporation;
 import com.mike_caron.megacorp.item.CorporateCard;
 import com.mike_caron.megacorp.item.ModItems;
+import com.mike_caron.mikesmodslib.block.MachineBlockBase;
 import mcjty.theoneprobe.api.ElementAlignment;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
@@ -65,9 +66,9 @@ public class OwnedMachineBlockBase
     }
 
     @Override
-    protected void addMegaCorpProbeInfo(ProbeMode mode, IProbeInfo info, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data)
+    protected void addBlockProbeInfo(ProbeMode mode, IProbeInfo info, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data)
     {
-        super.addMegaCorpProbeInfo(mode, info, player, world, blockState, data);
+        super.addBlockProbeInfo(mode, info, player, world, blockState, data);
 
         TileEntityOwnedBase teb = getTE(world, data.getPos());
         Corporation corp = null;

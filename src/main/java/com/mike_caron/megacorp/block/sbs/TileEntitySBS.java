@@ -1,9 +1,9 @@
 package com.mike_caron.megacorp.block.sbs;
 
-import com.mike_caron.megacorp.block.TileEntityBase;
 import com.mike_caron.megacorp.recipes.SBSRecipe;
 import com.mike_caron.megacorp.recipes.SBSRecipeManager;
 import com.mike_caron.megacorp.storage.LimitedItemStackHandler;
+import com.mike_caron.mikesmodslib.block.TileEntityBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;

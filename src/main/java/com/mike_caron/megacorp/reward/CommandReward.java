@@ -3,7 +3,7 @@ package com.mike_caron.megacorp.reward;
 import com.google.gson.JsonObject;
 import com.mike_caron.megacorp.api.IReward;
 import com.mike_caron.megacorp.api.IRewardFactory;
-import com.mike_caron.megacorp.util.DataUtils;
+import com.mike_caron.mikesmodslib.util.DataUtils;
 
 public class CommandReward
     extends BaseReward

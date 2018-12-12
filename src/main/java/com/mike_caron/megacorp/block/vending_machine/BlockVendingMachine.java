@@ -1,10 +1,10 @@
 package com.mike_caron.megacorp.block.vending_machine;
 
 import com.mike_caron.megacorp.MegaCorpMod;
-import com.mike_caron.megacorp.block.MachineBlockBase;
+import com.mike_caron.mikesmodslib.block.MachineBlockBase;
 import com.mike_caron.megacorp.item.Bottle;
-import com.mike_caron.megacorp.util.FluidUtils;
-import com.mike_caron.megacorp.util.TOPUtils;
+import com.mike_caron.mikesmodslib.util.FluidUtils;
+import com.mike_caron.mikesmodslib.util.TOPUtils;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.ProbeMode;
@@ -89,7 +89,7 @@ public class BlockVendingMachine
     }
 
     @Override
-    protected void addMegaCorpProbeInfo(ProbeMode mode, IProbeInfo info, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data)
+    protected void addBlockProbeInfo(ProbeMode mode, IProbeInfo info, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data)
     {
         TileEntityVendingMachine te = getTE(world, data.getPos());
 
@@ -97,7 +97,7 @@ public class BlockVendingMachine
 
         if(player.isSneaking())
         {
-            super.addMegaCorpProbeInfo(mode, info, player, world, blockState, data);
+            super.addBlockProbeInfo(mode, info, player, world, blockState, data);
 
             TOPUtils.addFluidTank(info, te.fluidTank);
         }

@@ -1,9 +1,9 @@
 package com.mike_caron.megacorp.block.profit_condenser;
 
-import com.mike_caron.megacorp.block.TileEntityBase;
 import com.mike_caron.megacorp.fluid.ModFluids;
 import com.mike_caron.megacorp.recipes.PCRecipe;
 import com.mike_caron.megacorp.recipes.PCRecipeManager;
+import com.mike_caron.mikesmodslib.block.TileEntityBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;

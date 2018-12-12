@@ -1,10 +1,11 @@
 package com.mike_caron.megacorp.gui;
 
+import com.mike_caron.mikesmodslib.gui.GuiUtil;
 import com.google.common.base.Preconditions;
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.block.uplink.ContainerUplink;
-import com.mike_caron.megacorp.gui.control.GuiContainerBase;
-import com.mike_caron.megacorp.gui.control.GuiList;
+import com.mike_caron.mikesmodslib.gui.GuiContainerBase;
+import com.mike_caron.mikesmodslib.gui.GuiList;
 import net.minecraft.util.ResourceLocation;
 
 import java.awt.*;
@@ -59,7 +60,9 @@ public class GuiTest
     @Override
     protected void drawGuiContainerBackgroundLayer(float v, int i, int i1)
     {
-        drawInsertCardBackground();
+        GuiUtil.setGLColor(Color.WHITE);
+        GuiUtil.bindTexture(Resources.MISC_RESOURCES);
+        GuiUtil.draw3x3Stretched(guiLeft, guiTop, xSize, ySize, 48, 16);
     }
 
     @Override
@@ -109,7 +112,7 @@ public class GuiTest
             {
                 GuiUtil.setGLColor(Color.RED);
             }
-            GuiUtil.bindTexture(GuiUtil.MISC_RESOURCES);
+            GuiUtil.bindTexture(Resources.MISC_RESOURCES);
 
             int sy = 16;
 

@@ -2,7 +2,7 @@ package com.mike_caron.megacorp.gui;
 
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.block.sbs.ContainerSBS;
-import com.mike_caron.megacorp.gui.control.*;
+import com.mike_caron.mikesmodslib.gui.*;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidRegistry;

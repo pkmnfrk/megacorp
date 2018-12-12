@@ -2,10 +2,10 @@ package com.mike_caron.megacorp.block.profit_materializer;
 
 import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.block.OwnedMachineBlockBase;
-import com.mike_caron.megacorp.integrations.ITOPInfoProvider;
 import com.mike_caron.megacorp.item.Bottle;
-import com.mike_caron.megacorp.util.FluidUtils;
-import com.mike_caron.megacorp.util.TOPUtils;
+import com.mike_caron.mikesmodslib.util.FluidUtils;
+import com.mike_caron.mikesmodslib.util.TOPUtils;
+import com.mike_caron.mikesmodslib.integrations.ITOPInfoProvider;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.ProbeMode;
@@ -96,9 +96,9 @@ public class BlockProfitMaterializer
     }
 
     @Override
-    public void addMegaCorpProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data)
+    public void addBlockProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data)
     {
-        super.addMegaCorpProbeInfo(mode, probeInfo, player, world, blockState, data);
+        super.addBlockProbeInfo(mode, probeInfo, player, world, blockState, data);
 
         TileEntityProfitMaterializer te = getTE(world, data.getPos());
 

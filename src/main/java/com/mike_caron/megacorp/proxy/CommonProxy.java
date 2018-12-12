@@ -9,7 +9,7 @@ import com.mike_caron.megacorp.impl.VendingManager;
 import com.mike_caron.megacorp.recipes.PCRecipeManager;
 import com.mike_caron.megacorp.recipes.SBSRecipeManager;
 import com.mike_caron.megacorp.reward.*;
-import com.mike_caron.megacorp.util.FileUtils;
+import com.mike_caron.mikesmodslib.util.FileUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.crafting.IRecipe;

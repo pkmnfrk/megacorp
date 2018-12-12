@@ -1,7 +1,7 @@
 package com.mike_caron.megacorp.block.profit_condenser;
 
-import com.mike_caron.megacorp.block.TEContainerBase;
-import com.mike_caron.megacorp.util.StringUtil;
+import com.mike_caron.mikesmodslib.util.StringUtil;
+import com.mike_caron.mikesmodslib.block.TEContainerBase;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidRegistry;

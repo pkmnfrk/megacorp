@@ -2,10 +2,14 @@ buildscript {
     repositories {
         jcenter()
         maven { url = "http://files.minecraftforge.net/maven" }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
+
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
@@ -59,19 +63,13 @@ repositories {
         name = "McModDev"
         url = "https://maven.mcmoddev.com"
     }
-    repositories {
-        maven {
-            name = "CurseForge"
-            url = "https://minecraft.curseforge.com/api/maven/"
-        }
-    }
-    ivy {
-        name 'GitHub'
-        url "https://github.com"
-        layout 'pattern', {
-            artifact '/[organisation]/[module]/archive/[revision].[ext]'
-        }
-    }
+    //repositories {
+    //    maven {
+    //        name = "CurseForge"
+    //        url = "https://minecraft.curseforge.com/api/maven/"
+    //    }
+    //}
+
 }
 
 dependencies {
@@ -90,7 +88,10 @@ dependencies {
 
     provided "net.darkhax.gamestages:GameStages-${mcversion}:${gamestages_version}"
     provided "net.darkhax.bookshelf:Bookshelf-${mcversion}:${bookshelf_version}"
-    // compile "pkmnfrk:mikesmodslib:${mikesmodslib_version}@jar"
+
+    //compile "pkmnfrk:MikesModsLib:${mikesmodslib_version}:dev@jar"
+
+
 
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..

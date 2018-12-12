@@ -1,5 +1,6 @@
 package com.mike_caron.megacorp.proxy;
 
+import com.mike_caron.megacorp.MegaCorpMod;
 import com.mike_caron.megacorp.block.capital_investor.ContainerCapitalInvestor;
 import com.mike_caron.megacorp.block.capital_investor.TileEntityCapitalInvestor;
 import com.mike_caron.megacorp.block.manufactory_supplier.ContainerManufactorySupplier;
@@ -17,8 +18,10 @@ import com.mike_caron.megacorp.block.uplink.TileEntityUplink;
 import com.mike_caron.megacorp.block.vending_machine.ContainerVendingMachine;
 import com.mike_caron.megacorp.block.vending_machine.TileEntityVendingMachine;
 import com.mike_caron.megacorp.gui.*;
+import com.mike_caron.mikesmodslib.gui.GuiGuide;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
@@ -83,7 +86,10 @@ public class GuiProxy implements IGuiHandler
     {
         if(ID == 100)
         {
-            return new GuiGuide();
+            return new GuiGuide(256, 166,
+                "gui.megacorp:guide.title",
+                new ResourceLocation(MegaCorpMod.modId, "textures/gui/guide.png"),
+                new ResourceLocation(MegaCorpMod.modId, "/index"));
         }
 
         BlockPos pos = new BlockPos(x,y,z);

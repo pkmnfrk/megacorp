@@ -69,7 +69,16 @@ repositories {
     //        url = "https://minecraft.curseforge.com/api/maven/"
     //    }
     //}
-
+    ivy {
+        name 'MikesModsLib'
+        ivyPattern "https://maven.tterrag.com/[module]-[revision].[ext]"
+        artifactPattern "https://media.forgecdn.net/files/${mikesmodslib_cf}/[module]-[revision](-[classifier]).[ext]"
+    }
+    ivy {
+        name 'Thaumcraft'
+        ivyPattern "https://maven.tterrag.com/[module]-[revision].[ext]"
+        artifactPattern "https://media.forgecdn.net/files/${thaumcraft_cf}/[module]-[revision](-[classifier]).[ext]"
+    }
 }
 
 dependencies {
@@ -89,9 +98,8 @@ dependencies {
     provided "net.darkhax.gamestages:GameStages-${mcversion}:${gamestages_version}"
     provided "net.darkhax.bookshelf:Bookshelf-${mcversion}:${bookshelf_version}"
 
-    //compile "pkmnfrk:MikesModsLib:${mikesmodslib_version}:dev@jar"
-
-
+    deobfCompile name: 'MikesModsLib', version: "${mikesmodslib_version}", classifier: 'dev', ext: 'jar'
+    provided name: 'Thaumcraft', version: "1.12.2-${thaumcraft_version}", ext: 'jar'
 
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
